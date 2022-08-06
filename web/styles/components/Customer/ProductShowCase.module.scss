@@ -1,0 +1,35 @@
+.productShowCase {
+    margin: 45px 0 15px 0;
+
+    &__title {
+        display: flex;
+        justify-content: space-between;
+
+        font-size: 1.8rem;
+
+        &_left {
+            display: flex;
+            gap: 20px;
+        }
+
+        &_date {
+            &_text {
+                font-weight: bold;
+                color: var(--default-red);
+            }
+
+            display: flex;
+            gap: 5px;
+        }
+    }
+
+    &__products {
+        width: 100%;
+        display: flex;
+        gap: 50px;
+    }
+
+    .divider {
+        margin: 15px 0;
+    }
+}

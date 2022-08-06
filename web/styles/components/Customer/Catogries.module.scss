@@ -1,0 +1,29 @@
+$top-margin-for-cat: 50px;
+
+.catogriesMain {
+    position: relative;
+    background-color: white;
+
+    .subcat {
+        display: none;
+        position: absolute;
+        left: 100%;
+        top: $top-margin-for-cat;
+        z-index: 2;
+    }
+
+    .catContainer {
+        margin-top: $top-margin-for-cat;
+
+        .catogryIcon {
+            color: var(--theme-color);
+        }
+
+        button {
+            margin-top: 10px;
+        }
+    }
+    .catHolder:hover .catText {
+        color: var(--theme-color);
+    }
+}

@@ -1,0 +1,16 @@
+.subCat {
+    width: 250px;
+    height: 320px;
+
+    background-color: var(--box-bg);
+
+    padding: 20px;
+    ul {
+        li {
+            list-style: none;
+            line-height: 30px;
+
+            font-size: 1.2rem;
+        }
+    }
+}

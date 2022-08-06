@@ -1,0 +1,130 @@
+.productDisplay {
+    margin-top: 70px;
+    width: 100%;
+    height: 440px;
+
+    background-color: var(--box-bg);
+    display: flex;
+
+    gap: 50px;
+
+    padding: 20px;
+
+    &__imagesDisplay {
+        height: 90%;
+        width: 40%;
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 20px;
+
+        &_img {
+            width: 100%;
+            height: 80%;
+
+            position: relative;
+        }
+
+        &_selector {
+            width: 100%;
+            height: 60px;
+
+            background-color: var(--prm-grey);
+        }
+    }
+
+    &__productInfo {
+        display: flex;
+        flex-direction: column;
+
+        gap: 25px;
+
+        &_name {
+            font-size: 1.3rem;
+        }
+
+        &_rating {
+            color: #f2c94c;
+            font-size: 1.2rem;
+            span {
+                color: var(--theme-color);
+            }
+        }
+
+        &_price {
+            font-size: 2.3rem;
+            display: flex;
+            gap: 10px;
+
+            .original {
+                color: var(--default-red);
+            }
+
+            .discounted {
+                text-decoration: line-through;
+            }
+
+            .discountprice {
+                color: var(--theme-color);
+            }
+        }
+
+        &_quantity {
+            display: flex;
+            align-items: center;
+
+            font-size: 1.3rem;
+
+            gap: 20px;
+
+            .buttons {
+                display: flex;
+                align-items: center;
+
+                .count {
+                    padding: 1rem 2rem;
+                }
+
+                button {
+                    padding: 1rem 1rem !important;
+                }
+            }
+        }
+
+        &_actionBtns {
+            display: flex;
+            gap: 20px;
+        }
+
+        &_aditionalInfo {
+            font-size: 1.2rem;
+            color: var(--prm-grey);
+
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            &_sellerInfo {
+                display: flex;
+                flex-direction: column;
+            }
+
+            &_delivary {
+                display: flex;
+                align-items: center;
+
+                gap: 10px;
+                .icon {
+                    color: var(--theme-color);
+                }
+            }
+
+            .policy {
+                display: flex;
+                color: var(--theme-color);
+                gap: 20px;
+            }
+        }
+    }
+}

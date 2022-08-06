@@ -1,0 +1,20 @@
+.ctg {
+    position: fixed;
+    // top: 60px;
+
+    width: 280px;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    z-index: 100;
+
+    .showCat {
+        display: block;
+    }
+
+    .hideCat {
+        display: none;
+    }
+}

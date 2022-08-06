@@ -1,0 +1,80 @@
+.loginContainer {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    background-image: url("../../../public/images/waves.svg");
+    background-position: center;
+
+    background-repeat: no-repeat;
+}
+
+.login {
+    width: 350px;
+    height: fit-content;
+
+    border: 1px solid var(--line-gray);
+
+    background-color: white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 10px 15px;
+
+    &__text {
+        &_main {
+            font-size: 1.3rem;
+            color: var(--default-dark);
+        }
+
+        &_sub {
+            color: var(--prm-grey);
+        }
+    }
+
+    &__input {
+        form {
+            display: flex;
+            flex-direction: column;
+
+            gap: 10px;
+        }
+    }
+
+    &__forgotPassword {
+        font-size: 1.3rem;
+        align-self: flex-end;
+        margin-right: 10px;
+    }
+
+    &__signup {
+        font-size: 1.5rem;
+
+        span {
+            color: var(--theme-color);
+        }
+    }
+
+    &__or {
+        font-size: 1.3rem;
+    }
+
+    &__loginOptions {
+        font-size: 2.3rem;
+        display: flex;
+        gap: 15px;
+    }
+}

@@ -1,0 +1,28 @@
+.common {
+    color: white;
+    padding: 0.5rem 3rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.error {
+    background-color: var(--default-red);
+}
+
+.success {
+    background-color: var(--default-green);
+}
+
+.outlined {
+    background-color: transparent;
+    outline: 2px solid var(--default-red);
+}
+
+.blank {
+    background-color: transparent;
+    color: black;
+}
