@@ -8,15 +8,16 @@ import styles from "../../styles/components/Customer/CustomerLayout.module.scss"
 interface Props {
   children: React.ReactNode;
   sidebar: "show" | "hide" | "clickable";
+  type?: "catogry" | "search" | "catogryPage";
 }
 
-const Layout: React.FC<Props> = ({ children, sidebar }) => {
+const Layout: React.FC<Props> = ({ children, sidebar, type = "catogry" }) => {
   return (
     <>
       <CustomerNav />
       <div className={styles.mainContainer}>
         <div className={styles.catogriesBarConainer}>
-          <CatogriesSideBar sidebar={sidebar} />
+          <CatogriesSideBar sidebar={sidebar} type={type} />
         </div>
         <div className={styles.contentContainer}>{children}</div>
       </div>

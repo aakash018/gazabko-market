@@ -8,7 +8,7 @@ import {
   BsStarHalf,
 } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa";
-import styles from "../../styles/components/Customer/ProductDisplay.module.scss";
+import styles from "../../styles/components/Customer/ProductInfoDisplay.module.scss";
 import Button from "../shared/Button";
 
 interface Props {

@@ -13,4 +13,69 @@
     .productInfo {
         min-width: 90%;
     }
+
+    .productDesc {
+        padding: 30px;
+        min-width: 90%;
+
+        font-size: 1.3rem;
+        line-height: 20px;
+
+        .title {
+            font-size: 1.4rem;
+            font-weight: bold;
+
+            margin-bottom: 10px;
+        }
+    }
+
+    .review {
+        min-width: 90%;
+
+        background-color: var(--box-bg);
+        padding: 20px;
+
+        display: flex;
+        flex-direction: column;
+
+        .title {
+            font-size: 2rem;
+            font-weight: bold;
+
+            margin-bottom: 10px;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            color: #f2c94c;
+
+            margin-bottom: 30px;
+
+            font-size: 2.7rem;
+            gap: 10px;
+
+            span {
+                font-size: 2rem;
+                color: var(--theme-color);
+            }
+        }
+
+        .reviewHouse {
+            display: flex;
+            flex-direction: column;
+
+            gap: 30px;
+        }
+
+        .actionBtn {
+            align-self: center;
+
+            margin-top: 30px;
+        }
+    }
+
+    .otherProducts {
+        min-width: 90%;
+    }
 }

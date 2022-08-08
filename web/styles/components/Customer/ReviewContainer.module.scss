@@ -1,0 +1,39 @@
+.reviewContainer {
+    width: 95%;
+    background-color: white;
+
+    box-shadow: 0px 0px 10px -5px rgba(0, 0, 0, 0.397);
+
+    padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    .rating {
+        display: flex;
+        align-items: center;
+        color: #f2c94c;
+
+        font-size: 1.7rem;
+        gap: 10px;
+
+        margin-bottom: 5px;
+
+        span {
+            font-size: 1rem;
+            color: var(--theme-color);
+        }
+    }
+
+    .name {
+        color: var(--prm-grey);
+    }
+
+    .review {
+        font-size: 1.2rem;
+
+        width: 90%;
+    }
+}
