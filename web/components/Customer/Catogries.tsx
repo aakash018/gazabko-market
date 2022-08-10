@@ -9,6 +9,7 @@ import { RiComputerFill } from "react-icons/ri";
 import { FaHeartbeat } from "react-icons/fa";
 import { IoMdBeer } from "react-icons/io";
 import SubCatogries from "./SubCatogries";
+import Router from "next/router";
 
 const Catogries: React.FC = () => {
   const subCatRef = useRef<HTMLDivElement>(null);
@@ -19,6 +20,11 @@ const Catogries: React.FC = () => {
 
   const hideSubCat = () => {
     subCatRef.current!.style.display = "none";
+  };
+
+  //TODO Change to LINK
+  const handleSubNavigate = () => {
+    Router.push("/catogries/54g5744ffdd");
   };
 
   return (
@@ -37,7 +43,7 @@ const Catogries: React.FC = () => {
           onMouseLeave={hideSubCat}
           className={styles.catHolder}
         >
-          <Button onClick={() => {}} look="blank">
+          <Button onClick={handleSubNavigate} look="blank">
             <span>
               <GiAmpleDress size={"30px"} className={styles.catogryIcon} />
             </span>
@@ -49,7 +55,7 @@ const Catogries: React.FC = () => {
           onMouseLeave={hideSubCat}
           className={styles.catHolder}
         >
-          <Button onClick={() => {}} look="blank">
+          <Button onClick={handleSubNavigate} look="blank">
             <span>
               <FaTshirt size={"30px"} className={styles.catogryIcon} />
             </span>
@@ -61,7 +67,7 @@ const Catogries: React.FC = () => {
           onMouseLeave={hideSubCat}
           className={styles.catHolder}
         >
-          <Button onClick={() => {}} look="blank">
+          <Button onClick={handleSubNavigate} look="blank">
             <span>
               <FaFan size={"30px"} className={styles.catogryIcon} />
             </span>
@@ -73,7 +79,7 @@ const Catogries: React.FC = () => {
           onMouseLeave={hideSubCat}
           className={styles.catHolder}
         >
-          <Button onClick={() => {}} look="blank">
+          <Button onClick={handleSubNavigate} look="blank">
             <span>
               <RiComputerFill size={"30px"} className={styles.catogryIcon} />
             </span>
@@ -85,7 +91,7 @@ const Catogries: React.FC = () => {
           onMouseLeave={hideSubCat}
           className={styles.catHolder}
         >
-          <Button onClick={() => {}} look="blank">
+          <Button onClick={handleSubNavigate} look="blank">
             <span>
               <FaHeartbeat size={"30px"} className={styles.catogryIcon} />
             </span>
@@ -97,7 +103,7 @@ const Catogries: React.FC = () => {
           onMouseLeave={hideSubCat}
           className={styles.catHolder}
         >
-          <Button onClick={() => {}} look="blank">
+          <Button onClick={handleSubNavigate} look="blank">
             <span>
               <IoMdBeer size={"30px"} className={styles.catogryIcon} />
             </span>

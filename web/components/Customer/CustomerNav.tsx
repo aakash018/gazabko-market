@@ -4,8 +4,11 @@ import SearchBarCustomer from "../shared/Customer/SearchBar";
 import styles from "../../styles/components/shared/Customer/CustomerNav.module.scss";
 import Button from "../shared/Button";
 import Router from "next/router";
+import { useAuth } from "../../context/User";
 
 const CustomerNav: React.FC = () => {
+  const { isLogedIn } = useAuth();
+
   return (
     <header>
       <nav className={styles.customerNav}>
@@ -19,18 +22,21 @@ const CustomerNav: React.FC = () => {
           />
         </section>
         <SearchBarCustomer />
-        <div className={styles.actionBtns}>
-          <Button
-            onClick={() => {
-              Router.push("/login");
-            }}
-          >
-            Login
-          </Button>
-          <Button onClick={() => {}} color="success">
-            Signup
-          </Button>
-        </div>
+        {!isLogedIn && (
+          <div className={styles.actionBtns}>
+            <Button
+              onClick={() => {
+                Router.push("/login");
+              }}
+            >
+              Login
+            </Button>
+            <Button onClick={() => {}} color="success">
+              Signup
+            </Button>
+          </div>
+        )}
+        {isLogedIn && <div className={styles.account}>ACCOUNT</div>}
       </nav>
     </header>
   );

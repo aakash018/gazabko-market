@@ -12,7 +12,7 @@ const SearchResult: React.FC = () => {
   return (
     <Layout sidebar="hide" type="search">
       <div className={styles.searchResults}>
-        <div className={styles.title}>Search result for "{parameter}"</div>
+        <div className={styles.title}>Search results for "{parameter}"</div>
         <ShowCase includeTimer={false} noOfProducts={16} />
       </div>
     </Layout>

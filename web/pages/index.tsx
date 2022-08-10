@@ -7,6 +7,7 @@ import Layout from "../components/Customer/Layout";
 import ShowCase from "../components/Customer/ShowCase";
 import ProductHolder from "../components/shared/Customer/ProductHolder";
 import Timer from "../components/shared/Customer/Timer";
+import { useAuth } from "../context/User";
 
 import styles from "../styles/components/Customer/Home.module.scss";
 
@@ -15,7 +16,6 @@ const Home = () => {
     <>
       <Layout sidebar="show">
         <Banner />
-        {/* <Timer date={new Date("Dec 5, 2022 15:37:25").getTime()} /> */}
 
         <ShowCase
           includeTimer={true}

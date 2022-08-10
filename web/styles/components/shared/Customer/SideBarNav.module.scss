@@ -1,0 +1,10 @@
+.catToSearchIn {
+    ul {
+        line-height: 18px;
+        li {
+            list-style: none;
+            color: var(--theme-color);
+            cursor: pointer;
+        }
+    }
+}
