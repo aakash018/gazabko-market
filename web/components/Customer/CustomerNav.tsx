@@ -5,6 +5,7 @@ import styles from "../../styles/components/shared/Customer/CustomerNav.module.s
 import Button from "../shared/Button";
 import Router from "next/router";
 import { useAuth } from "../../context/User";
+import { AiFillHeart, AiOutlineShoppingCart } from "react-icons/ai";
 
 const CustomerNav: React.FC = () => {
   const { isLogedIn } = useAuth();
@@ -36,7 +37,22 @@ const CustomerNav: React.FC = () => {
             </Button>
           </div>
         )}
-        {isLogedIn && <div className={styles.account}>ACCOUNT</div>}
+        {isLogedIn && (
+          <div className={styles.account}>
+            <div className={styles.cartAndWishlist}>
+              <AiOutlineShoppingCart
+                size={25}
+                onClick={() => {
+                  Router.push("/cart");
+                }}
+              />
+              <AiFillHeart size={25} />
+            </div>
+            <div className={styles.accountImg}>
+              <Image src="/images/avatar.jpg" layout="fill" objectFit="cover" />
+            </div>
+          </div>
+        )}
       </nav>
     </header>
   );

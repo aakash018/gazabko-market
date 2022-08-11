@@ -3,7 +3,7 @@ import styles from "../../styles/components/shared/Button.module.scss";
 
 interface Props {
   children: ReactNode;
-  onClick: () => any;
+  onClick?: () => any;
   className?: string;
   color?: "error" | "success" | "default";
   type?: "submit" | "reset" | "button";

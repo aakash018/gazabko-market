@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useRef } from "react";
+import React, { FormEvent, useRef } from "react";
 import Layout from "../components/Customer/Layout";
 import Button from "../components/shared/Button";
 import IntputField from "../components/shared/Input";
@@ -8,9 +8,19 @@ import styles from "../styles/components/Customer/Login.module.scss";
 
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
+import { useAuth } from "../context/User";
+import Router from "next/router";
 
 const Login: React.FC = () => {
-  const login = useRef<HTMLInputElement>(null);
+  const loginRef = useRef<HTMLInputElement>(null);
+
+  const { login } = useAuth();
+
+  const handelLogin = (e: FormEvent) => {
+    e.preventDefault();
+    login();
+    Router.push("/");
+  };
 
   return (
     <Layout sidebar="hide">
@@ -28,14 +38,14 @@ const Login: React.FC = () => {
             </section>
           </div>
           <div className={styles.login__input}>
-            <form action="">
-              <IntputField input={login} placeholder="Username" />
+            <form onSubmit={handelLogin}>
+              <IntputField input={loginRef} placeholder="Username" />
               <IntputField
-                input={login}
+                input={loginRef}
                 placeholder="Password"
                 type={"password"}
               />
-              <Button onClick={() => {}} color="default" type="submit">
+              <Button color="default" type="submit">
                 Login
               </Button>
             </form>

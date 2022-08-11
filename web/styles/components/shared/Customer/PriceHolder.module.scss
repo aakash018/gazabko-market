@@ -1,0 +1,16 @@
+.price {
+    display: flex;
+    gap: 10px;
+
+    .original {
+        color: var(--default-red);
+    }
+
+    .discounted {
+        text-decoration: line-through;
+    }
+
+    .discountprice {
+        color: var(--theme-color);
+    }
+}

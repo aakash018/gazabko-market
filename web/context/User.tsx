@@ -27,7 +27,7 @@ export function useAuth() {
 
 const Provider: React.FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLogedIn, setLoginStatus] = useState<boolean>(true);
+  const [isLogedIn, setLoginStatus] = useState<boolean>(false);
 
   const login = () => {
     setLoginStatus(true);

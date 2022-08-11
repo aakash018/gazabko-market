@@ -23,6 +23,11 @@ $top-margin-for-cat: 50px;
             margin-top: 10px;
         }
     }
+
+    .catHolder {
+        width: 100%;
+    }
+
     .catHolder:hover .catText {
         color: var(--theme-color);
     }

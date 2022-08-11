@@ -1,0 +1,21 @@
+.quantity {
+    display: flex;
+    align-items: center;
+
+    font-size: 1.3rem;
+
+    gap: 20px;
+
+    .buttons {
+        display: flex;
+        align-items: center;
+
+        .count {
+            padding: 1rem 2rem;
+        }
+
+        button {
+            padding: 1rem 1rem !important;
+        }
+    }
+}

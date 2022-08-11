@@ -6,12 +6,18 @@ import { AiFillStar } from "react-icons/ai";
 import { BsFillTagsFill } from "react-icons/bs";
 import { ProductHolderTypes } from "../../../@types/global";
 import Router from "next/router";
+import PriceHolder from "./PriceHolder";
 
-const ProductHolder: React.FC<ProductHolderTypes> = ({
+interface Props extends ProductHolderTypes {
+  fontSize?: number | string;
+}
+
+const ProductHolder: React.FC<Props> = ({
   productName,
   mp,
   discount,
   rating,
+  fontSize = "1.8rem",
 }) => {
   let price: number = 0;
   let discountPercentage: number = 0;
@@ -27,7 +33,11 @@ const ProductHolder: React.FC<ProductHolderTypes> = ({
   };
 
   return (
-    <div className={styles.productHolder} onClick={handleProductClick}>
+    <div
+      className={styles.productHolder}
+      onClick={handleProductClick}
+      style={{ fontSize: fontSize }}
+    >
       {discount !== 0 && (
         <div className={styles.productHolder__tag}>
           <div className={styles.productHolder__tag_icon}>
@@ -46,16 +56,7 @@ const ProductHolder: React.FC<ProductHolderTypes> = ({
           {productName}
         </section>
         <section className={styles.productHolder__productInfo_price}>
-          <div
-            className={`${styles.original} ${
-              discount && discount !== 0 ? styles.discounted : ""
-            }`}
-          >
-            Rs. {mp}
-          </div>
-          {discount !== 0 && price !== 0 && (
-            <span className={styles.discountprice}>Rs. {price}</span>
-          )}
+          <PriceHolder discount={discount} mp={mp} />
         </section>
         <section className={styles.productHolder__productInfo_rating}>
           <AiFillStar color="#F2C94C" size={15} />
