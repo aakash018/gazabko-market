@@ -108,6 +108,10 @@
             &_sellerInfo {
                 display: flex;
                 flex-direction: column;
+
+                .sellerName {
+                    color: var(--theme-color);
+                }
             }
 
             &_delivary {

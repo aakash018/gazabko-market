@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 import {
   BsBagPlusFill,
@@ -85,7 +86,9 @@ const ProductInfoDisplay: React.FC<Props> = ({
             }
           >
             <span>Sold By:</span>
-            <span>{sellerName}</span>
+            <span className={styles.sellerName}>
+              <Link href={"/sellerInfo/sdfsfd"}>{sellerName}</Link>{" "}
+            </span>
           </section>
           <section
             className={

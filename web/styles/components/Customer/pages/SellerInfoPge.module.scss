@@ -1,0 +1,93 @@
+.sellerInfoPage {
+    width: 100%;
+    padding: 20px;
+
+    background: #ffffff;
+    box-shadow: 0px 0px 23px -2px rgba(0, 0, 0, 0.25);
+    margin-top: 50px;
+
+    display: flex;
+    flex-direction: column;
+
+    .sellerDataContainer {
+        display: flex;
+
+        justify-content: center;
+    }
+
+    .sellerData {
+        position: relative;
+        min-width: 95%;
+
+        .sellerLogo {
+            width: 100px;
+            height: 100px;
+
+            border-radius: 50%;
+            overflow: hidden;
+
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            color: var(--default-yellow);
+            .text {
+                font-size: 1.5rem;
+                color: black;
+                font-weight: bold;
+            }
+        }
+
+        .sellerInfoFields {
+            line-height: 25px;
+
+            margin-top: 25px;
+
+            display: flex;
+            justify-content: space-between;
+
+            .name {
+                font-weight: bold;
+                font-size: 1.4rem;
+            }
+
+            .address {
+                font-size: 1.2rem;
+            }
+
+            .email {
+                font-size: 1.2rem;
+                color: var(--theme-color);
+            }
+
+            .productDetails {
+                display: flex;
+                gap: 30px;
+
+                .totalProduct {
+                    display: flex;
+                    flex-direction: column;
+
+                    align-items: center;
+
+                    .title {
+                        font-size: 1.2rem;
+                    }
+
+                    .number {
+                        font-size: 2rem;
+                        color: var(--default-red);
+                    }
+                }
+            }
+        }
+    }
+}
