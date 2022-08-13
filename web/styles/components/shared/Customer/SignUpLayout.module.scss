@@ -1,0 +1,67 @@
+.signupContainer {
+    width: 350px;
+    height: fit-content;
+
+    border: 1px solid var(--line-gray);
+
+    background-color: white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    // align-items: center;
+
+    gap: 20px;
+
+    padding: 10px 15px;
+
+    .logo {
+        align-self: center;
+    }
+
+    .text {
+        .main {
+            font-size: 1.3rem;
+            color: var(--default-dark);
+        }
+
+        .sub {
+            color: var(--prm-grey);
+        }
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+
+        gap: 10px;
+
+        input {
+            width: 100%;
+        }
+    }
+
+    .loginInsted {
+        display: flex;
+        flex-direction: column;
+
+        justify-content: center;
+        align-items: center;
+
+        gap: 5px;
+
+        .info {
+            font-size: 1.3rem;
+        }
+
+        .or {
+            font-size: 1.3rem;
+        }
+
+        .loginOptions {
+            font-size: 2.3rem;
+            display: flex;
+            gap: 15px;
+        }
+    }
+}

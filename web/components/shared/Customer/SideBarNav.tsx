@@ -13,8 +13,8 @@ const SideBarNav: React.FC<Props> = ({ title, options }) => {
         <h1>{title}</h1>
       </section>
       <ul>
-        {options.map((option) => (
-          <li>{option}</li>
+        {options.map((option, i) => (
+          <li key={i}>{option}</li>
         ))}
       </ul>
     </section>

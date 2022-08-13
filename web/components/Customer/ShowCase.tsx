@@ -53,10 +53,11 @@ const ShowCase: React.FC<Props> = ({
         </>
       )}
       <section className={styles.productShowCase__products}>
-        {Array.from({ length: noOfProducts }).map((_) => {
+        {Array.from({ length: noOfProducts }).map((_, i) => {
           if (type === "products") {
             return (
               <ProductHolder
+                key={i}
                 mp={2700}
                 discount={2000}
                 rating={4.1}
