@@ -1,8 +1,56 @@
-import React from "react";
+import Image from "next/image";
+import React, { useRef } from "react";
+import Layout from "../components/Customer/Layout";
+import Button from "../components/shared/Button";
+import Intput from "../components/shared/Input";
 import styles from "../styles/components/Customer/pages/SettingsPage.module.scss";
 
 const SettingsPage = () => {
-  return <div>SettingsPage</div>;
+  const username = useRef<HTMLInputElement>(null);
+  const firstName = useRef<HTMLInputElement>(null);
+  const lastName = useRef<HTMLInputElement>(null);
+  const deliveryAddress = useRef<HTMLInputElement>(null);
+  const nearestLandmark = useRef<HTMLInputElement>(null);
+  const email = useRef<HTMLInputElement>(null);
+
+  return (
+    <Layout sidebar="show">
+      <div className={styles.settingsPage}>
+        <section className={styles.title}>My Profile</section>
+        <div className={styles.upperPart}>
+          <section className={styles.profileSettings}>
+            <Intput input={username} label="Username" />
+            <Intput input={username} label="First Name" />
+            <Intput input={username} label="Last Name" />
+            <Intput input={username} label="Delivery address" />
+            <Intput input={username} label="Nearest Landmark" />
+            <Intput input={username} label="Phone no." />
+            <Intput input={username} label="Email" />
+
+            <Button>Save</Button>
+          </section>
+          <section className={styles.profilePic}>
+            <section className={styles.profilePicHolder}>
+              <Image
+                src="/images/avatar.jpg"
+                layout="fill"
+                alt="avatar"
+                objectFit="cover"
+              />
+            </section>
+            <Button>Change Profile Picture</Button>
+          </section>
+        </div>
+
+        <div className={styles.passwordSettings}>
+          <Intput input={username} label="Old Password" />
+          <Intput input={username} label="New Password" />
+          <Intput input={username} label="Confirm Password" />
+          <Button>Change Profile Picture</Button>
+        </div>
+      </div>
+    </Layout>
+  );
 };
 
 export default SettingsPage;

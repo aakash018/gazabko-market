@@ -46,6 +46,12 @@
     }
 
     &__input {
+        width: 100%;
+
+        input {
+            width: 100% !important ;
+        }
+
         form {
             display: flex;
             flex-direction: column;
