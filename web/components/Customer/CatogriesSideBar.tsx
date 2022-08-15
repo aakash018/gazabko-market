@@ -5,10 +5,9 @@ import Catogries from "./Catogries";
 
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import Input from "../shared/Input";
+
 import Button from "../shared/Button";
 import SideBarNav from "../shared/Customer/SideBarNav";
-import ShowCase from "./ShowCase";
 
 interface Props {
   sidebar: "show" | "hide" | "clickable";
@@ -30,7 +29,10 @@ const CatogriesSideBar: React.FC<Props> = ({ sidebar, type }) => {
       {type === "catogry" && (
         <>
           <CatogriesBtn onClick={handleShowCat} />
-          <div className={showCat ? `${styles.showCat}` : `${styles.hideCat}`}>
+          <div
+            className={showCat ? `${styles.showCat}` : `${styles.hideCat}`}
+            style={{ transition: "all 0.3s ease-in" }}
+          >
             <Catogries />
           </div>
         </>

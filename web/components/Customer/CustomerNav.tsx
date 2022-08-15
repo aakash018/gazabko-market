@@ -35,6 +35,7 @@ const CustomerNav: React.FC = () => {
               onClick={() => {
                 Router.push("/login");
               }}
+              look="blank"
             >
               Login
             </Button>
@@ -43,6 +44,7 @@ const CustomerNav: React.FC = () => {
                 Router.push("/signup");
               }}
               color="success"
+              look="outlined"
             >
               Signup
             </Button>
@@ -89,6 +91,13 @@ const CustomerNav: React.FC = () => {
                         }}
                       >
                         SignOut
+                      </li>
+                      <li
+                        onClick={() => {
+                          logout();
+                        }}
+                      >
+                        Order Details
                       </li>
                     </ul>
                   </div>

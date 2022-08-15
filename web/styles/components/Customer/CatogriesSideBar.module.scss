@@ -3,10 +3,9 @@
     // top: 60px;
 
     width: 280px;
-    height: 100vh;
 
     display: flex;
-    align-items: center;
+
     flex-direction: column;
 
     z-index: 100;
@@ -18,11 +17,12 @@
     }
 
     .showCat {
-        display: block;
+        transform: translateX(0px);
     }
 
     .hideCat {
-        display: none;
+        opacity: 0;
+        transform: translateX(-50px);
     }
 
     .searchSideBar {

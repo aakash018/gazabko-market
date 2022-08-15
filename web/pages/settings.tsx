@@ -47,7 +47,7 @@ const SettingsPage = () => {
                 objectFit="cover"
               />
             </section>
-            <Button>Change Profile Picture</Button>
+            <Button>Change Avatar</Button>
           </section>
         </div>
 
@@ -56,7 +56,7 @@ const SettingsPage = () => {
           <Intput input={username} label="Old Password" />
           <Intput input={username} label="New Password" />
           <Intput input={username} label="Confirm Password" />
-          <Button>Change Profile Picture</Button>
+          <Button>Save</Button>
         </div>
       </div>
     </Layout>

@@ -64,8 +64,8 @@
             position: absolute;
             top: -5px;
             right: 0px;
-            width: 150px;
-            height: 160px;
+            width: 200px;
+            height: fit-content;
 
             display: flex;
             justify-content: center;
@@ -98,7 +98,7 @@
         }
 
         .moveAccountImage {
-            transform: translateX(-46px);
+            transform: translateX(-75px);
         }
     }
 }

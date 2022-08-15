@@ -1,5 +1,5 @@
 import Router from "next/router";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "../components/Customer/Layout";
 import Button from "../components/shared/Button";
 import SignUpLayout from "../components/shared/Customer/SignUpLayout";
@@ -20,7 +20,17 @@ const SignUpPage: React.FC = () => {
   const email = useRef<HTMLInputElement>(null);
   const code = useRef<HTMLInputElement>(null);
 
+  const [showFooter, setShowFooter] = useState(false);
+
   const [page, setPage] = useState<number>(0);
+
+  useEffect(() => {
+    if (page === 0) {
+      setShowFooter(true);
+    } else {
+      setShowFooter(false);
+    }
+  }, [page]);
 
   const handlePageInc = () => {
     if (page >= 3) return;
@@ -35,7 +45,7 @@ const SignUpPage: React.FC = () => {
   return (
     <Layout sidebar="clickable">
       <div className={styles.signupWrapper}>
-        <SignUpLayout>
+        <SignUpLayout showFooter={showFooter}>
           {page === 0 && (
             <div className={styles.formInput}>
               <form>
@@ -66,6 +76,11 @@ const SignUpPage: React.FC = () => {
                   placeholder="Confirm Password"
                   type={"password"}
                 />
+                <select>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="others">Others</option>
+                </select>
                 <Input
                   input={cpassword}
                   placeholder="Phone No."

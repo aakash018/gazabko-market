@@ -7,9 +7,10 @@ import { FcGoogle } from "react-icons/fc";
 
 interface Props {
   children: React.ReactNode;
+  showFooter?: boolean;
 }
 
-const SignUpLayout: React.FC<Props> = ({ children }) => {
+const SignUpLayout: React.FC<Props> = ({ children, showFooter = false }) => {
   return (
     <div className={styles.signupContainer}>
       <div className={styles.logo}>
@@ -24,16 +25,18 @@ const SignUpLayout: React.FC<Props> = ({ children }) => {
         </section>
       </div>
       <div className={styles.content}>{children}</div>
-      <div className={styles.loginInsted}>
-        <span className={styles.info}>
-          Already have an account? Sign in instead
-        </span>
-        <section className={styles.or}>or</section>
-        <div className={styles.loginOptions}>
-          <FaFacebook />
-          <FcGoogle />
+      {showFooter && (
+        <div className={styles.loginInsted}>
+          <span className={styles.info}>
+            Already have an account? Sign in instead
+          </span>
+          <section className={styles.or}>or</section>
+          <div className={styles.loginOptions}>
+            <FaFacebook />
+            <FcGoogle />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

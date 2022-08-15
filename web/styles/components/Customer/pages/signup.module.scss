@@ -29,6 +29,19 @@
             }
         }
 
+        select {
+            padding: 1rem 2rem;
+
+            border: 1px solid var(--line-gray);
+            background-color: white;
+            outline: none;
+
+            &:focus {
+                outline: none;
+                border: 1px solid var(--theme-color);
+            }
+        }
+
         .actionBtn {
             display: flex;
             flex-grow: 1;

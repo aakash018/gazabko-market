@@ -1,8 +1,10 @@
-$top-margin-for-cat: 50px;
+$top-margin-for-cat: 0px;
 
 .catogriesMain {
     position: relative;
-    background-color: white;
+
+    background: #ffffff;
+    border: 1px solid var(--line-gray);
 
     .subcat {
         display: none;
@@ -20,7 +22,7 @@ $top-margin-for-cat: 50px;
         }
 
         button {
-            margin-top: 10px;
+            margin-bottom: 10px;
         }
     }
 

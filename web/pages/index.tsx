@@ -14,13 +14,14 @@ import styles from "../styles/components/Customer/Home.module.scss";
 const Home = () => {
   return (
     <>
-      <Layout sidebar="show">
+      <Layout sidebar="hide">
         <Banner />
 
         <ShowCase
           includeTimer={true}
           expireDate={new Date("August 26, 2022 23:37:25").getTime()}
           title={"Today's deal"}
+          noOfProducts={5}
         />
         <div className={styles.midBanner}>
           <Image
@@ -36,9 +37,19 @@ const Home = () => {
           includeTimer={true}
           expireDate={new Date("August 28, 2022 15:37:25").getTime()}
           title={"Big Sale"}
+          noOfProducts={5}
         />
-        <ShowCase includeTimer={false} title={"New Products"} />
-        <ShowCase includeTimer={false} title={"Recomdended Products"} />
+
+        <ShowCase
+          includeTimer={false}
+          title={"New Products"}
+          noOfProducts={5}
+        />
+        <ShowCase
+          includeTimer={false}
+          title={"Recomdended Products"}
+          noOfProducts={5}
+        />
       </Layout>
     </>
   );
