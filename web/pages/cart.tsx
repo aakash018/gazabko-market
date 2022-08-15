@@ -1,3 +1,4 @@
+import Router from "next/router";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import Layout from "../components/Customer/Layout";
 import Button from "../components/shared/Button";
@@ -56,7 +57,14 @@ const Cart: React.FC = () => {
               <span className={styles.number}>Rs. {totalPrice} </span>
             </section>
             <section className={styles.actionBtn}>
-              <Button color="success">PROCED TO CHECKOUT</Button>
+              <Button
+                color="success"
+                onClick={() => {
+                  Router.push("/checkout");
+                }}
+              >
+                PROCED TO CHECKOUT
+              </Button>
             </section>
           </section>
         </div>

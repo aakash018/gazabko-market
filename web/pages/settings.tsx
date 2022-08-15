@@ -1,7 +1,9 @@
 import Image from "next/image";
 import React, { useRef } from "react";
+import { IoMdAdd } from "react-icons/io";
 import Layout from "../components/Customer/Layout";
 import Button from "../components/shared/Button";
+import ProfileInfoHolder from "../components/shared/Customer/ProfileInfoHolder";
 import Intput from "../components/shared/Input";
 import styles from "../styles/components/Customer/pages/SettingsPage.module.scss";
 
@@ -17,6 +19,13 @@ const SettingsPage = () => {
     <Layout sidebar="show">
       <div className={styles.settingsPage}>
         <section className={styles.title}>My Profile</section>
+        <div className={styles.infoSection}>
+          <ProfileInfoHolder number={46} title="Total purcheses done" />
+          <ProfileInfoHolder number={4} title="Items in wishlist" />
+          <ProfileInfoHolder number={6} title="Items in cart" />
+          <ProfileInfoHolder number={1} title="Item out for delivery" />
+          <ProfileInfoHolder number={8} title="Favourite Seller" />
+        </div>
         <div className={styles.upperPart}>
           <section className={styles.profileSettings}>
             <Intput input={username} label="Username" />
@@ -43,6 +52,7 @@ const SettingsPage = () => {
         </div>
 
         <div className={styles.passwordSettings}>
+          <section className={styles.title}>Password Setting</section>
           <Intput input={username} label="Old Password" />
           <Intput input={username} label="New Password" />
           <Intput input={username} label="Confirm Password" />

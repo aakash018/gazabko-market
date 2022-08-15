@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import Router from "next/router";
 import React, { useState } from "react";
 import {
   BsBagPlusFill,
@@ -66,7 +67,12 @@ const ProductInfoDisplay: React.FC<Props> = ({
         <Quantity quantity={1} totalStock={totalStock} />
         <div> {totalStock} items remaining in stock </div>
         <section className={styles.productDisplay__productInfo_actionBtns}>
-          <Button onClick={() => {}} color="error">
+          <Button
+            onClick={() => {
+              Router.push("/checkout");
+            }}
+            color="error"
+          >
             <span>
               <BsBagPlusFill />
             </span>

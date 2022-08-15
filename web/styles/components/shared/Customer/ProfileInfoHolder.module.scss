@@ -1,0 +1,23 @@
+.profileInfooHolder {
+    width: 260px;
+    height: 125px;
+
+    background-color: rgb(62, 111, 235);
+
+    color: white;
+    padding: 10px;
+
+    .number {
+        font-size: 2.8rem;
+        font-weight: bold;
+    }
+
+    .title {
+        font-size: 1.6rem;
+        margin-bottom: 10px;
+    }
+
+    button {
+        padding: 0.3rem 2rem;
+    }
+}

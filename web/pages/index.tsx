@@ -19,7 +19,7 @@ const Home = () => {
 
         <ShowCase
           includeTimer={true}
-          expireDate={new Date("August 5, 2022 23:37:25").getTime()}
+          expireDate={new Date("August 26, 2022 23:37:25").getTime()}
           title={"Today's deal"}
         />
         <div className={styles.midBanner}>
@@ -34,7 +34,7 @@ const Home = () => {
         </div>
         <ShowCase
           includeTimer={true}
-          expireDate={new Date("August 8, 2022 15:37:25").getTime()}
+          expireDate={new Date("August 28, 2022 15:37:25").getTime()}
           title={"Big Sale"}
         />
         <ShowCase includeTimer={false} title={"New Products"} />
