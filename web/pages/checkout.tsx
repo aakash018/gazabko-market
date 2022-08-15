@@ -1,11 +1,14 @@
 import Link from "next/link";
-import React from "react";
+import React, { useRef } from "react";
 import { BsCash } from "react-icons/bs";
 import Layout from "../components/Customer/Layout";
 import Button from "../components/shared/Button";
+import Intput from "../components/shared/Input";
 import styles from "../styles/components/Customer/pages/Checkout.module.scss";
 
 const CheckoutPage = () => {
+  const deliveryAddress = useRef<HTMLInputElement>(null);
+
   return (
     <Layout sidebar="show">
       <div className={styles.checkoutPage}>
@@ -54,8 +57,12 @@ const CheckoutPage = () => {
                   <span className={styles.title}>Total: </span>
                   <span className={styles.number}>Rs. {2460} </span>
                 </section>
+                <div className={styles.addressInfo}>
+                  <Intput input={deliveryAddress} label="Delivery address" />
+                  <Intput input={deliveryAddress} label="Nearest Landmark" />
+                </div>
                 <section className={styles.actionBtn}>
-                  <Button color="success">CONFIRM ORDER</Button>
+                  <Button>CONFIRM ORDER</Button>
                 </section>
               </section>
             </div>
