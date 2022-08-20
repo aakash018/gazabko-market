@@ -10,6 +10,7 @@ import {
   BsStarHalf,
 } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa";
+import { useAlert } from "../../pages/_app";
 import styles from "../../styles/components/Customer/ProductInfoDisplay.module.scss";
 import Button from "../shared/Button";
 import PriceHolder from "../shared/Customer/PriceHolder";
@@ -33,6 +34,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
   totalStock,
 }) => {
   const [quantity, setQuantity] = useState(1);
+  const { setAlert } = useAlert();
 
   return (
     <div className={styles.productDisplay}>
@@ -78,7 +80,14 @@ const ProductInfoDisplay: React.FC<Props> = ({
             </span>
             <span>Buy Now</span>
           </Button>
-          <Button onClick={() => {}}>
+          <Button
+            onClick={() => {
+              setAlert({
+                type: "message",
+                message: "Added to cart",
+              });
+            }}
+          >
             <span>
               <BsFillCartPlusFill />
             </span>

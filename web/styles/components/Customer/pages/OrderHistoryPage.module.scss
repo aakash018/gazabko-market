@@ -1,0 +1,17 @@
+.orderHistory {
+    display: flex;
+    flex-shrink: 0;
+
+    justify-content: space-evenly;
+
+    width: 100%;
+
+    .products {
+        width: 70%;
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 20px;
+    }
+}

@@ -25,6 +25,7 @@ html {
 
 html {
   font-size: 62.5%;
+  color: var(--default-dark);
 }
 
 a {

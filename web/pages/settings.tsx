@@ -1,11 +1,16 @@
 import Image from "next/image";
 import React, { useRef } from "react";
-import { IoMdAdd } from "react-icons/io";
+import { AiFillHeart } from "react-icons/ai";
+
+import { TbGift } from "react-icons/tb";
+import { MdStorefront } from "react-icons/md";
 import Layout from "../components/Customer/Layout";
-import Button from "../components/shared/Button";
+
 import ProfileInfoHolder from "../components/shared/Customer/ProfileInfoHolder";
-import Intput from "../components/shared/Input";
+
 import styles from "../styles/components/Customer/pages/SettingsPage.module.scss";
+import Timer from "../components/shared/Customer/Timer";
+import SettingPageSettingHolder from "../components/shared/Customer/SettingPageSettingHolder";
 
 const SettingsPage = () => {
   const username = useRef<HTMLInputElement>(null);
@@ -18,7 +23,67 @@ const SettingsPage = () => {
   return (
     <Layout sidebar="show">
       <div className={styles.settingsPage}>
-        <section className={styles.title}>My Profile</section>
+        <div className={styles.mainInfo}>
+          <div className={styles.avatarContainer}>
+            <div>
+              <section className={styles.title}>My Profile</section>
+            </div>
+
+            <div className={styles.avatar}>
+              <Image
+                src={"/images/profile_avatar.png"}
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+          </div>
+          <div className={styles.info}>
+            <div className={styles.profileImg}>
+              <Image
+                src={"/images/avatar.jpg"}
+                layout="fill"
+                objectFit="contain"
+              />
+            </div>
+            <div className={styles.data}>
+              <div style={{ fontSize: "2rem", fontWeight: "bold" }}>
+                Joshep Miles
+              </div>
+              <div style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                joshep@gmial.com
+              </div>
+              <div>986247956</div>
+            </div>
+          </div>
+          <div className={styles.actionBtns}>
+            <div className={styles.buttonHolder}>
+              <AiFillHeart />
+              <div className={styles.data}>5</div>
+            </div>
+            <div className={styles.buttonHolder}>
+              <TbGift />
+              <div className={styles.data}>2</div>
+            </div>
+            <div className={styles.buttonHolder}>
+              <MdStorefront />
+              <div className={styles.data}>4</div>
+            </div>
+          </div>
+        </div>
+        <div className={styles.midBanner}>
+          <Image
+            src={"/images/bigsale.jpg"}
+            layout="fill"
+            priority={true}
+            objectFit="cover"
+            objectPosition={"center"}
+            alt="middle"
+          />
+          <div className={styles.timer}>
+            <div>Ends in:</div>
+            <Timer date={new Date("August 28, 2022 15:37:25").getTime()} />
+          </div>
+        </div>
         <div className={styles.infoSection}>
           <ProfileInfoHolder number={46} title="Total purcheses done" />
           <ProfileInfoHolder number={4} title="Items in wishlist" />
@@ -26,7 +91,25 @@ const SettingsPage = () => {
           <ProfileInfoHolder number={1} title="Item out for delivery" />
           <ProfileInfoHolder number={8} title="Favourite Seller" />
         </div>
-        <div className={styles.upperPart}>
+        <div className={styles.options}>
+          <SettingPageSettingHolder
+            title="Edit Profile"
+            subtitle="username, password etc."
+            onClick={() => {}}
+          />
+          <SettingPageSettingHolder
+            title="Shipping addresses"
+            subtitle="3 ddresses"
+            onClick={() => {}}
+          />
+          <SettingPageSettingHolder
+            title="Promocodes"
+            subtitle="You have special promocodes"
+            onClick={() => {}}
+          />
+        </div>
+        //? Form for profile edit
+        {/* <div className={styles.upperPart}>
           <section className={styles.profileSettings}>
             <Intput input={username} label="Username" />
             <Intput input={username} label="First Name" />
@@ -38,26 +121,27 @@ const SettingsPage = () => {
 
             <Button>Save</Button>
           </section>
-          <section className={styles.profilePic}>
-            <section className={styles.profilePicHolder}>
-              <Image
-                src="/images/avatar.jpg"
-                layout="fill"
-                alt="avatar"
-                objectFit="cover"
-              />
+          <div className={styles.rightSide}>
+            <section className={styles.profilePic}>
+              <section className={styles.profilePicHolder}>
+                <Image
+                  src="/images/avatar.jpg"
+                  layout="fill"
+                  alt="avatar"
+                  objectFit="cover"
+                />
+              </section>
+              <Button>Change Avatar</Button>
             </section>
-            <Button>Change Avatar</Button>
-          </section>
-        </div>
-
-        <div className={styles.passwordSettings}>
-          <section className={styles.title}>Password Setting</section>
-          <Intput input={username} label="Old Password" />
-          <Intput input={username} label="New Password" />
-          <Intput input={username} label="Confirm Password" />
-          <Button>Save</Button>
-        </div>
+            <div className={styles.passwordSettings}>
+              <section className={styles.title}>Password Setting</section>
+              <Intput input={username} label="Old Password" />
+              <Intput input={username} label="New Password" />
+              <Intput input={username} label="Confirm Password" />
+              <Button>Save</Button>
+            </div>
+          </div>
+        </div> */}
       </div>
     </Layout>
   );

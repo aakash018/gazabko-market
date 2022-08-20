@@ -45,9 +45,9 @@ const Catogries: React.FC = () => {
         >
           <Button onClick={handleSubNavigate} look="blank">
             <span>
-              <GiAmpleDress size={"30px"} className={styles.catogryIcon} />
+              <GiAmpleDress size={"25px"} className={styles.catogryIcon} />
             </span>
-            <span className={styles.catText}>Women &apos s Fassion</span>
+            <span className={styles.catText}>Women's Fassion</span>
           </Button>
         </div>
         <div
@@ -57,9 +57,9 @@ const Catogries: React.FC = () => {
         >
           <Button onClick={handleSubNavigate} look="blank">
             <span>
-              <FaTshirt size={"30px"} className={styles.catogryIcon} />
+              <FaTshirt size={"25px"} className={styles.catogryIcon} />
             </span>
-            <span className={styles.catText}>Men &apos s Fassion</span>
+            <span className={styles.catText}>Men's Fassion</span>
           </Button>
         </div>
         <div
@@ -69,7 +69,7 @@ const Catogries: React.FC = () => {
         >
           <Button onClick={handleSubNavigate} look="blank">
             <span>
-              <FaFan size={"30px"} className={styles.catogryIcon} />
+              <FaFan size={"25px"} className={styles.catogryIcon} />
             </span>
             <span className={styles.catText}>Babies & Toys</span>
           </Button>
@@ -81,7 +81,7 @@ const Catogries: React.FC = () => {
         >
           <Button onClick={handleSubNavigate} look="blank">
             <span>
-              <RiComputerFill size={"30px"} className={styles.catogryIcon} />
+              <RiComputerFill size={"25px"} className={styles.catogryIcon} />
             </span>
             <span className={styles.catText}>Electronic Devices</span>
           </Button>
@@ -93,7 +93,7 @@ const Catogries: React.FC = () => {
         >
           <Button onClick={handleSubNavigate} look="blank">
             <span>
-              <FaHeartbeat size={"30px"} className={styles.catogryIcon} />
+              <FaHeartbeat size={"25px"} className={styles.catogryIcon} />
             </span>
             <span className={styles.catText}>Health & Fitness</span>
           </Button>
@@ -105,7 +105,7 @@ const Catogries: React.FC = () => {
         >
           <Button onClick={handleSubNavigate} look="blank">
             <span>
-              <IoMdBeer size={"30px"} className={styles.catogryIcon} />
+              <IoMdBeer size={"25px"} className={styles.catogryIcon} />
             </span>
             <span className={styles.catText}>Gazabko Bar</span>
           </Button>

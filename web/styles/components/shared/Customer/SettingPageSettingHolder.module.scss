@@ -1,0 +1,28 @@
+.settingPageSettingsHolder {
+    width: 350px;
+
+    padding: 10px 10px 10px 3px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    cursor: pointer;
+
+    .title {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .subTitle {
+        color: var(--prm-grey);
+    }
+
+    .actionBtn {
+        font-size: 1.5rem;
+    }
+
+    &:hover {
+        background-color: var(--box-bg);
+    }
+}

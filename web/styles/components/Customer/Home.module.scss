@@ -4,3 +4,25 @@
 
     position: relative;
 }
+
+.popupBanner {
+    position: relative;
+
+    .cancelBtn {
+        font-size: 2.2rem;
+        color: var(--default-red);
+
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 10;
+        cursor: pointer;
+    }
+
+    .bannerImg {
+        width: 850px;
+        height: 550px;
+
+        position: relative;
+    }
+}

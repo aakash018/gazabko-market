@@ -10,20 +10,37 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { useAuth } from "../context/User";
 import Router from "next/router";
+import { useAlert } from "./_app";
 
 const Login: React.FC = () => {
-  const loginRef = useRef<HTMLInputElement>(null);
+  const username = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
 
   const { login } = useAuth();
+  const { setAlert } = useAlert();
 
   const handelLogin = (e: FormEvent) => {
     e.preventDefault();
+
+    console.log(username.current?.value.trim() === "");
+
+    if (username.current?.value.trim() === "") {
+      return setAlert({
+        type: "error",
+        message: "No Username",
+      });
+    }
+
+    setAlert({
+      type: "message",
+      message: "Login Successful",
+    });
     login();
     Router.push("/");
   };
 
   return (
-    <Layout sidebar="hide">
+    <Layout sidebar="hide" showFooter={false}>
       <div className={styles.loginContainer}>
         <div className={styles.login}>
           <div className={styles.login__logo}>
@@ -39,9 +56,9 @@ const Login: React.FC = () => {
           </div>
           <div className={styles.login__input}>
             <form onSubmit={handelLogin}>
-              <IntputField input={loginRef} placeholder="Username" />
+              <IntputField input={username} placeholder="Username" />
               <IntputField
-                input={loginRef}
+                input={password}
                 placeholder="Password"
                 type={"password"}
               />

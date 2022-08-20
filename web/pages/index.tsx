@@ -1,20 +1,104 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Banner from "../components/Customer/Banner";
-import CatogriesSideBar from "../components/Customer/CatogriesSideBar";
-import CustomerNav from "../components/Customer/CustomerNav";
+
 import Layout from "../components/Customer/Layout";
 import ShowCase from "../components/Customer/ShowCase";
-import ProductHolder from "../components/shared/Customer/ProductHolder";
-import Timer from "../components/shared/Customer/Timer";
-import { useAuth } from "../context/User";
+import Modal from "react-modal";
 
 import styles from "../styles/components/Customer/Home.module.scss";
 
+import { MdCancel } from "react-icons/md";
+import LoginReminder from "../components/Customer/LoginReminder";
+import { useAuth } from "../context/User";
+
 const Home = () => {
+  const [bannerModalIsOpen, setIsOpen] = useState(false);
+
+  const { isLogedIn } = useAuth();
+
+  const [modalLoginReminderOpen, setIsLoginReminderOpen] = useState(false);
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+  function closeLoginReminderModal() {
+    setIsLoginReminderOpen(false);
+  }
+
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      padding: "0px",
+      overflow: "hidden",
+    },
+    overlay: {
+      backgroundColor: "rgba(61,61,61,0.5)",
+      zIndex: 1000,
+    },
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsOpen(true);
+    }, 3000);
+  }, []);
+
+  // useEffect(() => {
+  //   setInterval(() => {
+  //     setIsOpen(true);
+  //   }, 5000);
+  // }, []);
+
+  useEffect(() => {
+    if (!isLogedIn) {
+      setTimeout(() => {
+        setIsLoginReminderOpen(true);
+      }, 10000);
+    }
+  }, []);
+
   return (
     <>
       <Layout sidebar="hide">
+        <Modal
+          isOpen={modalLoginReminderOpen}
+          style={customStyles}
+          onRequestClose={closeLoginReminderModal}
+        >
+          <LoginReminder />
+        </Modal>
+        <Modal
+          isOpen={bannerModalIsOpen}
+          // onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Popoup banner Modal"
+        >
+          <div className={styles.popupBanner}>
+            <div
+              className={styles.cancelBtn}
+              onClick={() => {
+                setIsOpen(false);
+              }}
+            >
+              <MdCancel />
+            </div>
+            <div className={styles.bannerImg}>
+              <Image
+                src="/images/popup_banner.png"
+                layout="fill"
+                objectFit="cover"
+                objectPosition={"top"}
+              />
+            </div>
+          </div>
+        </Modal>
         <Banner />
 
         <ShowCase

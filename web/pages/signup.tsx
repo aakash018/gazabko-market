@@ -43,7 +43,7 @@ const SignUpPage: React.FC = () => {
   };
 
   return (
-    <Layout sidebar="clickable">
+    <Layout sidebar="clickable" showFooter={false}>
       <div className={styles.signupWrapper}>
         <SignUpLayout showFooter={showFooter}>
           {page === 0 && (

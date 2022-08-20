@@ -7,6 +7,7 @@ import Router from "next/router";
 import { useAuth } from "../../context/User";
 import { AiFillHeart, AiOutlineShoppingCart } from "react-icons/ai";
 import Link from "next/link";
+import CatogriesBtn from "../shared/Customer/CatogriesBtn";
 
 const CustomerNav: React.FC = () => {
   const { isLogedIn, logout } = useAuth();
@@ -17,7 +18,7 @@ const CustomerNav: React.FC = () => {
   };
 
   return (
-    <header>
+    <header className={styles.header}>
       <nav className={styles.customerNav}>
         <section className="logo">
           <Image
@@ -107,6 +108,13 @@ const CustomerNav: React.FC = () => {
           </div>
         )}
       </nav>
+      <div className={styles.bottomInfo}>
+        <ul>
+          <li>Contact Us at: 9846523283</li>
+          <li>SELL ON DARAZ</li>
+          <li>CUSTOMER CARE</li>
+        </ul>
+      </div>
     </header>
   );
 };
