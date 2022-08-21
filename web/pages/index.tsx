@@ -11,6 +11,7 @@ import styles from "../styles/components/Customer/Home.module.scss";
 import { MdCancel } from "react-icons/md";
 import LoginReminder from "../components/Customer/LoginReminder";
 import { useAuth } from "../context/User";
+import CatogriesGrid from "../components/Customer/CatogiesGrid";
 
 const Home = () => {
   const [bannerModalIsOpen, setIsOpen] = useState(false);
@@ -123,6 +124,7 @@ const Home = () => {
           title={"Big Sale"}
           noOfProducts={5}
         />
+        <CatogriesGrid />
 
         <ShowCase
           includeTimer={false}

@@ -6,16 +6,26 @@ import styles from "../../styles/components/Customer/pages/OrderHistoryPage.modu
 const OrderHistoryPage: React.FC = () => {
   return (
     <Layout sidebar="clickable">
-      <div>Order Details</div>
       <div className={styles.orderHistory}>
-        <div className={styles.orderHistoryNav}>
-          <div className={styles.title}>My Orders</div>
-          <ul>
-            <li>My Returns</li>
-            <li>My Cancellations</li>
-          </ul>
+        <div>
+          <div className={styles.orderHistoryNav}>
+            <div className={styles.title}>My Orders</div>
+            <ul>
+              <li>My Returns</li>
+              <li>My Cancellations</li>
+            </ul>
+          </div>
+          <div className={styles.orderHistoryNav}>
+            <div className={styles.title}>My Wishlist</div>
+          </div>
+          <div className={styles.orderHistoryNav}>
+            <div className={styles.title}>My Reviews</div>
+          </div>
         </div>
+
         <div className={styles.products}>
+          <div className={styles.title}>Order History</div>
+
           <OrderHistoryProduct />
           <OrderHistoryProduct />
           <OrderHistoryProduct />

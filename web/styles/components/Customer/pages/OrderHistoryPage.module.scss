@@ -2,11 +2,39 @@
     display: flex;
     flex-shrink: 0;
 
-    justify-content: space-evenly;
+    justify-content: space-between;
 
     width: 100%;
 
+    .orderHistoryNav {
+        margin-top: 50px;
+        line-height: 25px;
+        .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        ul {
+            li {
+                font-size: 1.2rem;
+                list-style: none;
+                margin-left: 10px;
+
+                cursor: pointer;
+
+                &:hover {
+                    color: var(--theme-color);
+                }
+            }
+        }
+    }
+
     .products {
+        .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        margin-right: 100px;
         width: 70%;
 
         display: flex;
