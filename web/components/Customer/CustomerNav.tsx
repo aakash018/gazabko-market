@@ -108,13 +108,13 @@ const CustomerNav: React.FC = () => {
           </div>
         )}
       </nav>
-      <div className={styles.bottomInfo}>
+      {/* <div className={styles.bottomInfo}>
         <ul>
           <li>Contact Us at: 9846523283</li>
           <li>SELL ON DARAZ</li>
           <li>CUSTOMER CARE</li>
         </ul>
-      </div>
+      </div> */}
     </header>
   );
 };

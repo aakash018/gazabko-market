@@ -12,6 +12,7 @@ import { MdCancel } from "react-icons/md";
 import LoginReminder from "../components/Customer/LoginReminder";
 import { useAuth } from "../context/User";
 import CatogriesGrid from "../components/Customer/CatogiesGrid";
+import Button from "../components/shared/Button";
 
 const Home = () => {
   const [bannerModalIsOpen, setIsOpen] = useState(false);
@@ -134,8 +135,17 @@ const Home = () => {
         <ShowCase
           includeTimer={false}
           title={"Recomdended Products"}
-          noOfProducts={5}
+          noOfProducts={15}
         />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Button look="outlined">Load More</Button>
+        </div>
       </Layout>
     </>
   );

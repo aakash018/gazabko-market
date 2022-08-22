@@ -1,18 +1,13 @@
 import Image from "next/image";
 import React from "react";
 import styles from "../../styles/components/Customer/Banners.module.scss";
+import HomePageBannerSlider from "./HomePageBannerSlider";
 
 const Banner: React.FC = () => {
   return (
     <div className={styles.banners}>
       <div className={styles.banners__top}>
-        <Image
-          src={"/images/apple.jpg"}
-          width="100%"
-          height={"40px"}
-          layout="responsive"
-          alt="topImg"
-        />
+        <HomePageBannerSlider />
       </div>
       <div className={styles.banners__bottomBanners}>
         <div className={styles.banners__left}>

@@ -1,0 +1,48 @@
+.homePageBannerSlider {
+    width: 100%;
+    height: 100%;
+
+    position: relative;
+    .imageContainer {
+        width: 100%;
+        height: fit-content;
+        position: absolute;
+        opacity: 0;
+
+        transition: all 0.3s ease-in;
+
+        .imageHolder {
+            width: 100%;
+            height: 550px;
+
+            position: relative;
+        }
+    }
+
+    .show {
+        opacity: 1;
+    }
+
+    .navBtnLeft {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+
+        transform: translateY(-50%);
+
+        font-size: 3.5rem;
+        z-index: 10;
+    }
+
+    .navBtnRight {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+
+        transform: translateY(-50%);
+
+        font-size: 3.5rem;
+
+        z-index: 10;
+    }
+}
