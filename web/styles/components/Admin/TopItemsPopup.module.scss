@@ -1,0 +1,26 @@
+.topItemsPopup {
+    padding: 20px;
+    width: 500px;
+
+    .title {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .content {
+        font-size: 1.4rem;
+        .itemHolder {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+
+            .name {
+                color: var(--theme-color);
+            }
+
+            .amount {
+                font-weight: bold;
+            }
+        }
+    }
+}

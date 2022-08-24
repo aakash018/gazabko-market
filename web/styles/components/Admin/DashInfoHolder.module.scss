@@ -1,0 +1,86 @@
+.chartContainer {
+    width: 400px;
+    height: 170px;
+
+    display: flex;
+    justify-content: space-between;
+
+    padding: 10px;
+
+    background: #ffffff;
+    box-shadow: 0px 0px 33px -10px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+
+    .amount {
+        font-size: 2rem;
+
+        font-weight: bold;
+    }
+
+    .subTitle {
+        font-size: 1.2rem;
+        font-weight: bold;
+
+        color: var(--prm-grey);
+    }
+    .chart {
+        width: 40%;
+        height: 100%;
+    }
+
+    .topItems {
+        margin-top: 20px;
+        ul {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            li {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 15px;
+            }
+        }
+
+        .amount {
+            font-size: 1.2rem;
+        }
+
+        .label {
+            display: flex;
+            gap: 10px;
+        }
+
+        .item {
+            font-size: 1.2rem;
+
+            color: var(--prm-grey);
+        }
+
+        .first {
+            width: 20px;
+            border-radius: 50px;
+            height: 20px;
+            border-radius: 50px;
+
+            background-color: rgb(255, 99, 132);
+        }
+
+        .second {
+            width: 20px;
+            border-radius: 50px;
+            height: 20px;
+            border-radius: 50px;
+
+            background-color: rgb(54, 162, 235);
+        }
+        .third {
+            width: 20px;
+            border-radius: 50px;
+            height: 20px;
+            border-radius: 50px;
+
+            background-color: rgb(255, 205, 86);
+        }
+    }
+}

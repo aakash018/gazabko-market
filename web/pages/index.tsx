@@ -13,6 +13,7 @@ import LoginReminder from "../components/Customer/LoginReminder";
 import { useAuth } from "../context/User";
 import CatogriesGrid from "../components/Customer/CatogiesGrid";
 import Button from "../components/shared/Button";
+import { customStyles } from "../modalStyle";
 
 const Home = () => {
   const [bannerModalIsOpen, setIsOpen] = useState(false);
@@ -27,23 +28,6 @@ const Home = () => {
   function closeLoginReminderModal() {
     setIsLoginReminderOpen(false);
   }
-
-  const customStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      marginRight: "-50%",
-      transform: "translate(-50%, -50%)",
-      padding: "0px",
-      overflow: "hidden",
-    },
-    overlay: {
-      backgroundColor: "rgba(61,61,61,0.5)",
-      zIndex: 1000,
-    },
-  };
 
   useEffect(() => {
     setTimeout(() => {

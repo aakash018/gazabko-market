@@ -1,0 +1,22 @@
+.trackers {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.goals {
+    .title {
+        font-size: 1.5rem;
+        font-weight: bold;
+
+        margin-bottom: 25px;
+    }
+
+    .actionBtns {
+        margin-top: 20px;
+
+        display: flex;
+        justify-content: space-between;
+    }
+}

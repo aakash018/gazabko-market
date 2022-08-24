@@ -51,9 +51,9 @@ const SellerInfoPage = () => {
         </div>
 
         <section className={styles.products}>
-          <ShowCase title="Offered Deals" showTitle={true} noOfProducts={5} />
-          <ShowCase title="Popular Items" showTitle={true} noOfProducts={5} />
-          <ShowCase title="All Items" showTitle={true} noOfProducts={15} />
+          <ShowCase title="Offered Deals" showTitle={true} />
+          <ShowCase title="Popular Items" showTitle={true} />
+          <ShowCase title="All Items" showTitle={true} noOfProducts={12} />
         </section>
         <div style={{ alignSelf: "center", marginTop: "20px" }}>
           <Button color="error" look="outlined">
