@@ -14,6 +14,7 @@ import { useAuth } from "../context/User";
 import CatogriesGrid from "../components/Customer/CatogiesGrid";
 import Button from "../components/shared/Button";
 import { customStyles } from "../modalStyle";
+import CatogriesGridBox from "../components/Customer/CatogriesGridBox";
 
 const Home = () => {
   const [bannerModalIsOpen, setIsOpen] = useState(false);
@@ -109,7 +110,10 @@ const Home = () => {
           title={"Big Sale"}
           noOfProducts={5}
         />
-        <CatogriesGrid />
+        <div className={styles.catogriesGrid}>
+          <div className={styles.title}>Catogries</div>
+          <CatogriesGridBox />
+        </div>
 
         <ShowCase
           includeTimer={false}
