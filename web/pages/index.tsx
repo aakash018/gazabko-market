@@ -49,7 +49,7 @@ const Home = () => {
 
   return (
     <>
-      <Layout sidebar="clickable">
+      <Layout sidebar="show">
         <Modal
           isOpen={modalLoginReminderOpen}
           style={customStyles}

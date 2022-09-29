@@ -28,7 +28,7 @@ const CatogriesSideBar: React.FC<Props> = ({ sidebar, type }) => {
     <div className={styles.ctg}>
       {type === "catogry" && (
         <>
-          <CatogriesBtn onClick={handleShowCat} />
+          {/* <CatogriesBtn onClick={handleShowCat} /> */}
           <div
             className={showCat ? `${styles.showCat}` : `${styles.hideCat}`}
             style={{ transition: "all 0.3s ease-in" }}

@@ -1,0 +1,21 @@
+.catWraper {
+    position: relative;
+}
+
+.catHolder {
+    width: 100%;
+    flex-grow: 1;
+}
+
+.catHolder:hover .catText {
+    color: var(--theme-color);
+}
+
+.catogryIcon {
+    color: var(--theme-color);
+}
+
+.subcat {
+    display: none;
+    position: absolute;
+}

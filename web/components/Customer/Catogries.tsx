@@ -10,6 +10,7 @@ import { FaHeartbeat } from "react-icons/fa";
 import { IoMdBeer } from "react-icons/io";
 import SubCatogries from "./SubCatogries";
 import Router from "next/router";
+import CatogriesHolder from "../shared/Customer/CatogriesHolder";
 
 const Catogries: React.FC = () => {
   const subCatRef = useRef<HTMLDivElement>(null);
@@ -38,78 +39,24 @@ const Catogries: React.FC = () => {
         <SubCatogries />
       </div>
       <div className={styles.catContainer}>
-        <div
-          onMouseEnter={showSubCat}
-          onMouseLeave={hideSubCat}
-          className={styles.catHolder}
-        >
-          <Button onClick={handleSubNavigate} look="blank">
-            <span>
-              <GiAmpleDress size={"25px"} className={styles.catogryIcon} />
-            </span>
-            <span className={styles.catText}>Women's Fassion</span>
-          </Button>
-        </div>
-        <div
-          onMouseEnter={showSubCat}
-          onMouseLeave={hideSubCat}
-          className={styles.catHolder}
-        >
-          <Button onClick={handleSubNavigate} look="blank">
-            <span>
-              <FaTshirt size={"25px"} className={styles.catogryIcon} />
-            </span>
-            <span className={styles.catText}>Men's Fassion</span>
-          </Button>
-        </div>
-        <div
-          onMouseEnter={showSubCat}
-          onMouseLeave={hideSubCat}
-          className={styles.catHolder}
-        >
-          <Button onClick={handleSubNavigate} look="blank">
-            <span>
-              <FaFan size={"25px"} className={styles.catogryIcon} />
-            </span>
-            <span className={styles.catText}>Babies & Toys</span>
-          </Button>
-        </div>
-        <div
-          onMouseEnter={showSubCat}
-          onMouseLeave={hideSubCat}
-          className={styles.catHolder}
-        >
-          <Button onClick={handleSubNavigate} look="blank">
-            <span>
-              <RiComputerFill size={"25px"} className={styles.catogryIcon} />
-            </span>
-            <span className={styles.catText}>Electronic Devices</span>
-          </Button>
-        </div>
-        <div
-          onMouseEnter={showSubCat}
-          onMouseLeave={hideSubCat}
-          className={styles.catHolder}
-        >
-          <Button onClick={handleSubNavigate} look="blank">
-            <span>
-              <FaHeartbeat size={"25px"} className={styles.catogryIcon} />
-            </span>
-            <span className={styles.catText}>Health & Fitness</span>
-          </Button>
-        </div>
-        <div
-          onMouseEnter={showSubCat}
-          onMouseLeave={hideSubCat}
-          className={styles.catHolder}
-        >
-          <Button onClick={handleSubNavigate} look="blank">
-            <span>
-              <IoMdBeer size={"25px"} className={styles.catogryIcon} />
-            </span>
-            <span className={styles.catText}>Gazabko Bar</span>
-          </Button>
-        </div>
+        <CatogriesHolder name="Women's Fassion">
+          <GiAmpleDress size={"25px"} className={styles.catogryIcon} />
+        </CatogriesHolder>
+        <CatogriesHolder name="Men's Fassion">
+          <FaTshirt size={"25px"} className={styles.catogryIcon} />
+        </CatogriesHolder>
+        <CatogriesHolder name="Babies & Toys">
+          <FaFan size={"25px"} className={styles.catogryIcon} />
+        </CatogriesHolder>
+        <CatogriesHolder name="Electronic Devices">
+          <RiComputerFill size={"25px"} className={styles.catogryIcon} />
+        </CatogriesHolder>
+        <CatogriesHolder name="Health & Fitness">
+          <FaHeartbeat size={"25px"} className={styles.catogryIcon} />
+        </CatogriesHolder>
+        <CatogriesHolder name="Gazabko Bar">
+          <IoMdBeer size={"25px"} className={styles.catogryIcon} />
+        </CatogriesHolder>
       </div>
     </div>
   );

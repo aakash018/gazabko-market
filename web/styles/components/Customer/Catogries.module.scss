@@ -16,8 +16,11 @@ $top-margin-for-cat: 0px;
 
     .catContainer {
         margin-top: $top-margin-for-cat;
-        // display: flex;
-        // width: 100vw;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+
+        width: 100vw;
 
         .catogryIcon {
             color: var(--theme-color);

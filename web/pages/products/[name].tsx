@@ -12,7 +12,7 @@ const ProductDisplay: React.FC = () => {
   const router = useRouter();
   const { name } = router.query;
   return (
-    <Layout sidebar="hide">
+    <Layout sidebar="show">
       <div className={styles.productDisplay}>
         <div className={styles.productInfo}>
           <ProductInfoDisplay
