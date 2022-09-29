@@ -19,7 +19,7 @@ import CatogriesGridBox from "../components/Customer/CatogriesGridBox";
 const Home = () => {
   const [bannerModalIsOpen, setIsOpen] = useState(false);
 
-  const { isLogedIn } = useAuth();
+  const { isLogedIn, showBanners, disableBanners } = useAuth();
 
   const [modalLoginReminderOpen, setIsLoginReminderOpen] = useState(false);
 
@@ -32,15 +32,12 @@ const Home = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      setIsOpen(true);
+      if (showBanners) {
+        setIsOpen(true);
+        disableBanners();
+      }
     }, 3000);
   }, []);
-
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     setIsOpen(true);
-  //   }, 5000);
-  // }, []);
 
   useEffect(() => {
     if (!isLogedIn) {
@@ -52,7 +49,7 @@ const Home = () => {
 
   return (
     <>
-      <Layout sidebar="hide">
+      <Layout sidebar="clickable">
         <Modal
           isOpen={modalLoginReminderOpen}
           style={customStyles}
