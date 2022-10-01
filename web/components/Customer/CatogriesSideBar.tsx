@@ -26,7 +26,7 @@ const CatogriesSideBar: React.FC<Props> = ({ sidebar, type }) => {
   };
 
   return (
-    <div className={styles.ctg} {...(type === "catogryPage" ? { style: { position: 'sticky', top: '100px' } } : {})}>
+    <div className={styles.ctg} {...((type === "catogryPage" || type === "search") ? { style: { position: 'sticky', top: '100px' } } : {})}>
       {type === "catogry" && (
         <>
           {/* <CatogriesBtn onClick={handleShowCat} /> */}
