@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import CatogriesBtn from "../shared/Customer/CatogriesBtn";
 import styles from "../../styles/components/Customer/CatogriesSideBar.module.scss";
+
 import Catogries from "./Catogries";
 
 import Slider from "rc-slider";
@@ -113,7 +114,7 @@ const CatogriesSideBar: React.FC<Props> = ({ sidebar, type }) => {
             </div>
           </section>
 
-          <Button onClick={() => {}}>Filter </Button>
+          <Button onClick={() => { }}>Filter </Button>
         </div>
       )}
 
@@ -180,7 +181,7 @@ const CatogriesSideBar: React.FC<Props> = ({ sidebar, type }) => {
               </section>
             </div>
           </section>
-          <Button onClick={() => {}}>Filter </Button>
+          <Button onClick={() => { }}>Filter </Button>
         </div>
       )}
     </div>
