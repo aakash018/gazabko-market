@@ -26,7 +26,7 @@ const CatogriesSideBar: React.FC<Props> = ({ sidebar, type }) => {
   };
 
   return (
-    <div className={styles.ctg}>
+    <div className={styles.ctg} {...(type === "catogryPage" ? { style: { position: 'sticky', top: '100px' } } : {})}>
       {type === "catogry" && (
         <>
           {/* <CatogriesBtn onClick={handleShowCat} /> */}
@@ -39,152 +39,156 @@ const CatogriesSideBar: React.FC<Props> = ({ sidebar, type }) => {
         </>
       )}
 
-      {type === "search" && (
-        <div className={styles.searchSideBar}>
-          <section className={styles.catToSearchIn}>
-            <SideBarNav
-              title="Category to Search In "
-              options={["Electronics", "Men's Fassion", "Women's Fassion"]}
-            />
-          </section>
-          <section className={styles.priceRange}>
-            <section className={styles.title}>
-              <h1>Price Range</h1>
-            </section>
-            <section className={styles.rangeBar}>
-              <Slider
-                range={true}
-                value={priceRangeSlider}
-                onChange={(value: any) => {
-                  setPriceRangeSlider(value);
-                }}
+      {
+        type === "search" && (
+          <div className={styles.searchSideBar}>
+            <section className={styles.catToSearchIn}>
+              <SideBarNav
+                title="Category to Search In "
+                options={["Electronics", "Men's Fassion", "Women's Fassion"]}
               />
             </section>
-            <div className={styles.values}>
-              <section className={styles.val}>
-                <span>From</span>
-                <input
-                  className={styles.rangeUserInput}
-                  type="number"
-                  value={priceRangeSlider[0]}
-                  onChange={(e) => {
-                    setPriceRangeSlider((prev) => [
-                      parseInt(e.target.value),
-                      prev[1],
-                    ]);
+            <section className={styles.priceRange}>
+              <section className={styles.title}>
+                <h1>Price Range</h1>
+              </section>
+              <section className={styles.rangeBar}>
+                <Slider
+                  range={true}
+                  value={priceRangeSlider}
+                  onChange={(value: any) => {
+                    setPriceRangeSlider(value);
                   }}
                 />
               </section>
-              <section className={styles.val}>
-                <span>To</span>
-                <input
-                  className={styles.rangeUserInput}
-                  type="number"
-                  value={priceRangeSlider[1]}
-                  onChange={(e) => {
-                    setPriceRangeSlider((prev) => [
-                      prev[0],
-                      parseInt(e.target.value),
-                    ]);
-                  }}
-                />
-              </section>
-            </div>
-          </section>
-          <section className={styles.brand}>
-            <section className={styles.title}>
-              {" "}
-              <h1>Brands</h1>{" "}
+              <div className={styles.values}>
+                <section className={styles.val}>
+                  <span>From</span>
+                  <input
+                    className={styles.rangeUserInput}
+                    type="number"
+                    value={priceRangeSlider[0]}
+                    onChange={(e) => {
+                      setPriceRangeSlider((prev) => [
+                        parseInt(e.target.value),
+                        prev[1],
+                      ]);
+                    }}
+                  />
+                </section>
+                <section className={styles.val}>
+                  <span>To</span>
+                  <input
+                    className={styles.rangeUserInput}
+                    type="number"
+                    value={priceRangeSlider[1]}
+                    onChange={(e) => {
+                      setPriceRangeSlider((prev) => [
+                        prev[0],
+                        parseInt(e.target.value),
+                      ]);
+                    }}
+                  />
+                </section>
+              </div>
             </section>
-            <div className={styles.checkBox}>
-              <input type="checkbox" />
-              <span> brand</span>
-            </div>
-            <div className={styles.checkBox}>
-              <input type="checkbox" />
-              <span> brand</span>
-            </div>
-            <div className={styles.checkBox}>
-              <input type="checkbox" />
-              <span> brand</span>
-            </div>
-            <div className={styles.checkBox}>
-              <input type="checkbox" />
-              <span> brand</span>
-            </div>
-          </section>
-
-          <Button onClick={() => { }}>Filter </Button>
-        </div>
-      )}
-
-      {type === "catogryPage" && (
-        <div className={styles.catogryPage}>
-          <section className={styles.subCatogries}>
-            <SideBarNav
-              title="Sub-catogries"
-              options={[
-                "xyz subcat",
-                "xyz subcat",
-                "xyz subcat",
-                "xyz subcat",
-                "xyz subcat",
-              ]}
-            />
-          </section>
-
-          <section className={styles.brands}>
-            <SideBarNav
-              title="Brands"
-              options={["xyz ", "xyz ", "xyz", "xyz", "xyz "]}
-            />
-          </section>
-          <section className={styles.priceRange}>
-            <section className={styles.title}>
-              <h1>Price</h1>
+            <section className={styles.brand}>
+              <section className={styles.title}>
+                {" "}
+                <h1>Brands</h1>{" "}
+              </section>
+              <div className={styles.checkBox}>
+                <input type="checkbox" />
+                <span> brand</span>
+              </div>
+              <div className={styles.checkBox}>
+                <input type="checkbox" />
+                <span> brand</span>
+              </div>
+              <div className={styles.checkBox}>
+                <input type="checkbox" />
+                <span> brand</span>
+              </div>
+              <div className={styles.checkBox}>
+                <input type="checkbox" />
+                <span> brand</span>
+              </div>
             </section>
-            <Slider
-              range={true}
-              value={priceRangeSliderCat}
-              onChange={(value: any) => {
-                setPriceRangeSliderCat(value);
-              }}
-            />
-            <div className={styles.values}>
-              <section className={styles.val}>
-                <span>From</span>
-                <input
-                  className={styles.rangeUserInput}
-                  type="number"
-                  value={priceRangeSliderCat[0]}
-                  onChange={(e) => {
-                    setPriceRangeSlider((prev) => [
-                      parseInt(e.target.value),
-                      prev[1],
-                    ]);
-                  }}
-                />
+
+            <Button onClick={() => { }}>Filter </Button>
+          </div>
+        )
+      }
+
+      {
+        type === "catogryPage" && (
+          <div className={styles.catogryPage}>
+            <section className={styles.subCatogries}>
+              <SideBarNav
+                title="Sub-catogries"
+                options={[
+                  "xyz subcat",
+                  "xyz subcat",
+                  "xyz subcat",
+                  "xyz subcat",
+                  "xyz subcat",
+                ]}
+              />
+            </section>
+
+            <section className={styles.brands}>
+              <SideBarNav
+                title="Brands"
+                options={["xyz ", "xyz ", "xyz", "xyz", "xyz "]}
+              />
+            </section>
+            <section className={styles.priceRange}>
+              <section className={styles.title}>
+                <h1>Price</h1>
               </section>
-              <section className={styles.val}>
-                <span>To</span>
-                <input
-                  className={styles.rangeUserInput}
-                  type="number"
-                  value={priceRangeSliderCat[1]}
-                  onChange={(e) => {
-                    setPriceRangeSlider((prev) => [
-                      prev[0],
-                      parseInt(e.target.value),
-                    ]);
-                  }}
-                />
-              </section>
-            </div>
-          </section>
-          <Button onClick={() => { }}>Filter </Button>
-        </div>
-      )}
-    </div>
+              <Slider
+                range={true}
+                value={priceRangeSliderCat}
+                onChange={(value: any) => {
+                  setPriceRangeSliderCat(value);
+                }}
+              />
+              <div className={styles.values}>
+                <section className={styles.val}>
+                  <span>From</span>
+                  <input
+                    className={styles.rangeUserInput}
+                    type="number"
+                    value={priceRangeSliderCat[0]}
+                    onChange={(e) => {
+                      setPriceRangeSlider((prev) => [
+                        parseInt(e.target.value),
+                        prev[1],
+                      ]);
+                    }}
+                  />
+                </section>
+                <section className={styles.val}>
+                  <span>To</span>
+                  <input
+                    className={styles.rangeUserInput}
+                    type="number"
+                    value={priceRangeSliderCat[1]}
+                    onChange={(e) => {
+                      setPriceRangeSlider((prev) => [
+                        prev[0],
+                        parseInt(e.target.value),
+                      ]);
+                    }}
+                  />
+                </section>
+              </div>
+            </section>
+            <Button onClick={() => { }}>Filter </Button>
+          </div>
+        )
+      }
+    </div >
   );
 };
 
