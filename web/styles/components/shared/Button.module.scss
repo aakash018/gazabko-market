@@ -17,6 +17,12 @@
     background-color: var(--default-green);
 }
 
+.white {
+    background-color: white;
+    outline: 1px solid black;
+    color: black;
+}
+
 .outlined {
     background-color: transparent;
     outline: 2px solid var(--default-red);

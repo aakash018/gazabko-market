@@ -7,7 +7,6 @@ import Router from "next/router";
 import { useAuth } from "../../context/User";
 import { AiFillHeart, AiOutlineShoppingCart } from "react-icons/ai";
 import Link from "next/link";
-import CatogriesBtn from "../shared/Customer/CatogriesBtn";
 
 const CustomerNav: React.FC = () => {
   const { isLogedIn, logout } = useAuth();
@@ -95,7 +94,7 @@ const CustomerNav: React.FC = () => {
                       </li>
                       <li
                         onClick={() => {
-                          logout();
+                          Router.push("/orderHistory");
                         }}
                       >
                         Order Details

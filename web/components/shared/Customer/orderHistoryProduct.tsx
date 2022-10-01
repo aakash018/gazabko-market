@@ -1,9 +1,15 @@
 import Image from "next/image";
+import Router from "next/router";
 import React from "react";
 import styles from "../../../styles/components/shared/Customer/orderHistoryProducts.module.scss";
 const OrderHistoryProduct: React.FC = () => {
   return (
-    <div className={styles.orderHistoryProduct}>
+    <div
+      className={styles.orderHistoryProduct}
+      onClick={() => {
+        Router.push("/orderHistory/dfjhdsgj");
+      }}
+    >
       <section className={styles.productImg}>
         <Image
           src={"/images/shoes.jpg"}

@@ -11,6 +11,9 @@ import Goals from "../../components/Admin/Goals";
 import Modal from "react-modal";
 import TopItemsPopup from "../../components/Admin/TopItemsPopup";
 import { customStyles } from "../../modalStyle";
+import InfoCard from "../../components/Admin/shared/InfoCard";
+import { MdOutlinePendingActions } from "react-icons/md";
+import OrderingInfo from "../../components/Admin/OrderingInfo";
 
 const topItems = [
   {
@@ -90,6 +93,9 @@ const DashPage: React.FC = () => {
               }}
               onClick={handleClick}
             />
+          </div>
+          <div className={styles.ordersDetains}>
+            <OrderingInfo />
           </div>
           <div className={styles.earningGraph}>
             <span>Monthly Sales</span>

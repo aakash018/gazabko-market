@@ -1,0 +1,61 @@
+.upperPart {
+    display: flex;
+    gap: 50px;
+
+    input {
+        width: 100%;
+    }
+
+    label {
+        font-weight: bold;
+        font-size: 1.3rem;
+    }
+
+    .profileSettings {
+        display: flex;
+        flex-direction: column;
+
+        gap: 10px;
+
+        width: 40%;
+    }
+
+    .profilePic {
+        align-self: flex-start;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .profilePicHolder {
+            width: 130px;
+            height: 130px;
+
+            position: relative;
+        }
+    }
+
+    .rightSide {
+        display: flex;
+        flex-direction: column;
+    }
+    .passwordSettings {
+        min-width: 50%;
+        margin-top: 65px;
+        justify-self: flex-end;
+
+        .title {
+            margin-bottom: 20px;
+        }
+
+        input {
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 10px;
+
+            margin-bottom: 50px;
+        }
+    }
+}

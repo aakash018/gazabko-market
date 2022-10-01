@@ -4,13 +4,14 @@ import { AiFillHeart } from "react-icons/ai";
 
 import { TbGift } from "react-icons/tb";
 import { MdStorefront } from "react-icons/md";
-import Layout from "../components/Customer/Layout";
+import Layout from "../../components/Customer/Layout";
 
-import ProfileInfoHolder from "../components/shared/Customer/ProfileInfoHolder";
+import ProfileInfoHolder from "../../components/shared/Customer/ProfileInfoHolder";
 
-import styles from "../styles/components/Customer/pages/SettingsPage.module.scss";
-import Timer from "../components/shared/Customer/Timer";
-import SettingPageSettingHolder from "../components/shared/Customer/SettingPageSettingHolder";
+import styles from "../../styles/components/Customer/pages/SettingsPage.module.scss";
+import Timer from "../../components/shared/Customer/Timer";
+import SettingPageSettingHolder from "../../components/shared/Customer/SettingPageSettingHolder";
+import Router from "next/router";
 
 const SettingsPage = () => {
   const username = useRef<HTMLInputElement>(null);
@@ -95,7 +96,9 @@ const SettingsPage = () => {
           <SettingPageSettingHolder
             title="Edit Profile"
             subtitle="username, password etc."
-            onClick={() => {}}
+            onClick={() => {
+              Router.push("/settings/editProfile");
+            }}
           />
           <SettingPageSettingHolder
             title="Shipping addresses"
