@@ -1,0 +1,36 @@
+$button-width: 40px;
+$buttonCircle-width: 20px;
+
+.sliderBtn {
+    width: $button-width;
+    height: 15px;
+
+    background-color: var(--line-gray);
+
+    display: flex;
+    align-items: center;
+
+    border-radius: 50px;
+
+    cursor: pointer;
+    transition: all 0.3s ease-in;
+
+    .innerCircle {
+        width: $buttonCircle-width;
+        height: $buttonCircle-width;
+
+        border-radius: 50%;
+        background-color: var(--default-red);
+
+        transition: all 0.3s ease-in;
+    }
+
+    .active {
+        transform: translateX(calc($button-width - $buttonCircle-width));
+        background-color: var(--theme-color);
+    }
+}
+
+.activeBtn {
+    background-color: var(--theme-light);
+}

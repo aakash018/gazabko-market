@@ -5,7 +5,7 @@ const editLoader = () => {
   return (
     <>
       <AdminLayout>
-        <div>dfsdf</div>
+        <div></div>
       </AdminLayout>
     </>
   );

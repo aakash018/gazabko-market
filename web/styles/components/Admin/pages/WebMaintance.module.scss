@@ -1,0 +1,37 @@
+.webMaintance {
+    .content {
+        margin-left: 50px;
+        margin-top: 50px;
+
+        .title {
+            color: var(--theme-color);
+        }
+
+        .contentGroup {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            margin-top: 55px;
+
+            .title {
+                font-size: 1.5rem;
+                color: black;
+            }
+
+            .subject {
+                display: flex;
+                align-items: center;
+                gap: 40px;
+            }
+
+            .note {
+                color: var(--prm-grey);
+            }
+
+            button {
+                max-width: 100px;
+            }
+        }
+    }
+}
