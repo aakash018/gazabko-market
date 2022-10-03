@@ -1,0 +1,25 @@
+.editPage {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+
+    gap: 25px;
+
+    .title {
+        align-self: flex-start;
+        margin-left: 20px;
+    }
+
+    .options {
+        .optionsGroup {
+            display: flex;
+            gap: 45px;
+
+            margin-top: 45px;
+        }
+    }
+}
