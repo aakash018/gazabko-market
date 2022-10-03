@@ -11,7 +11,6 @@ import styles from "../styles/components/Customer/Home.module.scss";
 import { MdCancel } from "react-icons/md";
 import LoginReminder from "../components/Customer/LoginReminder";
 import { useAuth } from "../context/User";
-import CatogriesGrid from "../components/Customer/CatogiesGrid";
 import Button from "../components/shared/Button";
 import { customStyles } from "../modalStyle";
 import CatogriesGridBox from "../components/Customer/CatogriesGridBox";

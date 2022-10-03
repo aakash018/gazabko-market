@@ -1,3 +1,4 @@
+import Router from "next/router";
 import React from "react";
 import { AiFillDollarCircle, AiFillGift } from "react-icons/ai";
 import { BiCategoryAlt } from "react-icons/bi";
@@ -24,16 +25,23 @@ const Edit: React.FC = () => {
                 icon={<BiCategoryAlt />}
                 text="Edit Categories"
                 bgColor="#2CBBF9"
+                onClick={() => {
+                  Router.push("/admin/edit/editCategories");
+                }}
               />
               <EditOptionsButton
                 icon={<AiFillDollarCircle />}
                 text="Edit  Deals"
                 bgColor="#F36868"
+                onClick={() => {
+                  Router.push("/admin/edit/editDeals");
+                }}
               />
               <EditOptionsButton
                 icon={<FiPackage />}
                 text="Edit Products"
                 bgColor="#00AB77"
+                onClick={() => {}}
               />
             </div>
             <div className={styles.optionsGroup}>
@@ -41,16 +49,21 @@ const Edit: React.FC = () => {
                 icon={<GiReceiveMoney />}
                 text="Edit Seller’s Commision "
                 bgColor="#F9512C"
+                onClick={() => {}}
               />
               <EditOptionsButton
                 icon={<AiFillGift />}
                 text="Edit Gift Coupens"
                 bgColor="#7C63DE"
+                onClick={() => {}}
               />
               <EditOptionsButton
                 icon={<RiFileSettingsLine />}
                 text="Edit Page Settings"
                 bgColor="#E2B02E"
+                onClick={() => {
+                  Router.push("/admin/edit/editPageSettings");
+                }}
               />
             </div>
           </div>

@@ -1,0 +1,14 @@
+.addCategoriesModal {
+    display: flex;
+    flex-direction: column;
+
+    gap: 20px;
+
+    input {
+        width: 100%;
+    }
+
+    button {
+        max-width: 50%;
+    }
+}
