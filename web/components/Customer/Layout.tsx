@@ -23,10 +23,9 @@ const Layout: React.FC<Props> = ({
     <>
       <CustomerNav />
       <div className={styles.mainContainer}>
-        <div
-          className={`${styles.catogriesBarConainer} ${
-            type === "catogry" ? styles.lowMargin : ""
-          }`}
+        <div style={{ display: "relative" }}
+          className={`${styles.catogriesBarConainer} ${type === "catogry" ? styles.lowMargin : ""
+            }`}
         >
           <CatogriesSideBar sidebar={sidebar} type={type} />
         </div>

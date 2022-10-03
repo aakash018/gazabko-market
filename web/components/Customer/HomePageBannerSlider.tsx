@@ -20,21 +20,20 @@ const HomePageBannerSlider: React.FC = () => {
     }
     setShowImage((prev) => prev - 1);
   };
-  //   useEffect(() => {
-  //     const timeChange = setInterval(() => {
-  //       console.log(showImage);
-  //       incImage();
-  //     }, 5000);
 
-  //     return () => clearInterval(timeChange);
-  //   }, []);
+  useEffect(() => {
+    const timeChange = setInterval(() => {
+      incImage();
+    }, 5000);
+
+    return () => clearInterval(timeChange);
+  }, [showImage]);
 
   return (
     <div className={styles.homePageBannerSlider}>
       <div
-        className={`${styles.imageContainer} ${
-          showImage === 1 ? styles.show : ""
-        }`}
+        className={`${styles.imageContainer} ${showImage === 1 ? styles.show : ""
+          }`}
       >
         <div className={styles.imageHolder}>
           <Image
@@ -46,9 +45,8 @@ const HomePageBannerSlider: React.FC = () => {
         </div>
       </div>
       <div
-        className={`${styles.imageContainer} ${
-          showImage === 2 ? styles.show : ""
-        }`}
+        className={`${styles.imageContainer} ${showImage === 2 ? styles.show : ""
+          }`}
       >
         <div className={styles.imageHolder}>
           <Image
@@ -60,9 +58,8 @@ const HomePageBannerSlider: React.FC = () => {
         </div>
       </div>
       <div
-        className={`${styles.imageContainer} ${
-          showImage === 3 ? styles.show : ""
-        }`}
+        className={`${styles.imageContainer} ${showImage === 3 ? styles.show : ""
+          }`}
       >
         <div className={styles.imageHolder}>
           <Image
