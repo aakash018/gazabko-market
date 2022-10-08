@@ -1,0 +1,26 @@
+.editProducts {
+    display: flex;
+    flex-direction: column;
+
+    gap: 50px;
+
+    .options {
+        display: flex;
+        flex-wrap: wrap;
+
+        gap: 35px;
+    }
+
+    .table {
+        display: flex;
+        flex-direction: column;
+        .title {
+            color: var(--theme-color);
+            margin-bottom: 20px;
+        }
+
+        .main {
+            align-self: center;
+        }
+    }
+}

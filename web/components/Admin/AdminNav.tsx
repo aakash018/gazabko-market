@@ -8,6 +8,7 @@ import { BiHappyBeaming } from "react-icons/bi";
 import { RiAccountCircleFill } from "react-icons/ri";
 
 import { FiPackage } from "react-icons/fi";
+import Router from "next/router";
 
 interface Props {
   children: React.ReactNode;
@@ -26,13 +27,23 @@ const AdminLayout: React.FC<Props> = ({ children }) => {
           />
         </div>
         <div className={styles.navigation}>
-          <Button look="blank">
+          <Button
+            look="blank"
+            onClick={() => {
+              Router.push("/admin/dash");
+            }}
+          >
             <span>
               <MdSpaceDashboard size={"3rem"} color="#333333" />
             </span>
             <span style={{ marginTop: "-6px" }}>DashBoard</span>
           </Button>
-          <Button look="blank">
+          <Button
+            look="blank"
+            onClick={() => {
+              Router.push("/admin/edit");
+            }}
+          >
             <span>
               <AiFillEdit size={"3rem"} color="#333333" />
             </span>

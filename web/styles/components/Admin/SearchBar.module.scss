@@ -1,0 +1,26 @@
+.searchBar {
+    display: flex;
+    align-items: center;
+
+    input {
+        border-left: none;
+        padding: 10px;
+    }
+
+    .icon {
+        background-color: white;
+
+        height: 42px;
+        width: 30px;
+
+        border-top: 1px solid var(--line-gray);
+        border-left: 1px solid var(--line-gray);
+        border-bottom: 1px solid var(--line-gray);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        font-size: 1.5rem;
+    }
+}

@@ -7,9 +7,22 @@ interface Props {
   amount: number;
   children: React.ReactNode;
   bgColor: string;
+  onViewClick?: () => void;
 }
 
-const InfoCard: React.FC<Props> = ({ amount, title, children, bgColor }) => {
+const InfoCard: React.FC<Props> = ({
+  amount,
+  title,
+  children,
+  bgColor,
+  onViewClick,
+}) => {
+  const handleViewAll = () => {
+    if (onViewClick) {
+      onViewClick();
+    }
+  };
+
   return (
     <div
       className={styles.infoCard}
@@ -23,7 +36,9 @@ const InfoCard: React.FC<Props> = ({ amount, title, children, bgColor }) => {
       </div>
       <div className={styles.title}>{title}</div>
       <div className={styles.actBtn}>
-        <Button color="white">View All</Button>
+        <Button color="white" onClick={handleViewAll}>
+          View All
+        </Button>
       </div>
     </div>
   );

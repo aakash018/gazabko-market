@@ -41,7 +41,9 @@ const Edit: React.FC = () => {
                 icon={<FiPackage />}
                 text="Edit Products"
                 bgColor="#00AB77"
-                onClick={() => {}}
+                onClick={() => {
+                  Router.push("/admin/edit/editProducts");
+                }}
               />
             </div>
             <div className={styles.optionsGroup}>
