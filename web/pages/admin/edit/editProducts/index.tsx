@@ -127,10 +127,24 @@ const EditProducts: React.FC = () => {
           >
             <FaBoxOpen />
           </InfoCard>
-          <InfoCard amount={52} bgColor={"#9E1EEC"} title="Products Reviews">
+          <InfoCard
+            amount={52}
+            bgColor={"#9E1EEC"}
+            title="Products Reviews"
+            onViewClick={() => {
+              Router.push("/admin/edit/editProducts/productReviews");
+            }}
+          >
             <MdReviews />
           </InfoCard>
-          <InfoCard amount={52} bgColor={"#EC1E5C"} title="Products Reported">
+          <InfoCard
+            amount={52}
+            bgColor={"#EC1E5C"}
+            title="Products Reported"
+            onViewClick={() => {
+              Router.push("/admin/edit/editProducts/productReports");
+            }}
+          >
             <MdOutlineReportProblem />
           </InfoCard>
         </div>
