@@ -97,6 +97,10 @@ const EditProducts: React.FC = () => {
     { field: "Hide Item", width: 135 },
   ]);
 
+  const handleInfoCardRoute = (route: string) => {
+    Router.push(`/admin/edit/editProducts/${route}`);
+  };
+
   return (
     <AdminLayout>
       <div className={styles.editProducts}>
@@ -115,7 +119,7 @@ const EditProducts: React.FC = () => {
             bgColor={"#00AB77"}
             title="Total Product"
             onViewClick={() => {
-              Router.push("/admin/edit/editProducts/allProducts");
+              handleInfoCardRoute("allProducts");
             }}
           >
             <FiPackage />
@@ -124,6 +128,9 @@ const EditProducts: React.FC = () => {
             amount={52}
             bgColor={"#F36868"}
             title="Products out of stock"
+            onViewClick={() => {
+              handleInfoCardRoute("outOfStock");
+            }}
           >
             <FaBoxOpen />
           </InfoCard>
@@ -132,7 +139,7 @@ const EditProducts: React.FC = () => {
             bgColor={"#9E1EEC"}
             title="Products Reviews"
             onViewClick={() => {
-              Router.push("/admin/edit/editProducts/productReviews");
+              handleInfoCardRoute("productReviews");
             }}
           >
             <MdReviews />
@@ -142,7 +149,7 @@ const EditProducts: React.FC = () => {
             bgColor={"#EC1E5C"}
             title="Products Reported"
             onViewClick={() => {
-              Router.push("/admin/edit/editProducts/productReports");
+              handleInfoCardRoute("productReports");
             }}
           >
             <MdOutlineReportProblem />
