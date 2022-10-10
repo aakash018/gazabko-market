@@ -57,7 +57,9 @@ const Edit: React.FC = () => {
                 icon={<AiFillGift />}
                 text="Edit Gift Coupens"
                 bgColor="#7C63DE"
-                onClick={() => {}}
+                onClick={() => {
+                  Router.push("/admin/edit/editGiftCoupens");
+                }}
               />
               <EditOptionsButton
                 icon={<RiFileSettingsLine />}
