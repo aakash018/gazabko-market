@@ -3,6 +3,7 @@ import styles from "../../styles/components/Admin/pages/LoginPage.module.scss";
 import Image from "next/image";
 import IntputField from "../../components/shared/Input";
 import Button from "../../components/shared/Button";
+import Router from "next/router";
 
 const AdminLoginPage = () => {
   const username = useRef<HTMLInputElement>(null);
@@ -23,7 +24,13 @@ const AdminLoginPage = () => {
           <form>
             <IntputField input={username} label="Username" />
             <IntputField input={password} label="Password" type={"password"} />
-            <Button onClick={() => {}}>LOGIN</Button>
+            <Button
+              onClick={() => {
+                Router.push("/admin/dash");
+              }}
+            >
+              LOGIN
+            </Button>
           </form>
         </div>
       </div>
