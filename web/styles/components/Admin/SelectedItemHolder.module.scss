@@ -12,6 +12,10 @@
     padding: 5px;
     border-radius: 50px;
 
+    .text {
+        cursor: pointer;
+    }
+
     .cancel {
         color: var(--default-red);
     }

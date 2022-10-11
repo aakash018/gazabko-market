@@ -3,6 +3,7 @@ import AdminLayout from "../../../../components/Admin/AdminNav";
 import SelectedItemHolder from "../../../../components/Admin/shared/SelectedItemHolder";
 import Button from "../../../../components/shared/Button";
 import IntputField from "../../../../components/shared/Input";
+import TagsSelector from "../../../../components/shared/TagsSelector";
 
 import styles from "../../../../styles/components/Admin/pages/AddGiftCoupens.module.scss";
 import { generateCode } from "../../../../utils/autoGenetateCode";
@@ -114,42 +115,19 @@ const Add: React.FC = () => {
             </div>
           </div>
           <div className={styles.productSelector}>
-            <IntputField
-              input={productSKUInput}
+            <TagsSelector
+              listState={selectedProducts}
+              setListState={setSelectedProducts}
               label="Only for added  Products"
               placeholder="Product SKU number"
-              onKeyDown={handelProductSelect}
             />
-            <div className={styles.selectedItem}>
-              {selectedProducts.map((product, i) => (
-                <SelectedItemHolder
-                  content={product}
-                  key={i}
-                  onCancel={() => {
-                    handelCancelProductSelect(product);
-                  }}
-                />
-              ))}
-            </div>
           </div>
           <div className={styles.productSelector}>
-            <IntputField
-              input={vendorInput}
-              label="Only for added  Vendors"
-              placeholder="Vendor's Name"
-              onKeyDown={handelVendorSelect}
+            <TagsSelector
+              listState={selectedVendors}
+              setListState={setSelectedVendors}
+              label="Only for added Venddors"
             />
-            <div className={styles.selectedItem}>
-              {selectedVendors.map((vendor, i) => (
-                <SelectedItemHolder
-                  content={vendor}
-                  key={i}
-                  onCancel={() => {
-                    handelCancelVenddorSelect(vendor);
-                  }}
-                />
-              ))}
-            </div>
           </div>
         </div>
         <div className={styles.saveBtn}>

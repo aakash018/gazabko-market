@@ -142,7 +142,7 @@ const EditCategories = () => {
           </div>
           <div
             className={` ${styles.table} ag-theme-alpine`}
-            style={{ height: 350, width: "80%", overflow: "hidden" }}
+            style={{ height: 350, width: "850px", overflow: "hidden" }}
           >
             <AgGridReact
               rowData={rowData}
