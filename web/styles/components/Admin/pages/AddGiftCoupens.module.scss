@@ -1,0 +1,62 @@
+.addGiftCoupen {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    margin: 30px 0 0 50px;
+
+    .coupenCode {
+        display: flex;
+        align-items: center;
+
+        gap: 15px;
+        button {
+            margin-top: 20px;
+        }
+    }
+
+    select {
+        // width: 200px;
+        padding: 10px;
+        outline: none;
+        border: 1px solid var(--line-gray);
+        background-color: white;
+    }
+
+    .discountAmount {
+        display: flex;
+        align-items: flex-end;
+        gap: 20px;
+    }
+    .coupenLimitsSelector {
+        display: flex;
+        justify-content: space-between;
+        gap: 30px;
+
+        flex-wrap: wrap;
+
+        .categoriesSelect {
+            .label {
+                font-size: 1.3rem;
+                font-weight: bold;
+            }
+        }
+
+        .selectedItem {
+            background-color: white;
+            width: 300px;
+
+            min-height: 100px;
+            height: fit-content;
+
+            padding: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 20px;
+
+            border: 1px solid var(--line-gray);
+        }
+    }
+}

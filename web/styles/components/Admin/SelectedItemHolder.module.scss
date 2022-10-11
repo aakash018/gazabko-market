@@ -1,0 +1,18 @@
+.selectedItemHolder {
+    display: flex;
+    align-items: center;
+    height: 30px;
+
+    max-width: fit-content;
+
+    background-color: var(--line-gray);
+
+    gap: 5px;
+
+    padding: 5px;
+    border-radius: 50px;
+
+    .cancel {
+        color: var(--default-red);
+    }
+}

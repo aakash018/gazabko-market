@@ -10,6 +10,7 @@ import { BiEdit } from "react-icons/bi";
 import { FiDelete } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import Button from "../../../../components/shared/Button";
+import Router from "next/router";
 
 type TableDef = {
   SN: number;
@@ -113,7 +114,13 @@ const EditGftCoupens: React.FC = () => {
       <div className={styles.editGiftCoupens}>
         <div className={styles.table}>
           <div className={styles.addBtn}>
-            <Button>Add</Button>
+            <Button
+              onClick={() => {
+                Router.push("/admin/edit/editGiftCoupens/add");
+              }}
+            >
+              Add
+            </Button>
           </div>
           <div
             className="ag-theme-alpine"
