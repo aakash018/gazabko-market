@@ -23,12 +23,12 @@ const Layout: React.FC<Props> = ({
     <>
       <CustomerNav />
       <div className={styles.mainContainer}>
-        <div style={{ display: "relative" }}
-          className={`${styles.catogriesBarConainer} ${type === "catogry" ? styles.lowMargin : ""
-            }`}
-        >
-          <CatogriesSideBar sidebar={sidebar} type={type} />
-        </div>
+        <div
+          style={{ display: "relative" }}
+          className={`${styles.catogriesBarConainer} ${
+            type === "catogry" ? styles.lowMargin : ""
+          }`}
+        ></div>
         <div className={styles.contentContainer}>{children}</div>
       </div>
       {showFooter && (
