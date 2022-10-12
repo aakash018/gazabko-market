@@ -112,7 +112,9 @@ const EditProducts: React.FC = () => {
             icon={<MdOutlineAdd />}
             text={"Add Products"}
             bgColor={"#5494F5"}
-            onClick={() => {}}
+            onClick={() => {
+              handleInfoCardRoute("add");
+            }}
           />
           <InfoCard
             amount={52}

@@ -1,6 +1,4 @@
 import React from "react";
-import Banner from "./Banner";
-import CatogriesSideBar from "./CatogriesSideBar";
 import CustomerNav from "./CustomerNav";
 
 import styles from "../../styles/components/Customer/CustomerLayout.module.scss";

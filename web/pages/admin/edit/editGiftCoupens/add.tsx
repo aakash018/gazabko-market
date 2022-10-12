@@ -37,25 +37,8 @@ const Add: React.FC = () => {
     }
   };
 
-  const handelVendorSelect = (e: React.KeyboardEvent<HTMLElement>) => {
-    if (e.key === "Enter") {
-      if (vendorInput.current) {
-        if (selectedVendors.includes(vendorInput.current?.value)) return;
-        setSelectedVendors((prev) => [...prev, vendorInput.current!.value]);
-      }
-    }
-  };
-
   const handelCancelCatSelect = (select: string) => {
     setSelectedCategories((prev) => prev.filter((item) => item !== select));
-  };
-
-  const handelCancelProductSelect = (select: string) => {
-    setSelectedProducts((prev) => prev.filter((item) => item !== select));
-  };
-
-  const handelCancelVenddorSelect = (select: string) => {
-    setSelectedVendors((prev) => prev.filter((item) => item !== select));
   };
 
   const handelGenerateCode = () => {

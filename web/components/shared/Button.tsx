@@ -21,19 +21,20 @@ const Button: React.FC<Props> = ({
   icon,
 }) => {
   return (
-    <>
+    <div>
       <button
         type={type}
         className={`${styles[className]} 
-            ${styles[color]} 
-            ${styles[type]} 
-            ${styles[look]} 
-            ${styles.common}`}
+        ${styles[color]} 
+        ${styles[type]} 
+        ${styles[look]} 
+        ${styles.common}`}
         onClick={onClick}
       >
+        {icon}
         {children}
       </button>
-    </>
+    </div>
   );
 };
 
