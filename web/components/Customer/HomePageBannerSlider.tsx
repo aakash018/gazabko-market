@@ -30,6 +30,7 @@ const HomePageBannerSlider: React.FC = () => {
   }, [showImage]);
 
   return (
+    <div>
     <div className={styles.homePageBannerSlider}>
       <div
         className={`${styles.imageContainer} ${showImage === 1 ? styles.show : ""
@@ -76,6 +77,7 @@ const HomePageBannerSlider: React.FC = () => {
       <div className={styles.navBtnRight} onClick={incImage}>
         <AiFillRightCircle />
       </div>
+    </div>
     </div>
   );
 };

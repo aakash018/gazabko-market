@@ -4,7 +4,7 @@ import Layout from "../../components/Customer/Layout";
 import ShowCase from "../../components/Customer/ShowCase";
 import styles from "../../styles/components/Customer/pages/CatogriesPage.module.scss";
 
-const CatogriesPage = () => {
+const CategoriesPage = () => {
   const router = useRouter();
   const { id } = router.query;
 
@@ -20,4 +20,4 @@ const CatogriesPage = () => {
   );
 };
 
-export default CatogriesPage;
+export default CategoriesPage;

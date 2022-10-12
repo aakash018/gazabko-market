@@ -1,13 +1,13 @@
 import Image from "next/image";
 import React from "react";
 import styles from "../../styles/components/Customer/Banners.module.scss";
-import HomePageBannerSlider from "./HomePageBannerSlider";
+import BannerSlider from "./BannerSlider";
 
 const Banner: React.FC = () => {
   return (
     <div className={styles.banners}>
       <div className={styles.banners__top}>
-        <HomePageBannerSlider />
+        <BannerSlider />
       </div>
       <div className={styles.banners__bottomBanners}>
         <div className={styles.banners__left}>
