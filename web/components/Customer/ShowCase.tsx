@@ -4,7 +4,6 @@ import { ProductHolderTypes } from "../../@types/global";
 import styles from "../../styles/components/Customer/ProductShowCase.module.scss";
 import Timer from "../shared/Customer/Timer";
 
-import ScrollContainer from "react-indiana-drag-scroll";
 import ProductHolder from "../shared/Customer/ProductHolder";
 import Image from "next/image";
 

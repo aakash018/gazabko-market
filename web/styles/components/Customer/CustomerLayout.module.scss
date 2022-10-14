@@ -3,12 +3,14 @@
 
     display: flex;
 
-    .contentContainer {
-        width: 100vw;
+    .contentWrapper {
+        display: flex;
+        justify-content: center;
+        width: 100%;
 
-        margin-left: 60px;
-        margin-right: 60px;
-        //margin-top: 30px;
+        .contentContainer {
+            width: 1300px;
+        }
     }
 }
 .copyright {

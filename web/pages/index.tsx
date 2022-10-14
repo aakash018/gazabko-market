@@ -49,86 +49,88 @@ const Home = () => {
   return (
     <>
       <Layout sidebar="show">
-        <Modal
-          isOpen={modalLoginReminderOpen}
-          style={customStyles}
-          onRequestClose={closeLoginReminderModal}
-        >
-          <LoginReminder />
-        </Modal>
-        <Modal
-          isOpen={bannerModalIsOpen}
-          // onAfterOpen={afterOpenModal}
-          onRequestClose={closeModal}
-          style={customStyles}
-          contentLabel="Popoup banner Modal"
-        >
-          <div className={styles.popupBanner}>
-            <div
-              className={styles.cancelBtn}
-              onClick={() => {
-                setIsOpen(false);
-              }}
+        <div className={styles.homePageWraper}>
+          <div className={styles.homePageContainer}>
+            <Modal
+              isOpen={modalLoginReminderOpen}
+              style={customStyles}
+              onRequestClose={closeLoginReminderModal}
             >
-              <MdCancel />
-            </div>
-            <div className={styles.bannerImg}>
+              <LoginReminder />
+            </Modal>
+            <Modal
+              isOpen={bannerModalIsOpen}
+              // onAfterOpen={afterOpenModal}
+              onRequestClose={closeModal}
+              style={customStyles}
+              contentLabel="Popoup banner Modal"
+            >
+              <div className={styles.popupBanner}>
+                <div
+                  className={styles.cancelBtn}
+                  onClick={() => {
+                    setIsOpen(false);
+                  }}
+                >
+                  <MdCancel />
+                </div>
+                <div className={styles.bannerImg}>
+                  <Image
+                    src="/images/popup_banner.png"
+                    layout="fill"
+                    objectFit="cover"
+                    objectPosition={"top"}
+                  />
+                </div>
+              </div>
+            </Modal>
+            <Banner />
+            <ShowCase
+              includeTimer={true}
+              expireDate={new Date("August 26, 2022 23:37:25").getTime()}
+              title={"Today's deal"}
+              noOfProducts={5}
+            />
+            <div className={styles.midBanner}>
               <Image
-                src="/images/popup_banner.png"
+                src={"/images/bigsale.jpg"}
                 layout="fill"
+                priority={true}
                 objectFit="cover"
-                objectPosition={"top"}
+                objectPosition={"center"}
+                alt="middle"
               />
             </div>
+            <ShowCase
+              includeTimer={true}
+              expireDate={new Date("August 28, 2022 15:37:25").getTime()}
+              title={"Big Sale"}
+              noOfProducts={5}
+            />
+            <div className={styles.catogriesGrid}>
+              <div className={styles.title}>Catogries</div>
+              <CatogriesGridBox />
+            </div>
+            <ShowCase
+              includeTimer={false}
+              title={"New Products"}
+              noOfProducts={5}
+            />
+            <ShowCase
+              includeTimer={false}
+              title={"Recomdended Products"}
+              noOfProducts={15}
+            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Button look="outlined">Load More</Button>
+            </div>
           </div>
-        </Modal>
-        <Banner />
-
-        <ShowCase
-          includeTimer={true}
-          expireDate={new Date("August 26, 2022 23:37:25").getTime()}
-          title={"Today's deal"}
-          noOfProducts={5}
-        />
-        <div className={styles.midBanner}>
-          <Image
-            src={"/images/bigsale.jpg"}
-            layout="fill"
-            priority={true}
-            objectFit="cover"
-            objectPosition={"center"}
-            alt="middle"
-          />
-        </div>
-        <ShowCase
-          includeTimer={true}
-          expireDate={new Date("August 28, 2022 15:37:25").getTime()}
-          title={"Big Sale"}
-          noOfProducts={5}
-        />
-        <div className={styles.catogriesGrid}>
-          <div className={styles.title}>Catogries</div>
-          <CatogriesGridBox />
-        </div>
-
-        <ShowCase
-          includeTimer={false}
-          title={"New Products"}
-          noOfProducts={5}
-        />
-        <ShowCase
-          includeTimer={false}
-          title={"Recomdended Products"}
-          noOfProducts={15}
-        />
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Button look="outlined">Load More</Button>
         </div>
       </Layout>
     </>

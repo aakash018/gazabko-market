@@ -43,22 +43,20 @@ const ProductDisplay: React.FC = () => {
             <BsStarHalf />
             <span>4.7</span>
           </section>
-
           <div className={styles.reviewHouse}>
             <ReviewContainer
               name={"Willy"}
               rating={4.7}
-              review={`A jacket is a must have in winter. You can't be cold and stylish. Our jackets 
-              are made of high quality material and will keep you warm. They come in different
-               colors and sizes, so your style is covered.`}
+              review={`A jacket is a must have in winter. You can't be cold and stylish. Our jackets
+                  are made of high quality material and will keep you warm. They come in different
+                   colors and sizes, so your style is covered.`}
             />
-
             <ReviewContainer
               name={"Willy"}
               rating={4.7}
-              review={`A jacket is a must have in winter. You can't be cold and stylish. Our jackets 
-              are made of high quality material and will keep you warm. They come in different
-               colors and sizes, so your style is covered.`}
+              review={`A jacket is a must have in winter. You can't be cold and stylish. Our jackets
+                  are made of high quality material and will keep you warm. They come in different
+                   colors and sizes, so your style is covered.`}
             />
           </div>
           <section className={styles.actionBtn}>
@@ -67,14 +65,12 @@ const ProductDisplay: React.FC = () => {
             </Button>
           </section>
         </div>
-
         <div className={styles.otherProducts}>
           <ShowCase
             title="Other Products from the seller"
             includeTimer={false}
             noOfProducts={5}
           />
-
           <ShowCase
             title="People also like"
             includeTimer={false}

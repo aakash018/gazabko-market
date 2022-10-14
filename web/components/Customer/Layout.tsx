@@ -27,7 +27,9 @@ const Layout: React.FC<Props> = ({
             type === "catogry" ? styles.lowMargin : ""
           }`}
         ></div>
-        <div className={styles.contentContainer}>{children}</div>
+        <div className={styles.contentWrapper}>
+          <div className={styles.contentContainer}>{children}</div>
+        </div>
       </div>
       {showFooter && (
         <>

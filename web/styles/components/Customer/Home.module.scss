@@ -5,6 +5,15 @@
     position: relative;
 }
 
+.homePageWraper {
+    display: flex;
+    justify-content: center;
+}
+
+.homePageContainer {
+    width: 1200px;
+}
+
 .popupBanner {
     position: relative;
 
