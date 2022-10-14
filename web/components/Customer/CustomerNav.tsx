@@ -20,7 +20,7 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
   const { isLogedIn, logout } = useAuth();
   const [showProfileOptions, setShowProfileOptions] = useState(false);
 
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
 
   const controlNavbar = () => {
