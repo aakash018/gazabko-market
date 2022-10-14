@@ -1,0 +1,19 @@
+.categoryHolderMenu {
+  position: relative;
+  margin-top: 40px;;
+  width: 100px;
+  height: 30px;
+  z-index: 100;
+
+  button {
+    background: transparent;
+    color: #757575;
+    font-weight: 600;
+    height: 30px;
+
+    &:hover {
+      color: #444444;
+      text-decoration: underline;
+    }
+  }
+}

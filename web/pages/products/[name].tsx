@@ -7,14 +7,19 @@ import { BsStarFill, BsStarHalf } from "react-icons/bs";
 import ReviewContainer from "../../components/Customer/ReviewContainer";
 import Button from "../../components/shared/Button";
 import ShowCase from "../../components/Customer/ShowCase";
+import Breadcrumb from "../../components/Customer/Breadcrumb";
+import CategoriesHoverMenu from "../../components/Customer/CategoriesHolderMenu";
 
 const ProductDisplay: React.FC = () => {
   const router = useRouter();
   const { name } = router.query;
+
   return (
     <Layout sidebar="show">
       <div className={styles.productDisplay}>
         <div className={styles.productInfo}>
+          <CategoriesHoverMenu /> 
+          <Breadcrumb category={{ name: "Women's Clothing", url: "womens-clothing" }} subCategory={{ name: "Fashion", url: "fashion" }} />
           <ProductInfoDisplay
             totalStock={5}
             discount={2000}
@@ -60,7 +65,7 @@ const ProductDisplay: React.FC = () => {
             />
           </div>
           <section className={styles.actionBtn}>
-            <Button onClick={() => {}} look="outlined">
+            <Button onClick={() => { }} look="outlined">
               Load More
             </Button>
           </section>

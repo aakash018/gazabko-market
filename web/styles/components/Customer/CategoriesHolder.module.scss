@@ -1,0 +1,46 @@
+.bannerSliderCategoriesDivContainer {
+  position: relative;
+  width: 250px;
+  height: 100%;
+  padding: 10px 0px;
+  background: #fff;
+  line-height: 2.6em;
+  color: #757575;
+  box-shadow: 1px 1px 0px 1px #bbb, -1px -1px 0px 1px #bbb;
+}
+
+.bannerSliderSubCategoriesDivContainer, .bannerSliderGrandCategoriesDivContainer {
+  z-index: 100;
+  position: absolute;
+  width: 250px;
+  height: 100%;
+  padding: 10px 0px;
+  background: #fff;
+  top: 0;
+  left: 100%;
+  box-shadow: 1px 1px 0px 1px #bbb, -1px -1px 0px 1px #bbb;
+  color: #757575;
+}
+
+.bannerSliderCategoriesDiv, .bannerSliderSubCategoriesDiv, .bannerSliderGrandCategoriesDiv {
+  font-size: 13px;
+  padding: 0px 10px;
+}
+
+.bannerSliderCategoriesDiv:hover, .bannerSliderSubCategoriesDiv:hover {
+  background-color: #eceff1;
+  color: #1a9cb7;
+  cursor: pointer;
+}
+
+.bannerSliderGrandCategoriesDiv:hover {
+  color: #1a9cb7;
+  cursor: pointer;
+}
+
+.bannerSliderCategoriesDiv:hover .bannerSliderCategoryName:after, .bannerSliderSubCategoriesDiv:hover .bannerSliderSubCategoryName:after {
+  font-size: 30px;
+  font-weight: 400;
+  float: right;
+  content: ">";
+}
