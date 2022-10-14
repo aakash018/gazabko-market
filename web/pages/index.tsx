@@ -48,7 +48,7 @@ const Home = () => {
 
   return (
     <>
-      <Layout sidebar="show">
+      <Layout sliderCategories={true}>
         <div className={styles.homePageWraper}>
           <div className={styles.homePageContainer}>
             <Modal

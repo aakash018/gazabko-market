@@ -75,7 +75,7 @@ const SubCategories = ({
   );
 };
 
-const Categories = ({ category }: { category: CategoriesProps }) => {
+export const Categories = ({ category }: { category: CategoriesProps }) => {
   const [show, setShow] = useState(false);
 
   return (
@@ -109,7 +109,7 @@ const Categories = ({ category }: { category: CategoriesProps }) => {
   );
 };
 
-const categories = [
+export const categories = [
   {
     name: "Women's Fashion",
     subCategories: [

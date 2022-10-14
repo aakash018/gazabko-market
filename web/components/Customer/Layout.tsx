@@ -6,20 +6,20 @@ import Footer from "../shared/Customer/Footer";
 
 interface Props {
   children: React.ReactNode;
-  sidebar: "show" | "hide" | "clickable";
+  sliderCategories?: boolean;
   type?: "catogry" | "search" | "catogryPage";
   showFooter?: boolean;
 }
 
 const Layout: React.FC<Props> = ({
   children,
-  sidebar,
+  sliderCategories = false,
   type = "catogry",
   showFooter = true,
 }) => {
   return (
     <>
-      <CustomerNav />
+      <CustomerNav sliderCategories={sliderCategories} />
       <div className={styles.mainContainer}>
         <div
           style={{ display: "relative" }}

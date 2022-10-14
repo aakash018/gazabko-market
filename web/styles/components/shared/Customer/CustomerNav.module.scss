@@ -4,6 +4,30 @@
     top: 0;
     left: 0;
     z-index: 100;
+    .miniNav {
+        width: 100%;
+        background-color: var(--line-gray);
+        padding: 3px;
+
+        opacity: 0;
+
+        ul {
+            margin-right: 10px;
+            display: flex;
+            justify-content: flex-end;
+
+            gap: 20px;
+
+            li {
+                list-style: none;
+                font-size: 1.1rem;
+            }
+        }
+    }
+
+    .showNav {
+        opacity: 1;
+    }
 
     .bottomInfo {
         color: black;
@@ -42,6 +66,7 @@
     padding: 5px 25px;
 
     background-color: white;
+    transition: all 0.3s ease-in;
 
     .actionBtns {
         display: flex;
@@ -129,4 +154,37 @@
             transform: translateX(-75px);
         }
     }
+}
+
+.miniNavHidden {
+    transform: translateY(-25px);
+}
+
+.catogry {
+    display: flex;
+    align-items: center;
+
+    position: relative;
+
+    gap: 10px;
+
+    font-size: 1.5rem;
+    width: 100%;
+    background-color: #ffffff;
+    visibility: hidden;
+    transform: translateY(-8px);
+    cursor: pointer;
+    transition: all 0.3s ease-in;
+
+    z-index: 50;
+    .text {
+        margin-left: 25px;
+        font-size: 1.3rem;
+        font-weight: bold;
+    }
+}
+
+.active {
+    visibility: visible;
+    transform: translateY(0);
 }

@@ -1,6 +1,56 @@
 .searchResults {
-    //margin-left: 250px;
+    margin-left: 30px;
     .title {
         font-size: 2rem;
+    }
+}
+
+.searchPageContainer {
+    display: flex;
+
+    gap: 20px;
+}
+
+.searchSideBar {
+    display: flex;
+    flex-direction: column;
+
+    gap: 30px;
+
+    margin-left: 30px;
+
+    margin-top: 20px;
+    position: sticky;
+    top: 100px;
+
+    .priceRange {
+        .values {
+            display: flex;
+
+            margin-top: 15px;
+            gap: 30px;
+
+            .val {
+                display: flex;
+                gap: 10px;
+                input {
+                    max-width: 60px;
+                    padding-left: 5px;
+                }
+            }
+        }
+    }
+
+    .brand {
+        display: flex;
+        flex-direction: column;
+
+        gap: 10px;
+        .checkBox {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+        }
     }
 }
