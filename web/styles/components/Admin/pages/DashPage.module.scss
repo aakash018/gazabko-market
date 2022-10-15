@@ -5,6 +5,15 @@
     min-width: 90%;
 }
 
+.dashPageWraper {
+    display: flex;
+    justify-content: center;
+}
+
+.dashPageContainer {
+    width: 1050px;
+}
+
 .dash {
     display: flex;
     flex-direction: column;
@@ -12,8 +21,6 @@
     gap: 50px;
     align-items: center;
     .earningGraph {
-        width: 90%;
-        height: 500px;
         background-color: white;
 
         box-shadow: 0px 0px 33px -10px rgba(0, 0, 0, 0.25);
@@ -24,6 +31,15 @@
         span {
             font-size: 1.5rem;
             font-weight: bold;
+        }
+
+        .ordersDetains {
+            width: 100%;
+            background-color: aqua;
+        }
+        .monthlyGraph {
+            width: 900px;
+            height: 500px;
         }
     }
 

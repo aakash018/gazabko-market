@@ -1,0 +1,32 @@
+.dealsEdit {
+    form {
+        display: flex;
+        flex-direction: column;
+
+        gap: 20px;
+    }
+    .onOffOptions {
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 25px;
+    }
+
+    .note {
+        font-size: 1rem;
+        color: var(--prm-grey);
+    }
+
+    .deleteOffer {
+        width: 400px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        .title {
+            font-size: 1.5rem;
+            color: var(--default-red);
+            font-weight: bold;
+        }
+    }
+}
