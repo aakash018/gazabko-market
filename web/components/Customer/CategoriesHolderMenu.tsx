@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "../../styles/components/Customer/CategoriesHolderMenu.module.scss";
 import CategoriesHolder from "../../components/Customer/CategoriesHolder";
+import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 
 const CategoriesHolderMenu = () => {
   const [showCategories, setShowCategories] = useState(false);
@@ -9,7 +10,7 @@ const CategoriesHolderMenu = () => {
     <div className={styles.categoryHolderMenu} onMouseOver={() => setShowCategories(true)} onMouseOut={() => setShowCategories(false)}>
       <button>
         Categories &nbsp;
-        <span>{showCategories ? "^" : "v"}</span>
+        <span>{showCategories ? <AiOutlineUp /> : <AiOutlineDown />}</span>
       </button>
 
       {showCategories ?
