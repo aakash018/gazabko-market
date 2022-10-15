@@ -7,10 +7,10 @@ import Router from "next/router";
 import { useAuth } from "../../context/User";
 import {
   AiFillHeart,
-  AiOutlineDown,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import Link from "next/link";
+import CategoriesHolderMenu from "./CategoriesHolderMenu";
 
 interface Props {
   sliderCategories: boolean;
@@ -157,7 +157,10 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
           )}
         </div>
         <div className={`${styles.catogry}  ${show && styles.active} `}>
-          <div className={styles.text}>Category</div> <AiOutlineDown />
+          <div className={styles.text}>
+            <CategoriesHolderMenu />
+          </div>
+
           {/* {categories.map((category, i: number) => {
           return (
             <Categories category={category} key={`categories-home-page-${i}`} />
