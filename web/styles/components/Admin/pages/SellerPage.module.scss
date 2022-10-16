@@ -1,0 +1,26 @@
+.VendorWraper {
+    display: flex;
+    flex-direction: column;
+
+    gap: 30px;
+    .infoTabs {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .topVendors {
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        gap: 20px;
+
+        .title {
+            align-self: flex-start;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    }
+}

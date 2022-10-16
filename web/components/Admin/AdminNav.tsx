@@ -80,7 +80,11 @@ const AdminLayout: React.FC<Props> = ({ children }) => {
           </Button>
         </div>
       </div>
-      <div className={styles.content}>{children}</div>
+      <div className={styles.content}>
+        <div className={styles.wrapper}>
+          <div className={styles.container}>{children}</div>
+        </div>
+      </div>
     </div>
   );
 };

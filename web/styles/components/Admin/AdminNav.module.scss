@@ -46,4 +46,13 @@ $navBarWidth: 250px;
         padding: 20px;
         margin-left: $navBarWidth;
     }
+
+    .wrapper {
+        display: flex;
+        justify-content: center;
+    }
+
+    .container {
+        width: 1050px;
+    }
 }
