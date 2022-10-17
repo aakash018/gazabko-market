@@ -111,6 +111,7 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
                 <AiFillHeart size={25} />
               </div>
               <div
+                style={{ zIndex: 200 }}
                 className={`${showProfileOptions ? styles.profileOptions : ""}`}
               >
                 <div
