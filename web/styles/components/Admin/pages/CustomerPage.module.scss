@@ -1,0 +1,25 @@
+.customers {
+    .topShowcase {
+        margin-top: 30px;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .allCustomers {
+        margin-top: 40px;
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 20px;
+
+        align-items: center;
+
+        h2 {
+            align-self: flex-start;
+        }
+        .search {
+            align-self: flex-end;
+        }
+    }
+}
