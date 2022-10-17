@@ -36,49 +36,57 @@ const ProductDisplay: React.FC = () => {
             <br />
           </section>
         </div>
-        <div className={styles.review}>
-          <section className={styles.title}>Rating and review</section>
-          <section className={styles.rating}>
-            <BsStarFill />
-            <BsStarFill />
-            <BsStarFill />
-            <BsStarFill />
-            <BsStarHalf />
-            <span>4.7</span>
-          </section>
-          <div className={styles.reviewHouse}>
-            <ReviewContainer
-              name={"Willy"}
-              rating={4.7}
-              review={`A jacket is a must have in winter. You can't be cold and stylish. Our jackets
+        <div style={{ display: "flex", gap: "30px" }}>
+          <div>
+            <div className={styles.review}>
+              <section className={styles.title}>Rating and review</section>
+              <section className={styles.rating}>
+                <BsStarFill />
+                <BsStarFill />
+                <BsStarFill />
+                <BsStarFill />
+                <BsStarHalf />
+                <span>4.7</span>
+              </section>
+              <div className={styles.reviewHouse}>
+                <ReviewContainer
+                  name={"Willy"}
+                  rating={4.7}
+                  review={`A jacket is a must have in winter. You can't be cold and stylish. Our jackets
                   are made of high quality material and will keep you warm. They come in different
                    colors and sizes, so your style is covered.`}
-            />
-            <ReviewContainer
-              name={"Willy"}
-              rating={4.7}
-              review={`A jacket is a must have in winter. You can't be cold and stylish. Our jackets
+                />
+                <ReviewContainer
+                  name={"Willy"}
+                  rating={4.7}
+                  review={`A jacket is a must have in winter. You can't be cold and stylish. Our jackets
                   are made of high quality material and will keep you warm. They come in different
                    colors and sizes, so your style is covered.`}
-            />
+                />
+              </div>
+              <section className={styles.actionBtn}>
+                <Button onClick={() => { }} look="outlined">
+                  Load More
+                </Button>
+              </section>
+            </div>
+            <div className={styles.otherProducts}>
+              <ShowCase
+                title="People also like"
+                includeTimer={false}
+                noOfProducts={16}
+              />
+            </div>
           </div>
-          <section className={styles.actionBtn}>
-            <Button onClick={() => { }} look="outlined">
-              Load More
-            </Button>
-          </section>
-        </div>
-        <div className={styles.otherProducts}>
-          <ShowCase
-            title="Other Products from the seller"
-            includeTimer={false}
-            noOfProducts={5}
-          />
-          <ShowCase
-            title="People also like"
-            includeTimer={false}
-            noOfProducts={5}
-          />
+          <div style={{ width: "20%", marginTop: "-50px" }}>
+            <div className={styles.otherProducts}>
+              <ShowCase
+                title="Other from the seller"
+                includeTimer={false}
+                noOfProducts={5}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </Layout>

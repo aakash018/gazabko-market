@@ -44,9 +44,9 @@ const ShowCase: React.FC<Props> = ({
                 </span>
               )}
             </div>
-            <span className={styles.productShowCase__title_right}>
+            {/*<span className={styles.productShowCase__title_right}>
               View More
-            </span>
+            </span>*/}
           </section>
           <div className={`line ${styles.divider}`} />
         </>
