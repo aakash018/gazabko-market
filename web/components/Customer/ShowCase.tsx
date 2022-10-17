@@ -51,7 +51,7 @@ const ShowCase: React.FC<Props> = ({
           <div className={`line ${styles.divider}`} />
         </>
       )}
-      <section className={styles.productShowCase__products}>
+      <section style={{ display: "flex", justifyContent: "center" }} className={styles.productShowCase__products}>
         {Array.from({ length: noOfProducts }).map((_, i) => {
           if (type === "products") {
             return (

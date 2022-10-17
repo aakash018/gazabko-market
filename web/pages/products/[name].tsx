@@ -2,8 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import ProductInfoDisplay from "../../components/Customer/ProductDisplay";
 import Layout from "../../components/Customer/Layout";
-import styles from "../../styles/components/Customer/pages/ProductDisplay.module.scss";
-import { BsStarFill, BsStarHalf } from "react-icons/bs";
+import styles from "../../styles/components/Customer/pages/ProductDisplay.module.scss"; import { BsStarFill, BsStarHalf } from "react-icons/bs";
 import ReviewContainer from "../../components/Customer/ReviewContainer";
 import Button from "../../components/shared/Button";
 import ShowCase from "../../components/Customer/ShowCase";
@@ -36,7 +35,7 @@ const ProductDisplay: React.FC = () => {
             <br />
           </section>
         </div>
-        <div style={{ display: "flex", gap: "30px" }}>
+        <div style={{ display: "flex", gap: "25px" }}>
           <div>
             <div className={styles.review}>
               <section className={styles.title}>Rating and review</section>
@@ -78,7 +77,7 @@ const ProductDisplay: React.FC = () => {
               />
             </div>
           </div>
-          <div style={{ width: "20%", marginTop: "-50px" }}>
+          <div style={{ width: "25%", padding: "10px 10px 10px 0px", marginTop: "-50px" }}>
             <div className={styles.otherProducts}>
               <ShowCase
                 title="Other from the seller"
