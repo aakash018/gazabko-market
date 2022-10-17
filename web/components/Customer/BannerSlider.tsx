@@ -56,9 +56,9 @@ const BannerSlider = () => {
           return (
             <div
               className={i === currentImageIndex ? styles.show : styles.hide}
+              key={`bannerSlider-image-${i}`}
             >
               <Image
-                key={`homePageSlider-image-${i}`}
                 src={images.image}
                 layout="fill"
                 objectFit="cover"
