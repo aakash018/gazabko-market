@@ -7,8 +7,14 @@ import { BsStarFill } from "react-icons/bs";
 import ProductHolder from "../../../components/shared/Customer/ProductHolder";
 import ShowCase from "../../../components/Customer/ShowCase";
 import Button from "../../../components/shared/Button";
+import { useRouter } from "next/router";
 
 const SellerInfoPage: React.FC = () => {
+  const router = useRouter();
+  const { id } = router.query;
+
+  console.log(name);
+
   return (
     <AdminLayout>
       <div className={styles.sellerInfoPage}>
@@ -93,7 +99,9 @@ const SellerInfoPage: React.FC = () => {
         </div>
         <div className={styles.actBtn}>
           <Button>View Full Store</Button>
-          <Button color="error">Deactivate Seller</Button>
+          {id !== "diact" && <Button color="error">Deactivate Seller</Button>}
+          {id === "diact" && <Button color="success">Reactivate Seller</Button>}
+          {id === "diact" && <Button color="error">Delete Seller</Button>}
         </div>
       </div>
     </AdminLayout>
