@@ -162,7 +162,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
               <span>Cash on delivery</span>
             </div>
           </div>
-          <div style={{ padding: "5px", display: "flex", justifyContent: "space-between" }}>
+          <div style={{ padding: "8px 5px", display: "flex", justifyContent: "space-between" }}>
             <div>
               <span className={styles.grey}>Store name</span><br/>
               <Link href="/sellerinfo/dasds"><a style={{ fontSize: "18px" }}>Bindabasini Shoe Store</a></Link>

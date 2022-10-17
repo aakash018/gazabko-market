@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import styles from "../../../styles/components/shared/Customer/SearchBar.module.scss";
 import { BsSearch } from "react-icons/bs";
 import Router from "next/router";
+import SearchBarCategoriesSelector from "./SearchBarCategoriesSelector";
 
 const SearchBarCustomer: React.FC = () => {
   const searchInput = useRef<HTMLInputElement>(null);
@@ -18,18 +19,21 @@ const SearchBarCustomer: React.FC = () => {
   };
 
   return (
-    <div className={styles.searchBar}>
-      <section className={styles.icon}>
-        <BsSearch />
-      </section>
-      <section className={styles.input}>
-        <input
-          type="text"
-          placeholder="Search for products or brands"
-          onKeyDown={handleSearch}
-          ref={searchInput}
-        />
-      </section>
+    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      <SearchBarCategoriesSelector />
+      <div className={styles.searchBar}>
+        <section className={styles.icon}>
+          <BsSearch />
+        </section>
+        <section className={styles.input}>
+          <input
+            type="text"
+            placeholder="Search for products or brands"
+            onKeyDown={handleSearch}
+            ref={searchInput}
+          />
+        </section>
+      </div>
     </div>
   );
 };
