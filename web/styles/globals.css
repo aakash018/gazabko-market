@@ -47,3 +47,10 @@ button {
   height: 1px;
   background-color: var(--line-gray);
 }
+
+select {
+  padding: 10px;
+  outline: none;
+  border: 1px solid var(--line-gray);
+  background-color: white;
+}

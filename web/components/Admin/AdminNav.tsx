@@ -49,13 +49,23 @@ const AdminLayout: React.FC<Props> = ({ children }) => {
             </span>
             <span style={{ marginTop: "-6px" }}>Edits</span>
           </Button>
-          <Button look="blank">
+          <Button
+            look="blank"
+            onClick={() => {
+              Router.push("/admin/seller");
+            }}
+          >
             <span>
               <AiFillDollarCircle size={"3rem"} color="#333333" />
             </span>
             <span style={{ marginTop: "-6px" }}>Seller</span>
           </Button>
-          <Button look="blank">
+          <Button
+            look="blank"
+            onClick={() => {
+              Router.push("/admin/customers");
+            }}
+          >
             <span>
               <BiHappyBeaming size={"3rem"} color="#333333" />
             </span>

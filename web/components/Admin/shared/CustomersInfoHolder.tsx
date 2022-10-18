@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Router from "next/router";
 import React from "react";
 
 import styles from "../../../styles/components/shared/Admin/CustomersInfoHolder.module.scss";
@@ -23,16 +24,24 @@ const UserHolder: React.FC<UserHolderProps> = ({ name }) => {
         </div>
         <div className={styles.name}>{name}</div>
       </div>
-      <div className={styles.details}>View</div>
+      <div
+        className={styles.details}
+        onClick={() => {
+          Router.push("/admin/customers/sdad");
+        }}
+      >
+        View
+      </div>
     </div>
   );
 };
 
 interface Props {
   title: string;
+  onViewClick: () => void;
 }
 
-const CustomersInfoHolder: React.FC<Props> = ({ title }) => {
+const CustomersInfoHolder: React.FC<Props> = ({ title, onViewClick }) => {
   return (
     <div className={styles.customersInfoHolder}>
       <div className={styles.title}>{title}</div>
@@ -44,7 +53,7 @@ const CustomersInfoHolder: React.FC<Props> = ({ title }) => {
         <UserHolder name="Joe Mama" />
       </div>
       <div className={styles.actBtn}>
-        <Button>View All</Button>
+        <Button onClick={onViewClick}>View All</Button>
       </div>
     </div>
   );

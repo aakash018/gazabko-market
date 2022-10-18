@@ -1,0 +1,52 @@
+.customerInfoWrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.customerInfo {
+    background: #ffffff;
+    box-shadow: 0px 0px 21px -3px rgba(0, 0, 0, 0.25);
+
+    padding: 20px;
+
+    display: flex;
+    justify-content: space-around;
+
+    width: 800px;
+
+    .info {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+
+        font-size: 1.5rem;
+
+        .actBtn {
+            display: flex;
+            gap: 20px;
+        }
+
+        .title {
+            font-size: 1.7rem;
+            font-weight: bold;
+            color: var(--theme-color);
+        }
+
+        .infoGroup {
+            display: flex;
+            flex-direction: column;
+
+            gap: 10px;
+        }
+
+        .infoHolder {
+            display: flex;
+
+            gap: 10px;
+
+            .infoTitle {
+                font-weight: bold;
+            }
+        }
+    }
+}

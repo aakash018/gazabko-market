@@ -1,14 +1,13 @@
 import { AgGridReact } from "ag-grid-react";
+import Router from "next/router";
 import React, { useRef, useState } from "react";
 import AdminLayout from "../../../components/Admin/AdminNav";
-import CustomersInfoHolder from "../../../components/Admin/shared/CustomersInfoHolder";
 import SearchBar from "../../../components/Admin/shared/SearchBar";
 
-import styles from "../../../styles/components/Admin/pages/CustomerPage.module.scss";
+import styles from "../../../styles/components/Admin/pages/TopCustomers.module.scss";
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-import Router from "next/router";
 
 type TableDef = {
   SN: number;
@@ -19,7 +18,7 @@ type TableDef = {
   Details: any;
 };
 
-const CustomerPage = () => {
+const TopCustomers = () => {
   const searchRef = useRef<HTMLInputElement>(null);
 
   const [rowData] = useState<TableDef[]>([
@@ -60,49 +59,35 @@ const CustomerPage = () => {
 
   return (
     <AdminLayout>
-      <h1>Customers</h1>
-      <div className={styles.customers}>
-        <div className={styles.topShowcase}>
-          <div className={styles.topBuyers}>
-            <CustomersInfoHolder
-              title="Recently Added Customers"
-              onViewClick={() => {
-                Router.push("/admin/customers/newCustomers");
-              }}
-            />
-          </div>
-          <div className={styles.newCusomers}>
-            <CustomersInfoHolder
-              title="Top Customers This Month"
-              onViewClick={() => {
-                Router.push("/admin/customers/topCustomers");
-              }}
-            />
-          </div>
-        </div>
-        <div className={styles.allCustomers}>
-          <h2>All Customers</h2>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              width: "fit-content",
-              gap: "20px",
-            }}
-          >
+      <h1>Top Customers</h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "50px",
+        }}
+      >
+        <div className={styles.topCustomers}>
+          <div className={styles.contentHeader}>
+            <select>
+              <option value="All Time">All Time</option>
+              <option value="Daily">Daily</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Yearly">Yearly</option>
+            </select>
             <div className={styles.search}>
               <SearchBar inputRef={searchRef} />
             </div>
-            <div className={styles.tables}>
-              <div
-                className="ag-theme-alpine"
-                style={{ height: 400, width: 920 }}
-              >
-                <AgGridReact
-                  rowData={rowData}
-                  columnDefs={columnDefs}
-                ></AgGridReact>
-              </div>
+          </div>
+          <div className={styles.tables}>
+            <div
+              className="ag-theme-alpine"
+              style={{ height: 400, width: 920 }}
+            >
+              <AgGridReact
+                rowData={rowData}
+                columnDefs={columnDefs}
+              ></AgGridReact>
             </div>
           </div>
         </div>
@@ -111,4 +96,4 @@ const CustomerPage = () => {
   );
 };
 
-export default CustomerPage;
+export default TopCustomers;

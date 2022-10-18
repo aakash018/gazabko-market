@@ -1,0 +1,11 @@
+.topCustomers {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+
+    gap: 20px;
+    .contentHeader {
+        display: flex;
+        justify-content: space-between;
+    }
+}
