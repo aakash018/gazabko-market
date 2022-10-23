@@ -2,7 +2,7 @@ $width: 56vw;
 $height: 52px;
 
 .searchBar {
-  border: 1px solid black;
+  border: 1px solid var(--line-gray);
 
   &:focus {
     border: 2px solid yellow;

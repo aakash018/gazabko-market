@@ -40,7 +40,7 @@ const TableHolder: React.FC<TableHolderPros> = ({
         <SearchBar inputRef={inputRef} />
       </div>
       <div className={styles.table}>
-        <div className="ag-theme-alpine" style={{ height: 400, width: 1010 }}>
+        <div className="ag-theme-alpine" style={{ height: 400, width: 920 }}>
           <AgGridReact rowData={rowData} columnDefs={columData}></AgGridReact>
         </div>
       </div>
@@ -120,15 +120,17 @@ const Orders = () => {
     { field: "Quntity", width: 150 },
     { field: "Order No" },
     {
-      field: "Status",
+      field: "Details",
+      width: 100,
       cellRenderer: () => (
         <div
           style={{
             color: "var(--theme-color)",
             fontWeight: "bold",
+            cursor: "pointer",
           }}
         >
-          Pending
+          View
         </div>
       ),
     },
