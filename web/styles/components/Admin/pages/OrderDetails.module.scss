@@ -1,0 +1,103 @@
+.orderDetails {
+    display: flex;
+    flex-direction: column;
+
+    gap: 60px;
+
+    .tracker {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .info {
+        display: flex;
+        flex-direction: column;
+
+        gap: 40px;
+
+        align-items: center;
+        .infoHolder {
+            display: flex;
+            gap: 20px;
+            font-size: 1.3rem;
+            .title {
+                font-weight: bold;
+            }
+        }
+        .product {
+            background: #ffffff;
+            box-shadow: 0px 0px 21px -3px rgba(0, 0, 0, 0.25);
+
+            width: fit-content;
+            padding: 20px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 100px;
+            .content {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .actBtn {
+                display: flex;
+                gap: 20px;
+            }
+        }
+
+        .customer {
+            background: #ffffff;
+            box-shadow: 0px 0px 21px -3px rgba(0, 0, 0, 0.25);
+
+            width: fit-content;
+            padding: 20px;
+
+            .details {
+                display: flex;
+                flex-direction: column;
+
+                gap: 8px;
+            }
+
+            button {
+                margin-top: 30px;
+            }
+        }
+        .statusControl {
+            background: #ffffff;
+            box-shadow: 0px 0px 21px -3px rgba(0, 0, 0, 0.25);
+
+            width: 550px;
+            padding: 20px;
+
+            display: flex;
+            flex-direction: column;
+
+            gap: 10px;
+
+            .statusHolder {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                .text {
+                    font-size: 1.3rem;
+                    font-weight: bold;
+                }
+                input {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+        }
+    }
+    .mainTitle {
+        font-size: 1.5rem;
+        color: var(--theme-color);
+        font-weight: bold;
+
+        margin-bottom: 10px;
+    }
+}

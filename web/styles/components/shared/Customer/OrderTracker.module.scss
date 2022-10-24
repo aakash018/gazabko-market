@@ -13,11 +13,16 @@
         left: 0;
         width: 95%;
         height: 2px;
-        z-index: -1;
+        z-index: 1;
 
         transform: translateY(-100%);
 
         background-color: var(--theme-color);
+    }
+
+    .tags {
+        position: relative;
+        z-index: 2;
     }
 
     .icon {

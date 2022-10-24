@@ -8,6 +8,7 @@ import styles from "../../../styles/components/Admin/pages/orders.module.scss";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { AgGridReact } from "ag-grid-react";
+import Router from "next/router";
 
 interface TableDef {
   SN: number;
@@ -23,13 +24,15 @@ interface TableHolderPros {
   title: string;
   rowData: TableDef[];
   columData: {}[];
+  height?: number;
 }
 
-const TableHolder: React.FC<TableHolderPros> = ({
+export const TableHolder: React.FC<TableHolderPros> = ({
   inputRef,
   title,
   columData,
   rowData,
+  height = 400,
 }) => {
   return (
     <div className={styles.tableContainer}>
@@ -40,11 +43,10 @@ const TableHolder: React.FC<TableHolderPros> = ({
         <SearchBar inputRef={inputRef} />
       </div>
       <div className={styles.table}>
-        <div className="ag-theme-alpine" style={{ height: 400, width: 1010 }}>
+        <div className="ag-theme-alpine" style={{ height, width: 1010 }}>
           <AgGridReact rowData={rowData} columnDefs={columData}></AgGridReact>
         </div>
       </div>
-      <div className={styles.viewAll}>View Full List</div>
     </div>
   );
 };
@@ -139,7 +141,17 @@ const Orders = () => {
       <h1>Orders</h1>
       <div className={styles.orders}>
         <div className={styles.infoTabs}>
-          <OrderingInfo />
+          <OrderingInfo
+            processingClick={() => {
+              Router.push("/admin/orders/processing");
+            }}
+            deliveredClick={() => {
+              Router.push("/admin/orders/delivered");
+            }}
+            pendingClick={() => {
+              Router.push("/admin/orders/pending");
+            }}
+          />
         </div>
         <div className={styles.tables}>
           <TableHolder
