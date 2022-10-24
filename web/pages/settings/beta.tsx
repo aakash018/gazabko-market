@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 
 import { TbGift } from "react-icons/tb";
@@ -12,14 +12,22 @@ import styles from "../../styles/components/Customer/pages/SettingsPage.module.s
 import Timer from "../../components/shared/Customer/Timer";
 import SettingPageSettingHolder from "../../components/shared/Customer/SettingPageSettingHolder";
 import Router from "next/router";
+import { AgGridReact } from "ag-grid-react";
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
 
 const SettingsPage = () => {
-  const username = useRef<HTMLInputElement>(null);
-  const firstName = useRef<HTMLInputElement>(null);
-  const lastName = useRef<HTMLInputElement>(null);
-  const deliveryAddress = useRef<HTMLInputElement>(null);
-  const nearestLandmark = useRef<HTMLInputElement>(null);
-  const email = useRef<HTMLInputElement>(null);
+  const [columnData] = useState([
+    { field: "Order #", maxWidth: 90 },
+    { field: "Placed On", maxWidth: 170 },
+    { field: "Items" },
+    { field: "Total" },
+    { field: "Actions" }
+  ]);
+
+  const [rowData] = useState([
+    { "Order #": "1", "Placed On": `${new Date().getFullYear()}/${new Date().getMonth()}/${new Date().getDate()}`, "Items": "Jeans Pant", "Total": "Rs. 1999", "Actions": "Manage" }
+  ]);
 
   return (
     <Layout sidebar="show">
@@ -32,34 +40,34 @@ const SettingsPage = () => {
             </div>
           </div>
           <div>
-          <SettingPageSettingHolder
-            title="Edit Profile"
-            subtitle="username, password etc."
-            onClick={() => {
-              Router.push("/settings/editProfile");
-            }}
-          />
-          <SettingPageSettingHolder
-            title="Shipping addresses"
-            subtitle="3 ddresses"
-            onClick={() => {}}
-          />
-          <SettingPageSettingHolder
-            title="Payment Options"
-            subtitle="debit card, credit card, online wallet etc."
-            onClick={() => {}}
-          />
-          <SettingPageSettingHolder
-            title="Order History"
-            subtitle="order history"
-            onClick={() => {}}
-          />
-          <SettingPageSettingHolder
-            title="Promocodes"
-            subtitle="You have special promocodes"
-            onClick={() => {}}
-          />
-        </div>
+            <SettingPageSettingHolder
+              title="Edit Profile"
+              subtitle="username, password etc."
+              onClick={() => {
+                Router.push("/settings/editProfile");
+              }}
+            />
+            <SettingPageSettingHolder
+              title="Shipping addresses"
+              subtitle="3 ddresses"
+              onClick={() => { }}
+            />
+            <SettingPageSettingHolder
+              title="Payment Options"
+              subtitle="debit card, credit card, online wallet etc."
+              onClick={() => { }}
+            />
+            <SettingPageSettingHolder
+              title="Order History"
+              subtitle="order history"
+              onClick={() => { }}
+            />
+            <SettingPageSettingHolder
+              title="Promocodes"
+              subtitle="You have special promocodes"
+              onClick={() => { }}
+            />
+          </div>
         </div>
         <div>
           <h1>Settings</h1>
@@ -109,10 +117,24 @@ const SettingsPage = () => {
                   <span style={{ fontSize: "14px" }}>joshep@gmail.com</span>
                   <span style={{ fontSize: "14px" }}>(+977) 986247956</span>
                 </div>
-
               </div>
             </div>
           </div>
+          <div style={{ marginTop: "40px" }}>
+            <h1>Your Orders</h1>
+            <div style={{ marginTop: "20px" }}>
+              <div
+                className="ag-theme-alpine"
+                style={{ width: "100%", height: "200px" }}
+              >
+                <AgGridReact
+                  rowData={rowData}
+                  columnDefs={columnData}
+                ></AgGridReact>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </Layout>
