@@ -15,7 +15,7 @@ const CategoriesPage = () => {
   const [priceRangeSlider, setPriceRangeSlider] = useState([0, 100]);
 
   return (
-    <Layout sidebar="hide" type="catogryPage">
+    <Layout type="catogryPage">
       <div className={styles.catPageWrapper}>
         <div style={{ position: "sticky" }}>
           <div className={styles.catogryPage}>

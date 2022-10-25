@@ -1,4 +1,8 @@
 .checkoutPage {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
     .titleMain {
         font-size: 1.8rem;
         color: var(--theme-color);

@@ -27,6 +27,7 @@
     align-items: center;
 
     gap: 20px;
+    pointer-events: none;
 
     .message {
         font-size: 1.5rem;
@@ -46,6 +47,8 @@
 .show {
     transform: translate(-50%, 0);
     opacity: 1;
+
+    pointer-events: auto;
 
     // visibility: visible;
 }

@@ -71,13 +71,23 @@ const AdminLayout: React.FC<Props> = ({ children }) => {
             </span>
             <span style={{ marginTop: "-6px" }}>Customer</span>
           </Button>
-          <Button look="blank">
+          <Button
+            look="blank"
+            onClick={() => {
+              Router.push("/admin/orders");
+            }}
+          >
             <span>
               <FiPackage size={"3rem"} color="#333333" />
             </span>
             <span style={{ marginTop: "-6px" }}>Orders</span>
           </Button>
-          <Button look="blank">
+          <Button
+            look="blank"
+            onClick={() => {
+              Router.push("/admin/account");
+            }}
+          >
             <span>
               <RiAccountCircleFill size={"3rem"} color="#333333" />
             </span>

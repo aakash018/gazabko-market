@@ -122,15 +122,17 @@ const Orders = () => {
     { field: "Quntity", width: 150 },
     { field: "Order No" },
     {
-      field: "Status",
+      field: "Details",
+      width: 100,
       cellRenderer: () => (
         <div
           style={{
             color: "var(--theme-color)",
             fontWeight: "bold",
+            cursor: "pointer",
           }}
         >
-          Pending
+          View
         </div>
       ),
     },

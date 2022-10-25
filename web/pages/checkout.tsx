@@ -10,7 +10,7 @@ const CheckoutPage = () => {
   const deliveryAddress = useRef<HTMLInputElement>(null);
 
   return (
-    <Layout sidebar="show">
+    <Layout>
       <div className={styles.checkoutPage}>
         <div className={styles.titleMain}>Checkout</div>
         <div className={styles.content}>
