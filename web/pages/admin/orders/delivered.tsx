@@ -1,3 +1,4 @@
+import Router from "next/router";
 import React, { useRef, useState } from "react";
 import { TableHolder } from ".";
 import AdminLayout from "../../../components/Admin/AdminNav";
@@ -152,15 +153,17 @@ const Pending: React.FC = () => {
     { field: "Quntity", width: 150 },
     { field: "Order No" },
     {
-      field: "Status",
+      field: "Details",
       cellRenderer: () => (
         <div
+          onClick={() => Router.push("/admin/orders/54545465465")}
           style={{
             color: "var(--theme-color)",
             fontWeight: "bold",
+            cursor: "pointer",
           }}
         >
-          Pending
+          View
         </div>
       ),
     },

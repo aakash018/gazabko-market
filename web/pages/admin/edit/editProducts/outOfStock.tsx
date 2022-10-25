@@ -7,6 +7,7 @@ import styles from "../../../../styles/components/Admin/pages/outOfStock.module.
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import Button from "../../../../components/shared/Button";
+import Router from "next/router";
 
 type TableDef = {
   SN: number;
@@ -119,6 +120,7 @@ const OutOfStock = () => {
       cellRenderer: () => {
         return (
           <div
+            onClick={() => Router.push("/admin/edit/editProducts/5867ds")}
             style={{
               display: "flex",
               alignItems: "center",
@@ -136,6 +138,7 @@ const OutOfStock = () => {
       cellRenderer: () => {
         return (
           <div
+            onClick={() => Router.push("/admin/seller/dsfsdfds")}
             style={{
               display: "flex",
               alignItems: "center",

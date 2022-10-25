@@ -18,6 +18,7 @@ import { FiPackage } from "react-icons/fi";
 import { FaBoxOpen } from "react-icons/fa";
 import { AgGridReact } from "ag-grid-react";
 import Router from "next/router";
+import { BiEdit } from "react-icons/bi";
 
 type TableDef = {
   SN: number;
@@ -93,8 +94,37 @@ const EditProducts: React.FC = () => {
     { field: "Vendor", width: 220 },
     { field: "Item Sold", width: 135 },
     { field: "Item Status", width: 135 },
-    { field: "Edit", width: 135 },
-    { field: "Hide Item", width: 135 },
+    {
+      field: "Edit",
+      width: 135,
+      cellRenderer: () => (
+        <div
+          onClick={() => Router.push("/admin/edit/editProducts/add")}
+          style={{
+            fontSize: "25px",
+            color: "var(--theme-color)",
+          }}
+        >
+          <BiEdit style={{ cursor: "pointer" }} />
+        </div>
+      ),
+    },
+    {
+      field: "Details",
+      cellRenderer: () => (
+        <div
+          onClick={() => Router.push("/admin/edit/editProducts/18598787")}
+          style={{
+            fontWeight: "bold",
+            color: "var(--theme-color)",
+            cursor: "pointer",
+          }}
+        >
+          View
+        </div>
+      ),
+      width: 135,
+    },
   ]);
 
   const handleInfoCardRoute = (route: string) => {

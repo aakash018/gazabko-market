@@ -71,7 +71,12 @@ const EditGftCoupens: React.FC = () => {
       field: "Details",
       width: 100,
       cellRenderer: () => (
-        <div style={{ color: "#5494F5", fontWeight: "bold" }}>View</div>
+        <div
+          onClick={() => Router.push("/admin/edit/editGiftCoupens/dsff")}
+          style={{ color: "#5494F5", fontWeight: "bold" }}
+        >
+          View
+        </div>
       ),
     },
     {
@@ -79,6 +84,7 @@ const EditGftCoupens: React.FC = () => {
       width: 100,
       cellRenderer: () => (
         <div
+          onClick={() => Router.push("/admin/edit/editGiftCoupens/add")}
           style={{
             display: "flex",
             height: "100%",

@@ -13,6 +13,8 @@ import { AgGridReact } from "ag-grid-react";
 import styles from "../../../../styles/components/Admin/pages/AllProducts.module.scss";
 import SearchBarCustomer from "../../../../components/shared/Customer/SearchBar";
 import SearchBar from "../../../../components/Admin/shared/SearchBar";
+import Router from "next/router";
+import { BiEdit } from "react-icons/bi";
 
 type TableDef = {
   SN: number;
@@ -97,9 +99,53 @@ const AllProducts = () => {
     { field: "Vendor", width: 190 },
     { field: "Item Sold", width: 135 },
     { field: "Item Status", width: 135 },
-    { field: "Review", width: 135 },
-    { field: "Edit", width: 105 },
-    { field: "Hide Item", width: 105 },
+    {
+      field: "Review",
+      width: 135,
+      cellRenderer: () => (
+        <div
+          onClick={() => Router.push("/admin/edit/editProducts/productReviews")}
+          style={{
+            fontWeight: "bold",
+            color: "var(--theme-color)",
+            cursor: "pointer",
+          }}
+        >
+          View
+        </div>
+      ),
+    },
+    {
+      field: "Edit",
+      width: 105,
+      cellRenderer: () => (
+        <div
+          onClick={() => Router.push("/admin/edit/editProducts/add")}
+          style={{
+            fontSize: "25px",
+            color: "var(--theme-color)",
+          }}
+        >
+          <BiEdit style={{ cursor: "pointer" }} />
+        </div>
+      ),
+    },
+    {
+      field: "Details",
+      width: 105,
+      cellRenderer: () => (
+        <div
+          onClick={() => Router.push("/admin/edit/editProducts/18598787")}
+          style={{
+            fontWeight: "bold",
+            color: "var(--theme-color)",
+            cursor: "pointer",
+          }}
+        >
+          View
+        </div>
+      ),
+    },
   ]);
 
   return (

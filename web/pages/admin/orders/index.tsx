@@ -126,6 +126,7 @@ const Orders = () => {
       width: 100,
       cellRenderer: () => (
         <div
+          onClick={() => Router.push("/admin/orders/54545465465")}
           style={{
             color: "var(--theme-color)",
             fontWeight: "bold",
