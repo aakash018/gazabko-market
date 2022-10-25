@@ -109,7 +109,7 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
                   }}
                 />
                 <AiFillHeart size={25} onClick={() => {
-                  Router.push("/wishlist");
+                  Router.push("/orderHistory/wishlist");
                 }} />
               </div>
               <div
