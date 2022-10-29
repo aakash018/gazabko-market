@@ -28,6 +28,21 @@
         }
     }
 
+    .layout {
+        .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        margin-right: 100px;
+        width: 70%;
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 20px;
+    }
+
     .products {
         .title {
             font-size: 1.5rem;
