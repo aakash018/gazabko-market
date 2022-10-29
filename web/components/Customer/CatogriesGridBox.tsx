@@ -1,12 +1,17 @@
 import Image from "next/image";
+import Router from "next/router";
 import React from "react";
 import styles from "../../styles/components/Customer/CatogriesGridBox.module.scss";
 const CatogriesGridBox: React.FC = () => {
+  const handelRoute = () => {
+    Router.push("/catogries/jeans");
+  };
+
   return (
     <div className={styles.catogriesGridBox}>
       <div className={styles.grid}>
         <div className={styles.row}>
-          <div className={styles.catBox}>
+          <div className={styles.catBox} onClick={handelRoute}>
             <div className={styles.label}>Women Fashion</div>
             <div className={styles.image}>
               <Image
@@ -18,7 +23,7 @@ const CatogriesGridBox: React.FC = () => {
               />
             </div>
           </div>
-          <div className={styles.catBox}>
+          <div className={styles.catBox} onClick={handelRoute}>
             <div className={styles.label}>Men Fashion</div>
             <div className={styles.image}>
               <Image
@@ -27,10 +32,11 @@ const CatogriesGridBox: React.FC = () => {
                 height={150}
                 objectFit="cover"
                 objectPosition={"top"}
+                onClick={handelRoute}
               />
             </div>
           </div>
-          <div className={styles.catBox}>
+          <div className={styles.catBox} onClick={handelRoute}>
             <div className={styles.label}>Health & Fitness</div>
             <div className={styles.image}>
               <Image
@@ -38,10 +44,11 @@ const CatogriesGridBox: React.FC = () => {
                 width={300}
                 height={150}
                 objectFit="cover"
+                onClick={handelRoute}
               />
             </div>
           </div>
-          <div className={styles.catBox}>
+          <div className={styles.catBox} onClick={handelRoute}>
             <div className={styles.label}>Men Fashion</div>
             <div className={styles.image}>
               <Image
@@ -50,12 +57,13 @@ const CatogriesGridBox: React.FC = () => {
                 height={150}
                 objectFit="cover"
                 objectPosition={"top"}
+                onClick={handelRoute}
               />
             </div>
           </div>
         </div>
         <div className={styles.row}>
-          <div className={styles.catBox}>
+          <div className={styles.catBox} onClick={handelRoute}>
             <div className={styles.label}>Gazabko Bar</div>
             <div className={styles.image}>
               <Image
@@ -63,10 +71,11 @@ const CatogriesGridBox: React.FC = () => {
                 width={300}
                 height={150}
                 objectFit="cover"
+                onClick={handelRoute}
               />
             </div>
           </div>
-          <div className={styles.catBox}>
+          <div className={styles.catBox} onClick={handelRoute}>
             <div className={styles.label}>Sports</div>
             <div className={styles.image}>
               <Image
@@ -74,10 +83,11 @@ const CatogriesGridBox: React.FC = () => {
                 width={300}
                 height={150}
                 objectFit="cover"
+                onClick={handelRoute}
               />
             </div>
           </div>
-          <div className={styles.catBox}>
+          <div className={styles.catBox} onClick={handelRoute}>
             <div className={styles.label}>Toys</div>
             <div className={styles.image}>
               <Image
@@ -85,10 +95,11 @@ const CatogriesGridBox: React.FC = () => {
                 width={300}
                 height={150}
                 objectFit="cover"
+                onClick={handelRoute}
               />
             </div>
           </div>
-          <div className={styles.catBox}>
+          <div className={styles.catBox} onClick={handelRoute}>
             <div className={styles.label}>Toys</div>
             <div className={styles.image}>
               <Image
@@ -96,6 +107,7 @@ const CatogriesGridBox: React.FC = () => {
                 width={300}
                 height={150}
                 objectFit="cover"
+                onClick={handelRoute}
               />
             </div>
           </div>
