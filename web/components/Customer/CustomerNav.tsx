@@ -5,10 +5,7 @@ import styles from "../../styles/components/shared/Customer/CustomerNav.module.s
 import Button from "../shared/Button";
 import Router from "next/router";
 import { useAuth } from "../../context/User";
-import {
-  AiFillHeart,
-  AiOutlineShoppingCart,
-} from "react-icons/ai";
+import { AiFillHeart, AiOutlineShoppingCart } from "react-icons/ai";
 import Link from "next/link";
 import CategoriesHolderMenu from "./CategoriesHolderMenu";
 
@@ -61,7 +58,9 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
     <header className={styles.header}>
       <div className={`${styles.miniNav} ${!show && styles.showNav}`}>
         <ul>
-          <li>BECOME A SELLER</li>
+          <li>
+            <Link href={"/seller"}>BECOME A SELLER</Link>
+          </li>
           <li>TRACK MY ORDER</li>
           <li>CUSTOMER CARE</li>
         </ul>
@@ -108,9 +107,12 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
                     Router.push("/cart");
                   }}
                 />
-                <AiFillHeart size={25} onClick={() => {
-                  Router.push("/orderHistory/wishlist");
-                }} />
+                <AiFillHeart
+                  size={25}
+                  onClick={() => {
+                    Router.push("/orderHistory/wishlist");
+                  }}
+                />
               </div>
               <div
                 style={{ zIndex: 200 }}
