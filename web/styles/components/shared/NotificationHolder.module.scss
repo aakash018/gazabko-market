@@ -19,7 +19,7 @@ $notiWidth: 400px;
         width: fit-content;
         height: fit-content;
 
-        background-color: rgba(3, 72, 136, 0.39);
+        background-color: rgba(212, 229, 245, 0.39);
         backdrop-filter: blur(5px);
 
         padding: 10px;
@@ -36,7 +36,7 @@ $notiWidth: 400px;
     }
 
     .notification {
-        background-color: rgba(3, 72, 136, 0.39);
+        background-color: rgba(211, 211, 211, 0.658);
 
         backdrop-filter: blur(5px);
         box-shadow: 0px 0px 21px -3px rgba(0, 0, 0, 0.25);
@@ -67,7 +67,7 @@ $notiWidth: 400px;
             &:hover {
                 backdrop-filter: blur(5px);
                 box-shadow: 0px 0px 21px -3px rgba(0, 0, 0, 0.25);
-                color: white !important;
+                // color: white !important;
             }
 
             .info {

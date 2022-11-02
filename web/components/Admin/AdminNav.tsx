@@ -24,6 +24,7 @@ interface Props {
 const AdminLayout: React.FC<Props> = ({ children }) => {
   const [notiOpen, setNotiOpen] = useState(false);
   const [orderOpen, setOrderOpen] = useState(false);
+  const [warningOpen, setWarningOpen] = useState(false);
 
   const handleToggleNoti = () => {
     setNotiOpen((prev) => !prev);
@@ -34,8 +35,10 @@ const AdminLayout: React.FC<Props> = ({ children }) => {
       <NotificationHolder
         notiOpen={notiOpen}
         orderOpen={orderOpen}
+        warningOpen={warningOpen}
         setOrderOpen={setOrderOpen}
         setNotiOpen={setNotiOpen}
+        setWarningOpen={setWarningOpen}
       />
       <div className={styles.admin}>
         <div className={styles.adminNav}>
