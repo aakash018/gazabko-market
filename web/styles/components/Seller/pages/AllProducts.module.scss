@@ -1,0 +1,29 @@
+.allProducts {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 40px;
+    .categories {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        max-width: fit-content;
+    }
+
+    .tableContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .table {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: fit-content;
+            .search {
+                align-self: flex-end;
+            }
+        }
+    }
+}

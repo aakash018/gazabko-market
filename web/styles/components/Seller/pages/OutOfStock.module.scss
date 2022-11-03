@@ -1,0 +1,17 @@
+.outOfStock {
+    margin: 50px 0 0 0;
+    display: flex;
+    justify-content: center;
+
+    .table {
+        width: fit-content;
+
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .search {
+            align-self: flex-end;
+        }
+    }
+}
