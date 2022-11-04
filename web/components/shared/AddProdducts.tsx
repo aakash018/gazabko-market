@@ -14,6 +14,7 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import Image from "next/image";
 import Router from "next/router";
+import { useRouter } from "next/router";
 
 import Modal from "react-modal";
 import { customStyles } from "../../modalStyle";
@@ -50,6 +51,8 @@ const AddProdducts: React.FC = () => {
     setCategoriesList((prev) => prev.filter((item) => item !== select));
   };
 
+  const router = useRouter();
+
   return (
     <>
       <Modal
@@ -76,7 +79,7 @@ const AddProdducts: React.FC = () => {
           <Button
             icon={<TbArrowBack />}
             onClick={() => {
-              Router.push("/admin/edit/editProducts");
+              router.back();
             }}
           >
             Back

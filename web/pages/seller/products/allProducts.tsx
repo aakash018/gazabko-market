@@ -95,7 +95,7 @@ const AllProducts = () => {
       width: 135,
       cellRenderer: () => (
         <div
-          onClick={() => Router.push("/admin/edit/editProducts/productReviews")}
+          onClick={() => Router.push("/seller/products/productreview")}
           style={{
             fontWeight: "bold",
             color: "var(--theme-color)",
@@ -111,7 +111,7 @@ const AllProducts = () => {
       width: 105,
       cellRenderer: () => (
         <div
-          onClick={() => Router.push("/admin/edit/editProducts/add")}
+          onClick={() => Router.push("/seller/products/add")}
           style={{
             fontSize: "25px",
             color: "var(--theme-color)",

@@ -97,7 +97,7 @@ const ProductsPage = () => {
       width: 135,
       cellRenderer: () => (
         <div
-          onClick={() => Router.push("/admin/edit/editProducts/add")}
+          onClick={() => Router.push("/seller/products/add")}
           style={{
             fontSize: "25px",
             color: "var(--theme-color)",

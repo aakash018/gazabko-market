@@ -97,7 +97,7 @@ const SellerPage = () => {
       width: 120,
       cellRenderer: () => (
         <div
-          onClick={() => Router.push("/admin/edit/editProducts/add")}
+          onClick={() => Router.push("/seller/products/add")}
           style={{
             fontSize: "25px",
             color: "var(--theme-color)",
@@ -111,7 +111,7 @@ const SellerPage = () => {
       field: "Details",
       cellRenderer: () => (
         <div
-          onClick={() => Router.push("/admin/edit/editProducts/18598787")}
+          onClick={() => Router.push("/seller/products/sdfsfd")}
           style={{
             fontWeight: "bold",
             color: "var(--theme-color)",
