@@ -12,9 +12,10 @@ interface Props {
   discount?: number;
   onChecked?: (e: ChangeEvent<HTMLInputElement>) => any;
   noDelete?: boolean;
+  check: boolean;
 }
 
-const CartItemHolder: React.FC<Props> = ({ onChecked, noDelete }) => {
+const CartItemHolder: React.FC<Props> = ({ onChecked, noDelete, check }) => {
   return (
     <div className={styles.cartItemHolder}>
       <section className={styles.imageContainer}>
@@ -32,11 +33,11 @@ const CartItemHolder: React.FC<Props> = ({ onChecked, noDelete }) => {
         </section>
         <section className={styles.actionBtns}>
           <AiFillHeart />
-          { noDelete ? <></> : <AiFillDelete /> }
+          {noDelete ? <></> : <AiFillDelete />}
         </section>
       </section>
       <section className={styles.checkBox}>
-        <input type="checkBox" onChange={onChecked} />
+        <input type="checkBox" onChange={onChecked} checked={check} />
       </section>
     </div>
   );

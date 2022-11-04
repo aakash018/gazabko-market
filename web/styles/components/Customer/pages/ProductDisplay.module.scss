@@ -97,6 +97,16 @@
                 margin-bottom: 10px;
             }
 
+            .notLogeedIn {
+                font-size: 1.3rem;
+
+                span {
+                    font-weight: bold;
+                    color: var(--theme-color);
+                    cursor: pointer;
+                }
+            }
+
             .actBtn {
                 margin-top: 10px;
             }

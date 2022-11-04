@@ -9,6 +9,8 @@ import Button from "../../components/shared/Button";
 import ShowCase from "../../components/Customer/ShowCase";
 import Breadcrumb from "../../components/Customer/Breadcrumb";
 import Image from "next/image";
+import { useAuth } from "../../context/User";
+import Link from "next/link";
 
 interface QuestionsHolderProps {
   question: string;
@@ -72,6 +74,8 @@ const QuestionsHolder: React.FC<QuestionsHolderProps> = ({
 };
 
 const ProductDisplay: React.FC = () => {
+  const { isLogedIn } = useAuth();
+
   const router = useRouter();
   const { name } = router.query;
 
@@ -171,8 +175,24 @@ const ProductDisplay: React.FC = () => {
             <div className={styles.questionsInput}>
               <div className={styles.content}>
                 <h2>Ask a Question To Seller</h2>
-                <textarea cols={30} rows={10}></textarea>
-                <Button className={styles.actBtn}>Post</Button>
+                {!isLogedIn && (
+                  <>
+                    <div className={styles.notLogeedIn}>
+                      You must be loged in to ask questions.{" "}
+                      <Link href={"/login"}>
+                        <span>LOGIN</span>
+                      </Link>{" "}
+                      here
+                    </div>
+                  </>
+                )}
+                {isLogedIn && (
+                  <>
+                    {" "}
+                    <textarea cols={30} rows={10}></textarea>
+                    <Button className={styles.actBtn}>Post</Button>
+                  </>
+                )}
               </div>
             </div>
             <div className={styles.otherProducts}>

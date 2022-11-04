@@ -3,9 +3,11 @@ import React from "react";
 import Layout from "./Layout";
 import styles from "../../styles/components/Customer/pages/OrderHistoryPage.module.scss";
 
-const OrderHistoryLayout: React.FC<{children: React.ReactNode}> = ({ children }) => {
+const OrderHistoryLayout: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   return (
-    <Layout sidebar="clickable">
+    <Layout>
       <div className={styles.orderHistory}>
         <div>
           <div className={styles.orderHistoryNav}>
@@ -17,19 +19,21 @@ const OrderHistoryLayout: React.FC<{children: React.ReactNode}> = ({ children })
           </div>
           <div className={styles.orderHistoryNav}>
             <div className={styles.title}>
-              <Link href="/orderHistory/wishlist"><a>My Wishlist</a></Link>
+              <Link href="/orderHistory/wishlist">
+                <a>My Wishlist</a>
+              </Link>
             </div>
           </div>
           <div className={styles.orderHistoryNav}>
             <div className={styles.title}>
-              <Link href="/orderHistory/reviews"><a>My Reviews</a></Link>
+              <Link href="/orderHistory/reviews">
+                <a>My Reviews</a>
+              </Link>
             </div>
           </div>
         </div>
 
-        <div className={styles.layout}>
-          {children}
-        </div>
+        <div className={styles.layout}>{children}</div>
       </div>
     </Layout>
   );
