@@ -1,14 +1,10 @@
-import React, { useRef, useState } from "react";
-import AdminLayout from "../../../components/Admin/AdminNav";
-import OrderingInfo from "../../../components/Admin/OrderingInfo";
-import SearchBar from "../../../components/Admin/shared/SearchBar";
-
-import styles from "../../../styles/components/Admin/pages/orders.module.scss";
-
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
-import { AgGridReact } from "ag-grid-react";
 import Router from "next/router";
+import React, { useRef, useState } from "react";
+import OrderingInfo from "../../../components/Admin/OrderingInfo";
+import SellerNav from "../../../components/Seller/SellerNav";
+
+import styles from "../../../styles/components/Seller/pages/OrdersPage.module.scss";
+import { TableHolder } from "../../admin/orders";
 
 interface TableDef {
   SN: number;
@@ -19,39 +15,7 @@ interface TableDef {
   Status: "Verified" | "Not Verified";
 }
 
-interface TableHolderPros {
-  inputRef: React.LegacyRef<HTMLInputElement>;
-  title: string;
-  rowData: TableDef[];
-  columData: {}[];
-  height?: number;
-}
-
-export const TableHolder: React.FC<TableHolderPros> = ({
-  inputRef,
-  title,
-  columData,
-  rowData,
-  height = 400,
-}) => {
-  return (
-    <div className={styles.tableContainer}>
-      <div className={styles.title}>
-        <h2>{title}</h2>
-      </div>
-      <div className={styles.search}>
-        <SearchBar inputRef={inputRef} />
-      </div>
-      <div className={styles.table}>
-        <div className="ag-theme-alpine" style={{ height, width: 915 }}>
-          <AgGridReact rowData={rowData} columnDefs={columData}></AgGridReact>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const Orders = () => {
+const OrdersPage = () => {
   const recentOrdSearchRef = useRef<HTMLInputElement>(null);
   const allOrdSearchRef = useRef<HTMLInputElement>(null);
   const caancledOrdSearchRef = useRef<HTMLInputElement>(null);
@@ -126,7 +90,7 @@ const Orders = () => {
       width: 100,
       cellRenderer: () => (
         <div
-          onClick={() => Router.push("/admin/orders/54545465465")}
+          onClick={() => Router.push("/seller/orders/54545465465")}
           style={{
             color: "var(--theme-color)",
             fontWeight: "bold",
@@ -138,21 +102,20 @@ const Orders = () => {
       ),
     },
   ]);
-
   return (
-    <AdminLayout>
+    <SellerNav>
       <h1>Orders</h1>
       <div className={styles.orders}>
         <div className={styles.infoTabs}>
           <OrderingInfo
             processingClick={() => {
-              Router.push("/admin/orders/processing");
+              Router.push("/seller/orders/processing");
             }}
             deliveredClick={() => {
-              Router.push("/admin/orders/delivered");
+              Router.push("/seller/orders/delivered");
             }}
             pendingClick={() => {
-              Router.push("/admin/orders/pending");
+              Router.push("/seller/orders/pending");
             }}
           />
         </div>
@@ -177,8 +140,8 @@ const Orders = () => {
           />
         </div>
       </div>
-    </AdminLayout>
+    </SellerNav>
   );
 };
 
-export default Orders;
+export default OrdersPage;

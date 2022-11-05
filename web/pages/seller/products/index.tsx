@@ -17,7 +17,7 @@ import styles from "../../../styles/components/Seller/pages/ProductPage.module.s
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-import { BiEdit } from "react-icons/bi";
+import { BiEdit, BiHide } from "react-icons/bi";
 
 type TableDef = {
   SN: number;
@@ -180,6 +180,16 @@ const ProductsPage = () => {
           }}
         >
           <MdOutlineReportProblem />
+        </InfoCard>
+        <InfoCard
+          amount={2}
+          bgColor={"#a11e3f"}
+          title="Hidden Products"
+          onViewClick={() => {
+            handleInfoCardRoute("hiddenProducts");
+          }}
+        >
+          <BiHide />
         </InfoCard>
       </div>
 

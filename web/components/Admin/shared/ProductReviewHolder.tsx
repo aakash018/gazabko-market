@@ -3,7 +3,11 @@ import React from "react";
 import styles from "../../../styles/components/Admin/ProductReviewHolder.module.scss";
 import Button from "../../shared/Button";
 
-const ProductReviewHolder = () => {
+interface Props {
+  showViewVendor?: boolean;
+}
+
+const ProductReviewHolder: React.FC<Props> = ({ showViewVendor = true }) => {
   return (
     <div className={styles.productReviewHolder}>
       <div className={styles.img}>
@@ -37,7 +41,7 @@ const ProductReviewHolder = () => {
         </div>
         <div className={styles.actBtn}>
           <Button color="success">Dismiss</Button>
-          <Button color="default">View Vender</Button>
+          {showViewVendor && <Button color="default">View Vender</Button>}
           <Button color="error">Hide Product</Button>
         </div>
       </div>

@@ -1,0 +1,16 @@
+.hiddenProducts {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    .tableContainer {
+        width: fit-content;
+
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .search {
+            align-self: flex-end;
+        }
+    }
+}

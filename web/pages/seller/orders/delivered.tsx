@@ -1,7 +1,9 @@
 import Router from "next/router";
 import React, { useRef, useState } from "react";
-import { TableHolder } from ".";
+
 import AdminLayout from "../../../components/Admin/AdminNav";
+import SellerNav from "../../../components/Seller/SellerNav";
+import { TableHolder } from "../../admin/orders";
 
 interface TableDef {
   SN: number;
@@ -170,8 +172,8 @@ const Pending: React.FC = () => {
   ]);
 
   return (
-    <AdminLayout>
-      <h1>Processing Orders</h1>
+    <SellerNav>
+      <h1>Delivered Orders</h1>
       <div
         style={{
           display: "flex",
@@ -186,7 +188,7 @@ const Pending: React.FC = () => {
           height={800}
         />
       </div>
-    </AdminLayout>
+    </SellerNav>
   );
 };
 

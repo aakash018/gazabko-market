@@ -64,7 +64,7 @@ const SellerNav: React.FC<Props> = ({ children }) => {
             <Button
               look="blank"
               onClick={() => {
-                Router.push("/seller/seller");
+                Router.push("/seller/orders");
               }}
             >
               <span>

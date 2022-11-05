@@ -172,13 +172,20 @@ const Pending: React.FC = () => {
   return (
     <AdminLayout>
       <h1>Delivered Orders</h1>
-      <TableHolder
-        inputRef={searchRef}
-        title=""
-        columData={columnDefs}
-        rowData={rowData}
-        height={800}
-      />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <TableHolder
+          inputRef={searchRef}
+          title=""
+          columData={columnDefs}
+          rowData={rowData}
+          height={800}
+        />
+      </div>
     </AdminLayout>
   );
 };

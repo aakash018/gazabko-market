@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import SellerNav from "../../../components/Seller/SellerNav";
 import Button from "../../../components/shared/Button";
+import { useRouter } from "next/router";
 
 import Image from "next/image";
 
 import styles from "../../../styles/components/Seller/pages/ProductDetails.module.scss";
 
 const ProductDetails = () => {
+  const router = useRouter();
+  const { id } = router.query;
+
   const [imgURL, setImgUrl] = useState("/images/shoes.jpg");
 
   const handleCorsoulChange = (url: string) => {
@@ -84,7 +88,13 @@ const ProductDetails = () => {
           <div className={styles.infoGroup}>
             <div className={styles.actBtn}>
               <Button>View Full Page</Button>
-              <Button color="error">Hide Product</Button>
+              {id !== "diact" && <Button color="error">Hide Product</Button>}
+              {id === "diact" && (
+                <>
+                  <Button color="success">Unhide Product</Button>
+                  <Button color="error">Delete Product</Button>
+                </>
+              )}
             </div>
           </div>
         </div>

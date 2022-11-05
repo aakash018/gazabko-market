@@ -1,7 +1,8 @@
 import Router from "next/router";
 import React, { useRef, useState } from "react";
-import { TableHolder } from ".";
-import AdminLayout from "../../../components/Admin/AdminNav";
+
+import SellerNav from "../../../components/Seller/SellerNav";
+import { TableHolder } from "../../admin/orders";
 
 interface TableDef {
   SN: number;
@@ -12,7 +13,7 @@ interface TableDef {
   Status: "Verified" | "Not Verified";
 }
 
-const Pending: React.FC = () => {
+const Processing: React.FC = () => {
   const searchRef = useRef<HTMLInputElement>(null);
 
   const [rowData] = useState<TableDef[]>([
@@ -170,7 +171,7 @@ const Pending: React.FC = () => {
   ]);
 
   return (
-    <AdminLayout>
+    <SellerNav>
       <h1>Processing Orders</h1>
       <div
         style={{
@@ -186,8 +187,8 @@ const Pending: React.FC = () => {
           height={800}
         />
       </div>
-    </AdminLayout>
+    </SellerNav>
   );
 };
 
-export default Pending;
+export default Processing;
