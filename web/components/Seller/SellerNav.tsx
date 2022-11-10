@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { MdSpaceDashboard } from "react-icons/md";
-import { BiPackage } from "react-icons/bi";
+import { BiHappy, BiPackage } from "react-icons/bi";
 import { RiAccountCircleFill } from "react-icons/ri";
 import Router from "next/router";
 import Button from "../../components/shared/Button";
@@ -72,6 +72,19 @@ const SellerNav: React.FC<Props> = ({ children }) => {
               </span>
               <span style={{ color: "#757575", marginTop: "-6px" }}>
                 Orders
+              </span>
+            </Button>
+            <Button
+              look="blank"
+              onClick={() => {
+                Router.push("/seller/orders");
+              }}
+            >
+              <span>
+                <BiHappy size={"3rem"} color="#4F2496" />
+              </span>
+              <span style={{ color: "#757575", marginTop: "-6px" }}>
+                Customers
               </span>
             </Button>
             <Button

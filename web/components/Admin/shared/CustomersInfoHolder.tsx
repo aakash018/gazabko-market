@@ -7,9 +7,10 @@ import Button from "../../shared/Button";
 
 interface UserHolderProps {
   name: string;
+  route: string;
 }
 
-const UserHolder: React.FC<UserHolderProps> = ({ name }) => {
+const UserHolder: React.FC<UserHolderProps> = ({ name, route }) => {
   return (
     <div className={styles.userHolder}>
       <div
@@ -27,7 +28,7 @@ const UserHolder: React.FC<UserHolderProps> = ({ name }) => {
       <div
         className={styles.details}
         onClick={() => {
-          Router.push("/admin/customers/sdad");
+          Router.push(route);
         }}
       >
         View
@@ -39,18 +40,23 @@ const UserHolder: React.FC<UserHolderProps> = ({ name }) => {
 interface Props {
   title: string;
   onViewClick: () => void;
+  route: string;
 }
 
-const CustomersInfoHolder: React.FC<Props> = ({ title, onViewClick }) => {
+const CustomersInfoHolder: React.FC<Props> = ({
+  title,
+  onViewClick,
+  route,
+}) => {
   return (
     <div className={styles.customersInfoHolder}>
       <div className={styles.title}>{title}</div>
       <div className={styles.customers}>
-        <UserHolder name="Joe Mama" />
-        <UserHolder name="Joe Mama" />
-        <UserHolder name="Joe Mama" />
-        <UserHolder name="Joe Mama" />
-        <UserHolder name="Joe Mama" />
+        <UserHolder name="Joe Mama" route={route} />
+        <UserHolder name="Joe Mama" route={route} />
+        <UserHolder name="Joe Mama" route={route} />
+        <UserHolder name="Joe Mama" route={route} />
+        <UserHolder name="Joe Mama" route={route} />
       </div>
       <div className={styles.actBtn}>
         <Button onClick={onViewClick}>View All</Button>

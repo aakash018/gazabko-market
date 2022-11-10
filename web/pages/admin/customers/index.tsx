@@ -69,6 +69,7 @@ const CustomerPage = () => {
               onViewClick={() => {
                 Router.push("/admin/customers/newCustomers");
               }}
+              route={"/admin/customers/fsdf"}
             />
           </div>
           <div className={styles.newCusomers}>
@@ -77,6 +78,7 @@ const CustomerPage = () => {
               onViewClick={() => {
                 Router.push("/admin/customers/topCustomers");
               }}
+              route={"/admin/customers/fsdf"}
             />
           </div>
         </div>

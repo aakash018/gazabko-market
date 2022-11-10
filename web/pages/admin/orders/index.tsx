@@ -22,7 +22,7 @@ interface TableDef {
 interface TableHolderPros {
   inputRef: React.LegacyRef<HTMLInputElement>;
   title: string;
-  rowData: TableDef[];
+  rowData: any[];
   columData: {}[];
   height?: number;
 }
