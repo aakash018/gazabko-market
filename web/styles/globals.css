@@ -11,6 +11,9 @@
 html {
   overflow-x: hidden;
 }
+.leaflet-container {
+  height: 100%;
+}
 
 :root {
   --theme-color: #5494f5;

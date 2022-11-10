@@ -17,6 +17,12 @@
     background-repeat: no-repeat;
 
     .formInput {
+        .mapHolder {
+            height: 200px;
+            width: 450px;
+
+            background-color: aqua;
+        }
         .terms {
             display: flex;
             align-items: center;

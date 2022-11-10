@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import Router from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import Layout from "../components/Customer/Layout";
@@ -7,6 +8,10 @@ import Input from "../components/shared/Input";
 import { useAuth } from "../context/User";
 
 import styles from "../styles/components/Customer/pages/signup.module.scss";
+const Map = dynamic(
+  () => import("../components/shared/Map"), // replace '@components/map' with your component's location
+  { ssr: false } // This line is important. It's what prevents server-side render
+);
 
 const SignUpPage: React.FC = () => {
   const { login } = useAuth();
@@ -23,6 +28,8 @@ const SignUpPage: React.FC = () => {
   const [showFooter, setShowFooter] = useState(false);
 
   const [page, setPage] = useState<number>(0);
+
+  const [delivaryAdd, setDeleveryAdd] = useState("");
 
   useEffect(() => {
     if (page === 0) {
@@ -43,9 +50,9 @@ const SignUpPage: React.FC = () => {
   };
 
   return (
-    <Layout sidebar="clickable" showFooter={false}>
+    <Layout showFooter={false}>
       <div className={styles.signupWrapper}>
-        <SignUpLayout showFooter={showFooter}>
+        <SignUpLayout showFooter={showFooter} clean={page === 3}>
           {page === 0 && (
             <div className={styles.formInput}>
               <form>
@@ -110,10 +117,14 @@ const SignUpPage: React.FC = () => {
           {page === 3 && (
             <div className={styles.formInput}>
               <form>
+                <div className={styles.mapHolder}>
+                  <Map setAddress={setDeleveryAdd} />
+                </div>
                 <Input
                   input={code}
                   placeholder="Delivery Address"
                   type={"text"}
+                  value={delivaryAdd}
                 />
                 <Input
                   input={code}

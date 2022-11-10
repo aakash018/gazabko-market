@@ -1,5 +1,6 @@
 .signupContainer {
-    width: 350px;
+    min-width: 350px;
+    width: fit-content;
     height: fit-content;
 
     border: 1px solid var(--line-gray);
