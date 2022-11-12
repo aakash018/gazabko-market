@@ -93,10 +93,10 @@ const Home = () => {
             />
             <div className={styles.midBanner}>
               <Image
-                src={"/images/bigsale.jpg"}
+                src={"/images/sale.png"}
                 layout="fill"
                 priority={true}
-                objectFit="cover"
+                objectFit="contain"
                 objectPosition={"center"}
                 alt="middle"
               />

@@ -1,11 +1,14 @@
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
 import { BsCash } from "react-icons/bs";
 import Layout from "../components/Customer/Layout";
 import Button from "../components/shared/Button";
 import IntputField from "../components/shared/Input";
-import Map from "../components/shared/Map";
+
 import styles from "../styles/components/Customer/pages/Checkout.module.scss";
+
+const Map = dynamic(() => import("../components/shared/Map"), { ssr: false });
 
 const CheckoutPage = () => {
   const deliveryAddress = useRef<HTMLInputElement>(null);
