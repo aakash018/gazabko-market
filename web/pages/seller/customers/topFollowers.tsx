@@ -1,9 +1,6 @@
 import Router from "next/router";
 import React, { useRef, useState } from "react";
-import CustomersInfoHolder from "../../../components/Admin/shared/CustomersInfoHolder";
 import SellerNav from "../../../components/Seller/SellerNav";
-
-import styles from "../../../styles/components/Seller/pages/CustomerPage.module.scss";
 import { TableHolder } from "../../admin/orders";
 
 type TableDef = {
@@ -15,7 +12,7 @@ type TableDef = {
   Details: any;
 };
 
-const CustomersPage = () => {
+const TopFollowers = () => {
   const searchRef = useRef<HTMLInputElement>(null);
 
   const [rowData] = useState<TableDef[]>([
@@ -56,37 +53,21 @@ const CustomersPage = () => {
 
   return (
     <SellerNav>
-      <h1>Customers</h1>
-      <div className={styles.topShowcase}>
-        <div className={styles.topBuyers}>
-          <CustomersInfoHolder
-            title="Recently Added Followers"
-            onViewClick={() => {
-              Router.push("/seller/customers/newFollowers");
-            }}
-            route={"/seller/customers/fsdf"}
-          />
-        </div>
-        <div className={styles.newCusomers}>
-          <CustomersInfoHolder
-            title="Top Followers This Month"
-            onViewClick={() => {
-              Router.push("/seller/customers/topFollowers");
-            }}
-            route={"/seller/customers/fsdf"}
-          />
-        </div>
-      </div>
-      <div className={styles.allCustomemrs}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         <TableHolder
-          rowData={rowData}
           columData={columnDefs}
+          rowData={rowData}
           inputRef={searchRef}
-          title="All Followers"
+          title={"Top Followers"}
         />
       </div>
     </SellerNav>
   );
 };
 
-export default CustomersPage;
+export default TopFollowers;
