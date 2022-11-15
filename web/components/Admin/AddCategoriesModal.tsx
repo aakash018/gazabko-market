@@ -34,7 +34,7 @@ const AddCategoriesModal: React.FC = () => {
       </Modal>
       <div className={styles.addCategoriesModal}>
         <IntputField input={catName} label="Category's Name" />
-        <IntputField input={catName} label="Icon" type={"file"} />
+        <IntputField input={catName} label="Banner" type={"file"} />
         <TagsSelector
           label="Sub-Catogries"
           listState={subCats}

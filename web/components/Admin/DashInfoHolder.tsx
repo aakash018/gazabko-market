@@ -15,6 +15,7 @@ interface Props {
   second: TopItemsType;
   third: TopItemsType;
   onClick: () => void;
+  title?: string;
 }
 
 const DashInfoHolder: React.FC<Props> = ({
@@ -23,6 +24,7 @@ const DashInfoHolder: React.FC<Props> = ({
   second,
   third,
   onClick,
+  title = "Total Month Earning",
 }) => {
   return (
     <div>
@@ -30,7 +32,7 @@ const DashInfoHolder: React.FC<Props> = ({
         <div className={styles.info}>
           <div className={styles.totals}>
             <div className={styles.amount}>Rs. {totalEarning}</div>
-            <div className={styles.subTitle}>Total Month Earning</div>
+            <div className={styles.subTitle}>{title}</div>
           </div>
           <div className={styles.topItems}>
             <ul>

@@ -14,6 +14,7 @@ import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { MdDetails } from "react-icons/md";
 import AddCategoriesModal from "../../../../components/Admin/AddCategoriesModal";
 import { customStyles } from "../../../../modalStyle";
+import Router from "next/router";
 
 type TableCol = {
   SN: number;
@@ -123,6 +124,9 @@ const EditCategories = () => {
             style={{
               color: "var(--theme-color)",
               fontWeight: "bold",
+            }}
+            onClick={() => {
+              Router.push("/admin/edit/editCategories/sdasd");
             }}
           >
             View

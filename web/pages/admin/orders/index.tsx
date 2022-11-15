@@ -25,6 +25,7 @@ interface TableHolderPros {
   rowData: any[];
   columData: {}[];
   height?: number;
+  width?: number;
 }
 
 export const TableHolder: React.FC<TableHolderPros> = ({
@@ -33,6 +34,7 @@ export const TableHolder: React.FC<TableHolderPros> = ({
   columData,
   rowData,
   height = 400,
+  width = 915,
 }) => {
   return (
     <div className={styles.tableContainer}>
@@ -43,7 +45,7 @@ export const TableHolder: React.FC<TableHolderPros> = ({
         <SearchBar inputRef={inputRef} />
       </div>
       <div className={styles.table}>
-        <div className="ag-theme-alpine" style={{ height, width: 915 }}>
+        <div className="ag-theme-alpine" style={{ height, width }}>
           <AgGridReact rowData={rowData} columnDefs={columData}></AgGridReact>
         </div>
       </div>
