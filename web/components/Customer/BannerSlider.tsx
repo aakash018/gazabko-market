@@ -49,7 +49,10 @@ const BannerSlider = () => {
   }, [increaseIndex]);
 
   return (
-    <div className={styles.bannerSlider} style={{ background: sliderImages[currentImageIndex].backgroundColor }}>
+    <div
+      className={styles.bannerSlider}
+      style={{ background: sliderImages[currentImageIndex].backgroundColor }}
+    >
       <CategoriesHolder />
       <div style={{ position: "relative", width: "100%" }}>
         {sliderImages.map((images, i) => {

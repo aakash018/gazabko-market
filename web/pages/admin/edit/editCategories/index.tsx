@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import AdminLayout from "../../../components/Admin/AdminNav";
+import AdminLayout from "../../../../components/Admin/AdminNav";
 
 import { AgGridReact } from "ag-grid-react";
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-import Button from "../../../components/shared/Button";
+import Button from "../../../../components/shared/Button";
 import Modal from "react-modal";
 
-import styles from "../../../styles/components/Admin/pages/EditCategories.module.scss";
-import AddCategoriesModal from "../../../components/Admin/AddCategoriesModal";
-import { customStyles } from "../../../modalStyle";
+import styles from "../../../../styles/components/Admin/pages/EditCategories.module.scss";
+
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { MdDetails } from "react-icons/md";
+import AddCategoriesModal from "../../../../components/Admin/AddCategoriesModal";
+import { customStyles } from "../../../../modalStyle";
 
 type TableCol = {
   SN: number;
@@ -94,14 +96,13 @@ const EditCategories = () => {
 
   const [columnDefs] = useState([
     { field: "SN", width: 55 },
-    { field: "Icon", width: 125 },
-    { field: "Category Name" },
+    { field: "Category Name", resizable: true },
     { field: "Products", width: 115 },
     { field: "Vendors", width: 115 },
     {
       field: "Edit",
       width: 115,
-      //   cellStyle: "center",
+      // cellStyle: "center",
       cellRenderer: () => {
         return <AiFillEdit color="#5F97B9" size={20} />;
       },
@@ -111,6 +112,22 @@ const EditCategories = () => {
       width: 115,
       cellRenderer: () => {
         return <AiFillDelete color="#F36868" size={20} />;
+      },
+    },
+    {
+      field: "Details",
+      width: 125,
+      cellRenderer: () => {
+        return (
+          <span
+            style={{
+              color: "var(--theme-color)",
+              fontWeight: "bold",
+            }}
+          >
+            View
+          </span>
+        );
       },
     },
   ]);

@@ -174,10 +174,13 @@
     background-color: #ffffff;
     visibility: hidden;
     transform: translateY(-8px);
+
     cursor: pointer;
     transition: all 0.3s ease-in;
 
     z-index: 50;
+
+    box-shadow: 0 12px 12px 0 rgba(87, 87, 87, 0.616);
     .text {
         margin-left: 25px;
     }

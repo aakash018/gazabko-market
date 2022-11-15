@@ -57,4 +57,37 @@
             gap: 10px;
         }
     }
+
+    .avatarSelect {
+        // margin-top: 10px;
+
+        .avatarSelectHolder {
+            img {
+                border-radius: 50%;
+                cursor: pointer;
+            }
+        }
+
+        .selected {
+            border: 3px solid var(--theme-color);
+            border-radius: 50%;
+
+            overflow: hidden;
+            padding: 1px;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        .avatars {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .actBtn {
+            margin-top: 10px;
+        }
+    }
 }

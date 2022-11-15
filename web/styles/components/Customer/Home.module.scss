@@ -10,9 +10,9 @@
     justify-content: center;
 }
 
-.homePageContainer {
-    width: 1200px;
-}
+// .homePageContainer {
+//     width: 1300px;
+// }
 
 .popupBanner {
     position: relative;
@@ -37,9 +37,14 @@
 }
 
 .catogriesGrid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     .title {
         font-size: 1.8rem;
-
-        margin-bottom: 10px;
+        align-self: flex-start;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left: 35px;
     }
 }

@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import Router from "next/router";
+import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import Layout from "../components/Customer/Layout";
 import Button from "../components/shared/Button";
@@ -12,6 +13,61 @@ const Map = dynamic(
   () => import("../components/shared/Map"), // replace '@components/map' with your component's location
   { ssr: false } // This line is important. It's what prevents server-side render
 );
+
+interface AvaterSelectorProps {
+  imgURL: string;
+  width?: number;
+  height?: number;
+  select?: boolean;
+  onClick?: () => void;
+}
+
+const AvaterSelectHolder: React.FC<AvaterSelectorProps> = ({
+  imgURL,
+  width = 70,
+  height = 70,
+  select = false,
+  onClick,
+}) => {
+  return (
+    <div
+      className={`${styles.avatarSelectHolder} ${
+        select ? styles.selected : ""
+      }`}
+      onClick={onClick}
+    >
+      <Image src={imgURL} width={width} height={height} objectFit="cover" />
+    </div>
+  );
+};
+
+const avatarsData = [
+  {
+    imgUrl: "/images/avatar.jpg",
+    width: 70,
+    height: 70,
+  },
+  {
+    imgUrl: "/images/avatar2.png",
+    width: 70,
+    height: 70,
+  },
+  {
+    imgUrl: "/images/avater3.png",
+    width: 70,
+    height: 70,
+  },
+  {
+    imgUrl: "/images/avatar4.png",
+    width: 60,
+    height: 60,
+  },
+  {
+    imgUrl: "/images/avatar5.png",
+    width: 60,
+    height: 60,
+  },
+];
 
 const SignUpPage: React.FC = () => {
   const { login } = useAuth();
@@ -31,6 +87,15 @@ const SignUpPage: React.FC = () => {
 
   const [delivaryAdd, setDeleveryAdd] = useState("");
 
+  const [selectedAvaatar, setSelectedAvatar] = useState(0);
+  const [selectAvaarList, setSelectAvatarList] = useState([
+    true,
+    false,
+    false,
+    false,
+    false,
+  ]);
+
   useEffect(() => {
     if (page === 0) {
       setShowFooter(true);
@@ -40,7 +105,7 @@ const SignUpPage: React.FC = () => {
   }, [page]);
 
   const handlePageInc = () => {
-    if (page >= 3) return;
+    if (page >= 4) return;
     setPage((prev) => prev + 1);
   };
 
@@ -52,7 +117,7 @@ const SignUpPage: React.FC = () => {
   return (
     <Layout showFooter={false}>
       <div className={styles.signupWrapper}>
-        <SignUpLayout showFooter={showFooter} clean={page === 3}>
+        <SignUpLayout showFooter={showFooter} clean={page === 3 || page === 4}>
           {page === 0 && (
             <div className={styles.formInput}>
               <form>
@@ -132,15 +197,47 @@ const SignUpPage: React.FC = () => {
                   type={"text"}
                 />
 
+                <Button onClick={handlePageInc}>NEXT</Button>
+              </form>
+            </div>
+          )}
+          {page === 4 && (
+            <div className={styles.avatarSelect}>
+              <h1>We are almost done !!</h1>
+              <h2>Choose Your Avatar</h2>
+              <div className={styles.avatars}>
+                {avatarsData.map((avatar, i) => (
+                  <AvaterSelectHolder
+                    imgURL={avatar.imgUrl}
+                    width={avatar.width}
+                    height={avatar.height}
+                    select={selectAvaarList[i]}
+                    onClick={() => {
+                      // ? TO SELECT AVATAR
+                      // ? FIRST UNSELECT THE SELECTED AVATAR
+                      setSelectAvatarList([false, false, false, false, false]);
+
+                      // ? THEN set TRUE to the one avatar clicked
+                      setSelectAvatarList((prev) =>
+                        prev.map((ele, j) => {
+                          if (j === i) return true;
+                          else return false;
+                        })
+                      );
+                    }}
+                  />
+                ))}
+              </div>
+              <div className={styles.actBtn}>
                 <Button
                   onClick={() => {
                     login();
                     Router.push("/");
                   }}
                 >
-                  NEXT
+                  Save
                 </Button>
-              </form>
+              </div>
             </div>
           )}
         </SignUpLayout>
