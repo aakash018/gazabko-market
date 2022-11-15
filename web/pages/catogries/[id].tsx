@@ -7,6 +7,9 @@ import Button from "../../components/shared/Button";
 import SideBarNav from "../../components/shared/Customer/SideBarNav";
 import styles from "../../styles/components/Customer/pages/CatogriesPage.module.scss";
 
+import Image from "next/image";
+import IntputField from "../../components/shared/Input";
+
 const CategoriesPage = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -32,10 +35,33 @@ const CategoriesPage = () => {
               />
             </section>
             <section className={styles.brands}>
-              <SideBarNav
-                title="Brands"
-                options={["xyz ", "xyz ", "xyz", "xyz", "xyz "]}
-              />
+              <div className={styles.title}>Brands</div>
+              <ul>
+                <li>
+                  <IntputField type={"checkbox"} />
+                  <span>Brand Name</span>
+                </li>
+                <li>
+                  <IntputField type={"checkbox"} />
+                  <span>Brand Name</span>
+                </li>
+                <li>
+                  <IntputField type={"checkbox"} />
+                  <span>Brand Name</span>
+                </li>
+                <li>
+                  <IntputField type={"checkbox"} />
+                  <span>Brand Name</span>
+                </li>
+                <li>
+                  <IntputField type={"checkbox"} />
+                  <span>Brand Name</span>
+                </li>
+                <li>
+                  <IntputField type={"checkbox"} />
+                  <span>Brand Name</span>
+                </li>
+              </ul>
             </section>
             <section className={styles.priceRange}>
               <section className={styles.title}>
@@ -83,8 +109,64 @@ const CategoriesPage = () => {
           </div>
         </div>
         <div className={styles.catogriesPage}>
-          <div className={styles.topProduct}>
-            <ShowCase showTitle={true} title="Top Brands" type="brand" />
+          <div className={styles.catBanner}>
+            <div className={styles.catBanner}>
+              <Image
+                src={"/images/catogries/bar.jpg"}
+                layout="fill"
+                objectFit="cover"
+                objectPosition={"top"}
+              />
+              <div className={styles.label}>
+                <div className={styles.title}>Gazabko Bar</div>
+                <div className={styles.topBrands}>
+                  <Image
+                    src={"/images/brand.png"}
+                    width={70}
+                    height={70}
+                    objectFit="cover"
+                  />
+                  <Image
+                    src={"/images/placeHolders/placeHolder.jpeg"}
+                    width={70}
+                    height={70}
+                    objectFit="cover"
+                  />
+                  <Image
+                    src={"/images/brand.png"}
+                    width={70}
+                    height={70}
+                    objectFit="cover"
+                  />
+                  <Image
+                    src={"/images/placeHolders/placeHolder.jpeg"}
+                    width={70}
+                    height={70}
+                    objectFit="cover"
+                  />
+                  <Image
+                    src={"/images/brand.png"}
+                    width={70}
+                    height={70}
+                    objectFit="cover"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={styles.products}>
+            <div className={styles.actions}>
+              <div className={styles.sort}>
+                <span>Sort By:</span>
+                <select>
+                  <option value="Best Match" selected={true}>
+                    Best Match
+                  </option>
+                  <option value="Price High To Low">Price High To Low</option>
+                  <option value="Price Low To High">Price Low To High</option>
+                </select>
+              </div>
+            </div>
             <ShowCase title="All Products" showTitle={true} noOfProducts={20} />
           </div>
         </div>

@@ -13,7 +13,7 @@ interface Props {
 
 const Layout: React.FC<Props> = ({
   children,
-  sliderCategories = false,
+  sliderCategories = true,
   type = "catogry",
   showFooter = true,
 }) => {
