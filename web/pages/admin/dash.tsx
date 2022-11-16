@@ -12,6 +12,7 @@ import Modal from "react-modal";
 import TopItemsPopup from "../../components/Admin/TopItemsPopup";
 import { customStyles } from "../../modalStyle";
 import OrderingInfo from "../../components/Admin/OrderingInfo";
+import DashSearchBar from "../../components/Admin/DashSearchBar";
 
 const topItems = [
   {
@@ -57,6 +58,15 @@ const DashPage: React.FC = () => {
         <TopItemsPopup title="TEXT" items={topItems} />
       </Modal>
       <div className={styles.dash}>
+        <div
+          style={{
+            width: "50%",
+            alignSelf: "flex-start",
+            marginLeft: "50px",
+          }}
+        >
+          <DashSearchBar />
+        </div>
         <div className={styles.doughnutCharts}>
           <DashInfoHolder
             totalEarning={37575}

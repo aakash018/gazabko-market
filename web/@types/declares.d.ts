@@ -4,3 +4,5 @@ declare interface User {
   lastName: string;
   email: string;
 }
+
+declare module "turnstone";

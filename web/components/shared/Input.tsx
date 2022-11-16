@@ -11,6 +11,8 @@ interface Props {
   value?: string;
   setState?: React.Dispatch<React.SetStateAction<string | undefined>>;
   onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: () => void;
 }
 
 const IntputField: React.FC<Props> = ({
@@ -23,15 +25,18 @@ const IntputField: React.FC<Props> = ({
   value,
   setState,
   onKeyDown,
+  onChange,
+  onBlur,
 }) => {
   const handleChaange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (setState) {
       setState(e.target.value);
     }
+    if (onChange) onChange(e);
   };
 
   return (
-    <div className={styles.mainInput}>
+    <div className={styles.mainInput} style={{ width: "100%" }}>
       <label htmlFor={id} style={{ display: "block" }}>
         {label}
       </label>
@@ -44,6 +49,7 @@ const IntputField: React.FC<Props> = ({
         value={value}
         onChange={handleChaange}
         onKeyDown={onKeyDown}
+        onBlur={onBlur}
       />
     </div>
   );
