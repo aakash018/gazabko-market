@@ -38,27 +38,27 @@ const CategoriesPage = () => {
               <div className={styles.title}>Brands</div>
               <ul>
                 <li>
-                  <IntputField type={"checkbox"} />
+                  <input type={"checkbox"} />
                   <span>Brand Name</span>
                 </li>
                 <li>
-                  <IntputField type={"checkbox"} />
+                  <input type={"checkbox"} />
                   <span>Brand Name</span>
                 </li>
                 <li>
-                  <IntputField type={"checkbox"} />
+                  <input type={"checkbox"} />
                   <span>Brand Name</span>
                 </li>
                 <li>
-                  <IntputField type={"checkbox"} />
+                  <input type={"checkbox"} />
                   <span>Brand Name</span>
                 </li>
                 <li>
-                  <IntputField type={"checkbox"} />
+                  <input type={"checkbox"} />
                   <span>Brand Name</span>
                 </li>
                 <li>
-                  <IntputField type={"checkbox"} />
+                  <input type={"checkbox"} />
                   <span>Brand Name</span>
                 </li>
               </ul>
