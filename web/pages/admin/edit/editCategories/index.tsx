@@ -28,6 +28,7 @@ type TableCol = {
 
 const EditCategories = () => {
   const [addCatModal, setAddCatModal] = useState(false);
+  const [editCatModal, setEditCatModal] = useState(false);
   const [rowData] = useState<TableCol[]>([
     {
       SN: 1,
@@ -105,7 +106,11 @@ const EditCategories = () => {
       width: 115,
       // cellStyle: "center",
       cellRenderer: () => {
-        return <AiFillEdit color="#5F97B9" size={20} />;
+        return (
+          <div onClick={() => setEditCatModal(true)}>
+            <AiFillEdit color="#5F97B9" size={20} />
+          </div>
+        );
       },
     },
     {
@@ -151,6 +156,20 @@ const EditCategories = () => {
         style={customStyles}
       >
         <AddCategoriesModal />
+      </Modal>
+      <Modal
+        isOpen={editCatModal}
+        onRequestClose={() => {
+          setEditCatModal(false);
+        }}
+        style={customStyles}
+        ariaHideApp={false}
+      >
+        <AddCategoriesModal
+          catName="Random Cat Name"
+          catCommision={"200"}
+          subCategory={["Random Cat", "Random sub Cat", "Jeans"]}
+        />
       </Modal>
       <AdminLayout>
         <div className={styles.editCategoriesPage}>

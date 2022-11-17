@@ -78,24 +78,9 @@ const OrdersDetails = () => {
               <div className={styles.details}>
                 <div className={styles.mainTitle}>Customer</div>
                 <div className={styles.infoHolder}>
-                  <div className={styles.title}>Name</div>
-                  <div className={styles.data}>Jon McMills</div>
+                  <div className={styles.title}>Last Name</div>
+                  <div className={styles.data}>McMills</div>
                 </div>
-                <div className={styles.infoHolder}>
-                  <div className={styles.title}>Phone No.</div>
-                  <div className={styles.data}>9862145368</div>
-                </div>
-                <div className={styles.infoHolder}>
-                  <div className={styles.title}>Email</div>
-                  <div className={styles.data}>xyz@gmail.com</div>
-                </div>
-                <Button
-                  onClick={() => {
-                    Router.push("/admin/customers/sdad");
-                  }}
-                >
-                  View Customer
-                </Button>
               </div>
               <div className={styles.details}>
                 <div className={styles.mainTitle}>Delivery Details</div>

@@ -9,7 +9,7 @@ interface Props {
   id?: string;
   className?: string;
   value?: string;
-  setState?: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setState?: React.Dispatch<React.SetStateAction<any>>;
   onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: () => void;

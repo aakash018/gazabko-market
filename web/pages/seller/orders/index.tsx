@@ -138,6 +138,12 @@ const OrdersPage = () => {
             columData={columnDefs}
             rowData={rowData}
           />
+          <TableHolder
+            inputRef={caancledOrdSearchRef}
+            title="Returned Orders"
+            columData={columnDefs}
+            rowData={rowData}
+          />
         </div>
       </div>
     </SellerNav>
