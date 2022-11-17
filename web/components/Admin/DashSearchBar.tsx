@@ -8,13 +8,17 @@ import {
 import styles from "../../styles/components/Admin/DashSearchBar.module.scss";
 import IntputField from "../shared/Input";
 
-const DashSearchBar = () => {
+interface Props {
+  pageLayoutData: AdminPageSearchDataProps[];
+}
+
+const DashSearchBar: React.FC<Props> = ({ pageLayoutData }) => {
   const [matchedSug, setMatchedSug] = useState<AdminPageSearchDataProps[]>([]);
 
   const handelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let matches: AdminPageSearchDataProps[] = [];
     if (e.target.value.trim().length > 0) {
-      matches = adminPageSearchData.filter((ele) => {
+      matches = pageLayoutData.filter((ele) => {
         const regex = new RegExp(`${e.target.value}`, "gi");
         return ele.name.match(regex);
       });

@@ -17,6 +17,8 @@ import LineGraphInfo from "../../components/Admin/shared/LineGraphInfo";
 import Router from "next/router";
 import { useState } from "react";
 import { AgGridReact } from "ag-grid-react";
+import DashSearchBar from "../../components/Admin/DashSearchBar";
+import { selllerPageLayoutData } from "../../sellerPageLayoutData";
 Chart.register(CategoryScale);
 
 type TableDef = {
@@ -128,6 +130,20 @@ const SellerPage = () => {
   return (
     <SellerNav>
       <h1>DashBoard</h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <div
+          style={{
+            width: "50%",
+          }}
+        >
+          <DashSearchBar pageLayoutData={selllerPageLayoutData} />
+        </div>
+      </div>
       <div className={styles.dash}>
         <div className={styles.infoTabs}>
           <SellerDashTabs

@@ -13,6 +13,7 @@ import TopItemsPopup from "../../components/Admin/TopItemsPopup";
 import { customStyles } from "../../modalStyle";
 import OrderingInfo from "../../components/Admin/OrderingInfo";
 import DashSearchBar from "../../components/Admin/DashSearchBar";
+import { adminPageSearchData } from "../../adminPageSearchData";
 
 const topItems = [
   {
@@ -65,7 +66,7 @@ const DashPage: React.FC = () => {
             marginLeft: "50px",
           }}
         >
-          <DashSearchBar />
+          <DashSearchBar pageLayoutData={adminPageSearchData} />
         </div>
         <div className={styles.doughnutCharts}>
           <DashInfoHolder
