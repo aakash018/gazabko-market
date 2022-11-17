@@ -82,7 +82,7 @@ export const adminPageSearchData: AdminPageSearchDataProps[] = [
   },
   {
     name: "Product Reports",
-    url: "/admin/products/product Reports",
+    url: "/admin/products/productReports",
   },
   {
     name: "Seller",

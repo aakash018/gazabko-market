@@ -1,9 +1,9 @@
 import Image from "next/image";
 import React, { useState } from "react";
-import AdminLayout from "../../../../components/Admin/AdminNav";
-import Button from "../../../../components/shared/Button";
 
-import styles from "../../../../styles/components/Admin/pages/ProductDetails.module.scss";
+import styles from "../../../styles/components/Admin/pages/ProductDetails.module.scss";
+import AdminLayout from "../../../components/Admin/AdminNav";
+import Button from "../../../components/shared/Button";
 
 const ProductDetails = () => {
   const [imgURL, setImgUrl] = useState("/images/shoes.jpg");

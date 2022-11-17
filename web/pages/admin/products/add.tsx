@@ -1,5 +1,5 @@
 import React from "react";
-import AddProdducts from "../../../../components/shared/AddProdducts";
+import AddProdducts from "../../../components/shared/AddProdducts";
 
 const Add: React.FC = () => {
   return (

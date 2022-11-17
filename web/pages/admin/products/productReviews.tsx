@@ -1,10 +1,9 @@
 import React, { useRef } from "react";
-import AdminLayout from "../../../../components/Admin/AdminNav";
 
-import ProductReviewsHolder from "../../../../components/Admin/shared/ProductReviewsHolder";
-import SearchBar from "../../../../components/Admin/shared/SearchBar";
-
-import styles from "../../../../styles/components/Admin/pages/ProductReviews.module.scss";
+import styles from "../../../styles/components/Admin/pages/ProductReviews.module.scss";
+import AdminLayout from "../../../components/Admin/AdminNav";
+import ProductReviewsHolder from "../../../components/Admin/shared/ProductReviewsHolder";
+import SearchBar from "../../../components/Admin/shared/SearchBar";
 
 const ProductReviews = () => {
   const searchRef = useRef<HTMLInputElement>(null);

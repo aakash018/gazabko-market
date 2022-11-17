@@ -1,13 +1,14 @@
 import { AgGridReact } from "ag-grid-react";
 import React, { useState } from "react";
-import AdminLayout from "../../../../components/Admin/AdminNav";
 
-import styles from "../../../../styles/components/Admin/pages/outOfStock.module.scss";
+import styles from "../../../styles/components/Admin/pages/outOfStock.module.scss";
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-import Button from "../../../../components/shared/Button";
+
 import Router from "next/router";
+import AdminLayout from "../../../components/Admin/AdminNav";
+import Button from "../../../components/shared/Button";
 
 type TableDef = {
   SN: number;

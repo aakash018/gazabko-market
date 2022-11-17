@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import AdminLayout from "../../../../components/Admin/AdminNav";
-import EditOptionsButton from "../../../../components/Admin/shared/EditOptionsButton";
 
-import styles from "../../../../styles/components/Admin/pages/EditProducts.module.scss";
+import styles from "../../../styles/components/Admin/pages/EditProducts.module.scss";
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
@@ -12,13 +10,15 @@ import {
   MdOutlineReportProblem,
   MdReviews,
 } from "react-icons/md";
-import InfoCard from "../../../../components/Admin/shared/InfoCard";
 
 import { FiPackage } from "react-icons/fi";
 import { FaBoxOpen } from "react-icons/fa";
 import { AgGridReact } from "ag-grid-react";
 import Router from "next/router";
 import { BiEdit } from "react-icons/bi";
+import AdminLayout from "../../../components/Admin/AdminNav";
+import EditOptionsButton from "../../../components/Admin/shared/EditOptionsButton";
+import InfoCard from "../../../components/Admin/shared/InfoCard";
 
 type TableDef = {
   SN: number;
@@ -99,7 +99,7 @@ const EditProducts: React.FC = () => {
       width: 135,
       cellRenderer: () => (
         <div
-          onClick={() => Router.push("/admin/edit/editProducts/add")}
+          onClick={() => Router.push("/admin/products/add")}
           style={{
             fontSize: "25px",
             color: "var(--theme-color)",
@@ -113,7 +113,7 @@ const EditProducts: React.FC = () => {
       field: "Details",
       cellRenderer: () => (
         <div
-          onClick={() => Router.push("/admin/edit/editProducts/18598787")}
+          onClick={() => Router.push("/admin/products/18598787")}
           style={{
             fontWeight: "bold",
             color: "var(--theme-color)",
@@ -128,7 +128,7 @@ const EditProducts: React.FC = () => {
   ]);
 
   const handleInfoCardRoute = (route: string) => {
-    Router.push(`/admin/edit/editProducts/${route}`);
+    Router.push(`/admin/products/${route}`);
   };
 
   return (

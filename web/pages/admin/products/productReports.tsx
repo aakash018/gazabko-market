@@ -1,8 +1,8 @@
 import React from "react";
-import AdminLayout from "../../../../components/Admin/AdminNav";
-import ProductReviewHolder from "../../../../components/Admin/shared/ProductReviewHolder";
 
-import styles from "../../../../styles/components/Admin/pages/productReports.module.scss";
+import styles from "../../../styles/components/Admin/pages/productReports.module.scss";
+import AdminLayout from "../../../components/Admin/AdminNav";
+import ProductReviewHolder from "../../../components/Admin/shared/ProductReviewHolder";
 
 const ProductReviews: React.FC = () => {
   return (

@@ -38,21 +38,13 @@ const Edit: React.FC = () => {
                 }}
               />
               <EditOptionsButton
-                icon={<FiPackage />}
-                text="Edit Products"
-                bgColor="#00AB77"
-                onClick={() => {
-                  Router.push("/admin/edit/editProducts");
-                }}
-              />
-            </div>
-            <div className={styles.optionsGroup}>
-              <EditOptionsButton
                 icon={<GiReceiveMoney />}
                 text="Edit Seller’s Commision "
                 bgColor="#F9512C"
                 onClick={() => {}}
               />
+            </div>
+            <div className={styles.optionsGroup}>
               <EditOptionsButton
                 icon={<AiFillGift />}
                 text="Edit Gift Coupens"

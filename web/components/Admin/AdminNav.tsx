@@ -9,6 +9,7 @@ import {
   BiHappyBeaming,
   BiMessage,
   BiNotification,
+  BiPackage,
 } from "react-icons/bi";
 import { RiAccountCircleFill } from "react-icons/ri";
 
@@ -16,6 +17,8 @@ import { FiPackage } from "react-icons/fi";
 import Router from "next/router";
 import { IoMdWarning } from "react-icons/io";
 import NotificationHolder from "../shared/NotificationHolder";
+import { BsTruck } from "react-icons/bs";
+import { FaTruck } from "react-icons/fa";
 
 interface Props {
   children: React.ReactNode;
@@ -76,6 +79,17 @@ const AdminLayout: React.FC<Props> = ({ children }) => {
             <Button
               look="blank"
               onClick={() => {
+                Router.push("/admin/products");
+              }}
+            >
+              <span>
+                <FiPackage size={"3rem"} color="#333333" />
+              </span>
+              <span style={{ marginTop: "-6px" }}>Products</span>
+            </Button>
+            <Button
+              look="blank"
+              onClick={() => {
                 Router.push("/admin/seller");
               }}
             >
@@ -102,7 +116,7 @@ const AdminLayout: React.FC<Props> = ({ children }) => {
               }}
             >
               <span>
-                <FiPackage size={"3rem"} color="#333333" />
+                <FaTruck size={"3rem"} color="#333333" />
               </span>
               <span style={{ marginTop: "-6px" }}>Orders</span>
             </Button>

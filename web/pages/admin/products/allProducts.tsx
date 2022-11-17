@@ -3,18 +3,18 @@ import { FaTshirt, FaFan, FaHeartbeat } from "react-icons/fa";
 import { GiAmpleDress } from "react-icons/gi";
 import { IoMdBeer } from "react-icons/io";
 import { RiComputerFill } from "react-icons/ri";
-import AdminLayout from "../../../../components/Admin/AdminNav";
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
 import { AgGridReact } from "ag-grid-react";
 
-import styles from "../../../../styles/components/Admin/pages/AllProducts.module.scss";
-import SearchBarCustomer from "../../../../components/shared/Customer/SearchBar";
-import SearchBar from "../../../../components/Admin/shared/SearchBar";
+import styles from "../../../styles/components/Admin/pages/AllProducts.module.scss";
+
 import Router from "next/router";
 import { BiEdit } from "react-icons/bi";
+import AdminLayout from "../../../components/Admin/AdminNav";
+import SearchBar from "../../../components/Admin/shared/SearchBar";
 
 type TableDef = {
   SN: number;
