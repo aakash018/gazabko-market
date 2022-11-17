@@ -90,7 +90,7 @@ const SellerNav: React.FC<Props> = ({ children }) => {
             <Button
               look="blank"
               onClick={() => {
-                Router.push("/seller/customers");
+                Router.push("/seller/commision");
               }}
             >
               <span>
