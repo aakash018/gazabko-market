@@ -148,4 +148,8 @@ export const adminPageSearchData: AdminPageSearchDataProps[] = [
     name: "Change Password",
     url: "/admin/account",
   },
+  {
+    name: "Add Sub Accounts",
+    url: "/admin/account/addAccount",
+  },
 ];

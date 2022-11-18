@@ -76,10 +76,12 @@ export const selllerPageLayoutData: AdminPageSearchDataProps[] = [
   {
     name: "Commission",
     url: "/seller/commision",
+    bold: true,
   },
   {
     name: "Account Settings",
     url: "/seller/account",
+    bold: true,
   },
   {
     name: "Change Password",
