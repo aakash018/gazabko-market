@@ -10,12 +10,59 @@ import styles from "../styles/components/Customer/pages/Checkout.module.scss";
 
 const Map = dynamic(() => import("../components/shared/Map"), { ssr: false });
 
+type DeliveryAddressPage = {
+  pageNo: 1 | 2 | 3;
+  deliveryAddress: string;
+  NearestLandMark: string;
+};
+
+const deliveryAddressPageData: DeliveryAddressPage[] = [
+  {
+    pageNo: 1,
+    deliveryAddress:
+      "Deva Arcade, Lut Chok, Thamel, 14292-Kathmandu, Bagmati Pradesh, Nepal",
+    NearestLandMark: "Deva Arcade",
+  },
+  {
+    pageNo: 2,
+    deliveryAddress:
+      "Nepal Academy School, 44618-Nagarjun, Bagmati Pradesh, Nepal",
+    NearestLandMark: "Nepal Academy School",
+  },
+  {
+    pageNo: 3,
+    deliveryAddress: "Pnachkanya, 44618-Nagarjun, Bagmati Pradesh, Nepal",
+    NearestLandMark: "Standard Co. Ed Highschool",
+  },
+];
+
 const CheckoutPage = () => {
   const deliveryAddress = useRef<HTMLInputElement>(null);
 
   const [newAddress, setNewAddress] = useState("");
 
   const [showMap, setShowMap] = useState(false);
+
+  const [giftWrapTotal, setGiftWrapTotal] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(2460);
+
+  const [selectedAddress, setSelectedAddress] = useState<DeliveryAddressPage>(
+    deliveryAddressPageData[0]
+  );
+
+  const handleIsGiftCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setGiftWrapTotal((prev) => prev + 25);
+      setTotalPrice((prev) => prev + 25);
+    } else {
+      setGiftWrapTotal((prev) => prev - 25);
+      setTotalPrice((prev) => prev - 25);
+    }
+  };
+
+  const handleChangeDeliveryAddress = (page: 1 | 2 | 3) => {
+    setSelectedAddress(deliveryAddressPageData[page - 1]);
+  };
 
   return (
     <Layout>
@@ -32,28 +79,42 @@ const CheckoutPage = () => {
                 You can pay in cash to our courier when you receive the goods at
                 your doorstep.
               </div>
-              <div className={styles.itemsBeingBought}>
-                <div className={styles.title}>Items in the cart</div>
-                <ul>
-                  <li>
-                    <Link href={"/products/adadsd"}>Manaslu Mg5 Semi</Link>
-                  </li>
-                  <li>
-                    <Link href={"/products/adadsd"}>
-                      GoldStar Shoes P302 Black
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={"/products/adadsd"}>
-                      Yearcon Black Easy Shoes
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={"/products/adadsd"}>
-                      OLEEV White Dial King/Queen...
-                    </Link>
-                  </li>
-                </ul>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <div className={styles.itemsBeingBought}>
+                  <div className={styles.title}>
+                    <div>Items in the cart</div>
+                    <div>Is this a gift?</div>
+                  </div>
+                  <ul>
+                    <li>
+                      <Link href={"/products/adadsd"}>Manaslu Mg5 Semi</Link>
+                      <input type={"checkbox"} onChange={handleIsGiftCheck} />
+                    </li>
+                    <li>
+                      <Link href={"/products/adadsd"}>
+                        GoldStar Shoes P302 Black
+                      </Link>
+                      <input type={"checkbox"} onChange={handleIsGiftCheck} />
+                    </li>
+                    <li>
+                      <Link href={"/products/adadsd"}>
+                        Yearcon Black Easy Shoes
+                      </Link>
+                      <input type={"checkbox"} onChange={handleIsGiftCheck} />
+                    </li>
+                    <li>
+                      <Link href={"/products/adadsd"}>
+                        OLEEV White Dial King/Queen...
+                      </Link>
+                      <input type={"checkbox"} onChange={handleIsGiftCheck} />
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
             <div className={styles.paymentInfo}>
@@ -67,10 +128,19 @@ const CheckoutPage = () => {
                     <span className={styles.title}>Shipping fee: : </span>
                     <span className={styles.number}>Rs. {60} </span>
                   </section>
+                  {giftWrapTotal !== 0 && (
+                    <section className={`${styles.data}`}>
+                      <span className={styles.title}>Gift Wrap Charge: </span>
+                      <span className={styles.number}>
+                        Rs. {giftWrapTotal}{" "}
+                      </span>
+                    </section>
+                  )}
                   <section className={`${styles.data} ${styles.total}`}>
                     <span className={styles.title}>Total: </span>
-                    <span className={styles.number}>Rs. {2460} </span>
+                    <span className={styles.number}>Rs. {totalPrice} </span>
                   </section>
+
                   <section className={styles.actionBtn}>
                     <Button>CONFIRM ORDER</Button>
                   </section>
@@ -79,7 +149,35 @@ const CheckoutPage = () => {
             </div>
           </div>
           <div className={styles.addressHolder}>
-            <h3>Default Delivery Address</h3>
+            <div className={styles.header}>
+              <h3>Default Delivery Address</h3>
+              <div className={styles.setAddresses}>
+                <div
+                  className={`${styles.page} ${
+                    selectedAddress.pageNo === 1 ? styles.selected : ""
+                  }`}
+                  onClick={() => handleChangeDeliveryAddress(1)}
+                >
+                  1
+                </div>
+                <div
+                  className={`${styles.page} ${
+                    selectedAddress.pageNo === 2 ? styles.selected : ""
+                  }`}
+                  onClick={() => handleChangeDeliveryAddress(2)}
+                >
+                  2
+                </div>
+                <div
+                  className={`${styles.page} ${
+                    selectedAddress.pageNo === 3 ? styles.selected : ""
+                  }`}
+                  onClick={() => handleChangeDeliveryAddress(3)}
+                >
+                  3
+                </div>
+              </div>
+            </div>
             <div className={styles.addressInfo}>
               <section>
                 <div className={styles.infoTab}>
@@ -95,13 +193,14 @@ const CheckoutPage = () => {
                 <div className={styles.infoTab}>
                   <div className={styles.tag}>Address</div>
                   <div className={styles.info}>
-                    Deva Arcade, Lut Chok, Thamel, 14292-Kathmandu, Bagmati
-                    Pradesh, Nepal
+                    {selectedAddress.deliveryAddress}
                   </div>
                 </div>
                 <div className={styles.infoTab}>
                   <div className={styles.tag}>Nearest Landmark</div>
-                  <div className={styles.info}>Deva Arcade</div>
+                  <div className={styles.info}>
+                    {selectedAddress.NearestLandMark}
+                  </div>
                 </div>
               </section>
             </div>
