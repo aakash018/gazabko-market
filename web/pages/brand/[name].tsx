@@ -23,7 +23,7 @@ const BrandResult: React.FC = () => {
         <Breadcrumb grandCategory={{ name: "Goldstar", url: "/brand/goldstar" }} />
       </div>
       <div style={{ display: "flex", justifyContent: "center", margin: "20px 0px 30px 30px" }}>
-        <div style={{ display: "flex", border: "1px solid #bbb" }}>
+        <div style={{ display: "flex", boxShadow: "1px 1px 3px #bbb" }}>
           <div style={{ display: "flex", gap: "5px", padding: "15px 25px", flexDirection: "column", justifyContent: "center", textAlign: "center", borderRight: "1px solid #bbb" }}>
             <Image src="/images/sneakers.jpg" width={100} height={100} alt="Sneakers" />
             <span style={{ fontSize: "14px" }}>Sneakers</span>
