@@ -64,6 +64,9 @@ const ProductInfoDisplay: React.FC<Props> = ({
             <BsStarHalf />
             <span>{rating}</span>
           </section>
+          <section style={{ marginTop: "5px", fontSize: "14px" }}>
+            Brand: <Link href="/brand/goldstar">Goldstar</Link>
+          </section>
         </div>
         <section className={styles.productDisplay__productInfo_price}>
           <PriceHolder discount={discount} mp={mp} />

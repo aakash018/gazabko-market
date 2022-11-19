@@ -2,24 +2,28 @@ import Link from "next/link";
 import styles from "../../styles/components/Customer/Breadcrumb.module.scss";
 
 interface Props {
-  category: {
+  category?: {
     name: string;
     url: string;
   };
-  subCategory: {
+  subCategory?: {
+    name: string;
+    url: string;
+  };
+  grandCategory?: {
     name: string;
     url: string;
   };
 };
 
-const Breadcrumb = ({ category, subCategory }: Props) => {
+const Breadcrumb = ({ category, subCategory, grandCategory }: Props) => {
   return (
     <div className={styles.breadcrumb}>
       <Link href="/"><a>Home</a></Link> &gt;&nbsp;
-      <Link href={`/categories/${category.url}`}><a>{category.name}</a></Link> &gt;&nbsp;
-        <Link href={`/categories/${subCategory.url}`}><a>{subCategory.name}</a></Link> &gt;&nbsp;
-        <span>One Piece</span>
-      </div>
+      {category && <><Link href={`/categories/${category.url}`}><a>{category.name}</a></Link> &gt;&nbsp;</>}
+      {subCategory && <><Link href={`/categories/${subCategory.url}`}><a>{subCategory.name}</a></Link> &gt;&nbsp;</>}
+      {grandCategory && <><span>{grandCategory.name}</span></>}
+    </div>
   );
 };
 
