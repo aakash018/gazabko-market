@@ -11,7 +11,11 @@ const OrderHistoryLayout: React.FC<{ children: React.ReactNode }> = ({
       <div className={styles.orderHistory}>
         <div>
           <div className={styles.orderHistoryNav}>
-            <div className={styles.title}>My Orders</div>
+            <div className={styles.title}>
+              <Link href={"/orderHistory"}>
+                <a>My Orders</a>
+              </Link>
+            </div>
             <ul>
               <li>My Returns</li>
               <li>My Cancellations</li>

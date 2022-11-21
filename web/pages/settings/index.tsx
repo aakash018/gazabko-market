@@ -10,6 +10,7 @@ import Router from "next/router";
 
 import EditProfile from "../../components/Customer/settingPages/editProfile";
 import SettingHomePage from "../../components/Customer/settingPages/home";
+import ShippingAddress from "../../components/Customer/settingPages/ShippingAddress";
 
 const SettingsPage = () => {
   const [page, setPage] = useState<number>(1);
@@ -57,7 +58,9 @@ const SettingsPage = () => {
             <SettingPageSettingHolder
               title="Shipping addresses"
               subtitle="3 ddresses"
-              onClick={() => {}}
+              onClick={() => {
+                setPage(3);
+              }}
             />
             <SettingPageSettingHolder
               title="Payment Options"
@@ -67,7 +70,9 @@ const SettingsPage = () => {
             <SettingPageSettingHolder
               title="Order History"
               subtitle="order history"
-              onClick={() => {}}
+              onClick={() => {
+                Router.push("/orderHistory");
+              }}
             />
             <SettingPageSettingHolder
               title="Promocodes"
@@ -79,6 +84,7 @@ const SettingsPage = () => {
         <div className={styles.pages}>
           {page === 1 && <SettingHomePage />}
           {page === 2 && <EditProfile />}
+          {page === 3 && <ShippingAddress />}
         </div>
       </div>
     </Layout>

@@ -1,0 +1,70 @@
+.editAddressModal {
+    display: flex;
+    gap: 30px;
+
+    h3 {
+        margin-bottom: 30px;
+    }
+
+    .input {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        .delivery {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
+
+    .map {
+        width: 300px;
+        height: 300px;
+    }
+}
+
+.addressHolder {
+    background-color: white;
+    box-shadow: 0px 0px 12px rgba(110, 110, 110, 0.438);
+
+    padding: 15px;
+    position: relative;
+    font-size: 1.3rem;
+
+    width: 400px;
+
+    .edit {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+
+        color: var(--theme-color);
+        cursor: pointer;
+    }
+    .info {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        .landmark {
+            margin-top: 10px;
+        }
+    }
+}
+
+.shippingAddress {
+    display: flex;
+    flex-direction: column;
+
+    .actBtn {
+        margin: 20px 0;
+        align-self: flex-end;
+        justify-self: flex-end;
+    }
+
+    .addresses {
+        display: flex;
+        justify-content: center;
+    }
+}
