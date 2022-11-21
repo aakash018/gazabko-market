@@ -11,6 +11,7 @@ import Router from "next/router";
 import EditProfile from "../../components/Customer/settingPages/editProfile";
 import SettingHomePage from "../../components/Customer/settingPages/home";
 import ShippingAddress from "../../components/Customer/settingPages/ShippingAddress";
+import FavouriteSeller from "../../components/Customer/settingPages/favouriteSeller";
 
 const SettingsPage = () => {
   const [page, setPage] = useState<number>(1);
@@ -49,17 +50,24 @@ const SettingsPage = () => {
           </div>
           <div>
             <SettingPageSettingHolder
+              title="Favourite Seller"
+              subtitle="7 seller favourited"
+              onClick={() => {
+                setPage(2);
+              }}
+            />
+            <SettingPageSettingHolder
               title="Edit Profile"
               subtitle="username, password etc."
               onClick={() => {
-                setPage(2);
+                setPage(3);
               }}
             />
             <SettingPageSettingHolder
               title="Shipping addresses"
               subtitle="3 ddresses"
               onClick={() => {
-                setPage(3);
+                setPage(4);
               }}
             />
             <SettingPageSettingHolder
@@ -68,8 +76,8 @@ const SettingsPage = () => {
               onClick={() => {}}
             />
             <SettingPageSettingHolder
-              title="Order History"
-              subtitle="order history"
+              title="Order History & Reviews"
+              subtitle="order history | wishlist | reviews"
               onClick={() => {
                 Router.push("/orderHistory");
               }}
@@ -81,10 +89,16 @@ const SettingsPage = () => {
             />
           </div>
         </div>
-        <div className={styles.pages}>
+        <div
+          className={styles.pages}
+          style={{
+            width: "100%",
+          }}
+        >
           {page === 1 && <SettingHomePage />}
-          {page === 2 && <EditProfile />}
-          {page === 3 && <ShippingAddress />}
+          {page === 2 && <FavouriteSeller />}
+          {page === 3 && <EditProfile />}
+          {page === 4 && <ShippingAddress />}
         </div>
       </div>
     </Layout>
