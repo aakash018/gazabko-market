@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import { BiHeart } from "react-icons/bi";
 import { FaStar } from "react-icons/fa";
 import Layout from "../../components/Customer/Layout";
 import ShowCase from "../../components/Customer/ShowCase";
@@ -34,6 +35,18 @@ const SellerInfoPage = () => {
                   Southfield, Michigan, United States
                 </section>
                 <section className={styles.email}>logotext98@gmail.com</section>
+                <div
+                  style={{
+                    marginTop: "20px",
+                  }}
+                >
+                  <Button color="error">
+                    <span>
+                      <BiHeart />
+                    </span>
+                    <span>Follow Store</span>
+                  </Button>
+                </div>
               </div>
               <div className={styles.productDetails}>
                 <section className={styles.totalProduct}>
