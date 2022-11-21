@@ -1,14 +1,69 @@
 import Router from "next/router";
-import React from "react";
+import React, { useState } from "react";
+import { useAuth } from "../../../context/User";
+import { avatarsData, AvaterSelectHolder } from "../../../pages/signup";
 
 import styles from "../../../styles/components/Customer/EditProfilePage.module.scss";
 import Button from "../../shared/Button";
 import IntputField from "../../shared/Input";
 
 const EditProfile = () => {
+  const { login } = useAuth();
+
+  const [page, setPage] = useState<number>(0);
+
+  const [delivaryAdd, setDeleveryAdd] = useState("");
+
+  const [selectedAvaatar, setSelectedAvatar] = useState(0);
+  const [selectAvaarList, setSelectAvatarList] = useState([
+    true,
+    false,
+    false,
+    false,
+    false,
+  ]);
+
   return (
     <div className={styles.editProfile}>
       <h2>Edit Profile</h2>
+      <div className={styles.chooseAvatar}>
+        <div className={styles.avatarSelect}>
+          <h2>Choose Your Avatar</h2>
+          <div className={styles.avatars}>
+            {avatarsData.map((avatar, i) => (
+              <AvaterSelectHolder
+                imgURL={avatar.imgUrl}
+                width={avatar.width}
+                height={avatar.height}
+                select={selectAvaarList[i]}
+                onClick={() => {
+                  // ? TO SELECT AVATAR
+                  // ? FIRST UNSELECT THE SELECTED AVATAR
+                  setSelectAvatarList([false, false, false, false, false]);
+
+                  // ? THEN set TRUE to the one avatar clicked
+                  setSelectAvatarList((prev) =>
+                    prev.map((ele, j) => {
+                      if (j === i) return true;
+                      else return false;
+                    })
+                  );
+                }}
+              />
+            ))}
+          </div>
+          <div className={styles.actBtn}>
+            <Button
+              onClick={() => {
+                login();
+                Router.push("/");
+              }}
+            >
+              Save
+            </Button>
+          </div>
+        </div>
+      </div>
       <div className={styles.form}>
         <div
           style={{

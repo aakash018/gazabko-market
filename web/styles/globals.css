@@ -58,3 +58,11 @@ select {
   border: 1px solid var(--line-gray);
   background-color: white;
 }
+
+.selected {
+  border: 3px solid var(--theme-color);
+  border-radius: 50%;
+
+  overflow: hidden;
+  padding: 1px;
+}

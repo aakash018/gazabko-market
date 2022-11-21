@@ -22,7 +22,7 @@ interface AvaterSelectorProps {
   onClick?: () => void;
 }
 
-const AvaterSelectHolder: React.FC<AvaterSelectorProps> = ({
+export const AvaterSelectHolder: React.FC<AvaterSelectorProps> = ({
   imgURL,
   width = 70,
   height = 70,
@@ -31,9 +31,7 @@ const AvaterSelectHolder: React.FC<AvaterSelectorProps> = ({
 }) => {
   return (
     <div
-      className={`${styles.avatarSelectHolder} ${
-        select ? styles.selected : ""
-      }`}
+      className={`${styles.avatarSelectHolder} ${select ? "selected" : ""}`}
       onClick={onClick}
     >
       <Image src={imgURL} width={width} height={height} objectFit="cover" />
@@ -41,7 +39,7 @@ const AvaterSelectHolder: React.FC<AvaterSelectorProps> = ({
   );
 };
 
-const avatarsData = [
+export const avatarsData = [
   {
     imgUrl: "/images/avatar.jpg",
     width: 70,
