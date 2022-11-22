@@ -15,10 +15,10 @@ const SearchResult: React.FC = () => {
   const [priceRangeSlider, setPriceRangeSlider] = useState([0, 100]);
 
   return (
-    <Layout sidebar="hide" type="search">
+    <Layout type="search">
       <div className={styles.searchPageContainer}>
         <div className={styles.sideBar}>
-          <div className={styles.searchSideBar}>
+          <div className={styles.searchSideBar} style={{ paddingTop: "30px" }}>
             <section className={styles.catToSearchIn}>
               <SideBarNav
                 title="Category to Search In "
@@ -97,6 +97,30 @@ const SearchResult: React.FC = () => {
         </div>
         <div className={styles.searchResults}>
           <div className={styles.title}>Search results for "{parameter}"</div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 20,
+              justifyContent: "flex-end",
+              margin: "20px 0 0 0",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "1.3rem",
+              }}
+            >
+              Sort By:
+            </span>
+            <select>
+              <option value="Best Fit" selected>
+                Best Fit
+              </option>
+              <option value="Price High To Low">Price High To Low</option>
+              <option value="Price Low To High">Price Low To High</option>
+            </select>
+          </div>
           <ShowCase includeTimer={false} noOfProducts={16} />
         </div>
       </div>
