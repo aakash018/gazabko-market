@@ -1,15 +1,28 @@
 import Image from "next/image";
-import React from "react";
+import React, { useRef, useState } from "react";
 import SellerNav from "../../components/Seller/SellerNav";
 import Button from "../../components/shared/Button";
+import ImageUploader from "../../components/shared/ImageUploader";
 import IntputField from "../../components/shared/Input";
 
 import styles from "../../styles/components/Seller/pages/Account.module.scss";
 
 const Account: React.FC = () => {
+  const [selectedImage, setSelectedImage] = useState<any>(null);
+
   return (
     <SellerNav>
       <h1>Account's Settings</h1>
+      <div className={styles.addBanner}>
+        <h2>Add a Seller Profile Banner</h2>
+        <ImageUploader
+          height={500}
+          selectedImage={selectedImage}
+          setSelectedImage={setSelectedImage}
+          width={1200}
+        />
+        {selectedImage && <Button>Save</Button>}
+      </div>
       <div className={styles.account}>
         <div className={styles.inputs}>
           <div className={styles.storeInfo}>

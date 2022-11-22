@@ -123,9 +123,10 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
                   onClick={handleShoProfileOpions}
                 >
                   <div
-                    className={`${styles.accountImgContainer} ${
-                      showProfileOptions ? styles.moveAccountImage : ""
-                    }`}
+                    className={`${styles.accountImgContainer}`}
+                    onClick={() => {
+                      Router.push("/settings");
+                    }}
                   >
                     <Image
                       src="/images/avatar.jpg"
@@ -133,7 +134,7 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
                       objectFit="cover"
                     />
                   </div>
-                  {showProfileOptions && (
+                  {/* {showProfileOptions && (
                     <div className={styles.options}>
                       <ul>
                         <li>
@@ -155,7 +156,7 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
                         </li>
                       </ul>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>

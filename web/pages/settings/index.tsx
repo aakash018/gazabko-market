@@ -12,9 +12,14 @@ import EditProfile from "../../components/Customer/settingPages/editProfile";
 import SettingHomePage from "../../components/Customer/settingPages/home";
 import ShippingAddress from "../../components/Customer/settingPages/ShippingAddress";
 import FavouriteSeller from "../../components/Customer/settingPages/favouriteSeller";
+import Button from "../../components/shared/Button";
+import { useAuth } from "../../context/User";
+import { useAlert } from "../_app";
 
 const SettingsPage = () => {
   const [page, setPage] = useState<number>(1);
+  const { logout } = useAuth();
+  const { setAlert } = useAlert();
 
   return (
     <Layout>
@@ -87,6 +92,27 @@ const SettingsPage = () => {
               subtitle="You have special promocodes"
               onClick={() => {}}
             />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "20px",
+              }}
+            >
+              <Button
+                color="error"
+                onClick={() => {
+                  logout();
+                  setAlert({
+                    message: "Loged out successfully",
+                    type: "error",
+                  });
+                  Router.push("/");
+                }}
+              >
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
         <div

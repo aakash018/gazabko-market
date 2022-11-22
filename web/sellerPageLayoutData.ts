@@ -87,4 +87,8 @@ export const selllerPageLayoutData: AdminPageSearchDataProps[] = [
     name: "Change Password",
     url: "/seller/account",
   },
+  {
+    name: "Add a seller page banner",
+    url: "/seller/account",
+  },
 ];

@@ -11,7 +11,10 @@ import {
 } from "react-icons/bs";
 import { FaShippingFast } from "react-icons/fa";
 import { GoTriangleLeft } from "react-icons/go";
-import { HiOutlineInformationCircle, HiOutlineLocationMarker } from "react-icons/hi";
+import {
+  HiOutlineInformationCircle,
+  HiOutlineLocationMarker,
+} from "react-icons/hi";
 import { useAlert } from "../../pages/_app";
 import styles from "../../styles/components/Customer/ProductInfoDisplay.module.scss";
 import Button from "../shared/Button";
@@ -51,7 +54,10 @@ const ProductInfoDisplay: React.FC<Props> = ({
         </div>
         <div className={styles.productDisplay__imagesDisplay_selector}></div>
       </div>
-      <div className={styles.productDisplay__productInfo} style={{ width: "40%" }}>
+      <div
+        className={styles.productDisplay__productInfo}
+        style={{ width: "40%" }}
+      >
         <div>
           <section className={styles.productDisplay__productInfo_name}>
             <h1>{name}</h1>
@@ -131,8 +137,18 @@ const ProductInfoDisplay: React.FC<Props> = ({
                 <span>Spend Rs.2000 to collect Rs.250 cashback</span>
               </div>
               <div className={styles.leftTriangleContainer}>
-                <svg fill="var(--box-bg)" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="30px" height="40px" viewBox="0 0 30 40" overflow="visible" xmlSpace="preserve">
-                  <polygon points="0,20 30,0 30,40"/>
+                <svg
+                  fill="var(--box-bg)"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                  width="30px"
+                  height="40px"
+                  viewBox="0 0 30 40"
+                  overflow="visible"
+                  xmlSpace="preserve"
+                >
+                  <polygon points="0,20 30,0 30,40" />
                 </svg>
               </div>
             </div>
@@ -143,32 +159,63 @@ const ProductInfoDisplay: React.FC<Props> = ({
         <div className={styles.productDisplayRightContainer}>
           <div className={styles.containers}>
             <span className={styles.grey}>Delivery</span>
-            <span className={styles.grey}><HiOutlineInformationCircle /></span>
+            <span className={styles.grey}>
+              <HiOutlineInformationCircle />
+            </span>
           </div>
-          <div className={styles.containers} style={{ alignItems: "center", borderBottom: "1px solid #ddd" }}>
+          <div
+            className={styles.containers}
+            style={{ alignItems: "center", borderBottom: "1px solid #ddd" }}
+          >
             <div style={{ display: "flex", gap: "5px" }}>
-              <span style={{ marginTop: "5px", fontSize: "20px" }}><HiOutlineLocationMarker /></span>
+              <span style={{ marginTop: "5px", fontSize: "20px" }}>
+                <HiOutlineLocationMarker />
+              </span>
               <span>Gandaki,Pokhara-Lekhnath Metro ,9 Newroad</span>
             </div>
-            <Link href="#"><a style={{ color: "var(--theme-color)" }}>Change</a></Link>
+            <Link href="#">
+              <a style={{ color: "var(--theme-color)" }}>Change</a>
+            </Link>
           </div>
           <div className={styles.containers} style={{ alignItems: "center" }}>
             <div style={{ display: "flex", gap: "5px" }}>
-              <span style={{ marginTop: "5px", fontSize: "20px" }}><FaShippingFast /></span>
-              <span>Standard Delivery<br /><span style={{ fontSize: "13px", color: "#757575" }}>2 days</span></span>
+              <span style={{ marginTop: "5px", fontSize: "20px" }}>
+                <FaShippingFast />
+              </span>
+              <span>
+                Standard Delivery
+                <br />
+                <span style={{ fontSize: "13px", color: "#757575" }}>
+                  2 days
+                </span>
+              </span>
             </div>
             <span style={{ fontSize: "16px", fontWeight: "500" }}>Rs. 65</span>
           </div>
-          <div className={styles.containers} style={{ alignItems: "center", borderBottom: "1px solid #ddd" }}>
+          <div
+            className={styles.containers}
+            style={{ alignItems: "center", borderBottom: "1px solid #ddd" }}
+          >
             <div style={{ display: "flex", gap: "5px" }}>
-              <span style={{ fontSize: "20px" }}><BsCashStack /></span>
+              <span style={{ fontSize: "20px" }}>
+                <BsCashStack />
+              </span>
               <span>Cash on delivery</span>
             </div>
           </div>
-          <div style={{ padding: "8px 5px", display: "flex", justifyContent: "space-between" }}>
+          <div
+            style={{
+              padding: "8px 5px",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
             <div>
-              <span className={styles.grey}>Store name</span><br/>
-              <Link href="/sellerinfo/dasds"><a style={{ fontSize: "18px" }}>Bindabasini Shoe Store</a></Link>
+              <span className={styles.grey}>Store name</span>
+              <br />
+              <Link href="/sellerInfo/dasds">
+                <a style={{ fontSize: "18px" }}>Bindabasini Shoe Store</a>
+              </Link>
             </div>
           </div>
           <div className={styles.ratings}>
@@ -184,6 +231,9 @@ const ProductInfoDisplay: React.FC<Props> = ({
           <div className={styles.productDisplayRightButton}>
             <Button
               color="error"
+              onClick={() => {
+                Router.push("/sellerInfo/sdfsd");
+              }}
             >
               <span>Visit Store</span>
             </Button>

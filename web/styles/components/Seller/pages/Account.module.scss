@@ -1,3 +1,19 @@
+.addBanner {
+    min-width: 450px;
+    max-width: fit-content;
+    background-color: white;
+    box-shadow: 0 0 12px rgba(105, 105, 105, 0.479);
+
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    margin-top: 20px;
+
+    border-radius: 10px;
+}
 .account {
     display: flex;
     gap: 50px;
