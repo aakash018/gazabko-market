@@ -91,4 +91,8 @@ export const selllerPageLayoutData: AdminPageSearchDataProps[] = [
     name: "Add a seller page banner",
     url: "/seller/account",
   },
+  {
+    name: "Questions Asked",
+    url: "/seller/products/questionsAsked",
+  },
 ];

@@ -18,6 +18,7 @@ import styles from "../../../styles/components/Seller/pages/ProductPage.module.s
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { BiEdit, BiHide } from "react-icons/bi";
+import { BsFillPatchQuestionFill } from "react-icons/bs";
 
 type TableDef = {
   SN: number;
@@ -180,6 +181,16 @@ const ProductsPage = () => {
           }}
         >
           <MdOutlineReportProblem />
+        </InfoCard>
+        <InfoCard
+          amount={9}
+          bgColor={"#9b9e36"}
+          title="Questions Asked"
+          onViewClick={() => {
+            handleInfoCardRoute("questionsAsked");
+          }}
+        >
+          <BsFillPatchQuestionFill />
         </InfoCard>
         <InfoCard
           amount={2}

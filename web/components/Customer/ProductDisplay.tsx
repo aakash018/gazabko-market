@@ -41,18 +41,53 @@ const ProductInfoDisplay: React.FC<Props> = ({
   const [quantity, setQuantity] = useState(1);
   const { setAlert } = useAlert();
 
+  const [displayImageURL, setDisplayImageURL] = useState("/images/shoes.jpg");
+
   return (
     <div className={styles.productDisplay}>
       <div className={styles.productDisplay__imagesDisplay}>
         <div className={styles.productDisplay__imagesDisplay_img}>
           <Image
-            src={"/images/shoes.jpg"}
+            src={displayImageURL}
             layout="fill"
             priority={true}
             objectFit="cover"
           />
         </div>
-        <div className={styles.productDisplay__imagesDisplay_selector}></div>
+        <div className={styles.productDisplay__imagesDisplay_selector}>
+          <Image
+            src={"/images/shoes.jpg"}
+            width={50}
+            height={50}
+            onClick={() => {
+              setDisplayImageURL("/images/shoes.jpg");
+            }}
+          />
+          <Image
+            src={"/images/shoes2.webp"}
+            width={50}
+            height={50}
+            onClick={() => {
+              setDisplayImageURL("/images/shoes2.webp");
+            }}
+          />
+          <Image
+            src={"/images/shoes3.jpg"}
+            width={50}
+            height={50}
+            onClick={() => {
+              setDisplayImageURL("/images/shoes3.jpg");
+            }}
+          />
+          <Image
+            src={"/images/shoes4.jpeg"}
+            width={50}
+            height={50}
+            onClick={() => {
+              setDisplayImageURL("/images/shoes4.jpeg");
+            }}
+          />
+        </div>
       </div>
       <div
         className={styles.productDisplay__productInfo}
@@ -70,8 +105,18 @@ const ProductInfoDisplay: React.FC<Props> = ({
             <BsStarHalf />
             <span>{rating}</span>
           </section>
-          <section style={{ marginTop: "5px", fontSize: "14px" }}>
-            Brand: <Link href="/brand/goldstar">Goldstar</Link>
+          <section style={{ marginTop: "5px", fontSize: "1.3rem" }}>
+            Brand:{" "}
+            <Link href="/brand/goldstar">
+              <span
+                style={{
+                  color: "var(--theme-color)",
+                  cursor: "pointer",
+                }}
+              >
+                Goldstar
+              </span>
+            </Link>
           </section>
         </div>
         <section className={styles.productDisplay__productInfo_price}>

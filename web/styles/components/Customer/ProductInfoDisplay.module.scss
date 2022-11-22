@@ -2,19 +2,19 @@
   //margin-top: 70px;
   width: 100%;
   height: 440px;
-  
+
   background-color: var(--box-bg);
   display: flex;
   gap: 50px;
   padding: 20px;
-    
+
   &__imagesDisplay {
     height: 90%;
     width: 30%;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    
+
     &_img {
       width: 100%;
       height: 80%;
@@ -24,7 +24,14 @@
     &_selector {
       width: 100%;
       height: 60px;
-      background-color: var(--prm-grey);
+      background-color: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      & > * {
+        cursor: pointer;
+      }
     }
   }
 
@@ -108,7 +115,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        
+
         .icon {
           color: var(--theme-color);
         }
