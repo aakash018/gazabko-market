@@ -52,8 +52,8 @@ export const adminPageSearchData: AdminPageSearchDataProps[] = [
     url: "/admin/edit/editPageSettings/editHomepageBanner",
   },
   {
-    name: "Edit 404 page",
-    url: "/admin/edit/editPageSettings/edit404Page",
+    name: "Edit 404 Banner",
+    url: "/admin/edit/editPageSettings/edit404Banner",
   },
   {
     name: "Edit Homepage",
