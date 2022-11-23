@@ -34,9 +34,17 @@ const EditPageSettings: React.FC = () => {
                   Edit Popup banner
                 </Link>
               </li>
-              <li>Edit HomePage Banner</li>
+              <li>
+                <Link href={"/admin/edit/editPageSettings/editHomepageBanner"}>
+                  Edit HomePage Banner
+                </Link>
+              </li>
               <li>Edit 404 Error Banner</li>
-              <li>Efit Homepage</li>
+              <li>
+                <Link href={"/admin/edit/editPageSettings/editHomepage"}>
+                  Edit Homepage
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

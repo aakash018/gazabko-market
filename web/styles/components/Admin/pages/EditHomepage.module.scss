@@ -1,0 +1,15 @@
+.editHomepage {
+    .title {
+        margin-top: 20px;
+    }
+
+    .optHolder {
+        display: flex;
+        justify-content: space-between;
+        width: 400px;
+
+        .tag {
+            font-size: 1.6rem;
+        }
+    }
+}

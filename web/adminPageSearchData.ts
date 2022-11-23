@@ -56,6 +56,10 @@ export const adminPageSearchData: AdminPageSearchDataProps[] = [
     url: "/admin/edit/editPageSettings/edit404Page",
   },
   {
+    name: "Edit Homepage",
+    url: "/admin/edit/editPageSettings/editHomepage",
+  },
+  {
     name: "Edit Seller's Commision",
     url: "/admin/edit/editSellerCommision",
   },
