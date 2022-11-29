@@ -9,6 +9,7 @@ import {
 import "leaflet/dist/leaflet.css";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 
 import L from "leaflet";
 
