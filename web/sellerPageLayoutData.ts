@@ -95,4 +95,8 @@ export const selllerPageLayoutData: AdminPageSearchDataProps[] = [
     name: "Questions Asked",
     url: "/seller/products/questionsAsked",
   },
+  {
+    name: "Cancled Orders",
+    url: "/seller/orders/cancledOrders",
+  },
 ];

@@ -22,6 +22,7 @@ import SelectedItemHolder from "../Admin/shared/SelectedItemHolder";
 
 const AddProdducts: React.FC = () => {
   const [tagsList, setTagsList] = useState<string[]>([]);
+  const [sizeList, setSizeList] = useState<string[]>([]);
   const [categoriesList, setCategoriesList] = useState<string[]>([]);
   const [subCategoriesList, setSubCategoriesList] = useState<string[]>([]);
   const [subSubCategoriesList, setSubSubCategoriesList] = useState<string[]>(
@@ -122,6 +123,11 @@ const AddProdducts: React.FC = () => {
                       </div>
                     </div>
                     <div className={styles.selectors}>
+                      <TagsSelector
+                        label="Sizes"
+                        listState={sizeList}
+                        setListState={setSizeList}
+                      />
                       <TagsSelector
                         label="Tags"
                         listState={tagsList}

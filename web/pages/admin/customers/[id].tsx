@@ -1,11 +1,19 @@
+import dynamic from "next/dynamic";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import AdminLayout from "../../../components/Admin/AdminNav";
 import Button from "../../../components/shared/Button";
 
 import styles from "../../../styles/components/Admin/pages/CustomerInfoPage.module.scss";
 
+const Map = dynamic(
+  () => import("../../../components/shared/Map"), // replace '@components/map' with your component's location
+  { ssr: false } // This line is important. It's what prevents server-side render
+);
+
 const CustomerInfoPage = () => {
+  const [address, setAddress] = useState("");
+
   return (
     <AdminLayout>
       <div className={styles.customerInfoWrapper}>
@@ -83,8 +91,13 @@ const CustomerInfoPage = () => {
               <Button color="error">Ban User</Button>
             </div>
           </div>
-          <div className={styles.avatar}>
-            <Image src="/images/avatar.jpg" width={250} height={250} />
+          <div className={styles.right}>
+            <div className={styles.avatar}>
+              <Image src="/images/avatar.jpg" width={250} height={250} />
+            </div>
+            <div className={styles.map}>
+              <Map setAddress={setAddress} />
+            </div>
           </div>
         </div>
       </div>

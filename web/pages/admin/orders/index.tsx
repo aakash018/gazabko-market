@@ -156,6 +156,9 @@ const Orders = () => {
             pendingClick={() => {
               Router.push("/admin/orders/pending");
             }}
+            cancledClick={() => {
+              Router.push("/admin/orders/cancledOrders");
+            }}
           />
         </div>
         <div className={styles.tables}>

@@ -15,20 +15,8 @@ const CustomerDetails = () => {
             <div className={styles.title}>Customer’s Profile</div>
             <div className={styles.infoGroup}>
               <div className={styles.infoHolder}>
-                <div className={styles.infoTitle}>First Name: </div>
-                <div className={styles.infoContent}>Laxmi</div>
-              </div>{" "}
-              <div className={styles.infoHolder}>
                 <div className={styles.infoTitle}>Last Name: </div>
                 <div className={styles.infoContent}>Bhattarai</div>
-              </div>
-              <div className={styles.infoHolder}>
-                <div className={styles.infoTitle}>Email: </div>
-                <div className={styles.infoContent}>random@gmail.com</div>
-              </div>
-              <div className={styles.infoHolder}>
-                <div className={styles.infoTitle}>Phone: </div>
-                <div className={styles.infoContent}>9862364785</div>
               </div>
               <div className={styles.infoHolder}>
                 <div className={styles.infoTitle}>Status: </div>

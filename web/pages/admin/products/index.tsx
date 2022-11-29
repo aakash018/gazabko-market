@@ -186,6 +186,16 @@ const EditProducts: React.FC = () => {
           >
             <MdOutlineReportProblem />
           </InfoCard>
+          <InfoCard
+            amount={52}
+            bgColor={"#48bdbd"}
+            title="Products Returned"
+            onViewClick={() => {
+              handleInfoCardRoute("productsReturned");
+            }}
+          >
+            <MdOutlineReportProblem />
+          </InfoCard>
         </div>
         <div className={styles.table}>
           <div className={styles.title}>

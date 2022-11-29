@@ -1,15 +1,23 @@
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Router from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import AdminLayout from "../../../components/Admin/AdminNav";
 import Button from "../../../components/shared/Button";
-import CheckBox from "../../../components/shared/CheckBox";
 import OrderTracker from "../../../components/shared/Customer/OrderTracker";
 import IntputField from "../../../components/shared/Input";
 
 import styles from "../../../styles/components/Admin/pages/OrderDetails.module.scss";
 
+const Map = dynamic(
+  () => import("../../../components/shared/Map"), // replace '@components/map' with your component's location
+  { ssr: false } // This line is important. It's what prevents server-side render
+);
+
 const OrderDetails = () => {
+  const [address, setAddress] = useState("");
+  const [viewMap, setViewMap] = useState(false);
+
   return (
     <AdminLayout>
       <h1>Order Details</h1>
@@ -115,8 +123,31 @@ const OrderDetails = () => {
                   <div className={styles.title}>Expected Delivary Date</div>
                   <div className={styles.data}>28 Jul 2022</div>
                 </div>
+                <span
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "1.3rem",
+                    color: "var(--theme-color)",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setViewMap((prev) => !prev)}
+                >
+                  {!viewMap ? "View in map" : "Close map"}
+                </span>
               </div>
             </div>
+            {viewMap && (
+              <div
+                style={{
+                  width: "100%",
+                  height: 200,
+                  marginTop: "30px",
+                }}
+                className={styles.map}
+              >
+                <Map setAddress={setAddress} />
+              </div>
+            )}
           </div>
           <div className={styles.statusControl}>
             <div className={styles.mainTitle}>Order Status Control</div>

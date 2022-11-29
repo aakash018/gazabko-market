@@ -61,7 +61,7 @@ export const adminPageSearchData: AdminPageSearchDataProps[] = [
   },
   {
     name: "Edit Seller's Commision",
-    url: "/admin/edit/editSellerCommision",
+    url: "/admin/edit/editCommision",
   },
   {
     name: "Products",
@@ -155,5 +155,9 @@ export const adminPageSearchData: AdminPageSearchDataProps[] = [
   {
     name: "Add Sub Accounts",
     url: "/admin/account/addAccount",
+  },
+  {
+    name: "Products Returned",
+    url: "/admin/products/productsReturned",
   },
 ];
