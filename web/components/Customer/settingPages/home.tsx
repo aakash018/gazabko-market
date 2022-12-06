@@ -9,6 +9,7 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 import Image from "next/image";
 
 import React, { useState } from "react";
+import Router from "next/router";
 
 const SettingHomePage = () => {
   const [columnData] = useState([
@@ -16,12 +17,42 @@ const SettingHomePage = () => {
     { field: "Placed On", maxWidth: 170 },
     { field: "Items" },
     { field: "Total" },
-    { field: "Actions" },
+    {
+      field: "Actions",
+      cellRenderer: () => (
+        <div
+          style={{
+            fontWeight: "bold",
+            color: "var(--theme-color)",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            Router.push("/settings/manage");
+          }}
+        >
+          Manage
+        </div>
+      ),
+    },
   ]);
 
   const [rowData] = useState([
     {
       "Order #": "1",
+      "Placed On": `${new Date().getFullYear()}/${new Date().getMonth()}/${new Date().getDate()}`,
+      Items: "Jeans Pant",
+      Total: "Rs. 1999",
+      Actions: "Manage",
+    },
+    {
+      "Order #": "2",
+      "Placed On": `${new Date().getFullYear()}/${new Date().getMonth()}/${new Date().getDate()}`,
+      Items: "Jeans Pant",
+      Total: "Rs. 1999",
+      Actions: "Manage",
+    },
+    {
+      "Order #": "3",
       "Placed On": `${new Date().getFullYear()}/${new Date().getMonth()}/${new Date().getDate()}`,
       Items: "Jeans Pant",
       Total: "Rs. 1999",
@@ -151,7 +182,7 @@ const SettingHomePage = () => {
         <div style={{ marginTop: "20px" }}>
           <div
             className="ag-theme-alpine"
-            style={{ width: "100%", height: "200px" }}
+            style={{ width: 870, height: "200px" }}
           >
             <AgGridReact
               rowData={rowData}

@@ -1,0 +1,37 @@
+.manage {
+    display: flex;
+    gap: 30px;
+
+    .content {
+        width: 100%;
+    }
+
+    .review {
+        .review {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 1.3rem;
+            .products {
+                display: flex;
+                gap: 20px;
+
+                .rating {
+                    color: var(--prm-grey);
+                    font-size: 2rem;
+                    display: flex;
+                    gap: 5px;
+                }
+            }
+
+            textarea {
+                width: 50%;
+                height: 150px;
+
+                outline: none;
+                resize: none;
+                padding: 10px;
+            }
+        }
+    }
+}
