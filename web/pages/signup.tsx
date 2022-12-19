@@ -80,8 +80,26 @@ const SignUpPage: React.FC = () => {
   const [password, setPassword] = useState("");
   const [cpassword, setCPassword] = useState("");
   const [email, setEmail] = useState("");
-  const phone = useRef<HTMLInputElement>(null);
+  const [phone, setPhone] = useState("");
   const code = useRef<HTMLInputElement>(null);
+  const [delivaryAdd, setDeleveryAdd] = useState("");
+  const [nearestLandmark, setNearestLandark] = useState("");
+  const [showFooter, setShowFooter] = useState(false);
+  const [gender, setGender] = useState<"male" | "female" | "others">("male");
+
+  const [page, setPage] = useState<number>(0);
+
+  const userIDforEmailVerification = useRef("");
+
+  const [selectedAvaatar, setSelectedAvatar] = useState(0);
+  const [mapCods, setMapCods] = useState("");
+  const [selectAvaarList, setSelectAvatarList] = useState([
+    true,
+    false,
+    false,
+    false,
+    false,
+  ]);
 
   const handlePageInc = () => {
     if (page >= 4) return;
@@ -101,12 +119,40 @@ const SignUpPage: React.FC = () => {
       });
     }
 
+    if (password.length <= 8) {
+      return setAlert({
+        type: "error",
+        message: "Password too short!!!",
+      });
+    }
+
+    if (
+      firstName.trim() === "" ||
+      lastName.trim() === "" ||
+      username.trim() === "" ||
+      email.trim() === "" ||
+      delivaryAdd.trim() === "" ||
+      nearestLandmark.trim() === "" ||
+      gender.trim() === "" ||
+      phone.trim() === ""
+    ) {
+      return setAlert({
+        type: "error",
+        message: "Empty Fields !!!",
+      });
+    }
+
     const payload = {
       firstName,
       lastName,
       username,
       password,
       email,
+      delivaryAdd,
+      nearestLandmark,
+      mapCods,
+      gender,
+      phone,
     };
 
     const response = await axios.post(
@@ -115,23 +161,26 @@ const SignUpPage: React.FC = () => {
     );
     console.log(response);
 
+    userIDforEmailVerification.current = response.data.id;
+
     handlePageInc();
   };
 
-  const [showFooter, setShowFooter] = useState(false);
-
-  const [page, setPage] = useState<number>(0);
-
-  const [delivaryAdd, setDeleveryAdd] = useState("");
-
-  const [selectedAvaatar, setSelectedAvatar] = useState(0);
-  const [selectAvaarList, setSelectAvatarList] = useState([
-    true,
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const handleEmailVerification = async () => {
+    const response = await axios.post(
+      "http://localhost:5000/auth/verification",
+      {
+        id: userIDforEmailVerification.current,
+        code: code.current?.value,
+      }
+    );
+    if (response.data.status === "ok") {
+      setAlert({
+        type: "message",
+        message: "Account Verified",
+      });
+    }
+  };
 
   useEffect(() => {
     if (page === 0) {
@@ -148,9 +197,21 @@ const SignUpPage: React.FC = () => {
           {page === 0 && (
             <div className={styles.formInput}>
               <form>
-                <Input setState={setFirstName} placeholder="First Name" />
-                <Input setState={setLastName} placeholder="Last Name" />
-                <Input setState={setUsername} placeholder="Username" />
+                <Input
+                  setState={setFirstName}
+                  placeholder="First Name"
+                  value={firstName}
+                />
+                <Input
+                  setState={setLastName}
+                  placeholder="Last Name"
+                  value={lastName}
+                />
+                <Input
+                  setState={setUsername}
+                  placeholder="Username"
+                  value={username}
+                />
 
                 <div className={styles.terms}>
                   <input type="checkbox" name="poliecy" />
@@ -169,22 +230,65 @@ const SignUpPage: React.FC = () => {
                   setState={setPassword}
                   placeholder="Password"
                   type={"password"}
+                  value={password}
                 />
                 <Input
                   setState={setCPassword}
                   placeholder="Confirm Password"
                   type={"password"}
+                  value={cpassword}
                 />
-                <select>
+                <select
+                  value={"male"}
+                  onChange={(e) => {
+                    setGender(e.target.value as "male" | "female" | "others");
+                  }}
+                >
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                   <option value="others">Others</option>
                 </select>
-                <Input input={phone} placeholder="Phone No." type={"number"} />
-                <Input setState={setEmail} placeholder="Email" type={"email"} />
+                <Input
+                  setState={setPhone}
+                  placeholder="Phone No."
+                  type={"number"}
+                  value={phone}
+                />
+                <Input
+                  setState={setEmail}
+                  placeholder="Email"
+                  type={"email"}
+                  value={email}
+                />
                 <div className={styles.actionBtn}>
                   <Button onClick={handlePageDce} color="error">
                     BACK
+                  </Button>
+                  <Button onClick={handlePageInc}>NEXT</Button>
+                </div>
+              </form>
+            </div>
+          )}
+          {page === 2 && (
+            <div className={styles.formInput}>
+              <form>
+                <div className={styles.mapHolder}>
+                  <Map setAddress={setDeleveryAdd} setLatLng={setMapCods} />
+                </div>
+                <Input
+                  placeholder="Delivery Address"
+                  type={"text"}
+                  value={delivaryAdd}
+                />
+                <Input
+                  setState={setNearestLandark}
+                  placeholder="Nearest Landmark"
+                  type={"text"}
+                  value={nearestLandmark}
+                />
+                <div className={styles.actionBtn}>
+                  <Button onClick={handlePageDce} color="error">
+                    Back
                   </Button>
                   <Button onClick={onSubmit}>NEXT</Button>
                 </div>
@@ -192,38 +296,16 @@ const SignUpPage: React.FC = () => {
             </div>
           )}
 
-          {page === 2 && (
+          {page === 3 && (
             <div className={styles.formInput}>
               <form>
                 <Input input={code} placeholder="Code" type={"text"} />
 
-                <Button onClick={handlePageInc}>VERIFY</Button>
+                <Button onClick={handleEmailVerification}>VERIFY</Button>
               </form>
             </div>
           )}
 
-          {page === 3 && (
-            <div className={styles.formInput}>
-              <form>
-                <div className={styles.mapHolder}>
-                  <Map setAddress={setDeleveryAdd} />
-                </div>
-                <Input
-                  input={code}
-                  placeholder="Delivery Address"
-                  type={"text"}
-                  value={delivaryAdd}
-                />
-                <Input
-                  input={code}
-                  placeholder="Nearest Landmark"
-                  type={"text"}
-                />
-
-                <Button onClick={handlePageInc}>NEXT</Button>
-              </form>
-            </div>
-          )}
           {page === 4 && (
             <div className={styles.avatarSelect}>
               <h1>We are almost done !!</h1>
