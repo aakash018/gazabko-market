@@ -5,8 +5,9 @@ import cors from "cors";
 import { AppDataSource } from "./dataSource";
 
 import auth from "./api/auth";
-import { User } from "./entities/User";
-import { Address } from "./entities/Address";
+import update from "./api/update";
+// import { User } from "./entities/User";
+// import { Address } from "./entities/Address";
 
 const app = express();
 const PORT = 5000;
@@ -46,6 +47,7 @@ app.get("/", (_, res) => {
 
 //? ROUTERS
 app.use("/auth", auth);
+app.use("/update", update);
 
 app.listen(PORT, () => {
   console.log("SERVER IS RUNNING at ", PORT);

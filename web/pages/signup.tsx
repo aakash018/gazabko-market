@@ -91,7 +91,7 @@ const SignUpPage: React.FC = () => {
 
   const userIDforEmailVerification = useRef("");
 
-  const [selectedAvaatar, setSelectedAvatar] = useState(0);
+  const [selectedAvaatar, setSelectedAvatar] = useState("/images/avatar.jpg");
   const [mapCods, setMapCods] = useState("");
   const [selectAvaarList, setSelectAvatarList] = useState([
     true,
@@ -155,29 +155,81 @@ const SignUpPage: React.FC = () => {
       phone,
     };
 
-    const response = await axios.post(
-      "http://localhost:5000/auth/signup",
-      payload
-    );
-    console.log(response);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/auth/signup",
+        payload
+      );
+      console.log(response);
 
-    userIDforEmailVerification.current = response.data.id;
+      if (response.data.status !== "ok") {
+        return setAlert({
+          type: "error",
+          message: "error doing signup",
+        });
+      }
 
-    handlePageInc();
+      userIDforEmailVerification.current = response.data.id;
+
+      handlePageInc();
+    } catch (e) {
+      setAlert({
+        type: "error",
+        message: "error doing signup",
+      });
+    }
   };
 
   const handleEmailVerification = async () => {
-    const response = await axios.post(
-      "http://localhost:5000/auth/verification",
-      {
-        id: userIDforEmailVerification.current,
-        code: code.current?.value,
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/auth/verification",
+        {
+          id: userIDforEmailVerification.current,
+          code: code.current?.value,
+        }
+      );
+      if (response.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: "Account Verified",
+        });
+        handlePageInc();
+      } else {
+        return setAlert({
+          type: "error",
+          message: response.data.message,
+        });
       }
-    );
-    if (response.data.status === "ok") {
+    } catch {
       setAlert({
-        type: "message",
-        message: "Account Verified",
+        type: "error",
+        message: "error verifing account",
+      });
+    }
+  };
+
+  const handleAvatarSet = async () => {
+    try {
+      const res = await axios.post("http://localhost:5000/update/avatar", {
+        id: userIDforEmailVerification.current,
+        imgURL: selectedAvaatar,
+      });
+      console.log(res.data);
+
+      if (res.data.status !== "ok") {
+        return setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+
+      login();
+      Router.push("/");
+    } catch {
+      setAlert({
+        type: "error",
+        message: "error setting avatar",
       });
     }
   };
@@ -321,6 +373,7 @@ const SignUpPage: React.FC = () => {
                       // ? TO SELECT AVATAR
                       // ? FIRST UNSELECT THE SELECTED AVATAR
                       setSelectAvatarList([false, false, false, false, false]);
+                      setSelectedAvatar(avatar.imgUrl);
 
                       // ? THEN set TRUE to the one avatar clicked
                       setSelectAvatarList((prev) =>
@@ -334,14 +387,7 @@ const SignUpPage: React.FC = () => {
                 ))}
               </div>
               <div className={styles.actBtn}>
-                <Button
-                  onClick={() => {
-                    login();
-                    Router.push("/");
-                  }}
-                >
-                  Save
-                </Button>
+                <Button onClick={handleAvatarSet}>Save</Button>
               </div>
             </div>
           )}

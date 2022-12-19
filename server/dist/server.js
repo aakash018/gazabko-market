@@ -9,6 +9,7 @@ require("reflect-metadata");
 const cors_1 = __importDefault(require("cors"));
 const dataSource_1 = require("./dataSource");
 const auth_1 = __importDefault(require("./api/auth"));
+const update_1 = __importDefault(require("./api/update"));
 const app = (0, express_1.default)();
 const PORT = 5000;
 app.set("trust proxy", 1);
@@ -32,6 +33,7 @@ app.get("/", (_, res) => {
     });
 });
 app.use("/auth", auth_1.default);
+app.use("/update", update_1.default);
 app.listen(PORT, () => {
     console.log("SERVER IS RUNNING at ", PORT);
 });

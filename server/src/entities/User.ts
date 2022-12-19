@@ -41,7 +41,7 @@ export class User extends BaseEntity {
   gender: "male" | "female" | "others";
 
   @Column({ nullable: true })
-  avater: string;
+  avatar: string;
 
   @Column({ nullable: true, default: false })
   emailVerified: boolean;

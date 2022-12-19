@@ -82,6 +82,11 @@ router.post("/verification", async (req, res) => {
       status: "ok",
       message: "account verified",
     });
+  } else {
+    res.json({
+      status: "fail",
+      message: "wrong verification code",
+    });
   }
 });
 
