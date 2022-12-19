@@ -1,4 +1,7 @@
 import { DataSource } from "typeorm";
+import { Address } from "./entities/Address";
+import { Cart } from "./entities/Cart";
+import { Products } from "./entities/Products";
 import { User } from "./entities/User";
 
 export const AppDataSource = new DataSource({
@@ -9,5 +12,5 @@ export const AppDataSource = new DataSource({
   database: "gazabko_market",
   synchronize: true,
   logging: true,
-  entities: [User],
+  entities: [User, Address, Cart, Products],
 });

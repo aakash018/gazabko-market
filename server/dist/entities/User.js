@@ -11,6 +11,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
+const Address_1 = require("./Address");
+const Cart_1 = require("./Cart");
 let User = class User extends typeorm_1.BaseEntity {
 };
 __decorate([
@@ -30,17 +32,43 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "username", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ default: "customer" }),
+    __metadata("design:type", String)
+], User.prototype, "role", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], User.prototype, "phoneNo", void 0);
+__decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "gender", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], User.prototype, "avater", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true, default: false }),
+    __metadata("design:type", Boolean)
+], User.prototype, "emailVerified", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => Address_1.Address),
+    (0, typeorm_1.JoinColumn)(),
+    __metadata("design:type", Address_1.Address)
+], User.prototype, "address", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => Cart_1.Cart, (cart) => cart.user, { nullable: true }),
+    (0, typeorm_1.JoinColumn)(),
+    __metadata("design:type", Cart_1.Cart)
+], User.prototype, "cart", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
