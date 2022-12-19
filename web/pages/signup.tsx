@@ -9,6 +9,8 @@ import Input from "../components/shared/Input";
 import { useAuth } from "../context/User";
 
 import styles from "../styles/components/Customer/pages/signup.module.scss";
+import axios from "axios";
+import { useAlert } from "./_app";
 const Map = dynamic(
   () => import("../components/shared/Map"), // replace '@components/map' with your component's location
   { ssr: false } // This line is important. It's what prevents server-side render
@@ -69,15 +71,52 @@ export const avatarsData = [
 
 const SignUpPage: React.FC = () => {
   const { login } = useAuth();
+  const { setAlert } = useAlert();
 
-  const firstName = useRef<HTMLInputElement>(null);
-  const lastName = useRef<HTMLInputElement>(null);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
-  const username = useRef<HTMLInputElement>(null);
-  const password = useRef<HTMLInputElement>(null);
-  const cpassword = useRef<HTMLInputElement>(null);
-  const email = useRef<HTMLInputElement>(null);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [cpassword, setCPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const phone = useRef<HTMLInputElement>(null);
   const code = useRef<HTMLInputElement>(null);
+
+  const handlePageInc = () => {
+    if (page >= 4) return;
+    setPage((prev) => prev + 1);
+  };
+
+  const handlePageDce = () => {
+    if (page <= 0) return;
+    setPage((prev) => prev - 1);
+  };
+
+  const onSubmit = async () => {
+    if (password !== cpassword) {
+      return setAlert({
+        type: "error",
+        message: "Confirm Password didn't match!",
+      });
+    }
+
+    const payload = {
+      firstName,
+      lastName,
+      username,
+      password,
+      email,
+    };
+
+    const response = await axios.post(
+      "http://localhost:5000/auth/signup",
+      payload
+    );
+    console.log(response);
+
+    handlePageInc();
+  };
 
   const [showFooter, setShowFooter] = useState(false);
 
@@ -102,16 +141,6 @@ const SignUpPage: React.FC = () => {
     }
   }, [page]);
 
-  const handlePageInc = () => {
-    if (page >= 4) return;
-    setPage((prev) => prev + 1);
-  };
-
-  const handlePageDce = () => {
-    if (page <= 0) return;
-    setPage((prev) => prev - 1);
-  };
-
   return (
     <Layout showFooter={false}>
       <div className={styles.signupWrapper}>
@@ -119,9 +148,9 @@ const SignUpPage: React.FC = () => {
           {page === 0 && (
             <div className={styles.formInput}>
               <form>
-                <Input input={firstName} placeholder="First Name" />
-                <Input input={lastName} placeholder="Last Name" />
-                <Input input={username} placeholder="Username" />
+                <Input setState={setFirstName} placeholder="First Name" />
+                <Input setState={setLastName} placeholder="Last Name" />
+                <Input setState={setUsername} placeholder="Username" />
 
                 <div className={styles.terms}>
                   <input type="checkbox" name="poliecy" />
@@ -137,12 +166,12 @@ const SignUpPage: React.FC = () => {
             <div className={styles.formInput}>
               <form>
                 <Input
-                  input={password}
+                  setState={setPassword}
                   placeholder="Password"
                   type={"password"}
                 />
                 <Input
-                  input={cpassword}
+                  setState={setCPassword}
                   placeholder="Confirm Password"
                   type={"password"}
                 />
@@ -151,17 +180,13 @@ const SignUpPage: React.FC = () => {
                   <option value="female">Female</option>
                   <option value="others">Others</option>
                 </select>
-                <Input
-                  input={cpassword}
-                  placeholder="Phone No."
-                  type={"number"}
-                />
-                <Input input={email} placeholder="Email" type={"email"} />
+                <Input input={phone} placeholder="Phone No." type={"number"} />
+                <Input setState={setEmail} placeholder="Email" type={"email"} />
                 <div className={styles.actionBtn}>
                   <Button onClick={handlePageDce} color="error">
                     BACK
                   </Button>
-                  <Button onClick={handlePageInc}>NEXT</Button>
+                  <Button onClick={onSubmit}>NEXT</Button>
                 </div>
               </form>
             </div>
