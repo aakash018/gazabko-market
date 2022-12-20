@@ -7,10 +7,10 @@ import { VerificationCode } from "./entities/VerificationCode";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
-  host: "127.0.0.1",
-  username: "sw17t",
-  password: "password",
-  database: "gazabko_market",
+  host: process.env.DB_HOST,
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   synchronize: true,
   logging: true,
   entities: [User, Address, Cart, Products, VerificationCode],

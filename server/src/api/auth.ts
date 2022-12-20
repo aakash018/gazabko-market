@@ -30,8 +30,8 @@ router.post("/signup", async (req, res) => {
     host: "smtp.gmail.com",
     port: 587,
     auth: {
-      user: "aakashkhanal015@gmail.com",
-      pass: process.env.GMAILSMPTPASSWORD,
+      user: process.env.SMTP_USERNAME,
+      pass: process.env.SMTP_PASSWORD,
     },
   });
 
@@ -80,7 +80,7 @@ router.post("/signup", async (req, res) => {
 
     transporter
       .sendMail({
-        from: "aakashkhanal015@gmail.com", // sender address
+        from: process.env.SMTP_PASSWORD, // sender address
         to: userData.email, // list of receivers
         subject: "Medium @edigleyssonsilva ✔", // Subject line
         text: `YOUR VERIFICATION CODE IS ${verifyCode}`, // plain text body
@@ -156,6 +156,8 @@ router.post("/login", async (req, res) => {
     );
 
     if (isPasswordCorrect) {
+      req.session.user = userLoginInfo.username;
+
       res.json({
         status: "ok",
         message: "logged in",
