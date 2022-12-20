@@ -31,7 +31,7 @@ router.post("/signup", async (req, res) => {
     port: 587,
     auth: {
       user: "aakashkhanal015@gmail.com",
-      pass: "xgnoqilruitmvbio",
+      pass: process.env.GMAILSMPTPASSWORD,
     },
   });
 
