@@ -3,6 +3,12 @@ import { AppDataSource } from "..//dataSource";
 import { Address } from "../entities/Address";
 import { User } from "../entities/User";
 
+import nodemailer from "nodemailer";
+import { generateCode } from "../../utils/generateRandomCode";
+import { VerificationCode } from "../entities/VerificationCode";
+
+import bcrypt from "bcrypt";
+
 const router = express();
 
 interface SignUpPayloadType {
@@ -20,6 +26,19 @@ interface SignUpPayloadType {
 
 router.post("/signup", async (req, res) => {
   const userData: SignUpPayloadType = req.body;
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    auth: {
+      user: "aakashkhanal015@gmail.com",
+      pass: "xgnoqilruitmvbio",
+    },
+  });
+
+  transporter
+    .verify()
+    .then(() => console.log("YOYO"))
+    .catch(console.error);
 
   try {
     const address = new Address();
@@ -29,12 +48,13 @@ router.post("/signup", async (req, res) => {
 
     await AppDataSource.manager.save(address);
 
+    const hashPass = await bcrypt.hash(userData.password, 12);
     const user = new User();
 
     user.firstName = userData.firstName;
     user.lastName = userData.lastName;
     user.gender = userData.gender;
-    user.password = userData.password;
+    user.password = hashPass;
     user.username = userData.username;
     user.email = userData.email;
     user.phoneNo = userData.phone;
@@ -42,6 +62,7 @@ router.post("/signup", async (req, res) => {
 
     await AppDataSource.manager.save(user);
 
+    // ! TO REMOVE
     console.log(
       await AppDataSource.getRepository(User).find({
         relations: {
@@ -50,9 +71,27 @@ router.post("/signup", async (req, res) => {
       })
     );
 
+    const verifyCode = generateCode();
+
+    await VerificationCode.create({
+      userID: user.id,
+      code: verifyCode,
+    }).save();
+
+    transporter
+      .sendMail({
+        from: "aakashkhanal015@gmail.com", // sender address
+        to: userData.email, // list of receivers
+        subject: "Medium @edigleyssonsilva ✔", // Subject line
+        text: `YOUR VERIFICATION CODE IS ${verifyCode}`, // plain text body
+      })
+      .then((info) => {
+        console.log({ info });
+      })
+      .catch(console.error);
+
     res.json({
       status: "ok",
-      message: "code: XV173VT",
       id: user.id,
     });
   } catch (e) {
@@ -71,21 +110,67 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/verification", async (req, res) => {
-  if (req.body.code === "XV173VT") {
+  const codeData = await VerificationCode.findOne({
+    where: { userID: req.body.id },
+  });
+
+  if (!codeData) {
+    return res.send({
+      status: "fail",
+      message: "wrong user id",
+    });
+  }
+
+  if (req.body.code === codeData!.code) {
     await AppDataSource.createQueryBuilder()
       .update(User)
       .set({ emailVerified: true })
       .where("id = :id", { id: req.body.id })
       .execute();
 
-    res.json({
+    return res.json({
       status: "ok",
       message: "account verified",
     });
   } else {
-    res.json({
+    return res.json({
       status: "fail",
       message: "wrong verification code",
+    });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  const userLoginInfo = req.body;
+
+  const user = await User.findOne({
+    where: { username: userLoginInfo.username },
+    relations: {
+      address: true,
+    },
+  });
+  if (user) {
+    const isPasswordCorrect = await bcrypt.compare(
+      userLoginInfo.password,
+      user.password
+    );
+
+    if (isPasswordCorrect) {
+      res.json({
+        status: "ok",
+        message: "logged in",
+        user: user,
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "password incorrect",
+      });
+    }
+  } else {
+    res.json({
+      status: "fail",
+      message: "no user found",
     });
   }
 });

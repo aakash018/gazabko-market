@@ -3,6 +3,7 @@ import { Address } from "./entities/Address";
 import { Cart } from "./entities/Cart";
 import { Products } from "./entities/Products";
 import { User } from "./entities/User";
+import { VerificationCode } from "./entities/VerificationCode";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -12,5 +13,5 @@ export const AppDataSource = new DataSource({
   database: "gazabko_market",
   synchronize: true,
   logging: true,
-  entities: [User, Address, Cart, Products],
+  entities: [User, Address, Cart, Products, VerificationCode],
 });

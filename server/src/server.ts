@@ -31,9 +31,9 @@ app.use(express.urlencoded({ extended: false }) as RequestHandler);
 
 AppDataSource.initialize()
   .then(() => {
-    console.log("Data Source Initilized");
     // User.delete({});
     // Address.delete({});
+    console.log("Data Source Initilized");
   })
   .catch((e) => {
     console.log("Error initilizing Data Source !!!", e);
