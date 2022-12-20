@@ -36,7 +36,6 @@ const Provider: React.FC<Props> = ({ children }) => {
   const [showBanners, setShowBanners] = useState<boolean>(true);
 
   const login = async (username: string, password: string) => {
-    setLoginStatus(true);
     const res = await axios.post("http://localhost:5000/auth/login", {
       username: username,
       password: password,
@@ -44,7 +43,13 @@ const Provider: React.FC<Props> = ({ children }) => {
 
     console.log(res.data.user);
 
+    if (res.data.status !== "ok") {
+      return res.data;
+    }
+
     setUser(res.data.user);
+    setLoginStatus(true);
+    return res.data;
   };
   const logout = () => {
     setLoginStatus(false);

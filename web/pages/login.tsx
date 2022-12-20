@@ -34,12 +34,20 @@ const Login: React.FC = () => {
         message: "Empty fields",
       });
     }
-    login(username.current!.value, password.current!.value);
-    setAlert({
-      type: "message",
-      message: "Login Successful",
-    });
-    Router.push("/");
+    const res = await login(username.current!.value, password.current!.value);
+
+    if (res.status !== "ok") {
+      setAlert({
+        type: "error",
+        message: res.message,
+      });
+    } else {
+      setAlert({
+        type: "message",
+        message: "Logged successfully",
+      });
+      Router.push("/");
+    }
   };
 
   return (

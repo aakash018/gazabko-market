@@ -6,6 +6,7 @@ import { AppDataSource } from "./dataSource";
 
 import auth from "./api/auth";
 import update from "./api/update";
+import sellerAuth from "./api/seller/auth";
 // import { User } from "./entities/User";
 // import { Address } from "./entities/Address";
 
@@ -48,7 +49,7 @@ app.get("/", (_, res) => {
 //? ROUTERS
 app.use("/auth", auth);
 app.use("/update", update);
-
+app.use("/sellerAuth", sellerAuth);
 app.listen(PORT, () => {
   console.log("SERVER IS RUNNING at ", PORT);
 });

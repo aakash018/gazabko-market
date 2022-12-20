@@ -26,8 +26,8 @@ export class Seller extends BaseEntity {
   @Column()
   phoneNo: number;
 
-  @Column()
-  isVerified: number;
+  @Column({ default: false })
+  isVerified: boolean;
 
   @Column({ nullable: true })
   panNo: number;
