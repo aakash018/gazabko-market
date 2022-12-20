@@ -11,6 +11,7 @@ import { FaFacebook } from "react-icons/fa";
 import { useAuth } from "../context/User";
 import Router from "next/router";
 import { useAlert } from "./_app";
+import axios from "axios";
 
 const Login: React.FC = () => {
   const username = useRef<HTMLInputElement>(null);
@@ -19,28 +20,30 @@ const Login: React.FC = () => {
   const { login } = useAuth();
   const { setAlert } = useAlert();
 
-  const handelLogin = (e: FormEvent) => {
+  const handelLogin = async (e: FormEvent) => {
     e.preventDefault();
 
     console.log(username.current?.value.trim() === "");
 
-    if (username.current?.value.trim() === "") {
+    if (
+      username.current?.value.trim() === "" ||
+      password.current?.value.trim() === ""
+    ) {
       return setAlert({
         type: "error",
-        message: "No Username",
+        message: "Empty fields",
       });
     }
-
+    login(username.current!.value, password.current!.value);
     setAlert({
       type: "message",
       message: "Login Successful",
     });
-    login();
     Router.push("/");
   };
 
   return (
-    <Layout sidebar="hide" showFooter={false}>
+    <Layout showFooter={false}>
       <div className={styles.loginContainer}>
         <div className={styles.login}>
           <div className={styles.login__logo}>

@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { createContext, useContext, useState } from "react";
 
 interface Props {
@@ -9,8 +10,8 @@ type authContextType = {
 
   isLogedIn: boolean;
   showBanners: boolean;
-  login: () => void;
-  logout: () => void;
+  login: (usernme: string, password: string) => any;
+  logout: () => any;
   disableBanners: () => void;
 };
 
@@ -34,8 +35,16 @@ const Provider: React.FC<Props> = ({ children }) => {
   const [isLogedIn, setLoginStatus] = useState<boolean>(false);
   const [showBanners, setShowBanners] = useState<boolean>(true);
 
-  const login = () => {
+  const login = async (username: string, password: string) => {
     setLoginStatus(true);
+    const res = await axios.post("http://localhost:5000/auth/login", {
+      username: username,
+      password: password,
+    });
+
+    console.log(res.data.user);
+
+    setUser(res.data.user);
   };
   const logout = () => {
     setLoginStatus(false);

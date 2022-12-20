@@ -11,6 +11,7 @@ import { useAuth } from "../context/User";
 import styles from "../styles/components/Customer/pages/signup.module.scss";
 import axios from "axios";
 import { useAlert } from "./_app";
+import { MdVerified } from "react-icons/md";
 const Map = dynamic(
   () => import("../components/shared/Map"), // replace '@components/map' with your component's location
   { ssr: false } // This line is important. It's what prevents server-side render
@@ -224,7 +225,7 @@ const SignUpPage: React.FC = () => {
         });
       }
 
-      login();
+      login(username, password);
       Router.push("/");
     } catch {
       setAlert({
@@ -351,6 +352,29 @@ const SignUpPage: React.FC = () => {
           {page === 3 && (
             <div className={styles.formInput}>
               <form>
+                <div
+                  style={{
+                    fontSize: "1.3rem",
+                    fontWeight: "bold",
+                    width: "380px",
+
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  Type in the verification code we sent to your provided email
+                  address
+                  <div
+                    style={{
+                      fontSize: "6rem",
+                      color: "var(--theme-color)",
+                    }}
+                  >
+                    <MdVerified />
+                  </div>
+                </div>
                 <Input input={code} placeholder="Code" type={"text"} />
 
                 <Button onClick={handleEmailVerification}>VERIFY</Button>

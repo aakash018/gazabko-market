@@ -10,8 +10,11 @@ import Image from "next/image";
 
 import React, { useState } from "react";
 import Router from "next/router";
+import { useAuth } from "../../../context/User";
 
 const SettingHomePage = () => {
+  const { user } = useAuth();
+
   const [columnData] = useState([
     { field: "Order #", maxWidth: 90 },
     { field: "Placed On", maxWidth: 170 },
@@ -80,20 +83,16 @@ const SettingHomePage = () => {
                 height: "150px",
               }}
             >
-              <Image
-                src={"/images/avatar.jpg"}
-                layout="fill"
-                objectFit="contain"
-              />
+              <Image src={user!.avatar} layout="fill" objectFit="contain" />
             </div>
             <div>
               <div style={{ fontSize: "2rem", fontWeight: "bold" }}>
-                Joshep Miles
+                {user?.firstName} {user?.lastName}
               </div>
               <div style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
-                joshep@gmail.com
+                {user?.email}
               </div>
-              <div>986247956</div>
+              <div>{user?.phoneNo}</div>
               <div
                 style={{
                   display: "flex",
@@ -130,7 +129,6 @@ const SettingHomePage = () => {
                 display: "flex",
                 flexDirection: "column",
                 paddingRight: "50px",
-                borderRight: "1px solid #ddd",
               }}
             >
               <span style={{ fontSize: "14px", color: "#757575" }}>
@@ -143,36 +141,16 @@ const SettingHomePage = () => {
                   margin: "5px 0px",
                 }}
               >
-                Joshep
+                {user?.firstName}
               </span>
-              <span style={{ fontSize: "14px" }}>Lake Side</span>
-              <span style={{ fontSize: "14px" }}>Pokhara, Lake Side Area</span>
-              <span style={{ fontSize: "14px" }}>joshep@gmail.com</span>
-              <span style={{ fontSize: "14px" }}>(+977) 986247956</span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                paddingLeft: "20px",
-              }}
-            >
-              <span style={{ fontSize: "14px", color: "#757575" }}>
-                Default Billing Address
+              <span style={{ fontSize: "14px" }}>
+                {user?.address.nearestLandmark}
               </span>
-              <span
-                style={{
-                  fontWeight: 600,
-                  fontSize: "14px",
-                  margin: "5px 0px",
-                }}
-              >
-                Joshep
+              <span style={{ fontSize: "14px" }}>
+                {user?.address.deliveryAddress}
               </span>
-              <span style={{ fontSize: "14px" }}>Lake Side</span>
-              <span style={{ fontSize: "14px" }}>Pokhara, Lake Side Area</span>
-              <span style={{ fontSize: "14px" }}>joshep@gmail.com</span>
-              <span style={{ fontSize: "14px" }}>(+977) 986247956</span>
+              <span style={{ fontSize: "14px" }}>{user?.email}</span>
+              <span style={{ fontSize: "14px" }}>{user?.phoneNo}</span>
             </div>
           </div>
         </div>

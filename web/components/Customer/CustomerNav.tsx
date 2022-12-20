@@ -14,7 +14,7 @@ interface Props {
 }
 
 const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
-  const { isLogedIn, logout } = useAuth();
+  const { isLogedIn, user } = useAuth();
   const [showProfileOptions, setShowProfileOptions] = useState(false);
 
   const [show, setShow] = useState(false);
@@ -98,7 +98,7 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
               </Button>
             </div>
           )}
-          {isLogedIn && (
+          {isLogedIn && user && (
             <div className={styles.account}>
               <div className={styles.cartAndWishlist}>
                 <AiOutlineShoppingCart
@@ -128,11 +128,7 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
                       Router.push("/settings");
                     }}
                   >
-                    <Image
-                      src="/images/avatar.jpg"
-                      layout="fill"
-                      objectFit="cover"
-                    />
+                    <Image src={user!.avatar} layout="fill" objectFit="cover" />
                   </div>
                   {/* {showProfileOptions && (
                     <div className={styles.options}>
