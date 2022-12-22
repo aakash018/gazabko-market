@@ -1,5 +1,5 @@
 declare global {
-  module 'express-session' {
+  module "express-session" {
     interface SessionData {
       user: string;
     }

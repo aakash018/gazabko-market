@@ -142,7 +142,7 @@ router.post("/verification", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const userLoginInfo = req.body;
-
+  console.table(await User.find({}));
   const user = await User.findOne({
     where: { username: userLoginInfo.username },
     relations: {
@@ -157,7 +157,7 @@ router.post("/login", async (req, res) => {
 
     if (isPasswordCorrect) {
       req.session.user = userLoginInfo.username;
-
+      console.log(req.session);
       res.json({
         status: "ok",
         message: "logged in",

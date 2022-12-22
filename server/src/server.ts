@@ -21,12 +21,11 @@ const PORT = 5000;
 
 //? redis connect
 const redisClient = createClient({ legacyMode: true });
-redisClient.connect().catch(console.error);
 const RedisStore = connectRedis(session);
+redisClient.connect().catch(console.error);
 
 app.set("trust proxy", 1);
 // app.enable("trust proxy")
-app.use(cookieParser());
 
 app.use(
   cors({
@@ -36,13 +35,27 @@ app.use(
 );
 
 //? Express Session
-app.use(session({
-  store: new RedisStore({ client: redisClient }),
-  secret: process.env.SESSION_SECRET,
-  saveUninitialized: false,
-  resave: false,
-  cookie: { maxAge: 24 * 60 * 60 * 1000 } // one day
-}));
+if (process.env.SESSION_SECRET) {
+  app.use(
+    session({
+      name: "qid",
+      store: new RedisStore({ client: redisClient, disableTouch: true }),
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
+        httpOnly: true,
+        sameSite: "none",
+        secure: false,
+      },
+      saveUninitialized: false,
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+    })
+  );
+} else {
+  console.log("No session secret");
+}
+
+app.use(cookieParser());
 
 //? Parser MiddleWare
 app.use(express.json() as RequestHandler);
