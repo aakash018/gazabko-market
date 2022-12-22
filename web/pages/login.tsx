@@ -23,8 +23,6 @@ const Login: React.FC = () => {
   const handelLogin = async (e: FormEvent) => {
     e.preventDefault();
 
-    console.log(username.current?.value.trim() === "");
-
     if (
       username.current?.value.trim() === "" ||
       password.current?.value.trim() === ""
@@ -35,7 +33,6 @@ const Login: React.FC = () => {
       });
     }
     const res = await login(username.current!.value, password.current!.value);
-
     if (res.status !== "ok") {
       setAlert({
         type: "error",

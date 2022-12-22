@@ -29,8 +29,9 @@ app.set("trust proxy", 1);
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000"],
     credentials: true,
+    exposedHeaders: ["set-cookie"],
   })
 );
 
@@ -43,7 +44,7 @@ if (process.env.SESSION_SECRET) {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24, // 1 day
         httpOnly: true,
-        sameSite: "none",
+        sameSite: "lax",
         secure: false,
       },
       saveUninitialized: false,

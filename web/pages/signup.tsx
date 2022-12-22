@@ -292,7 +292,7 @@ const SignUpPage: React.FC = () => {
                   value={cpassword}
                 />
                 <select
-                  value={"male"}
+                  value={gender}
                   onChange={(e) => {
                     setGender(e.target.value as "male" | "female" | "others");
                   }}

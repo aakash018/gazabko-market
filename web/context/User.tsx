@@ -36,12 +36,15 @@ const Provider: React.FC<Props> = ({ children }) => {
   const [showBanners, setShowBanners] = useState<boolean>(true);
 
   const login = async (username: string, password: string) => {
-    const res = await axios.post("http://localhost:5000/auth/login", {
-      username: username,
-      password: password,
-    });
-
-    console.log(res.data.user);
+    const res = await axios.post(
+      "http://localhost:5000/auth/login",
+      {
+        username: username,
+        password: password,
+      },
+      { withCredentials: true }
+    );
+    console.log(res);
 
     if (res.data.status !== "ok") {
       return res.data;
