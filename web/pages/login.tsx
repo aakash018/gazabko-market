@@ -20,6 +20,14 @@ const Login: React.FC = () => {
   const { login } = useAuth();
   const { setAlert } = useAlert();
 
+  const clickme = async () => {
+    const res = await axios.get("http://localhost:5000/auth/me", {
+      withCredentials: true,
+    });
+
+    console.log(res.data);
+  };
+
   const handelLogin = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -56,6 +64,7 @@ const Login: React.FC = () => {
           </div>
           <div className={styles.login__text}>
             <section className={styles.login__text_main}>
+              <Button onClick={clickme}>Click Me!</Button>
               <h1>Welcome to Gazabko Market ! </h1>
             </section>
             <section className={styles.login__text_sub}>

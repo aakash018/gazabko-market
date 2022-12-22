@@ -8,6 +8,7 @@ import { generateCode } from "../../utils/generateRandomCode";
 import { VerificationCode } from "../entities/VerificationCode";
 
 import bcrypt from "bcrypt";
+import validateUser from "../middleware/validateUser";
 
 const router = express();
 
@@ -156,7 +157,7 @@ router.post("/login", async (req, res) => {
     );
 
     if (isPasswordCorrect) {
-      req.session.user = userLoginInfo.username;
+      req.session.user = user.id;
       console.log(req.session);
       res.json({
         status: "ok",
@@ -175,6 +176,14 @@ router.post("/login", async (req, res) => {
       message: "no user found",
     });
   }
+});
+
+router.get("/me", validateUser, async (req, res) => {
+  res.send({
+    status: "ok",
+    message: "info retrived",
+    user: await User.findOne({ where: { id: req.session.user } }),
+  });
 });
 
 export default router;

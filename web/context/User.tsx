@@ -44,7 +44,6 @@ const Provider: React.FC<Props> = ({ children }) => {
       },
       { withCredentials: true }
     );
-    console.log(res);
 
     if (res.data.status !== "ok") {
       return res.data;
