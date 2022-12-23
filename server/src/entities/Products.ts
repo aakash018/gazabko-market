@@ -16,7 +16,7 @@ export class Products extends BaseEntity {
   name: string;
 
   @Column()
-  rating: number;
+  price: number;
 
   @Column()
   brand: string;
@@ -52,7 +52,7 @@ export class Products extends BaseEntity {
   category: string;
 
   @Column()
-  SKU: number;
+  sku: number;
 
   @CreateDateColumn()
   created_at: Date;

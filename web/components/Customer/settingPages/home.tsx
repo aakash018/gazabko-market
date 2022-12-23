@@ -63,6 +63,10 @@ const SettingHomePage = () => {
     },
   ]);
 
+  if (!user) {
+    return <h2>Loading...</h2>;
+  }
+
   return (
     <div>
       <h1>Settings</h1>

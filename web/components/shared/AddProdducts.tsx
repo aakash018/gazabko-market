@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 import { TbArrowBack } from "react-icons/tb";
 
@@ -13,14 +13,23 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 import "react-quill/dist/quill.snow.css";
 import Image from "next/image";
-import Router from "next/router";
 import { useRouter } from "next/router";
 
 import Modal from "react-modal";
 import { customStyles } from "../../modalStyle";
 import SelectedItemHolder from "../Admin/shared/SelectedItemHolder";
 
+interface Props {
+  productName: React.RefObject<HTMLInputElement>;
+  price: React.RefObject<HTMLInputElement>;
+  discount: React.RefObject<HTMLInputElement>;
+  totalStock: React.RefObject<HTMLInputElement>;
+  offer: React.RefObject<HTMLInputElement>;
+  sku: React.RefObject<HTMLInputElement>;
+}
+
 const AddProdducts: React.FC = () => {
+  const name = useRef<HTMLInputElement>(null);
   const [tagsList, setTagsList] = useState<string[]>([]);
   const [sizeList, setSizeList] = useState<string[]>([]);
   const [categoriesList, setCategoriesList] = useState<string[]>([]);

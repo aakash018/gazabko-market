@@ -186,4 +186,52 @@ router.get("/me", validateUser, async (req, res) => {
   });
 });
 
+router.get("/presistUser", async (req, res) => {
+  const userReq = req.cookies;
+
+  if (userReq.qid) {
+    const user = await User.findOne({
+      where: { id: req.session.user },
+      relations: {
+        address: true,
+      },
+    });
+
+    res.json({
+      status: "ok",
+      message: "user retrivied!",
+      user: user,
+    });
+  } else {
+    res.json({
+      status: "fail",
+      message: "no cookie found",
+    });
+  }
+});
+
+router.get("/logout", (req, res) => {
+  if (req.session) {
+    req.session.destroy((e) => {
+      if (e) {
+        res.json({
+          status: "fail",
+          message: "failed to logout",
+        });
+      } else {
+        res.clearCookie("qid");
+        res.json({
+          status: "ok",
+          message: "logged out sucessufully",
+        });
+      }
+    });
+  } else {
+    res.json({
+      status: "fail",
+      message: "no session found!",
+    });
+  }
+});
+
 export default router;

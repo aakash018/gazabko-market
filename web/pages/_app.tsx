@@ -1,10 +1,11 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import Provider from "../context/User";
+import Provider, { useAuth } from "../context/User";
 import Modal from "react-modal";
 import { useContext, useEffect, useRef, useState } from "react";
 import React from "react";
 import AlertBox from "../components/shared/AlertBox";
+import axios from "axios";
 
 // ? For Global Alert ---
 

@@ -101,13 +101,23 @@ const SettingsPage = () => {
             >
               <Button
                 color="error"
-                onClick={() => {
-                  logout();
-                  setAlert({
-                    message: "Loged out successfully",
-                    type: "error",
-                  });
-                  Router.push("/");
+                onClick={async () => {
+                  const res = await logout();
+
+                  console.log(res);
+
+                  if (res?.status === "ok") {
+                    setAlert({
+                      type: "message",
+                      message: res.message,
+                    });
+                    Router.push("/");
+                  } else {
+                    setAlert({
+                      type: "error",
+                      message: "error logging out",
+                    });
+                  }
                 }}
               >
                 Logout

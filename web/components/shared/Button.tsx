@@ -9,6 +9,7 @@ interface Props {
   type?: "submit" | "reset" | "button";
   look?: "outlined" | "filled" | "blank";
   icon?: ReactNode;
+  disable?: boolean;
 }
 
 const Button: React.FC<Props> = ({
@@ -19,6 +20,7 @@ const Button: React.FC<Props> = ({
   type = "button",
   look = "filled",
   icon,
+  disable,
 }) => {
   return (
     <div>
@@ -30,6 +32,7 @@ const Button: React.FC<Props> = ({
         ${styles[look]} 
         ${styles.common}`}
         onClick={onClick}
+        disabled={disable}
       >
         {icon}
         {children}

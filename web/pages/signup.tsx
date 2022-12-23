@@ -12,6 +12,7 @@ import styles from "../styles/components/Customer/pages/signup.module.scss";
 import axios from "axios";
 import { useAlert } from "./_app";
 import { MdVerified } from "react-icons/md";
+import { setLazyProp } from "next/dist/server/api-utils";
 const Map = dynamic(
   () => import("../components/shared/Map"), // replace '@components/map' with your component's location
   { ssr: false } // This line is important. It's what prevents server-side render
@@ -74,6 +75,7 @@ const SignUpPage: React.FC = () => {
   const { login } = useAuth();
   const { setAlert } = useAlert();
 
+  const [loading, setLoading] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
@@ -157,13 +159,15 @@ const SignUpPage: React.FC = () => {
     };
 
     try {
+      setLoading(true);
+
       const response = await axios.post(
         "http://localhost:5000/auth/signup",
         payload
       );
-      console.log(response);
 
       if (response.data.status !== "ok") {
+        setLoading(false);
         return setAlert({
           type: "error",
           message: "error doing signup",
@@ -171,9 +175,11 @@ const SignUpPage: React.FC = () => {
       }
 
       userIDforEmailVerification.current = response.data.id;
+      setLoading(false);
 
       handlePageInc();
     } catch (e) {
+      setLoading(false);
       setAlert({
         type: "error",
         message: "error doing signup",
@@ -183,6 +189,7 @@ const SignUpPage: React.FC = () => {
 
   const handleEmailVerification = async () => {
     try {
+      setLoading(true);
       const response = await axios.post(
         "http://localhost:5000/auth/verification",
         {
@@ -195,8 +202,10 @@ const SignUpPage: React.FC = () => {
           type: "message",
           message: "Account Verified",
         });
+        setLoading(false);
         handlePageInc();
       } else {
+        setLoading(false);
         return setAlert({
           type: "error",
           message: response.data.message,
@@ -207,11 +216,13 @@ const SignUpPage: React.FC = () => {
         type: "error",
         message: "error verifing account",
       });
+      setLoading(false);
     }
   };
 
   const handleAvatarSet = async () => {
     try {
+      setLoading(true);
       const res = await axios.post("http://localhost:5000/update/avatar", {
         id: userIDforEmailVerification.current,
         imgURL: selectedAvaatar,
@@ -223,15 +234,18 @@ const SignUpPage: React.FC = () => {
           type: "error",
           message: res.data.message,
         });
+        setLoading(false);
       }
 
       login(username, password);
+
       Router.push("/");
     } catch {
       setAlert({
         type: "error",
         message: "error setting avatar",
       });
+      setLoading(false);
     }
   };
 
@@ -314,7 +328,11 @@ const SignUpPage: React.FC = () => {
                   value={email}
                 />
                 <div className={styles.actionBtn}>
-                  <Button onClick={handlePageDce} color="error">
+                  <Button
+                    onClick={handlePageDce}
+                    color="error"
+                    disable={loading}
+                  >
                     BACK
                   </Button>
                   <Button onClick={handlePageInc}>NEXT</Button>
@@ -340,7 +358,11 @@ const SignUpPage: React.FC = () => {
                   value={nearestLandmark}
                 />
                 <div className={styles.actionBtn}>
-                  <Button onClick={handlePageDce} color="error">
+                  <Button
+                    onClick={handlePageDce}
+                    color="error"
+                    disable={loading}
+                  >
                     Back
                   </Button>
                   <Button onClick={onSubmit}>NEXT</Button>
@@ -377,7 +399,9 @@ const SignUpPage: React.FC = () => {
                 </div>
                 <Input input={code} placeholder="Code" type={"text"} />
 
-                <Button onClick={handleEmailVerification}>VERIFY</Button>
+                <Button onClick={handleEmailVerification} disable={loading}>
+                  VERIFY
+                </Button>
               </form>
             </div>
           )}
@@ -411,7 +435,9 @@ const SignUpPage: React.FC = () => {
                 ))}
               </div>
               <div className={styles.actBtn}>
-                <Button onClick={handleAvatarSet}>Save</Button>
+                <Button onClick={handleAvatarSet} disable={loading}>
+                  Save
+                </Button>
               </div>
             </div>
           )}

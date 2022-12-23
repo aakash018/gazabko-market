@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface Props {
   children: React.ReactNode;
@@ -11,16 +11,22 @@ type authContextType = {
   isLogedIn: boolean;
   showBanners: boolean;
   login: (usernme: string, password: string) => any;
-  logout: () => any;
+  logout: () => Promise<{
+    status: "ok" | "fail";
+    message: string;
+  }> | null;
   disableBanners: () => void;
 };
 
 const authContextDefaultValues: authContextType = {
   user: null,
+
   isLogedIn: true,
   showBanners: true,
   login: () => {},
-  logout: () => {},
+  logout: () => {
+    return null;
+  },
   disableBanners: () => {},
 };
 
@@ -32,8 +38,26 @@ export function useAuth() {
 
 const Provider: React.FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+
   const [isLogedIn, setLoginStatus] = useState<boolean>(false);
   const [showBanners, setShowBanners] = useState<boolean>(true);
+
+  useEffect(() => {
+    (async () => {
+      const res = await axios.get<{
+        status: "ok" | "fail";
+        message: "string";
+        user: User;
+      }>("http://localhost:5000/auth/presistUser", {
+        withCredentials: true,
+      });
+
+      if (res.data.status === "ok") {
+        setUser(res.data.user);
+        setLoginStatus(true);
+      }
+    })();
+  }, []);
 
   const login = async (username: string, password: string) => {
     const res = await axios.post(
@@ -53,8 +77,21 @@ const Provider: React.FC<Props> = ({ children }) => {
     setLoginStatus(true);
     return res.data;
   };
-  const logout = () => {
-    setLoginStatus(false);
+  const logout = async (): Promise<{
+    status: "ok" | "fail";
+    message: string;
+  }> => {
+    const res = await axios.get<{ status: "ok" | "fail"; message: string }>(
+      "http://localhost:5000/auth/logout",
+      { withCredentials: true }
+    );
+
+    if (res.data.status === "ok") {
+      setLoginStatus(false);
+      return res.data;
+    }
+
+    return res.data;
   };
 
   const disableBanners = () => {
@@ -63,6 +100,7 @@ const Provider: React.FC<Props> = ({ children }) => {
 
   const value = {
     user,
+
     isLogedIn,
     showBanners,
     login,

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { FormEvent, useRef } from "react";
+import React, { FormEvent, useRef, useState } from "react";
 import Layout from "../components/Customer/Layout";
 import Button from "../components/shared/Button";
 import IntputField from "../components/shared/Input";
@@ -17,16 +17,18 @@ const Login: React.FC = () => {
   const username = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
 
+  const [loading, setLoading] = useState(false);
+
   const { login } = useAuth();
   const { setAlert } = useAlert();
 
-  const clickme = async () => {
-    const res = await axios.get("http://localhost:5000/auth/me", {
-      withCredentials: true,
-    });
+  // const clickme = async () => {
+  //   const res = await axios.get("http://localhost:5000/auth/me", {
+  //     withCredentials: true,
+  //   });
 
-    console.log(res.data);
-  };
+  //   console.log(res.data);
+  // };
 
   const handelLogin = async (e: FormEvent) => {
     e.preventDefault();
@@ -40,12 +42,14 @@ const Login: React.FC = () => {
         message: "Empty fields",
       });
     }
+    setLoading(true);
     const res = await login(username.current!.value, password.current!.value);
     if (res.status !== "ok") {
       setAlert({
         type: "error",
         message: res.message,
       });
+      setLoading(false);
     } else {
       setAlert({
         type: "message",
@@ -64,7 +68,7 @@ const Login: React.FC = () => {
           </div>
           <div className={styles.login__text}>
             <section className={styles.login__text_main}>
-              <Button onClick={clickme}>Click Me!</Button>
+              {/* <Button onClick={clickme}>Click Me!</Button> */}
               <h1>Welcome to Gazabko Market ! </h1>
             </section>
             <section className={styles.login__text_sub}>
@@ -79,8 +83,8 @@ const Login: React.FC = () => {
                 placeholder="Password"
                 type={"password"}
               />
-              <Button color="default" type="submit">
-                Login
+              <Button color="default" type="submit" disable={loading}>
+                {loading ? "Loading" : "Login"}
               </Button>
             </form>
           </div>
