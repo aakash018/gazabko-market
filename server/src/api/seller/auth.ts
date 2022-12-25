@@ -2,6 +2,7 @@ import express from "express";
 import { Seller } from "../../entities/Seller";
 
 import bcrypt, { hash } from "bcrypt";
+import { AppDataSource } from "../../dataSource";
 
 const router = express();
 
@@ -50,11 +51,14 @@ router.get("/login", (_, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const sellerInputData: { usernme: string; password: string } = req.body;
+  const sellerInputData: { username: string; password: string } = req.body;
 
-  const seller = await Seller.findOne({
-    where: { username: sellerInputData.usernme },
-  });
+  const seller = await AppDataSource.getRepository(Seller)
+    .createQueryBuilder("seller")
+    .select("seller")
+    .where({ username: sellerInputData.username })
+    .addSelect("seller.password")
+    .getOne();
 
   if (seller && seller.isVerified !== false) {
     const isPasswordMatched = await bcrypt.compare(

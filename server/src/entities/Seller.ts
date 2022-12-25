@@ -24,7 +24,7 @@ export class Seller extends BaseEntity {
   @Column()
   address: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @Column()

@@ -20,5 +20,5 @@ export interface ProtuctPayloadType {
   sku: number;
   brand: string;
   images: string;
-  store: string;
+  store?: string;
 }

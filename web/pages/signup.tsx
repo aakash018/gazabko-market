@@ -237,7 +237,7 @@ const SignUpPage: React.FC = () => {
         setLoading(false);
       }
 
-      login(username, password);
+      login(username, password, "customer");
 
       Router.push("/");
     } catch {

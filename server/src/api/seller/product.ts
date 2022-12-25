@@ -1,4 +1,5 @@
 import express from "express";
+import { Seller } from "../../entities/Seller";
 import { Products } from "../../entities/Products";
 
 const router = express();
@@ -25,24 +26,29 @@ router.post("/add", async (req, res) => {
   const productDetails: ProtuctPayloadType = req.body;
 
   if (req.session.sellerID) {
+    const seller = await Seller.findOne({
+      where: { id: req.session.sellerID },
+    });
     try {
-      const product = await Products.create({
-        brand: productDetails.brand,
-        category: productDetails.category,
-        name: productDetails.productName,
-        price: productDetails.price,
-        description: productDetails.description,
-        offers: productDetails.offer,
-        totalStock: productDetails.totalStock,
-        store: productDetails.store,
-        sku: productDetails.sku,
-        sizes: productDetails.sizes,
-        images: productDetails.images,
-        tags: productDetails.tags,
-        discount: productDetails.discount,
-      }).save();
-
-      console.log(product);
+      if (seller && seller.isVerified) {
+        const product = await Products.create({
+          brand: productDetails.brand,
+          category: productDetails.category,
+          name: productDetails.productName,
+          price: productDetails.price,
+          description: productDetails.description,
+          offers: productDetails.offer,
+          totalStock: productDetails.totalStock,
+          store: seller.storeName,
+          sku: productDetails.sku,
+          sizes: productDetails.sizes,
+          images: productDetails.images,
+          tags: productDetails.tags,
+          discount: productDetails.discount,
+          seller: seller,
+        }).save();
+        console.log(product);
+      }
       res.json({
         status: "ok",
         message: "product added",

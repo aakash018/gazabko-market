@@ -13,7 +13,7 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 import "react-quill/dist/quill.snow.css";
 
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 
 import Modal from "react-modal";
 import { customStyles } from "../../modalStyle";
@@ -21,8 +21,11 @@ import SelectedItemHolder from "../Admin/shared/SelectedItemHolder";
 import MultipleImageUploader from "./MultipleImageUploader";
 import axios from "axios";
 import { ProtuctPayloadType } from "../../@types/global";
+import { useAlert } from "../../pages/_app";
 
 const AddProdducts: React.FC = () => {
+  const { setAlert } = useAlert();
+
   const [tagsList, setTagsList] = useState<string[]>([]);
   const [sizeList, setSizeList] = useState<string[]>([]);
   const [categoriesList, setCategoriesList] = useState<string[]>([]);
@@ -34,16 +37,51 @@ const AddProdducts: React.FC = () => {
   const productName = useRef<HTMLInputElement>(null);
   const price = useRef<HTMLInputElement>(null);
   const discount = useRef<HTMLInputElement>(null);
-  const description = useRef<HTMLInputElement>(null);
   const totalStock = useRef<HTMLInputElement>(null);
-  const offer = useRef<HTMLInputElement>(null);
   const sizes = useRef<HTMLInputElement>(null);
-  const category = useRef<HTMLInputElement>(null);
+  const [openSubCatModal, setOpenSubCatModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
+  const [discountType, setDiscountType] = useState<"percentage" | "amount">(
+    "percentage"
+  );
   const sku = useRef<HTMLInputElement>(null);
   const brand = useRef<HTMLInputElement>(null);
-  const store = useRef<HTMLInputElement>(null);
+  const [value, setValue] = useState("");
+  const [images, setImages] = useState<any[]>([]);
+
+  const handelCatSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (categoriesList.includes(e.target.value)) return;
+    setCategoriesList((prev) => [...prev, e.target.value]);
+  };
+
+  const handelCancelCatSelect = (select: string) => {
+    setCategoriesList((prev) => prev.filter((item) => item !== select));
+  };
 
   const handleSubmit = async () => {
+    if (
+      productName.current?.value.trim() === "" ||
+      brand.current?.value.trim() === "" ||
+      price.current?.value.trim() === "" ||
+      totalStock.current?.value.trim() === "" ||
+      tagsList.length === 0 ||
+      categoriesList.length === 0 ||
+      sku.current?.value.trim() === "" ||
+      images.length === 0 ||
+      value.trim() === ""
+    ) {
+      return setAlert({
+        type: "error",
+        message: "empty fields",
+      });
+    }
+
+    let discountAmount = parseInt(discount.current!.value);
+    if (discountType === "percentage") {
+      discountAmount =
+        parseInt(price.current!.value) *
+        (parseInt(discount.current!.value) / 100);
+    }
     const payload: ProtuctPayloadType = {
       productName: productName.current!.value,
       brand: brand.current!.value,
@@ -53,31 +91,30 @@ const AddProdducts: React.FC = () => {
       category: JSON.stringify(categoriesList),
       subCategory: JSON.stringify(subCategoriesList),
       sku: parseInt(sku.current!.value),
-      images: selectedImage,
-      store: "xyz",
+      images: JSON.stringify(images),
+      description: value,
+      discount: discountAmount,
+      sizes: JSON.stringify(sizes),
     };
 
-    const res = await axios.post(
+    const res = await axios.post<{ status: "ok" | "fail"; message: string }>(
       `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/add`,
       payload,
       { withCredentials: true }
     );
 
-    console.log(res.data);
-  };
-
-  const [openSubCatModal, setOpenSubCatModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState("");
-
-  const [value, setValue] = useState("");
-
-  const handelCatSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (categoriesList.includes(e.target.value)) return;
-    setCategoriesList((prev) => [...prev, e.target.value]);
-  };
-
-  const handelCancelCatSelect = (select: string) => {
-    setCategoriesList((prev) => prev.filter((item) => item !== select));
+    if (res.data.status === "ok") {
+      setAlert({
+        type: "message",
+        message: res.data.message,
+      });
+      Router.push("/seller/products");
+    } else {
+      setAlert({
+        type: "error",
+        message: res.data.message,
+      });
+    }
   };
 
   const router = useRouter();
@@ -137,7 +174,14 @@ const AddProdducts: React.FC = () => {
                         type={"number"}
                         input={discount}
                       />
-                      <select>
+                      <select
+                        onChange={(e) => {
+                          setDiscountType(
+                            e.target.value as "percentage" | "amount"
+                          );
+                        }}
+                        value={discountType}
+                      >
                         <option value={"percentage"}>percentage</option>
                         <option value={"amount"}>amount</option>
                       </select>
@@ -220,6 +264,8 @@ const AddProdducts: React.FC = () => {
                       height={200}
                       selectedImage={selectedImage}
                       setSelectedImage={setSelectedImage}
+                      images={images}
+                      setImages={setImages}
                     />
                   </div>
                 </div>

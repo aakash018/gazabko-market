@@ -9,6 +9,8 @@ interface Props {
   height: number;
   selectedImage: any;
   setSelectedImage: React.Dispatch<any>;
+  images: any[];
+  setImages: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 const MultipleImageUploader: React.FC<Props> = ({
@@ -16,9 +18,10 @@ const MultipleImageUploader: React.FC<Props> = ({
   selectedImage,
   setSelectedImage,
   width,
+  images,
+  setImages,
 }) => {
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const [images, setImages] = useState<any[]>([]);
 
   // useEffect(() => {
   //   if (images.length !== 0) {
