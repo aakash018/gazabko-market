@@ -28,6 +28,7 @@ interface Props {
   discount: number;
   sellerName: string;
   totalStock: number;
+  brand: string;
 }
 
 const ProductInfoDisplay: React.FC<Props> = ({
@@ -37,6 +38,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
   discount,
   sellerName,
   totalStock,
+  brand,
 }) => {
   const [quantity, setQuantity] = useState(1);
   const { setAlert } = useAlert();
@@ -114,7 +116,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
                   cursor: "pointer",
                 }}
               >
-                Goldstar
+                {brand}
               </span>
             </Link>
           </section>
@@ -259,7 +261,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
               <span className={styles.grey}>Store name</span>
               <br />
               <Link href="/sellerInfo/dasds">
-                <a style={{ fontSize: "18px" }}>Bindabasini Shoe Store</a>
+                <a style={{ fontSize: "18px" }}>{sellerName}</a>
               </Link>
             </div>
           </div>

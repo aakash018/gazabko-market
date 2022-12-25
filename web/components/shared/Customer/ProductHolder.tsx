@@ -10,6 +10,7 @@ import PriceHolder from "./PriceHolder";
 
 interface Props extends ProductHolderTypes {
   fontSize?: number | string;
+  id?: number;
 }
 
 const ProductHolder: React.FC<Props> = ({
@@ -18,6 +19,7 @@ const ProductHolder: React.FC<Props> = ({
   discount,
   rating,
   fontSize = "1.8rem",
+  id,
 }) => {
   let price: number = 0;
   let discountPercentage: number = 0;
@@ -29,7 +31,7 @@ const ProductHolder: React.FC<Props> = ({
   }
 
   const handleProductClick = () => {
-    Router.push("/products/Acoolproduct");
+    Router.push(`/products/${id}`);
   };
 
   return (

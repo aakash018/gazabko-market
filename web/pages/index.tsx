@@ -14,6 +14,7 @@ import { useAuth } from "../context/User";
 import Button from "../components/shared/Button";
 import { customStyles } from "../modalStyle";
 import CatogriesGridBox from "../components/Customer/CatogriesGridBox";
+import axios from "axios";
 
 const Home = () => {
   const [bannerModalIsOpen, setIsOpen] = useState(false);
@@ -21,6 +22,7 @@ const Home = () => {
   const { isLogedIn, showBanners, disableBanners } = useAuth();
 
   const [modalLoginReminderOpen, setIsLoginReminderOpen] = useState(false);
+  const [products, setProducts] = useState([]);
 
   function closeModal() {
     setIsOpen(false);
@@ -44,6 +46,16 @@ const Home = () => {
         setIsLoginReminderOpen(true);
       }, 10000);
     }
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products`,
+        { withCredentials: true }
+      );
+      setProducts(res.data.products);
+    })();
   }, []);
 
   return (
@@ -87,9 +99,9 @@ const Home = () => {
             <Banner />
             <ShowCase
               includeTimer={true}
-              expireDate={new Date("August 26, 2022 23:37:25").getTime()}
+              expireDate={new Date("Jan 26, 2022 23:37:25").getTime()}
               title={"Today's deal"}
-              noOfProducts={5}
+              products={products.slice(0, 5)}
             />
             <div className={styles.midBanner}>
               <Image
@@ -103,9 +115,10 @@ const Home = () => {
             </div>
             <ShowCase
               includeTimer={true}
-              expireDate={new Date("August 28, 2022 15:37:25").getTime()}
+              expireDate={new Date("Jan 28, 2023 15:37:25").getTime()}
               title={"Big Sale"}
               noOfProducts={5}
+              products={products.slice(3, 8)}
             />
             <div className={styles.catogriesGrid}>
               <div className={styles.title}>Catogries</div>
@@ -114,12 +127,12 @@ const Home = () => {
             <ShowCase
               includeTimer={false}
               title={"New Products"}
-              noOfProducts={5}
+              products={products.slice(2, 7)}
             />
             <ShowCase
               includeTimer={false}
               title={"Recomdended Products"}
-              noOfProducts={15}
+              products={products}
             />
             <div
               style={{

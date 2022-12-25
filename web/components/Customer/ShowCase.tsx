@@ -1,5 +1,9 @@
 import React from "react";
-import { ProductHolderTypes } from "../../@types/global";
+import {
+  ProductHolderTypes,
+  ProtuctPayloadType,
+  ProtuctType,
+} from "../../@types/global";
 
 import styles from "../../styles/components/Customer/ProductShowCase.module.scss";
 import Timer from "../shared/Customer/Timer";
@@ -11,7 +15,7 @@ interface Props {
   includeTimer?: boolean;
   expireDate?: number;
   title?: string;
-  products?: ProductHolderTypes[];
+  products?: ProtuctType[];
   showTitle?: boolean;
   noOfProducts?: number;
 
@@ -51,30 +55,48 @@ const ShowCase: React.FC<Props> = ({
           <div className={`line ${styles.divider}`} />
         </>
       )}
-      <section style={{ display: "flex", justifyContent: "center" }} className={styles.productShowCase__products}>
-        {Array.from({ length: noOfProducts }).map((_, i) => {
-          if (type === "products") {
+      <section
+        style={{ display: "flex", justifyContent: "center" }}
+        className={styles.productShowCase__products}
+      >
+        {!products &&
+          Array.from({ length: noOfProducts }).map((_, i) => {
+            if (type === "products") {
+              return (
+                <ProductHolder
+                  key={i}
+                  mp={2700}
+                  discount={2000}
+                  rating={4.1}
+                  productName={"GoldStar Shoes P302 Black"}
+                />
+              );
+            } else {
+              return (
+                <div className={styles.brandHolder}>
+                  <Image
+                    src="/images/brand.png"
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                </div>
+              );
+            }
+          })}
+        {products &&
+          products.length !== 0 &&
+          products.map((product, i) => {
             return (
               <ProductHolder
                 key={i}
-                mp={2700}
-                discount={2000}
+                mp={product.price}
+                discount={product.discount ? product.discount : 0}
                 rating={4.1}
-                productName={"GoldStar Shoes P302 Black"}
+                productName={product.name}
+                id={product.id}
               />
             );
-          } else {
-            return (
-              <div className={styles.brandHolder}>
-                <Image
-                  src="/images/brand.png"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </div>
-            );
-          }
-        })}
+          })}
       </section>
     </div>
   );

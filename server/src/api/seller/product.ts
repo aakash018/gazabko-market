@@ -2,13 +2,15 @@ import express from "express";
 import { Seller } from "../../entities/Seller";
 import { Products } from "../../entities/Products";
 
+import sanitizeHtml from "sanitize-html";
+
 const router = express();
 
 interface ProtuctPayloadType {
   productName: string;
   price: number;
   discount?: number;
-  description?: string;
+  description: string;
   totalStock: number;
   offer?: string;
   sizes?: string;
@@ -22,9 +24,19 @@ interface ProtuctPayloadType {
   store: string;
 }
 
+router.get("/", async (_, res) => {
+  const products = await Products.find({});
+
+  res.json({
+    status: "ok",
+    message: "prducts found",
+    products: products,
+  });
+});
+
 router.post("/add", async (req, res) => {
   const productDetails: ProtuctPayloadType = req.body;
-
+  const cleanDesc = sanitizeHtml(productDetails.description);
   if (req.session.sellerID) {
     const seller = await Seller.findOne({
       where: { id: req.session.sellerID },
@@ -36,7 +48,7 @@ router.post("/add", async (req, res) => {
           category: productDetails.category,
           name: productDetails.productName,
           price: productDetails.price,
-          description: productDetails.description,
+          description: cleanDesc,
           offers: productDetails.offer,
           totalStock: productDetails.totalStock,
           store: seller.storeName,
@@ -63,6 +75,30 @@ router.post("/add", async (req, res) => {
     res.json({
       status: "fail",
       message: "not auth",
+    });
+  }
+});
+
+router.get("/info", async (req, res) => {
+  const parsedData = req.query as unknown as { id: number };
+
+  const product = await Products.findOne({
+    where: { id: parsedData.id },
+    relations: {
+      seller: true,
+    },
+  });
+
+  if (product) {
+    res.json({
+      status: "ok",
+      message: "product found",
+      product: product,
+    });
+  } else {
+    res.json({
+      status: "fail",
+      message: "no product found",
     });
   }
 });

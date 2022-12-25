@@ -16,4 +16,7 @@ declare interface User {
   };
 }
 
-declare module "turnstone";
+declare interface RespondType {
+  status: "ok" | "fail";
+  message: string;
+}
