@@ -43,7 +43,11 @@ const Login: React.FC = () => {
       });
     }
     setLoading(true);
-    const res = await login(username.current!.value, password.current!.value);
+    const res = await login(
+      username.current!.value,
+      password.current!.value,
+      "customer"
+    );
     if (res.status !== "ok") {
       setAlert({
         type: "error",

@@ -1,7 +1,7 @@
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      CLIENT_END_POINT: string;
+      SERVER_END_POINT: string;
       SMTP_USERNAME: string;
       SMTP_PASSWORD: string;
       SESSION_SECRET: string;
@@ -13,4 +13,4 @@ declare global {
   }
 }
 
-export {}
+export {};

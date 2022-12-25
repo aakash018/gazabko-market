@@ -12,24 +12,17 @@ import dynamic from "next/dynamic";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 import "react-quill/dist/quill.snow.css";
-import Image from "next/image";
+
 import { useRouter } from "next/router";
 
 import Modal from "react-modal";
 import { customStyles } from "../../modalStyle";
 import SelectedItemHolder from "../Admin/shared/SelectedItemHolder";
-
-interface Props {
-  productName: React.RefObject<HTMLInputElement>;
-  price: React.RefObject<HTMLInputElement>;
-  discount: React.RefObject<HTMLInputElement>;
-  totalStock: React.RefObject<HTMLInputElement>;
-  offer: React.RefObject<HTMLInputElement>;
-  sku: React.RefObject<HTMLInputElement>;
-}
+import MultipleImageUploader from "./MultipleImageUploader";
+import axios from "axios";
+import { ProtuctPayloadType } from "../../@types/global";
 
 const AddProdducts: React.FC = () => {
-  const name = useRef<HTMLInputElement>(null);
   const [tagsList, setTagsList] = useState<string[]>([]);
   const [sizeList, setSizeList] = useState<string[]>([]);
   const [categoriesList, setCategoriesList] = useState<string[]>([]);
@@ -38,19 +31,45 @@ const AddProdducts: React.FC = () => {
     []
   );
 
+  const productName = useRef<HTMLInputElement>(null);
+  const price = useRef<HTMLInputElement>(null);
+  const discount = useRef<HTMLInputElement>(null);
+  const description = useRef<HTMLInputElement>(null);
+  const totalStock = useRef<HTMLInputElement>(null);
+  const offer = useRef<HTMLInputElement>(null);
+  const sizes = useRef<HTMLInputElement>(null);
+  const category = useRef<HTMLInputElement>(null);
+  const sku = useRef<HTMLInputElement>(null);
+  const brand = useRef<HTMLInputElement>(null);
+  const store = useRef<HTMLInputElement>(null);
+
+  const handleSubmit = async () => {
+    const payload: ProtuctPayloadType = {
+      productName: productName.current!.value,
+      brand: brand.current!.value,
+      price: parseInt(price.current!.value),
+      totalStock: parseInt(totalStock.current!.value),
+      tags: JSON.stringify(tagsList),
+      category: JSON.stringify(categoriesList),
+      subCategory: JSON.stringify(subCategoriesList),
+      sku: parseInt(sku.current!.value),
+      images: selectedImage,
+      store: "xyz",
+    };
+
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/add`,
+      payload,
+      { withCredentials: true }
+    );
+
+    console.log(res.data);
+  };
+
   const [openSubCatModal, setOpenSubCatModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
 
   const [value, setValue] = useState("");
-
-  const [imgToDisplay, setImgToDisplay] = useState<
-    "shoes.jpg" | "shoes2.webp" | "shoes3.jpg" | "shoes4.jpeg"
-  >("shoes.jpg");
-
-  const handelChangeImg = (
-    img: "shoes.jpg" | "shoes2.webp" | "shoes3.jpg" | "shoes4.jpeg"
-  ) => {
-    setImgToDisplay(img);
-  };
 
   const handelCatSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (categoriesList.includes(e.target.value)) return;
@@ -110,16 +129,24 @@ const AddProdducts: React.FC = () => {
                       gap: "15px",
                     }}
                   >
-                    <IntputField label="Product's Name" />
-                    <IntputField label="Price" />
+                    <IntputField label="Product's Name" input={productName} />
+                    <IntputField label="Price" input={price} />
                     <div className={styles.discount}>
-                      <IntputField label="Discount" type={"number"} />
+                      <IntputField
+                        label="Discount"
+                        type={"number"}
+                        input={discount}
+                      />
                       <select>
                         <option value={"percentage"}>percentage</option>
                         <option value={"amount"}>amount</option>
                       </select>
                     </div>
-                    <IntputField label="Total Stock" type={"number"} />
+                    <IntputField
+                      label="Total Stock"
+                      type={"number"}
+                      input={totalStock}
+                    />
                     <div className={styles.dealsSection}>
                       <h2>Add to offer</h2>
                       <div className={styles.offers}>
@@ -188,58 +215,17 @@ const AddProdducts: React.FC = () => {
                     </div>
                   </div>
                   <div className={styles.imagesContainer}>
-                    <div className={styles.img}>
-                      <Image
-                        src={`/images/${imgToDisplay}`}
-                        width={400}
-                        height={300}
-                        objectFit="cover"
-                      />
-                      <div className={styles.extraImageHolder}>
-                        <Image
-                          src={"/images/shoes.jpg"}
-                          height={50}
-                          width={50}
-                          objectFit="contain"
-                          onClick={() => {
-                            handelChangeImg("shoes.jpg");
-                          }}
-                        />
-                        <Image
-                          src={"/images/shoes2.webp"}
-                          height={50}
-                          width={50}
-                          objectFit="contain"
-                          onClick={() => {
-                            handelChangeImg("shoes2.webp");
-                          }}
-                        />
-                        <Image
-                          src={"/images/shoes3.jpg"}
-                          height={50}
-                          width={50}
-                          objectFit="contain"
-                          onClick={() => {
-                            handelChangeImg("shoes3.jpg");
-                          }}
-                        />
-                        <Image
-                          src={"/images/shoes4.jpeg"}
-                          height={50}
-                          width={50}
-                          objectFit="contain"
-                          onClick={() => {
-                            handelChangeImg("shoes4.jpeg");
-                          }}
-                        />
-                        <div className={styles.addPictures}>+</div>
-                      </div>
-                    </div>
+                    <MultipleImageUploader
+                      width={200}
+                      height={200}
+                      selectedImage={selectedImage}
+                      setSelectedImage={setSelectedImage}
+                    />
                   </div>
                 </div>
                 <div className={styles.skuAndBrand}>
-                  <IntputField label="SKU" type={"number"} />
-                  <IntputField label="Brand" />
+                  <IntputField label="SKU" type={"number"} input={sku} />
+                  <IntputField label="Brand" input={brand} />
                 </div>
                 <div className={styles.producttDetails}>
                   <h2>Product Details</h2>
@@ -252,7 +238,9 @@ const AddProdducts: React.FC = () => {
                   ;
                 </div>
                 <div className={styles.actBtn}>
-                  <Button color="success">Save</Button>
+                  <Button color="success" onClick={handleSubmit}>
+                    Save
+                  </Button>
                   <Button>View</Button>
                 </div>
               </form>

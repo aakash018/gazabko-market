@@ -10,7 +10,11 @@ type authContextType = {
 
   isLogedIn: boolean;
   showBanners: boolean;
-  login: (usernme: string, password: string) => any;
+  login: (
+    usernme: string,
+    password: string,
+    type: "seller" | "admin" | "customer"
+  ) => any;
   logout: () => Promise<{
     status: "ok" | "fail";
     message: string;
@@ -59,9 +63,23 @@ const Provider: React.FC<Props> = ({ children }) => {
     })();
   }, []);
 
-  const login = async (username: string, password: string) => {
+  const login = async (
+    username: string,
+    password: string,
+    type: "seller" | "admin" | "customer"
+  ) => {
+    let url;
+
+    if (type === "customer") {
+      url = `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/auth/login`;
+    } else if (type === "seller") {
+      url = `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/sellerAuth/login`;
+    } else {
+      url = `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/adminAuth/login`;
+    }
+
     const res = await axios.post(
-      "http://localhost:5000/auth/login",
+      url,
       {
         username: username,
         password: password,

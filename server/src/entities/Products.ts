@@ -5,7 +5,9 @@ import {
   BaseEntity,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from "typeorm";
+import { Seller } from "./Seller";
 
 @Entity()
 export class Products extends BaseEntity {
@@ -27,7 +29,7 @@ export class Products extends BaseEntity {
   @Column()
   store: string;
 
-  @Column({ type: "text" })
+  @Column({ type: "text", nullable: true })
   description: string;
 
   @Column()
@@ -36,16 +38,16 @@ export class Products extends BaseEntity {
   @Column()
   tags: string;
 
-  @Column()
+  @Column({ default: false })
   isHidden: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   discount: number;
 
-  @Column()
+  @Column({ nullable: true })
   offers: string;
 
-  @Column()
+  @Column({ nullable: true })
   sizes: string;
 
   @Column()
@@ -53,6 +55,9 @@ export class Products extends BaseEntity {
 
   @Column()
   sku: number;
+
+  @ManyToOne(() => Seller, (seller) => seller.products)
+  seller: Seller;
 
   @CreateDateColumn()
   created_at: Date;
