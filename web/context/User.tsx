@@ -47,20 +47,26 @@ const Provider: React.FC<Props> = ({ children }) => {
   const [showBanners, setShowBanners] = useState<boolean>(true);
 
   useEffect(() => {
-    (async () => {
-      const res = await axios.get<{
-        status: "ok" | "fail";
-        message: "string";
-        user: User;
-      }>("http://localhost:5000/auth/presistUser", {
-        withCredentials: true,
-      });
+    let ignore = false;
+    if (!ignore) {
+      (async () => {
+        const res = await axios.get<{
+          status: "ok" | "fail";
+          message: "string";
+          user: User;
+        }>("http://localhost:5000/auth/presistUser", {
+          withCredentials: true,
+        });
 
-      if (res.data.status === "ok") {
-        setUser(res.data.user);
-        setLoginStatus(true);
-      }
-    })();
+        if (res.data.status === "ok") {
+          setUser(res.data.user);
+          setLoginStatus(true);
+        }
+      })();
+    }
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const login = async (
@@ -105,6 +111,7 @@ const Provider: React.FC<Props> = ({ children }) => {
     );
 
     if (res.data.status === "ok") {
+      setUser(null);
       setLoginStatus(false);
       return res.data;
     }

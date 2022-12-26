@@ -49,13 +49,19 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    (async () => {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products`,
-        { withCredentials: true }
-      );
-      setProducts(res.data.products);
-    })();
+    let ignore = false;
+    if (!ignore) {
+      (async () => {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products`,
+          { withCredentials: true }
+        );
+        setProducts(res.data.products);
+      })();
+    }
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   return (

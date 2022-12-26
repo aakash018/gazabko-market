@@ -67,8 +67,6 @@ router.post("/login", async (req, res) => {
     );
 
     if (isPasswordMatched) {
-      Reflect.deleteProperty(seller, "password");
-
       req.session.sellerID = seller.id;
       res.json({
         status: "ok",

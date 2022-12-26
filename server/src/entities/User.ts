@@ -7,9 +7,11 @@ import {
   UpdateDateColumn,
   JoinColumn,
   OneToOne,
+  OneToMany,
 } from "typeorm";
 import { Address } from "./Address";
 import { Cart } from "./Cart";
+import { Review } from "./Review";
 
 @Entity()
 export class User extends BaseEntity {
@@ -53,6 +55,9 @@ export class User extends BaseEntity {
   @OneToOne(() => Cart, (cart) => cart.user, { nullable: true })
   @JoinColumn()
   cart: Cart;
+
+  @OneToMany(() => Review, (review) => review.user)
+  review: Review[];
 
   @CreateDateColumn()
   created_at: Date;

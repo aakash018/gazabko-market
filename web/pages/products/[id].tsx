@@ -87,27 +87,33 @@ const ProductDisplay: React.FC = () => {
   const [product, setProduct] = useState<ProtuctType | undefined>(undefined);
 
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-      const res = await axios.get<RespondType & { product?: ProtuctType }>(
-        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/info`,
-        {
-          params: {
-            id: id,
-          },
-          withCredentials: true,
+    let ignore = false;
+    if (!ignore) {
+      (async () => {
+        setLoading(true);
+        const res = await axios.get<RespondType & { product?: ProtuctType }>(
+          `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/info`,
+          {
+            params: {
+              id: id,
+            },
+            withCredentials: true,
+          }
+        );
+        if (res.data.status === "ok") {
+          setProduct(res.data!.product);
+          setLoading(false);
+        } else {
+          setAlert({
+            type: "error",
+            message: res.data.message,
+          });
         }
-      );
-      if (res.data.status === "ok") {
-        setProduct(res.data!.product);
-        setLoading(false);
-      } else {
-        setAlert({
-          type: "error",
-          message: res.data.message,
-        });
-      }
-    })();
+      })();
+    }
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   return (

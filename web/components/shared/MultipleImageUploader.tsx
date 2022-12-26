@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 
 import styles from "../../styles/components/shared/MultipleImageUploader.module.scss";
 import Button from "./Button";
@@ -22,14 +22,6 @@ const MultipleImageUploader: React.FC<Props> = ({
   setImages,
 }) => {
   const inputFileRef = useRef<HTMLInputElement>(null);
-
-  // useEffect(() => {
-  //   if (images.length !== 0) {
-  //     setSelectedImage(images[0]);
-  //   } else {
-  //     setSelectedImage(null);
-  //   }
-  // }, [images]);
 
   return (
     <div>
@@ -71,10 +63,11 @@ const MultipleImageUploader: React.FC<Props> = ({
       <input
         type={"file"}
         onChange={(event: any) => {
-          if (event.target.files) {
-            console.log(event.target.files[0]);
+          if (event.target.files[0]) {
             setSelectedImage(event.target.files[0]);
             setImages((prev) => [...prev, event.target.files[0]]);
+          } else {
+            console.log(images);
           }
         }}
         style={{ display: "none" }}

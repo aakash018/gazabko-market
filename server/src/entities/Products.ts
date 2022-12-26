@@ -6,7 +6,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
 } from "typeorm";
+import { Review } from "./Review";
 import { Seller } from "./Seller";
 
 @Entity()
@@ -16,6 +18,9 @@ export class Products extends BaseEntity {
 
   @Column()
   name: string;
+
+  @Column({ nullable: true })
+  rating: number;
 
   @Column()
   price: number;
@@ -58,6 +63,9 @@ export class Products extends BaseEntity {
 
   @ManyToOne(() => Seller, (seller) => seller.products)
   seller: Seller;
+
+  @OneToMany(() => Review, (review) => review.review)
+  review: Review[];
 
   @CreateDateColumn()
   created_at: Date;
