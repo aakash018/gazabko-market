@@ -1,18 +1,60 @@
-import React, { useState } from "react";
-import Layout from "../../components/Customer/Layout";
-import SettingPageSettingHolder from "../../components/shared/Customer/SettingPageSettingHolder";
+import React, { useRef, useState } from "react";
+import Layout from "../../../components/Customer/Layout";
+import SettingPageSettingHolder from "../../../components/shared/Customer/SettingPageSettingHolder";
 
-import styles from "../../styles/components/Customer/pages/settings/Manage.module.scss";
+import styles from "../../../styles/components/Customer/pages/settings/Manage.module.scss";
 import Image from "next/image";
 import Link from "next/link";
-import Button from "../../components/shared/Button";
-import Router from "next/router";
+import Button from "../../../components/shared/Button";
+import Router, { useRouter } from "next/router";
 import { BsStarFill } from "react-icons/bs";
-import IntputField from "../../components/shared/Input";
+import InputField from "../../../components/shared/Input";
+import axios from "axios";
+import { useAlert } from "../../_app";
 
 const UserInput: React.FC<{ title: "Review" | "Return" | "Report" }> = ({
   title,
 }) => {
+  const router = useRouter();
+  const reviewRef = useRef<HTMLTextAreaElement>(null);
+  const { pid } = router.query;
+  const { setAlert } = useAlert();
+  const handleSubmit = async () => {
+    if (reviewRef.current && reviewRef.current.value.trim() !== "") {
+      const payload = {
+        pid,
+        review: reviewRef.current.value,
+        rating: 4.5,
+      };
+      try {
+        const res = await axios.post<RespondType>(
+          `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/rrr/review`,
+          payload,
+          { withCredentials: true }
+        );
+
+        if (res.data.status === "ok") {
+          setAlert({
+            type: "message",
+            message: res.data.message,
+          });
+        } else {
+          setAlert({
+            type: "error",
+            message: res.data.message,
+          });
+        }
+      } catch {
+        setAlert({
+          type: "error",
+          message: "error posting review",
+        });
+      }
+    } else {
+      console.log(reviewRef.current);
+    }
+  };
+
   return (
     <div className={styles.review}>
       <h2>{title}</h2>
@@ -36,13 +78,16 @@ const UserInput: React.FC<{ title: "Review" | "Return" | "Report" }> = ({
         </div>
         {title === "Report" && (
           <div style={{ width: "350px" }}>
-            <IntputField placeholder="Subject" />
+            <InputField placeholder="Subject" />
           </div>
         )}
         <textarea
           placeholder={title !== "Review" ? "write a message" : "write review"}
+          ref={reviewRef}
         ></textarea>
-        <Button>{title === "Return" ? "Send Return Request" : "Post"}</Button>
+        <Button onClick={handleSubmit}>
+          {title === "Return" ? "Send Return Request" : "Post"}
+        </Button>
       </div>
     </div>
   );

@@ -30,7 +30,7 @@ const SettingHomePage = () => {
             cursor: "pointer",
           }}
           onClick={() => {
-            Router.push("/settings/manage");
+            Router.push(`/settings/manage/1`);
           }}
         >
           Manage

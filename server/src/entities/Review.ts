@@ -19,9 +19,6 @@ export class Review extends BaseEntity {
   @Column()
   rating: string;
 
-  @Column()
-  laglat: string;
-
   @ManyToOne(() => User, (user) => user.review)
   user: User;
 

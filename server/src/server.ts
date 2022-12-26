@@ -14,6 +14,9 @@ import auth from "./api/auth";
 import update from "./api/update";
 import sellerAuth from "./api/seller/auth";
 import products from "./api/seller/product";
+//?? RETURN REVIEW REPORT
+import rrr from "./api/rrr";
+// import { Products } from "./entities/Products";
 // import { Seller } from "./entities/Seller";
 // import { User } from "./entities/User";
 // import { Address } from "./entities/Address";
@@ -71,10 +74,10 @@ AppDataSource.initialize()
     // User.delete({});
     // Address.delete({});
     // Seller.delete({});
-    console.log("Data Source Initilized");
+    console.log("Data Source Initialized");
   })
   .catch((e) => {
-    console.log("Error initilizing Data Source !!!", e);
+    console.log("Error initializing Data Source !!!", e);
   });
 
 app.get("/", (_, res) => {
@@ -88,6 +91,8 @@ app.use("/auth", auth);
 app.use("/update", update);
 app.use("/sellerAuth", sellerAuth);
 app.use("/seller/products", products);
+//?? RETURN REVIEW REPORT
+app.use("/rrr", rrr);
 
 app.listen(PORT, () => {
   console.log("SERVER IS RUNNING at ", PORT);
