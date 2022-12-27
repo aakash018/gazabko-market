@@ -2,6 +2,7 @@ import { DataSource } from "typeorm";
 import { Address } from "./entities/Address";
 import { Cart } from "./entities/Cart";
 import { Products } from "./entities/Products";
+import { Answer, Question } from "./entities/QuestionAndAnswer";
 import { Review } from "./entities/Review";
 import { Seller } from "./entities/Seller";
 import { User } from "./entities/User";
@@ -15,5 +16,15 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: true,
   logging: true,
-  entities: [User, Address, Cart, Products, VerificationCode, Seller, Review],
+  entities: [
+    User,
+    Address,
+    Cart,
+    Products,
+    VerificationCode,
+    Seller,
+    Review,
+    Question,
+    Answer,
+  ],
 });

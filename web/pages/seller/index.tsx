@@ -3,7 +3,7 @@ import Router from "next/router";
 import React, { useRef } from "react";
 import Layout from "../../components/Customer/Layout";
 import Button from "../../components/shared/Button";
-import IntputField from "../../components/shared/Input";
+import InputField from "../../components/shared/Input";
 import { useAuth } from "../../context/User";
 
 import styles from "../../styles/components/Customer/pages/SellerLogin.module.scss";
@@ -14,7 +14,7 @@ const SellerLogin = () => {
   const password = useRef<HTMLInputElement>(null);
 
   const { setAlert } = useAlert();
-  const { login } = useAuth();
+  const { login, user, logout } = useAuth();
 
   const handleSubmit = async () => {
     if (
@@ -26,7 +26,9 @@ const SellerLogin = () => {
         message: "empty fields!",
       });
     }
-
+    if (user) {
+      logout();
+    }
     const res = await login(
       username.current!.value,
       password.current!.value,
@@ -54,11 +56,11 @@ const SellerLogin = () => {
           <div className={styles.header}>
             <div className={styles.main}>Welcome,</div>
             <div className={styles.sub}>
-              Sell On GazabzoMarket, BOOM Your Buissness
+              Sell On GazabzoMarket, BOOM Your Business
             </div>
           </div>
-          <IntputField label="Username" input={username} />
-          <IntputField label="Password" type="password" input={password} />
+          <InputField label="Username" input={username} />
+          <InputField label="Password" type="password" input={password} />
           <div className={styles.actBtn}>
             <Button onClick={handleSubmit}>Login</Button>
             <Button

@@ -14,6 +14,7 @@ import auth from "./api/auth";
 import update from "./api/update";
 import sellerAuth from "./api/seller/auth";
 import products from "./api/seller/product";
+import question from "./api/question";
 //?? RETURN REVIEW REPORT
 import rrr from "./api/rrr";
 // import { Products } from "./entities/Products";
@@ -91,6 +92,7 @@ app.use("/auth", auth);
 app.use("/update", update);
 app.use("/sellerAuth", sellerAuth);
 app.use("/seller/products", products);
+app.use("/question", question);
 //?? RETURN REVIEW REPORT
 app.use("/rrr", rrr);
 

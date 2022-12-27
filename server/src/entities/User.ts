@@ -11,6 +11,7 @@ import {
 } from "typeorm";
 import { Address } from "./Address";
 import { Cart } from "./Cart";
+import { Question } from "./QuestionAndAnswer";
 import { Review } from "./Review";
 
 @Entity()
@@ -33,10 +34,10 @@ export class User extends BaseEntity {
   @Column()
   phoneNo: number;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
-  @Column({ unique: true })
+  @Column()
   email: string;
 
   @Column()
@@ -58,6 +59,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Review, (review) => review.user)
   review: Review[];
+
+  @OneToMany(() => Question, (question) => question.user)
+  questions: Question[];
 
   @CreateDateColumn()
   created_at: Date;

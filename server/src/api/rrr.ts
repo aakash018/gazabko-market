@@ -9,15 +9,18 @@ import validateUser from "../middleware/validateUser";
 const router = express();
 
 router.post("/review", validateUser, async (req, res) => {
-  const userReq = req.body;
+  const userReq: { pid: string; review: string; rating: string } = req.body;
   const user = await User.findOne({ where: { id: req.session.user } });
-  const product = await Products.findOne({ where: { id: userReq.productID } });
+  const product = await Products.findOne({
+    where: { id: parseInt(userReq.pid) },
+  });
   try {
     if (user && product) {
       await Review.create({
-        rating: userReq.rating,
+        rating: parseInt(userReq.rating),
         product: product,
         review: userReq.review,
+        productID: parseInt(userReq.pid),
         user: user,
       }).save();
 
@@ -30,6 +33,36 @@ router.post("/review", validateUser, async (req, res) => {
     res.json({
       status: "fail",
       message: "failed to review the product!!",
+    });
+  }
+});
+
+router.get("/getReview", async (req, res) => {
+  const userReq = req.query as unknown as { pid: string };
+  console.log(userReq);
+  try {
+    const reviews = await Review.find({
+      where: { productID: parseInt(userReq.pid) },
+      relations: {
+        user: true,
+      },
+    });
+    if (reviews && reviews.length !== 0) {
+      res.json({
+        status: "ok",
+        message: "reviews retrieved",
+        reviews: reviews,
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "no reviews found",
+      });
+    }
+  } catch {
+    res.json({
+      status: "ok",
+      message: "failed to retrieve review",
     });
   }
 });

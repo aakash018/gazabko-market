@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import ProductInfoDisplay from "../../components/Customer/ProductDisplay";
 import Layout from "../../components/Customer/Layout";
@@ -14,6 +14,7 @@ import Link from "next/link";
 import axios from "axios";
 import { ProtuctType } from "../../@types/global";
 import { useAlert } from "../_app";
+import { QuestionType, ReviewType } from "../../@types/rrr";
 
 interface QuestionsHolderProps {
   question: string;
@@ -80,33 +81,109 @@ const ProductDisplay: React.FC = () => {
   const { isLogedIn } = useAuth();
 
   const router = useRouter();
-  const { id } = router.query;
+  const { pid } = router.query;
   const { setAlert } = useAlert();
+
+  const questionRef = useRef<HTMLTextAreaElement>(null);
 
   const [loading, setLoading] = useState(false);
   const [product, setProduct] = useState<ProtuctType | undefined>(undefined);
+
+  const [reviewLoading, setReviewLoading] = useState(false);
+  const [questionLoading, setQuestionLoading] = useState(false);
+  const [reviews, setReviews] = useState<ReviewType[]>([]);
+  const [questions, setQuestions] = useState<QuestionType[]>([]);
+
+  const handleClick = async () => {
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/question/askQuestion`,
+      {
+        question: questionRef.current?.value,
+        pid,
+      },
+      { withCredentials: true }
+    );
+
+    console.log(res.data);
+  };
 
   useEffect(() => {
     let ignore = false;
     if (!ignore) {
       (async () => {
         setLoading(true);
-        const res = await axios.get<RespondType & { product?: ProtuctType }>(
-          `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/info`,
-          {
-            params: {
-              id: id,
-            },
-            withCredentials: true,
+
+        //? GETTING PRODUCT INFO
+        try {
+          if (product == null) {
+            const res = await axios.get<
+              RespondType & { product?: ProtuctType }
+            >(
+              `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/info`,
+              {
+                params: {
+                  id: pid,
+                },
+                withCredentials: true,
+              }
+            );
+            if (res.data.status === "ok") {
+              setProduct(res.data!.product);
+              setLoading(false);
+            } else {
+              setAlert({
+                type: "error",
+                message: res.data.message,
+              });
+            }
           }
-        );
-        if (res.data.status === "ok") {
-          setProduct(res.data!.product);
-          setLoading(false);
-        } else {
+          //? GETTING REVIEWS
+          if (reviews.length === 0) {
+            setReviewLoading(true);
+
+            const reviewRes = await axios.get<
+              RespondType & { reviews?: ReviewType[] }
+            >(`${process.env.NEXT_PUBLIC_SERVER_END_POINT}/rrr/getReview`, {
+              params: {
+                pid: pid,
+              },
+              withCredentials: true,
+            });
+
+            if (reviewRes.data.status === "ok" && reviewRes.data.reviews) {
+              setReviews(reviewRes.data.reviews);
+            }
+            setReviewLoading(false);
+          }
+
+          //? GETTING QUESTIONS
+          if (questions.length === 0) {
+            setQuestionLoading(true);
+            console.log(pid);
+            const questionRes = await axios.get<
+              RespondType & { questions?: QuestionType[] }
+            >(
+              `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/question/getQuestions`,
+              {
+                params: {
+                  pid: pid,
+                },
+                withCredentials: true,
+              }
+            );
+
+            if (
+              questionRes.data.status === "ok" &&
+              questionRes.data.questions
+            ) {
+              setQuestions(questionRes.data.questions);
+            }
+            setQuestionLoading(false);
+          }
+        } catch {
           setAlert({
             type: "error",
-            message: res.data.message,
+            message: "failed to retrieve product info",
           });
         }
       })();
@@ -114,7 +191,7 @@ const ProductDisplay: React.FC = () => {
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [pid]);
 
   return (
     <Layout>
@@ -155,59 +232,50 @@ const ProductDisplay: React.FC = () => {
                   <span>4.7</span>
                 </section>
                 <div className={styles.reviewHouse}>
-                  <ReviewContainer
-                    name={"Willy"}
-                    rating={4.7}
-                    review={`A jacket is a must have in winter. You can't be cold and stylish. Our jackets
-                  are made of high quality material and will keep you warm. They come in different
-                   colors and sizes, so your style is covered.`}
-                  />
-                  <ReviewContainer
-                    name={"Willy"}
-                    rating={4.7}
-                    review={`A jacket is a must have in winter. You can't be cold and stylish. Our jackets
-                  are made of high quality material and will keep you warm. They come in different
-                   colors and sizes, so your style is covered.`}
-                  />
+                  {reviewLoading && <h2>Loading...</h2>}
+                  {!reviewLoading && reviews.length === 0 && (
+                    <h2>No reviews found...</h2>
+                  )}
+                  {!reviewLoading &&
+                    reviews.map((review, i) => (
+                      <ReviewContainer
+                        name={`${review.user?.firstName} ${review.user?.lastName}`}
+                        rating={review.rating}
+                        review={review.review}
+                      />
+                    ))}
                 </div>
-                <section className={styles.actionBtn}>
-                  <Button onClick={() => {}} look="outlined">
-                    Load More
-                  </Button>
-                </section>
+                {!reviewLoading && reviews.length !== 0 && (
+                  <section className={styles.actionBtn}>
+                    <Button onClick={() => {}} look="outlined">
+                      Load More
+                    </Button>
+                  </section>
+                )}
               </div>
               <div className={styles.questionsContainer}>
                 <h2>Questions About This Product </h2>
-                <QuestionsHolder
-                  question={"Is this available in Type C ?"}
-                  userAvatarUrl={"/images/avatar.jpg"}
-                  name={"Joe Don"}
-                  date={"22 September 2004"}
-                  replyAvatarUrl={"/images/brand.png"}
-                  reply="type c not available "
-                  replyDate="23 September 2004"
-                  replyName="Golden Xyz Superstore"
-                />
-                <QuestionsHolder
-                  question={"Is this available in Type C ?"}
-                  userAvatarUrl={"/images/avatar.jpg"}
-                  name={"Joe Don"}
-                  date={"22 September 2004"}
-                  replyAvatarUrl={"/images/brand.png"}
-                  reply="type c not available "
-                  replyDate="23 September 2004"
-                  replyName="Golden Xyz Superstore"
-                />
-                <QuestionsHolder
-                  question={"Is this available in Type C ?"}
-                  userAvatarUrl={"/images/avatar.jpg"}
-                  name={"Joe Don"}
-                  date={"22 September 2004"}
-                  replyAvatarUrl={"/images/brand.png"}
-                  reply="type c not available "
-                  replyDate="23 September 2004"
-                  replyName="Golden Xyz Superstore"
-                />
+                {questionLoading && <h2> Loading...</h2>}
+                {!questionLoading && questions.length === 0 && (
+                  <h2>No Questions Found</h2>
+                )}
+                {!questionLoading &&
+                  questions.length !== 0 &&
+                  questions.map((question, i) => (
+                    <QuestionsHolder
+                      question={question.question}
+                      userAvatarUrl={question.user!.avatar}
+                      name={`${question.user!.firstName} ${
+                        question.user!.lastName
+                      }`}
+                      date={question.created_at}
+                      replyAvatarUrl={"/images/brand.png"}
+                      reply="type c not available "
+                      replyDate="23 September 2004"
+                      replyName="Golden Xyz Superstore"
+                      key={i}
+                    />
+                  ))}
               </div>
               <div className={styles.questionsInput}>
                 <div className={styles.content}>
@@ -226,8 +294,14 @@ const ProductDisplay: React.FC = () => {
                   {isLogedIn && (
                     <>
                       {" "}
-                      <textarea cols={30} rows={10}></textarea>
-                      <Button className={styles.actBtn}>Post</Button>
+                      <textarea
+                        cols={30}
+                        rows={10}
+                        ref={questionRef}
+                      ></textarea>
+                      <Button className={styles.actBtn} onClick={handleClick}>
+                        Post
+                      </Button>
                     </>
                   )}
                 </div>

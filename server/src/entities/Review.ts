@@ -17,10 +17,13 @@ export class Review extends BaseEntity {
   review: string;
 
   @Column()
-  rating: string;
+  rating: number;
 
   @ManyToOne(() => User, (user) => user.review)
   user: User;
+
+  @Column()
+  productID: number;
 
   @ManyToOne(() => Products, (product) => product.review)
   product: Products;

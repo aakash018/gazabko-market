@@ -3,6 +3,7 @@ import { Seller } from "../../entities/Seller";
 import { Products } from "../../entities/Products";
 
 import sanitizeHtml from "sanitize-html";
+import validateUser from "../../middleware/validateUser";
 
 const router = express();
 
@@ -34,12 +35,12 @@ router.get("/", async (_, res) => {
   });
 });
 
-router.post("/add", async (req, res) => {
+router.post("/add", validateUser, async (req, res) => {
   const productDetails: ProtuctPayloadType = req.body;
   const cleanDesc = sanitizeHtml(productDetails.description);
-  if (req.session.sellerID) {
+  if (req.session.user) {
     const seller = await Seller.findOne({
-      where: { id: req.session.sellerID },
+      where: { id: req.session.user },
     });
     try {
       if (seller && seller.isVerified) {

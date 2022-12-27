@@ -6,6 +6,7 @@ import {
   OneToMany,
 } from "typeorm";
 import { Products } from "./Products";
+import { Answer } from "./QuestionAndAnswer";
 
 @Entity()
 export class Seller extends BaseEntity {
@@ -44,4 +45,7 @@ export class Seller extends BaseEntity {
 
   @OneToMany(() => Products, (product) => product.seller)
   products: Products[];
+
+  @OneToMany(() => Answer, (answer) => answer.seller)
+  answers: Answer[];
 }

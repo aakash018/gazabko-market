@@ -144,12 +144,14 @@ router.post("/verification", async (req, res) => {
 router.post("/login", async (req, res) => {
   const userLoginInfo = req.body;
   console.table(await User.find({}));
-  const user = await User.findOne({
-    where: { username: userLoginInfo.username },
-    relations: {
-      address: true,
-    },
-  });
+
+  const user = await AppDataSource.getRepository(User)
+    .createQueryBuilder("user")
+    .select("user")
+    .where({ username: userLoginInfo.username })
+    .addSelect("user.password")
+    .leftJoinAndSelect("user.address", "address")
+    .getOne();
   if (user) {
     const isPasswordCorrect = await bcrypt.compare(
       userLoginInfo.password,
@@ -190,15 +192,16 @@ router.get("/presistUser", async (req, res) => {
   const userReq = req.cookies;
   if (userReq.qid) {
     if (req.session.user) {
-      const user = await User.findOne({
-        where: { id: req.session.user },
-        relations: {
-          address: true,
-        },
-      });
+      const user = await AppDataSource.getRepository(User)
+        .createQueryBuilder("user")
+        .select("user")
+        .where({ id: req.session.user })
+        .leftJoinAndSelect("user.address", "address")
+        .getOne();
+
       res.json({
         status: "ok",
-        message: "user retrivied!",
+        message: "user retrieved!",
         user: user,
       });
     } else {
