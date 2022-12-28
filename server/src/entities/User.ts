@@ -10,7 +10,7 @@ import {
   OneToMany,
 } from "typeorm";
 import { Address } from "./Address";
-import { Cart } from "./Cart";
+import { Cart } from "./Cart/Cart";
 import { Question } from "./QuestionAndAnswer";
 import { Review } from "./Review";
 

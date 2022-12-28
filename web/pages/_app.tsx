@@ -6,6 +6,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import React from "react";
 import AlertBox from "../components/shared/AlertBox";
 import axios from "axios";
+import { Cart } from "../@types/global";
 
 // ? For Global Alert ---
 
@@ -18,6 +19,11 @@ interface IAlert {
   >;
 }
 
+interface ICart {
+  cart: Cart | null;
+  setCart: React.Dispatch<React.SetStateAction<Cart | null>> | null;
+}
+
 export const AlertContext = React.createContext<IAlert>({
   alert: {
     type: "message",
@@ -26,8 +32,21 @@ export const AlertContext = React.createContext<IAlert>({
   setAlert: () => {},
 });
 
+export const CartContext = React.createContext<ICart>({
+  cart: {
+    products: [],
+    subTotal: 0,
+    totalProducts: 0,
+  },
+  setCart: () => {},
+});
+
 export function useAlert() {
   return useContext(AlertContext);
+}
+
+export function useCart() {
+  return useContext(CartContext);
 }
 
 // ? --- Ends
@@ -37,6 +56,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     type: "error",
     message: "",
   });
+  const [cart, setCart] = useState<Cart | null>(null);
 
   const modalRef = useRef<any>();
 
@@ -60,16 +80,23 @@ function MyApp({ Component, pageProps }: AppProps) {
     setAlert: setAlert,
   };
 
+  const cartValue = {
+    cart: cart,
+    setCart: setCart,
+  };
+
   return (
     <Provider>
       <AlertContext.Provider value={value}>
-        <AlertBox
-          type={alert!.type || "error"}
-          message={alert!.message}
-          show={alert?.message.trim() !== ""}
-        />
+        <CartContext.Provider value={cartValue}>
+          <AlertBox
+            type={alert!.type || "error"}
+            message={alert!.message}
+            show={alert?.message.trim() !== ""}
+          />
 
-        <Component {...pageProps} />
+          <Component {...pageProps} />
+        </CartContext.Provider>
       </AlertContext.Provider>
       <div id="modal" ref={modalRef}></div>
     </Provider>

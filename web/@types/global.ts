@@ -41,3 +41,18 @@ export interface ProtuctType {
   images: string;
   store?: string;
 }
+
+interface OnCartProductType {
+  productName: string;
+  productID: number;
+  quantity: number;
+  sizes?: string;
+  color?: string;
+  price: number;
+}
+
+export interface Cart {
+  products: OnCartProductType[];
+  subTotal: number;
+  totalProducts: number;
+}

@@ -94,6 +94,8 @@ const ProductDisplay: React.FC = () => {
   const [reviews, setReviews] = useState<ReviewType[]>([]);
   const [questions, setQuestions] = useState<QuestionType[]>([]);
 
+  const [products, setProducts] = useState<ProtuctType[]>([]);
+
   const handleClick = async () => {
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/question/askQuestion`,
@@ -157,7 +159,7 @@ const ProductDisplay: React.FC = () => {
           }
 
           //? GETTING QUESTIONS
-          if (questions.length === 0) {
+          if (questions.length === 0 && pid) {
             setQuestionLoading(true);
             console.log(pid);
             const questionRes = await axios.get<
@@ -179,6 +181,16 @@ const ProductDisplay: React.FC = () => {
               setQuestions(questionRes.data.questions);
             }
             setQuestionLoading(false);
+          }
+
+          if (products.length === 0 && pid) {
+            const productRes = await axios.get<
+              RespondType & { products?: ProtuctType[] }
+            >(`${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products`);
+
+            if (productRes.data.status === "ok" && productRes.data.products) {
+              setProducts(productRes.data.products);
+            }
           }
         } catch {
           setAlert({
@@ -204,6 +216,7 @@ const ProductDisplay: React.FC = () => {
               subCategory={{ name: "Fashion", url: "fashion" }}
             />
             <ProductInfoDisplay
+              id={product.id}
               totalStock={product!.totalStock}
               discount={product!.discount as number}
               mp={product!.price}
@@ -310,7 +323,7 @@ const ProductDisplay: React.FC = () => {
                 <ShowCase
                   title="People also like"
                   includeTimer={false}
-                  noOfProducts={16}
+                  products={products}
                 />
               </div>
             </div>
@@ -325,7 +338,7 @@ const ProductDisplay: React.FC = () => {
                 <ShowCase
                   title="Other from the seller"
                   includeTimer={false}
-                  noOfProducts={8}
+                  products={products.slice(0, 5)}
                 />
               </div>
             </div>

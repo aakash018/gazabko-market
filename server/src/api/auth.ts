@@ -9,6 +9,7 @@ import { VerificationCode } from "../entities/VerificationCode";
 
 import bcrypt from "bcrypt";
 import validateUser from "../middleware/validateUser";
+import { Cart } from "../entities/Cart/Cart";
 
 const router = express();
 
@@ -63,14 +64,9 @@ router.post("/signup", async (req, res) => {
 
     await AppDataSource.manager.save(user);
 
-    // ! TO REMOVE
-    console.log(
-      await AppDataSource.getRepository(User).find({
-        relations: {
-          address: true,
-        },
-      })
-    );
+    await Cart.create({
+      user: user,
+    }).save();
 
     const verifyCode = generateCode();
 
@@ -83,7 +79,7 @@ router.post("/signup", async (req, res) => {
       .sendMail({
         from: process.env.SMTP_PASSWORD, // sender address
         to: userData.email, // list of receivers
-        subject: "Medium @edigleyssonsilva ✔", // Subject line
+        subject: "Verification Email", // Subject line
         text: `YOUR VERIFICATION CODE IS ${verifyCode}`, // plain text body
       })
       .then((info) => {
@@ -143,7 +139,6 @@ router.post("/verification", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const userLoginInfo = req.body;
-  console.table(await User.find({}));
 
   const user = await AppDataSource.getRepository(User)
     .createQueryBuilder("user")

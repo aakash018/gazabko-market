@@ -1,12 +1,14 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
+import { useEffect } from "react";
 import { BsCash } from "react-icons/bs";
 import Layout from "../components/Customer/Layout";
 import Button from "../components/shared/Button";
 import IntputField from "../components/shared/Input";
 
 import styles from "../styles/components/Customer/pages/Checkout.module.scss";
+import { useCart } from "./_app";
 
 const Map = dynamic(() => import("../components/shared/Map"), { ssr: false });
 
@@ -37,14 +39,14 @@ const deliveryAddressPageData: DeliveryAddressPage[] = [
 ];
 
 const CheckoutPage = () => {
-  const deliveryAddress = useRef<HTMLInputElement>(null);
+  const { cart } = useCart();
 
   const [newAddress, setNewAddress] = useState("");
 
   const [showMap, setShowMap] = useState(false);
 
   const [giftWrapTotal, setGiftWrapTotal] = useState(0);
-  const [totalPrice, setTotalPrice] = useState(2460);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const [selectedAddress, setSelectedAddress] = useState<DeliveryAddressPage>(
     deliveryAddressPageData[0]
@@ -59,6 +61,14 @@ const CheckoutPage = () => {
       setTotalPrice((prev) => prev - 25);
     }
   };
+
+  useEffect(() => {
+    setTotalPrice(
+      cart!.products.reduce((accumulator, product) => {
+        return accumulator + product.price;
+      }, 0) + 60
+    );
+  }, []);
 
   const handleChangeDeliveryAddress = (page: 1 | 2 | 3) => {
     setSelectedAddress(deliveryAddressPageData[page - 1]);
@@ -90,30 +100,21 @@ const CheckoutPage = () => {
                     <div>Items in the cart</div>
                     <div>Is this a gift?</div>
                   </div>
-                  <ul>
-                    <li>
-                      <Link href={"/products/adadsd"}>Manaslu Mg5 Semi</Link>
-                      <input type={"checkbox"} onChange={handleIsGiftCheck} />
-                    </li>
-                    <li>
-                      <Link href={"/products/adadsd"}>
-                        GoldStar Shoes P302 Black
-                      </Link>
-                      <input type={"checkbox"} onChange={handleIsGiftCheck} />
-                    </li>
-                    <li>
-                      <Link href={"/products/adadsd"}>
-                        Yearcon Black Easy Shoes
-                      </Link>
-                      <input type={"checkbox"} onChange={handleIsGiftCheck} />
-                    </li>
-                    <li>
-                      <Link href={"/products/adadsd"}>
-                        OLEEV White Dial King/Queen...
-                      </Link>
-                      <input type={"checkbox"} onChange={handleIsGiftCheck} />
-                    </li>
-                  </ul>
+                  {cart?.products && (
+                    <ul>
+                      {cart?.products.map((product, i) => (
+                        <li key={i}>
+                          <Link href={`/products/${product.productID}`}>
+                            {product.productName}
+                          </Link>
+                          <input
+                            type={"checkbox"}
+                            onChange={handleIsGiftCheck}
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
             </div>
@@ -122,7 +123,7 @@ const CheckoutPage = () => {
                 <section className={styles.info}>
                   <section className={styles.data}>
                     <span className={styles.title}>SubTotal: </span>
-                    <span className={styles.number}>Rs. {2400} </span>
+                    <span className={styles.number}>Rs. {cart?.subTotal} </span>
                   </section>
                   <section className={styles.data}>
                     <span className={styles.title}>Shipping fee: : </span>

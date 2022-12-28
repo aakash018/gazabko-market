@@ -24,7 +24,6 @@ type authContextType = {
 
 const authContextDefaultValues: authContextType = {
   user: null,
-
   isLogedIn: true,
   showBanners: true,
   login: () => {},
@@ -125,7 +124,6 @@ const Provider: React.FC<Props> = ({ children }) => {
 
   const value = {
     user,
-
     isLogedIn,
     showBanners,
     login,

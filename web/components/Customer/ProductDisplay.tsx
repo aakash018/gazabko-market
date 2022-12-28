@@ -1,3 +1,4 @@
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import Router from "next/router";
@@ -15,13 +16,14 @@ import {
   HiOutlineInformationCircle,
   HiOutlineLocationMarker,
 } from "react-icons/hi";
-import { useAlert } from "../../pages/_app";
+import { useAlert, useCart } from "../../pages/_app";
 import styles from "../../styles/components/Customer/ProductInfoDisplay.module.scss";
 import Button from "../shared/Button";
 import PriceHolder from "../shared/Customer/PriceHolder";
 import Quantity from "../shared/Customer/Quantity";
 
 interface Props {
+  id: number;
   name: string;
   rating: number;
   mp: number;
@@ -32,6 +34,7 @@ interface Props {
 }
 
 const ProductInfoDisplay: React.FC<Props> = ({
+  id,
   name,
   rating,
   mp,
@@ -44,6 +47,36 @@ const ProductInfoDisplay: React.FC<Props> = ({
   const { setAlert } = useAlert();
 
   const [displayImageURL, setDisplayImageURL] = useState("/images/shoes.jpg");
+
+  const { setCart } = useCart();
+
+  const handleBuyNow = () => {
+    if (setCart) {
+      setCart({
+        subTotal: mp - discount,
+        totalProducts: 1,
+        products: [
+          { productName: name, productID: id, quantity, price: mp - discount },
+        ],
+      });
+      Router.push("/checkout");
+    }
+  };
+
+  const handleAddToCart = async () => {
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/cart/addToCart`,
+      {
+        productID: id,
+        productName: name,
+        price: mp,
+        quantity: quantity,
+      },
+      { withCredentials: true }
+    );
+
+    console.log(res.data);
+  };
 
   return (
     <div className={styles.productDisplay}>
@@ -127,12 +160,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
         <Quantity quantity={1} totalStock={totalStock} />
         <div> {totalStock} items remaining in stock </div>
         <section className={styles.productDisplay__productInfo_actionBtns}>
-          <Button
-            onClick={() => {
-              Router.push("/checkout");
-            }}
-            color="error"
-          >
+          <Button onClick={handleBuyNow} color="error">
             <span>
               <BsBagPlusFill />
             </span>
@@ -140,6 +168,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
           </Button>
           <Button
             onClick={() => {
+              handleAddToCart();
               setAlert({
                 type: "message",
                 message: "Added to cart",
@@ -153,26 +182,6 @@ const ProductInfoDisplay: React.FC<Props> = ({
           </Button>
         </section>
         <section className={styles.productDisplay__productInfo_aditionalInfo}>
-          {/*<section
-            className={
-              styles.productDisplay__productInfo_aditionalInfo_sellerInfo
-            }
-          >
-            <span>Sold By:</span>
-            <span className={styles.sellerName}>
-              <Link href={"/sellerInfo/sdfsfd"}>{sellerName}</Link>{" "}
-            </span>
-          </section>
-          <section
-            className={
-              styles.productDisplay__productInfo_aditionalInfo_delivary
-            }
-          >
-            <span className={styles.icon}>
-              <BsCashStack size={25} />
-            </span>
-            <span>Cash on Delivery (3 days to deliver)</span>
-          </section>*/}
           <section className={styles.policy}>
             <span>Return Policy</span>
             <span>Warenty Policy</span>
