@@ -27,7 +27,7 @@ export interface ProtuctType {
   id: number;
   name: string;
   price: number;
-  discount?: number;
+  discount: number;
   description: string;
   totalStock: number;
   offer?: string;
@@ -42,13 +42,11 @@ export interface ProtuctType {
   store?: string;
 }
 
-interface OnCartProductType {
-  productName: string;
-  productID: number;
+export interface OnCartProductType {
+  product: ProtuctType;
   quantity: number;
   sizes?: string;
   color?: string;
-  price: number;
 }
 
 export interface Cart {

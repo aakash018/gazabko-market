@@ -97,6 +97,7 @@ const Provider: React.FC<Props> = ({ children }) => {
     }
 
     setUser(res.data.user);
+
     setLoginStatus(true);
     return res.data;
   };

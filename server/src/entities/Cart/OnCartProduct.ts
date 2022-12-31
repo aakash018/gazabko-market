@@ -4,7 +4,10 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
+  OneToOne,
+  JoinColumn,
 } from "typeorm";
+import { Products } from "../Products";
 import { Cart } from "./Cart";
 
 @Entity()
@@ -12,14 +15,9 @@ export class OnCartProduct extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  productID: number;
-
-  @Column()
-  productName: string;
-
-  @Column()
-  price: number;
+  @OneToOne(() => Products)
+  @JoinColumn()
+  product: Products;
 
   @Column({ default: false })
   isGift: boolean;

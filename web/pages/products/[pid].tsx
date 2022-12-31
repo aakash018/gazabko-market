@@ -105,8 +105,6 @@ const ProductDisplay: React.FC = () => {
       },
       { withCredentials: true }
     );
-
-    console.log(res.data);
   };
 
   useEffect(() => {
@@ -129,6 +127,7 @@ const ProductDisplay: React.FC = () => {
                 withCredentials: true,
               }
             );
+
             if (res.data.status === "ok") {
               setProduct(res.data!.product);
               setLoading(false);
@@ -137,6 +136,7 @@ const ProductDisplay: React.FC = () => {
                 type: "error",
                 message: res.data.message,
               });
+              setLoading(false);
             }
           }
           //? GETTING REVIEWS
@@ -161,7 +161,7 @@ const ProductDisplay: React.FC = () => {
           //? GETTING QUESTIONS
           if (questions.length === 0 && pid) {
             setQuestionLoading(true);
-            console.log(pid);
+
             const questionRes = await axios.get<
               RespondType & { questions?: QuestionType[] }
             >(
@@ -192,6 +192,7 @@ const ProductDisplay: React.FC = () => {
               setProducts(productRes.data.products);
             }
           }
+          setLoading(false);
         } catch {
           setAlert({
             type: "error",
@@ -224,6 +225,7 @@ const ProductDisplay: React.FC = () => {
               rating={4.7}
               sellerName={product!.store as string}
               brand={product!.brand}
+              product={product}
             />
           </div>
           <div className={styles.productDesc}>

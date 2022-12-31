@@ -47,6 +47,7 @@ const CheckoutPage = () => {
 
   const [giftWrapTotal, setGiftWrapTotal] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [subTotalPrice, setSubTotalPrice] = useState(0);
 
   const [selectedAddress, setSelectedAddress] = useState<DeliveryAddressPage>(
     deliveryAddressPageData[0]
@@ -63,12 +64,22 @@ const CheckoutPage = () => {
   };
 
   useEffect(() => {
-    setTotalPrice(
-      cart!.products.reduce((accumulator, product) => {
-        return accumulator + product.price;
-      }, 0) + 60
-    );
-  }, []);
+    {
+      cart?.products &&
+        setSubTotalPrice(
+          cart!.products.reduce((accumulator, product) => {
+            return (
+              accumulator + product.product.price - product.product.discount
+            );
+          }, 0)
+        );
+      setTotalPrice(
+        cart!.products.reduce((accumulator, product) => {
+          return accumulator + product.product.price - product.product.discount;
+        }, 0)
+      );
+    }
+  }, [cart?.products]);
 
   const handleChangeDeliveryAddress = (page: 1 | 2 | 3) => {
     setSelectedAddress(deliveryAddressPageData[page - 1]);
@@ -100,12 +111,13 @@ const CheckoutPage = () => {
                     <div>Items in the cart</div>
                     <div>Is this a gift?</div>
                   </div>
+
                   {cart?.products && (
                     <ul>
                       {cart?.products.map((product, i) => (
                         <li key={i}>
-                          <Link href={`/products/${product.productID}`}>
-                            {product.productName}
+                          <Link href={`/products/${product.product.id}`}>
+                            {product.product.name}
                           </Link>
                           <input
                             type={"checkbox"}
@@ -123,7 +135,7 @@ const CheckoutPage = () => {
                 <section className={styles.info}>
                   <section className={styles.data}>
                     <span className={styles.title}>SubTotal: </span>
-                    <span className={styles.number}>Rs. {cart?.subTotal} </span>
+                    <span className={styles.number}>Rs. {subTotalPrice} </span>
                   </section>
                   <section className={styles.data}>
                     <span className={styles.title}>Shipping fee: : </span>
@@ -139,7 +151,9 @@ const CheckoutPage = () => {
                   )}
                   <section className={`${styles.data} ${styles.total}`}>
                     <span className={styles.title}>Total: </span>
-                    <span className={styles.number}>Rs. {totalPrice} </span>
+                    <span className={styles.number}>
+                      Rs. {totalPrice + 60}{" "}
+                    </span>
                   </section>
 
                   <section className={styles.actionBtn}>

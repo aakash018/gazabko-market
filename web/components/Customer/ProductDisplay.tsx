@@ -11,11 +11,12 @@ import {
   BsStarHalf,
 } from "react-icons/bs";
 import { FaShippingFast } from "react-icons/fa";
-import { GoTriangleLeft } from "react-icons/go";
+
 import {
   HiOutlineInformationCircle,
   HiOutlineLocationMarker,
 } from "react-icons/hi";
+import { ProtuctType } from "../../@types/global";
 import { useAlert, useCart } from "../../pages/_app";
 import styles from "../../styles/components/Customer/ProductInfoDisplay.module.scss";
 import Button from "../shared/Button";
@@ -31,6 +32,7 @@ interface Props {
   sellerName: string;
   totalStock: number;
   brand: string;
+  product: ProtuctType;
 }
 
 const ProductInfoDisplay: React.FC<Props> = ({
@@ -42,6 +44,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
   sellerName,
   totalStock,
   brand,
+  product,
 }) => {
   const [quantity, setQuantity] = useState(1);
   const { setAlert } = useAlert();
@@ -56,7 +59,10 @@ const ProductInfoDisplay: React.FC<Props> = ({
         subTotal: mp - discount,
         totalProducts: 1,
         products: [
-          { productName: name, productID: id, quantity, price: mp - discount },
+          {
+            product: product,
+            quantity,
+          },
         ],
       });
       Router.push("/checkout");
@@ -64,7 +70,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
   };
 
   const handleAddToCart = async () => {
-    const res = await axios.post(
+    const res = await axios.post<RespondType>(
       `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/cart/addToCart`,
       {
         productID: id,
@@ -75,7 +81,17 @@ const ProductInfoDisplay: React.FC<Props> = ({
       { withCredentials: true }
     );
 
-    console.log(res.data);
+    if (res.data.status === "ok") {
+      setAlert({
+        type: "message",
+        message: "Added to cart",
+      });
+    } else {
+      setAlert({
+        type: "error",
+        message: res.data.message,
+      });
+    }
   };
 
   return (
@@ -157,7 +173,11 @@ const ProductInfoDisplay: React.FC<Props> = ({
         <section className={styles.productDisplay__productInfo_price}>
           <PriceHolder discount={discount} mp={mp} />
         </section>
-        <Quantity quantity={1} totalStock={totalStock} />
+        <Quantity
+          quantityInput={quantity}
+          setQuantity={setQuantity}
+          totalStock={totalStock}
+        />
         <div> {totalStock} items remaining in stock </div>
         <section className={styles.productDisplay__productInfo_actionBtns}>
           <Button onClick={handleBuyNow} color="error">
@@ -166,15 +186,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
             </span>
             <span>Buy Now</span>
           </Button>
-          <Button
-            onClick={() => {
-              handleAddToCart();
-              setAlert({
-                type: "message",
-                message: "Added to cart",
-              });
-            }}
-          >
+          <Button onClick={handleAddToCart}>
             <span>
               <BsFillCartPlusFill />
             </span>

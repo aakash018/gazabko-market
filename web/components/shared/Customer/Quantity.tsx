@@ -5,18 +5,18 @@ import Button from "../Button";
 import styles from "../../../styles/components/shared/Customer/Quantity.module.scss";
 
 interface Props {
-  quantity: number;
   totalStock: number;
   onQuantityChange?: (quntity: number) => void;
+  quantityInput: number;
+  setQuantity: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const Quantity: React.FC<Props> = ({
-  quantity,
   totalStock,
   onQuantityChange,
+  quantityInput,
+  setQuantity,
 }) => {
-  const [quantityInput, setQuantity] = useState(1);
-
   const handleQuantityChange = () => {
     if (onQuantityChange) {
       onQuantityChange(quantityInput);

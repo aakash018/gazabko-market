@@ -75,6 +75,35 @@ function MyApp({ Component, pageProps }: AppProps) {
     return () => clearTimeout(resetAlert);
   }, [alert]);
 
+  useEffect(() => {
+    let ignore = false;
+    (async () => {
+      try {
+        if (!ignore) {
+          const res = await axios.get<RespondType & { cart?: Cart }>(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/cart/getCart`,
+            {
+              withCredentials: true,
+            }
+          );
+          if (res.data.status === "ok" && res.data.cart) {
+            setCart(res.data.cart);
+          } else {
+            console.log("no cart found");
+          }
+        }
+      } catch {
+        setAlert({
+          type: "error",
+          message: "failed to get cart",
+        });
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   const value = {
     alert: alert,
     setAlert: setAlert,

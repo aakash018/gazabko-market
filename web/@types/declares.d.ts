@@ -7,7 +7,7 @@ declare interface User {
   role: "customer" | "seller" | "admin";
   phoneNo: number;
   gender: "male" | "female" | "others";
-  cart?: any;
+  cart?: Cart;
   address: {
     deliveryAddress: string;
     id: number;

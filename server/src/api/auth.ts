@@ -146,6 +146,7 @@ router.post("/login", async (req, res) => {
     .where({ username: userLoginInfo.username })
     .addSelect("user.password")
     .leftJoinAndSelect("user.address", "address")
+    .leftJoinAndSelect("user.cart", "cart")
     .getOne();
   if (user) {
     const isPasswordCorrect = await bcrypt.compare(
@@ -192,6 +193,7 @@ router.get("/presistUser", async (req, res) => {
         .select("user")
         .where({ id: req.session.user })
         .leftJoinAndSelect("user.address", "address")
+        .leftJoinAndSelect("user.cart", "cart")
         .getOne();
 
       res.json({
