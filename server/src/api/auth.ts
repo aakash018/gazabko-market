@@ -107,6 +107,8 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/verification", async (req, res) => {
+  console.log(req.body);
+
   const codeData = await VerificationCode.findOne({
     where: { userID: req.body.id },
   });
@@ -117,6 +119,8 @@ router.post("/verification", async (req, res) => {
       message: "wrong user id",
     });
   }
+
+  console.log(codeData);
 
   if (req.body.code === codeData!.code) {
     await AppDataSource.createQueryBuilder()

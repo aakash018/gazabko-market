@@ -3,8 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BaseEntity,
-  OneToOne,
-  JoinColumn,
+  ManyToOne,
 } from "typeorm";
 import { User } from "./User";
 import { Products } from "./Products";
@@ -17,14 +16,21 @@ export class Order extends BaseEntity {
   @Column()
   quantity: number;
 
+  @Column({ nullable: true })
+  size: string;
+
+  @Column({ default: false })
+  isGift: boolean;
+
+  @Column({ nullable: true })
+  color: string;
+
   @Column({ default: "pending" })
   status: "pending" | "processing" | "delivered";
 
-  @OneToOne(() => Products)
-  @JoinColumn()
+  @ManyToOne(() => Products, (product) => product.order)
   product: Products;
 
-  @OneToOne(() => User)
-  @JoinColumn()
+  @ManyToOne(() => User, (user) => user.order)
   user: User;
 }

@@ -7,6 +7,7 @@ import {
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from "typeorm";
 import { User } from "../User";
 import { OnCartProduct } from "./OnCartProduct";
@@ -22,7 +23,10 @@ export class Cart extends BaseEntity {
   @Column({ default: 0 })
   totalProducts: number;
 
-  @OneToOne(() => User, (user) => user.cart) // specify inverse side as a second parameter
+  @Column()
+  userID: number;
+  @OneToOne(() => User, (user) => user.cart)
+  @JoinColumn({ name: "userID" }) // specify inverse side as a second parameter
   user: User;
 
   @OneToMany(() => OnCartProduct, (product) => product.cart, { nullable: true })

@@ -11,6 +11,7 @@ import {
 } from "typeorm";
 import { Address } from "./Address";
 import { Cart } from "./Cart/Cart";
+import { Order } from "./Orders";
 import { Question } from "./QuestionAndAnswer";
 import { Review } from "./Review";
 
@@ -62,6 +63,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Question, (question) => question.user)
   questions: Question[];
+
+  @OneToMany(() => Order, (order) => order.user)
+  order: Order[];
 
   @CreateDateColumn()
   created_at: Date;

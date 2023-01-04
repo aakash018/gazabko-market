@@ -16,12 +16,9 @@ import sellerAuth from "./api/seller/auth";
 import products from "./api/seller/product";
 import question from "./api/question";
 import cart from "./api/cart";
+import order from "./api/order";
 //?? RETURN REVIEW REPORT
 import rrr from "./api/rrr";
-// import { Products } from "./entities/Products";
-// import { Seller } from "./entities/Seller";
-// import { User } from "./entities/User";
-// import { Address } from "./entities/Address";
 
 const app = express();
 const PORT = 5000;
@@ -74,7 +71,11 @@ app.use(express.urlencoded({ extended: false }) as RequestHandler);
 AppDataSource.initialize()
   .then(() => {
     // User.delete({});
+    // Review.delete({});
     // Address.delete({});
+    // Question.delete({});
+    // Cart.delete({});
+    // OnCartProduct.delete({});
     // Seller.delete({});
     console.log("Data Source Initialized");
   })
@@ -95,6 +96,7 @@ app.use("/sellerAuth", sellerAuth);
 app.use("/seller/products", products);
 app.use("/question", question);
 app.use("/cart", cart);
+app.use("/order", order);
 //?? RETURN REVIEW REPORT
 app.use("/rrr", rrr);
 

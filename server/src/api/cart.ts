@@ -98,4 +98,54 @@ router.post("/deleteProduct", validateUser, async (req, res) => {
   }
 });
 
+interface UpdateQuantityType {
+  productID: number;
+  quantity: number;
+}
+router.post("/updateQuantity", validateUser, async (req, res) => {
+  const userReq = req.body as UpdateQuantityType;
+
+  try {
+    const product = await OnCartProduct.findOne({
+      relations: {
+        cart: true,
+      },
+      where: {
+        cart: { userID: req.session.user },
+        product: { id: userReq.productID },
+      },
+    });
+
+    if (product) {
+      product.quantity = userReq.quantity;
+      await product?.save();
+
+      const cart = await Cart.findOne({
+        where: { user: { id: req.session.user } },
+        relations: {
+          products: {
+            product: true,
+          },
+        },
+      });
+
+      res.json({
+        status: "ok",
+        message: "cart updated",
+        cart,
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "failed to update cart",
+      });
+    }
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to update cart",
+    });
+  }
+});
+
 export default router;

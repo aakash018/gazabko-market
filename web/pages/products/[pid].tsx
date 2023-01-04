@@ -194,6 +194,8 @@ const ProductDisplay: React.FC = () => {
           }
           setLoading(false);
         } catch {
+          setLoading(false);
+
           setAlert({
             type: "error",
             message: "failed to retrieve product info",

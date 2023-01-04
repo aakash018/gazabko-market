@@ -53,7 +53,7 @@ const Provider: React.FC<Props> = ({ children }) => {
           status: "ok" | "fail";
           message: "string";
           user: User;
-        }>("http://localhost:5000/auth/presistUser", {
+        }>(`${process.env.NEXT_PUBLIC_SERVER_END_POINT}/auth/presistUser`, {
           withCredentials: true,
         });
 

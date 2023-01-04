@@ -47,6 +47,7 @@ export interface OnCartProductType {
   quantity: number;
   sizes?: string;
   color?: string;
+  isGift?: boolean;
 }
 
 export interface Cart {

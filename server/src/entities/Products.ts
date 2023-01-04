@@ -8,6 +8,7 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
+import { Order } from "./Orders";
 import { Question } from "./QuestionAndAnswer";
 import { Review } from "./Review";
 import { Seller } from "./Seller";
@@ -61,6 +62,9 @@ export class Products extends BaseEntity {
 
   @Column()
   sku: number;
+
+  @OneToMany(() => Order, (order) => order.product)
+  order: Order[];
 
   @OneToMany(() => Question, (question) => question.product)
   questions: Question[];

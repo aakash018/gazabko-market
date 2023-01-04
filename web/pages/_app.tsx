@@ -86,6 +86,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               withCredentials: true,
             }
           );
+
           if (res.data.status === "ok" && res.data.cart) {
             setCart(res.data.cart);
           } else {

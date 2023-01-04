@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaHeart } from "react-icons/fa";
+
 import Button from "../Button";
 
 import styles from "../../../styles/components/shared/Customer/Quantity.module.scss";
@@ -17,9 +17,9 @@ const Quantity: React.FC<Props> = ({
   quantityInput,
   setQuantity,
 }) => {
-  const handleQuantityChange = () => {
+  const handleQuantityChange = (e: number) => {
     if (onQuantityChange) {
-      onQuantityChange(quantityInput);
+      onQuantityChange(e);
     }
   };
 
@@ -31,7 +31,7 @@ const Quantity: React.FC<Props> = ({
           onClick={() => {
             if (quantityInput !== 1) {
               setQuantity((prev) => prev - 1);
-              handleQuantityChange();
+              handleQuantityChange(quantityInput - 1);
             }
           }}
           color="error"
@@ -43,7 +43,7 @@ const Quantity: React.FC<Props> = ({
           onClick={() => {
             if (quantityInput !== totalStock) {
               setQuantity((prev) => prev + 1);
-              handleQuantityChange();
+              handleQuantityChange(quantityInput + 1);
             }
           }}
           color="success"
