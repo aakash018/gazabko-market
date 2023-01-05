@@ -94,7 +94,7 @@ const AddProdducts: React.FC = () => {
       images: JSON.stringify(images),
       description: value,
       discount: discountAmount,
-      sizes: JSON.stringify(sizes),
+      sizes: JSON.stringify(sizeList),
     };
 
     const res = await axios.post<{ status: "ok" | "fail"; message: string }>(

@@ -20,9 +20,25 @@ router.post("/addToCart", validateUser, async (req, res) => {
 
   const cart = await Cart.findOne({
     where: { user: { id: req.session.user } },
+    relations: {
+      products: {
+        product: true,
+      },
+    },
   });
 
   const product = await Products.findOne({ where: { id: userReq.productID } });
+
+  if (
+    cart?.products.some((product) => product.product.id === userReq.productID)
+  ) {
+    return res.json({
+      status: "fail",
+      message: "product already added to cart",
+    });
+  }
+
+  console.log(cart);
 
   try {
     if (cart && product) {
@@ -34,19 +50,25 @@ router.post("/addToCart", validateUser, async (req, res) => {
         cart: cart,
       }).save();
 
-      res.json({
+      return res.json({
         status: "ok",
         message: "added to cart",
       });
+    } else {
+      return res.json({
+        status: "fail",
+        message: "cart or product not found",
+      });
     }
   } catch (e) {
+    console.log(e);
     if (e.code === "23505") {
-      res.json({
+      return res.json({
         status: "fail",
         message: "product already added to cart",
       });
     } else {
-      res.json({
+      return res.json({
         status: "fail",
         message: "failed to add to cart",
       });

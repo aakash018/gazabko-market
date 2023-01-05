@@ -96,6 +96,8 @@ const ProductDisplay: React.FC = () => {
 
   const [products, setProducts] = useState<ProtuctType[]>([]);
 
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+
   const handleClick = async () => {
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/question/askQuestion`,
@@ -228,6 +230,7 @@ const ProductDisplay: React.FC = () => {
               sellerName={product!.store as string}
               brand={product!.brand}
               product={product}
+              sizes={product.sizes}
             />
           </div>
           <div className={styles.productDesc}>

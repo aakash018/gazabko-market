@@ -33,6 +33,7 @@ interface Props {
   totalStock: number;
   brand: string;
   product: ProtuctType;
+  sizes?: string;
 }
 
 const ProductInfoDisplay: React.FC<Props> = ({
@@ -45,11 +46,15 @@ const ProductInfoDisplay: React.FC<Props> = ({
   totalStock,
   brand,
   product,
+  sizes,
 }) => {
   const [quantity, setQuantity] = useState(1);
   const { setAlert } = useAlert();
 
   const [displayImageURL, setDisplayImageURL] = useState("/images/shoes.jpg");
+  const [selectedSize, setSelectedSize] = useState<string | undefined>(
+    undefined
+  );
 
   const { setCart } = useCart();
 
@@ -62,6 +67,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
           {
             product: product,
             quantity,
+            sizes: selectedSize,
           },
         ],
       });
@@ -77,6 +83,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
         productName: name,
         price: mp,
         quantity: quantity,
+        sizes: selectedSize,
       },
       { withCredentials: true }
     );
@@ -173,6 +180,28 @@ const ProductInfoDisplay: React.FC<Props> = ({
         <section className={styles.productDisplay__productInfo_price}>
           <PriceHolder discount={discount} mp={mp} />
         </section>
+        {sizes && (
+          <section
+            style={{
+              display: "flex",
+              gap: "20px",
+            }}
+          >
+            {JSON.parse(sizes).map((size: string, i: number) => (
+              <div
+                key={i}
+                className={`${styles.size} ${
+                  selectedSize === size ? styles.selectedSize : ""
+                } `}
+                onClick={() => {
+                  setSelectedSize(size);
+                }}
+              >
+                {size}
+              </div>
+            ))}
+          </section>
+        )}
         <Quantity
           quantityInput={quantity}
           setQuantity={setQuantity}

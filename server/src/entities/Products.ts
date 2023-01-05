@@ -8,6 +8,7 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
+import { OnCartProduct } from "./Cart/OnCartProduct";
 import { Order } from "./Orders";
 import { Question } from "./QuestionAndAnswer";
 import { Review } from "./Review";
@@ -68,6 +69,9 @@ export class Products extends BaseEntity {
 
   @OneToMany(() => Question, (question) => question.product)
   questions: Question[];
+
+  @OneToMany(() => OnCartProduct, (onCart) => onCart.product)
+  onCartProduct: OnCartProduct[];
 
   @ManyToOne(() => Seller, (seller) => seller.products)
   seller: Seller;

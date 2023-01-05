@@ -141,7 +141,8 @@ const CheckoutPage = () => {
           return (
             accumulator +
             (product.product.price - product.product.discount) *
-              product.quantity
+              product.quantity +
+            giftWrapTotal
           );
         }, 0)
       );
