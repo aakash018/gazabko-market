@@ -98,15 +98,34 @@ const ProductDisplay: React.FC = () => {
 
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
-  const handleClick = async () => {
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/question/askQuestion`,
-      {
-        question: questionRef.current?.value,
-        pid,
-      },
-      { withCredentials: true }
-    );
+  const handleQuastionSubmit = async () => {
+    try {
+      const res = await axios.post<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/question/askQuestion`,
+        {
+          question: questionRef.current?.value,
+          pid,
+        },
+        { withCredentials: true }
+      );
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: "question added",
+        });
+        questionRef.current!.value = "";
+      } else {
+        setAlert({
+          type: "error",
+          message: "error adding question",
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "error adding question",
+      });
+    }
   };
 
   useEffect(() => {
@@ -117,30 +136,27 @@ const ProductDisplay: React.FC = () => {
 
         //? GETTING PRODUCT INFO
         try {
-          if (product == null) {
-            const res = await axios.get<
-              RespondType & { product?: ProtuctType }
-            >(
-              `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/info`,
-              {
-                params: {
-                  id: pid,
-                },
-                withCredentials: true,
-              }
-            );
-
-            if (res.data.status === "ok") {
-              setProduct(res.data!.product);
-              setLoading(false);
-            } else {
-              setAlert({
-                type: "error",
-                message: res.data.message,
-              });
-              setLoading(false);
+          const res = await axios.get<RespondType & { product?: ProtuctType }>(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/info`,
+            {
+              params: {
+                id: pid,
+              },
+              withCredentials: true,
             }
+          );
+
+          if (res.data.status === "ok") {
+            setProduct(res.data!.product);
+            setLoading(false);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+            setLoading(false);
           }
+
           //? GETTING REVIEWS
           if (reviews.length === 0) {
             setReviewLoading(true);
@@ -227,10 +243,11 @@ const ProductDisplay: React.FC = () => {
               mp={product!.price}
               name={product!.name}
               rating={4.7}
-              sellerName={product!.store as string}
+              seller={product.seller}
               brand={product!.brand}
               product={product}
               sizes={product.sizes}
+              color={product.color}
             />
           </div>
           <div className={styles.productDesc}>
@@ -319,7 +336,10 @@ const ProductDisplay: React.FC = () => {
                         rows={10}
                         ref={questionRef}
                       ></textarea>
-                      <Button className={styles.actBtn} onClick={handleClick}>
+                      <Button
+                        className={styles.actBtn}
+                        onClick={handleQuastionSubmit}
+                      >
                         Post
                       </Button>
                     </>

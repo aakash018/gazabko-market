@@ -35,7 +35,7 @@ router.post("/askQuestion", validateUser, async (req, res) => {
   }
 });
 
-router.get("/getQuestions", validateUser, async (req, res) => {
+router.get("/getQuestions", async (req, res) => {
   const userReq = req.query as unknown as { pid: string };
   try {
     const questions = await Question.find({
@@ -44,6 +44,8 @@ router.get("/getQuestions", validateUser, async (req, res) => {
         user: true,
       },
     });
+
+    console.log(questions);
 
     res.json({
       status: "ok",

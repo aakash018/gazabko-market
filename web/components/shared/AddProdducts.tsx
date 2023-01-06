@@ -48,6 +48,7 @@ const AddProdducts: React.FC = () => {
   const brand = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState("");
   const [images, setImages] = useState<any[]>([]);
+  const [colorList, setColorList] = useState<string[]>([]);
 
   const handelCatSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (categoriesList.includes(e.target.value)) return;
@@ -95,6 +96,7 @@ const AddProdducts: React.FC = () => {
       description: value,
       discount: discountAmount,
       sizes: JSON.stringify(sizeList),
+      color: JSON.stringify(colorList),
     };
 
     const res = await axios.post<{ status: "ok" | "fail"; message: string }>(
@@ -207,6 +209,11 @@ const AddProdducts: React.FC = () => {
                         label="Sizes"
                         listState={sizeList}
                         setListState={setSizeList}
+                      />
+                      <TagsSelector
+                        label="Color"
+                        listState={colorList}
+                        setListState={setColorList}
                       />
                       <TagsSelector
                         label="Tags"

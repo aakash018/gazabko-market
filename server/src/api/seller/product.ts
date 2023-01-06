@@ -23,6 +23,7 @@ interface ProtuctPayloadType {
   brand: string;
   images: string;
   store: string;
+  color: string;
 }
 
 router.get("/", async (_, res) => {
@@ -59,6 +60,7 @@ router.post("/add", validateUser, async (req, res) => {
           tags: productDetails.tags,
           discount: productDetails.discount,
           seller: seller,
+          color: productDetails.color,
         }).save();
         console.log(product);
       }

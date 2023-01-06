@@ -5,6 +5,20 @@ export interface ProductHolderTypes {
   rating: number;
 }
 
+export interface Seller {
+  id: number;
+  username: string;
+  email: string;
+  storeName: string;
+  address: string;
+  contactPerson: string;
+  phoneNo: number;
+  role: "seller";
+  isVerified: boolean;
+  panNo: number;
+  productCount?: number;
+}
+
 export interface ProtuctPayloadType {
   productName: string;
   price: number;
@@ -21,6 +35,7 @@ export interface ProtuctPayloadType {
   brand: string;
   images: string;
   store?: string;
+  color: string;
 }
 
 export interface ProtuctType {
@@ -40,6 +55,8 @@ export interface ProtuctType {
   brand: string;
   images: string;
   store?: string;
+  color?: string;
+  seller: Seller;
 }
 
 export interface OnCartProductType {

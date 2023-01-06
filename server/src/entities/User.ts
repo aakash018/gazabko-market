@@ -8,12 +8,14 @@ import {
   JoinColumn,
   OneToOne,
   OneToMany,
+  ManyToMany,
 } from "typeorm";
 import { Address } from "./Address";
 import { Cart } from "./Cart/Cart";
 import { Order } from "./Orders";
 import { Question } from "./QuestionAndAnswer";
 import { Review } from "./Review";
+import { Seller } from "./Seller";
 
 @Entity()
 export class User extends BaseEntity {
@@ -66,6 +68,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Order, (order) => order.user)
   order: Order[];
+
+  @ManyToMany(() => Seller, (seller) => seller.followers)
+  followedSeller: Seller[];
 
   @CreateDateColumn()
   created_at: Date;

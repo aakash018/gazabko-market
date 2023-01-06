@@ -16,7 +16,8 @@ import {
   HiOutlineInformationCircle,
   HiOutlineLocationMarker,
 } from "react-icons/hi";
-import { ProtuctType } from "../../@types/global";
+import { ProtuctType, Seller } from "../../@types/global";
+import { useAuth } from "../../context/User";
 import { useAlert, useCart } from "../../pages/_app";
 import styles from "../../styles/components/Customer/ProductInfoDisplay.module.scss";
 import Button from "../shared/Button";
@@ -29,11 +30,12 @@ interface Props {
   rating: number;
   mp: number;
   discount: number;
-  sellerName: string;
+  seller: Seller;
   totalStock: number;
   brand: string;
   product: ProtuctType;
   sizes?: string;
+  color?: string;
 }
 
 const ProductInfoDisplay: React.FC<Props> = ({
@@ -42,12 +44,14 @@ const ProductInfoDisplay: React.FC<Props> = ({
   rating,
   mp,
   discount,
-  sellerName,
+  seller,
   totalStock,
   brand,
   product,
   sizes,
+  color,
 }) => {
+  const { user } = useAuth();
   const [quantity, setQuantity] = useState(1);
   const { setAlert } = useAlert();
 
@@ -55,7 +59,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
   const [selectedSize, setSelectedSize] = useState<string | undefined>(
     undefined
   );
-
+  const [selectedColor, setSelectedColor] = useState("");
   const { setCart } = useCart();
 
   const handleBuyNow = () => {
@@ -68,6 +72,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
             product: product,
             quantity,
             sizes: selectedSize,
+            color: selectedColor,
           },
         ],
       });
@@ -84,6 +89,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
         price: mp,
         quantity: quantity,
         sizes: selectedSize,
+        color: selectedColor,
       },
       { withCredentials: true }
     );
@@ -187,21 +193,44 @@ const ProductInfoDisplay: React.FC<Props> = ({
               gap: "20px",
             }}
           >
-            {JSON.parse(sizes).map((size: string, i: number) => (
-              <div
-                key={i}
-                className={`${styles.size} ${
-                  selectedSize === size ? styles.selectedSize : ""
-                } `}
-                onClick={() => {
-                  setSelectedSize(size);
-                }}
-              >
-                {size}
-              </div>
-            ))}
+            {JSON.parse(sizes).constructor === Array &&
+              JSON.parse(sizes).map((size: string, i: number) => (
+                <div
+                  key={i}
+                  className={`${styles.size} ${
+                    selectedSize === size ? styles.selectedSize : ""
+                  } `}
+                  onClick={() => {
+                    setSelectedSize(size);
+                  }}
+                >
+                  {size}
+                </div>
+              ))}
           </section>
         )}
+        <section
+          style={{
+            display: "flex",
+            gap: "20px",
+          }}
+        >
+          {color &&
+            JSON.parse(color).constructor === Array &&
+            JSON.parse(color).map((col: string, i: number) => (
+              <div
+                key={i}
+                className={`${styles.colorHolder}
+              ${selectedColor === col ? styles.selectedColor : ""}
+              `}
+                onClick={() => {
+                  setSelectedColor(col);
+                }}
+              >
+                {col}
+              </div>
+            ))}
+        </section>
         <Quantity
           quantityInput={quantity}
           setQuantity={setQuantity}
@@ -252,91 +281,93 @@ const ProductInfoDisplay: React.FC<Props> = ({
           </section>
         </section>
       </div>
-      <div className={styles.productDisplayRight}>
-        <div className={styles.productDisplayRightContainer}>
-          <div className={styles.containers}>
-            <span className={styles.grey}>Delivery</span>
-            <span className={styles.grey}>
-              <HiOutlineInformationCircle />
-            </span>
-          </div>
-          <div
-            className={styles.containers}
-            style={{ alignItems: "center", borderBottom: "1px solid #ddd" }}
-          >
-            <div style={{ display: "flex", gap: "5px" }}>
-              <span style={{ marginTop: "5px", fontSize: "20px" }}>
-                <HiOutlineLocationMarker />
+      {seller && (
+        <div className={styles.productDisplayRight}>
+          <div className={styles.productDisplayRightContainer}>
+            <div className={styles.containers}>
+              <span className={styles.grey}>Delivery</span>
+              <span className={styles.grey}>
+                <HiOutlineInformationCircle />
               </span>
-              <span>Gandaki,Pokhara-Lekhnath Metro ,9 Newroad</span>
             </div>
-            <Link href="#">
-              <a style={{ color: "var(--theme-color)" }}>Change</a>
-            </Link>
-          </div>
-          <div className={styles.containers} style={{ alignItems: "center" }}>
-            <div style={{ display: "flex", gap: "5px" }}>
-              <span style={{ marginTop: "5px", fontSize: "20px" }}>
-                <FaShippingFast />
-              </span>
-              <span>
-                Standard Delivery
-                <br />
-                <span style={{ fontSize: "13px", color: "#757575" }}>
-                  2 days
+            <div
+              className={styles.containers}
+              style={{ alignItems: "center", borderBottom: "1px solid #ddd" }}
+            >
+              <div style={{ display: "flex", gap: "5px" }}>
+                <span style={{ marginTop: "5px", fontSize: "20px" }}>
+                  <HiOutlineLocationMarker />
                 </span>
+                {!user && <span>Not logged in</span>}
+                {user && <span>{user?.address.deliveryAddress}</span>}
+              </div>
+            </div>
+            <div className={styles.containers} style={{ alignItems: "center" }}>
+              <div style={{ display: "flex", gap: "5px" }}>
+                <span style={{ marginTop: "5px", fontSize: "20px" }}>
+                  <FaShippingFast />
+                </span>
+                <span>
+                  Standard Delivery
+                  <br />
+                  <span style={{ fontSize: "13px", color: "#757575" }}>
+                    2 days
+                  </span>
+                </span>
+              </div>
+              <span style={{ fontSize: "16px", fontWeight: "500" }}>
+                Rs. 60
               </span>
             </div>
-            <span style={{ fontSize: "16px", fontWeight: "500" }}>Rs. 65</span>
-          </div>
-          <div
-            className={styles.containers}
-            style={{ alignItems: "center", borderBottom: "1px solid #ddd" }}
-          >
-            <div style={{ display: "flex", gap: "5px" }}>
-              <span style={{ fontSize: "20px" }}>
-                <BsCashStack />
-              </span>
-              <span>Cash on delivery</span>
+            <div
+              className={styles.containers}
+              style={{ alignItems: "center", borderBottom: "1px solid #ddd" }}
+            >
+              <div style={{ display: "flex", gap: "5px" }}>
+                <span style={{ fontSize: "20px" }}>
+                  <BsCashStack />
+                </span>
+                <span>Cash on delivery</span>
+              </div>
             </div>
-          </div>
-          <div
-            style={{
-              padding: "8px 5px",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <div>
-              <span className={styles.grey}>Store name</span>
-              <br />
-              <Link href="/sellerInfo/dasds">
-                <a style={{ fontSize: "18px" }}>{sellerName}</a>
-              </Link>
-            </div>
-          </div>
-          <div className={styles.ratings}>
-            <div className={styles.rating}>
-              <span>Seller rating</span>
-              <span className={styles.ratingPercentage}>99%</span>
-            </div>
-            <div className={`${styles.rating} ${styles.ratingBorderLeft}`}>
-              <span>Ship on time</span>
-              <span className={styles.ratingPercentage}>99%</span>
-            </div>
-          </div>
-          <div className={styles.productDisplayRightButton}>
-            <Button
-              color="error"
-              onClick={() => {
-                Router.push("/sellerInfo/sdfsd");
+            <div
+              style={{
+                padding: "8px 5px",
+                display: "flex",
+                justifyContent: "space-between",
               }}
             >
-              <span>Visit Store</span>
-            </Button>
+              <div>
+                <span className={styles.grey}>Store name</span>
+                <br />
+                <Link href="/sellerInfo/dasds">
+                  <a style={{ fontSize: "18px" }}>{seller.storeName}</a>
+                </Link>
+              </div>
+            </div>
+            <div className={styles.ratings}>
+              <div className={styles.rating}>
+                <span>Seller rating</span>
+                <span className={styles.ratingPercentage}>99%</span>
+              </div>
+              <div className={`${styles.rating} ${styles.ratingBorderLeft}`}>
+                <span>Ship on time</span>
+                <span className={styles.ratingPercentage}>99%</span>
+              </div>
+            </div>
+            <div className={styles.productDisplayRightButton}>
+              <Button
+                color="error"
+                onClick={() => {
+                  Router.push(`/sellerInfo/${seller.id}`);
+                }}
+              >
+                <span>Visit Store</span>
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

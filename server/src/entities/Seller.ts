@@ -4,9 +4,11 @@ import {
   Column,
   BaseEntity,
   OneToMany,
+  ManyToMany,
 } from "typeorm";
 import { Products } from "./Products";
 import { Answer } from "./QuestionAndAnswer";
+import { User } from "./User";
 
 @Entity()
 export class Seller extends BaseEntity {
@@ -45,6 +47,9 @@ export class Seller extends BaseEntity {
 
   @OneToMany(() => Products, (product) => product.seller)
   products: Products[];
+
+  @ManyToMany(() => User, (user) => user.followedSeller)
+  followers: User[];
 
   @OneToMany(() => Answer, (answer) => answer.seller)
   answers: Answer[];

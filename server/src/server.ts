@@ -17,8 +17,10 @@ import products from "./api/seller/product";
 import question from "./api/question";
 import cart from "./api/cart";
 import order from "./api/order";
+import sellerInfo from "./api/sellerInfo";
 //?? RETURN REVIEW REPORT
 import rrr from "./api/rrr";
+import { Products } from "./entities/Products";
 
 const app = express();
 const PORT = 5000;
@@ -83,7 +85,10 @@ AppDataSource.initialize()
     console.log("Error initializing Data Source !!!", e);
   });
 
-app.get("/", (_, res) => {
+app.get("/", async (_, res) => {
+  console.log(
+    await Products.findOne({ where: { id: 2 }, relations: { seller: true } })
+  );
   res.json({
     status: "working",
   });
@@ -97,6 +102,8 @@ app.use("/seller/products", products);
 app.use("/question", question);
 app.use("/cart", cart);
 app.use("/order", order);
+
+app.use("/sellerInfo", sellerInfo);
 //?? RETURN REVIEW REPORT
 app.use("/rrr", rrr);
 

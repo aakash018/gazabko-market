@@ -44,6 +44,16 @@
       font-size: 1.3rem;
     }
 
+    .colorHolder {
+      padding: 5px 10px;
+      border: 1px solid var(--theme-color);
+      cursor: pointer;
+      &:hover {
+        background-color: var(--theme-color);
+        color: white;
+      }
+    }
+
     .size {
       border: 1px solid var(--default-red);
       padding: 5px 10px;
@@ -56,9 +66,14 @@
         color: white;
       }
     }
-
-    .selectedSize {
+    .selectedColor {
+      border: 1px solid var(--default-red);
       background-color: var(--default-red);
+      color: white;
+    }
+    .selectedSize {
+      border: 1px solid var(--theme-color);
+      background-color: var(--theme-color);
       color: white;
     }
 

@@ -57,6 +57,8 @@ export class Products extends BaseEntity {
 
   @Column({ nullable: true })
   sizes: string;
+  @Column({ nullable: true })
+  color: string;
 
   @Column()
   category: string;
