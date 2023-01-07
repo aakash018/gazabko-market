@@ -77,7 +77,7 @@ const AddProdducts: React.FC = () => {
       });
     }
 
-    let discountAmount = parseInt(discount.current!.value);
+    let discountAmount = parseInt(discount.current!.value) | 0;
     if (discountType === "percentage") {
       discountAmount =
         parseInt(price.current!.value) *

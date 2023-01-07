@@ -10,7 +10,7 @@ const router = express();
 interface ProtuctPayloadType {
   productName: string;
   price: number;
-  discount?: number;
+  discount: number;
   description: string;
   totalStock: number;
   offer?: string;
@@ -61,6 +61,7 @@ router.post("/add", validateUser, async (req, res) => {
           discount: productDetails.discount,
           seller: seller,
           color: productDetails.color,
+          priceAfterDiscount: productDetails.price - productDetails.discount,
         }).save();
         console.log(product);
       }

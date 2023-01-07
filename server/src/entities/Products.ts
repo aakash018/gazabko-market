@@ -49,8 +49,11 @@ export class Products extends BaseEntity {
   @Column({ default: false })
   isHidden: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: 0 })
   discount: number;
+
+  @Column({ nullable: true })
+  priceAfterDiscount: number;
 
   @Column({ nullable: true })
   offers: string;

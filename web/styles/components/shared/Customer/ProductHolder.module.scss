@@ -58,6 +58,9 @@ $box-bg: #f0f0f0;
 
         &_name {
             font-size: 1.2rem;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
         }
 
         &_price {

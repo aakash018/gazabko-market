@@ -10,7 +10,7 @@ interface Props {
 const PriceHolder: React.FC<Props> = ({
   discount,
   mp,
-  fontSize = "1.8rem",
+  fontSize = "1.6rem",
 }) => {
   let price: number = 0;
 

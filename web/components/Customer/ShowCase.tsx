@@ -59,30 +59,18 @@ const ShowCase: React.FC<Props> = ({
         style={{ display: "flex", justifyContent: "center" }}
         className={styles.productShowCase__products}
       >
-        {!products &&
-          Array.from({ length: noOfProducts }).map((_, i) => {
-            if (type === "products") {
-              return (
-                <ProductHolder
-                  key={i}
-                  mp={2700}
-                  discount={2000}
-                  rating={4.1}
-                  productName={"GoldStar Shoes P302 Black"}
-                />
-              );
-            } else {
-              return (
-                <div className={styles.brandHolder}>
-                  <Image
-                    src="/images/brand.png"
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                </div>
-              );
-            }
-          })}
+        {!products ||
+          (products.length === 0 && (
+            <div
+              style={{
+                height: "100px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <h2>No products found</h2>
+            </div>
+          ))}
         {products &&
           products.length !== 0 &&
           products.map((product, i) => {
