@@ -4,12 +4,14 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { BiHeart } from "react-icons/bi";
 import { FaStar } from "react-icons/fa";
+import { GiBrokenHeart } from "react-icons/gi";
 import { ProtuctType, Seller } from "../../@types/global";
 import Layout from "../../components/Customer/Layout";
 import ShowCase from "../../components/Customer/ShowCase";
 import Button from "../../components/shared/Button";
 
 import styles from "../../styles/components/Customer/pages/SellerInfoPge.module.scss";
+import { sleep } from "../../utils/sleep";
 import { useAlert } from "../_app";
 
 const SellerInfoPage = () => {
@@ -18,8 +20,11 @@ const SellerInfoPage = () => {
   const { setAlert } = useAlert();
 
   const [products, setproducts] = useState<ProtuctType[]>([]);
+  const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
+  const [isFollowingLoading, setIsFollowingLoading] = useState(false);
   const router = useRouter();
   const { sid } = router.query;
+
   useEffect(() => {
     let ignore = false;
     if (!ignore) {
@@ -34,7 +39,6 @@ const SellerInfoPage = () => {
               },
             }
           );
-          console.log(res.data);
           if (res.data.status === "ok" && res.data.seller) {
             setSeller(res.data.seller);
             setLoading(false);
@@ -65,6 +69,96 @@ const SellerInfoPage = () => {
       ignore = true;
     };
   }, [sid]);
+
+  useEffect(() => {
+    let ignore = false;
+    try {
+      (async () => {
+        if (!ignore) {
+          const res = await axios.get<RespondType & { isFollowed?: boolean }>(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/sellerInfo/isFollowed`,
+            {
+              params: { sid },
+              withCredentials: true,
+            }
+          );
+          console.log(res.data);
+          if (res.data.status === "ok") {
+            setIsFollowing(res.data.isFollowed as boolean);
+          }
+        }
+      })();
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed to get store follow info",
+      });
+    }
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      setIsFollowingLoading(true);
+      await sleep(3000);
+      setIsFollowingLoading(false);
+    })();
+  }, [isFollowing]);
+  const handleFollow = async () => {
+    try {
+      const res = await axios.post<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/sellerInfo/followSeller`,
+        { sid: sid },
+        { withCredentials: true }
+      );
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+        setIsFollowing(true);
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "error trying to follow user",
+      });
+    }
+  };
+
+  const handleUnfollow = async () => {
+    try {
+      const res = await axios.post<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/sellerInfo/unfollowSeller`,
+        { sid: sid },
+        { withCredentials: true }
+      );
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+        setIsFollowing(false);
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "error trying to follow user",
+      });
+    }
+  };
 
   return (
     <Layout>
@@ -99,12 +193,25 @@ const SellerInfoPage = () => {
                       marginTop: "20px",
                     }}
                   >
-                    <Button color="error">
-                      <span>
-                        <BiHeart />
-                      </span>
-                      <span>Follow Store</span>
-                    </Button>
+                    {isFollowing == null ||
+                      (isFollowingLoading && (
+                        <Button disable={true} color="gray">
+                          Loading...
+                        </Button>
+                      ))}
+                    {isFollowing != null && !isFollowingLoading && (
+                      <Button
+                        color={`${isFollowing ? "gray" : "error"}`}
+                        onClick={isFollowing ? handleUnfollow : handleFollow}
+                      >
+                        <span>
+                          {isFollowing ? <GiBrokenHeart /> : <BiHeart />}
+                        </span>
+                        <span>
+                          {isFollowing ? "Unfollow Store" : "Follow Store"}
+                        </span>
+                      </Button>
+                    )}
                   </div>
                 </div>
                 <div className={styles.productDetails}>

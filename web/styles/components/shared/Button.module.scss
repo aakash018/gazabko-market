@@ -32,6 +32,11 @@
     color: black;
 }
 
+.gray {
+    background-color: rgb(189, 189, 189);
+    color: rgb(61, 61, 61);
+}
+
 .outlined {
     background-color: transparent;
     outline: 2px solid var(--default-red);

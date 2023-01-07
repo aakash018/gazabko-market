@@ -5,7 +5,7 @@ interface Props {
   children: ReactNode;
   onClick?: () => any;
   className?: string;
-  color?: "error" | "success" | "default" | "white";
+  color?: "error" | "success" | "default" | "white" | "gray";
   type?: "submit" | "reset" | "button";
   look?: "outlined" | "filled" | "blank";
   icon?: ReactNode;

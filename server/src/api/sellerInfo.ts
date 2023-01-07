@@ -1,6 +1,10 @@
 import express from "express";
+import validateUser from "../middleware/validateUser";
 import { Products } from "../entities/Products";
 import { Seller } from "../entities/Seller";
+
+import { Follow } from "../entities/Follow";
+import { User } from "../entities/User";
 
 const router = express();
 
@@ -65,10 +69,107 @@ router.get("/getSellerProducts", async (req, res) => {
   }
 });
 
-// router.post("/followSeller", async (req, res) => {
-//   const userReq = req.body as unknown as { sid: string };
+router.post("/followSeller", validateUser, async (req, res) => {
+  const userReq = req.body as unknown as { sid: string };
 
-//   const seller = await Seller.findOne({ where: { id: parseInt(userReq.sid) } });
-// });
+  try {
+    const seller = await Seller.findOne({
+      where: { id: parseInt(userReq.sid) },
+    });
+    const user = await User.findOne({
+      where: { id: req.session.user },
+      relations: { followedSellers: true },
+    });
+
+    //? If already followed
+    if (
+      user?.followedSellers.some(
+        (follow) => follow.sellerId === parseInt(userReq.sid)
+      )
+    ) {
+      return res.json({
+        status: "fail",
+        message: "already followed",
+      });
+    }
+
+    if (user && seller) {
+      await Follow.create({
+        userId: user?.id,
+        sellerId: seller?.id,
+        user,
+        seller,
+      }).save();
+
+      return res.json({
+        status: "ok",
+        message: "seller followed",
+      });
+    } else {
+      return res.json({
+        status: "fail",
+        message: "user or seller not found",
+      });
+    }
+  } catch {
+    return res.json({
+      status: "fail",
+      message: "error trying to follow seller",
+    });
+  }
+});
+
+router.post("/unfollowSeller", validateUser, async (req, res) => {
+  const userReq = req.body as { sid: string };
+
+  try {
+    await Follow.delete({
+      userId: req.session.user,
+      sellerId: parseInt(userReq.sid),
+    });
+    res.json({
+      status: "ok",
+      message: "unfollowed store",
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to unfollow user",
+    });
+  }
+});
+
+router.get("/isFollowed", validateUser, async (req, res) => {
+  const userReq = req.query as unknown as { sid: string };
+  try {
+    const user = await User.findOne({
+      where: { id: req.session.user },
+      relations: { followedSellers: true },
+    });
+
+    const isFollowed = user?.followedSellers.some(
+      (follow) => follow.sellerId === parseInt(userReq.sid)
+    );
+
+    if (isFollowed) {
+      res.json({
+        status: "ok",
+        message: "got seller info",
+        isFollowed: true,
+      });
+    } else {
+      res.json({
+        status: "ok",
+        message: "got seller followed info",
+        isFollowed: false,
+      });
+    }
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to get seller followed info",
+    });
+  }
+});
 
 export default router;
