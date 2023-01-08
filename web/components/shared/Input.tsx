@@ -8,11 +8,12 @@ interface Props {
   input?: LegacyRef<HTMLInputElement>;
   id?: string;
   className?: string;
-  value?: string;
+  value?: string | number;
   setState?: React.Dispatch<React.SetStateAction<any>>;
   onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
+  style?: React.CSSProperties;
 }
 
 const IntputField: React.FC<Props> = ({
@@ -27,6 +28,7 @@ const IntputField: React.FC<Props> = ({
   onKeyDown,
   onChange,
   onBlur,
+  style,
 }) => {
   const handleChaange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (setState) {
@@ -50,6 +52,7 @@ const IntputField: React.FC<Props> = ({
         onChange={handleChaange}
         onKeyDown={onKeyDown}
         onBlur={onBlur}
+        style={style}
       />
     </div>
   );

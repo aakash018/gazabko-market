@@ -151,6 +151,8 @@ router.get("/isFollowed", validateUser, async (req, res) => {
       (follow) => follow.sellerId === parseInt(userReq.sid)
     );
 
+    console.log("ISS", userReq);
+
     if (isFollowed) {
       res.json({
         status: "ok",
@@ -168,6 +170,37 @@ router.get("/isFollowed", validateUser, async (req, res) => {
     res.json({
       status: "fail",
       message: "failed to get seller followed info",
+    });
+  }
+});
+
+router.get("/getFollowingList", validateUser, async (req, res) => {
+  try {
+    const userWithFollowers = await User.findOne({
+      where: { id: req.session.user },
+      relations: {
+        followedSellers: {
+          seller: true,
+        },
+      },
+    });
+    console.log("Follow", userWithFollowers?.followedSellers);
+    if (userWithFollowers?.followedSellers) {
+      res.json({
+        status: "ok",
+        message: "seller Info Found",
+        sellers: userWithFollowers?.followedSellers,
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "user or followers not found",
+      });
+    }
+  } catch {
+    res.json({
+      status: "fail",
+      message: "fail to find followers",
     });
   }
 });

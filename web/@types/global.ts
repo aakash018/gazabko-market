@@ -57,6 +57,7 @@ export interface ProtuctType {
   store?: string;
   color?: string;
   seller: Seller;
+  priceAfterDiscount: number;
 }
 
 export interface OnCartProductType {

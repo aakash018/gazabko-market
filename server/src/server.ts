@@ -18,6 +18,7 @@ import question from "./api/question";
 import cart from "./api/cart";
 import order from "./api/order";
 import sellerInfo from "./api/sellerInfo";
+import search from "./api/search";
 //?? RETURN REVIEW REPORT
 import rrr from "./api/rrr";
 import { Products } from "./entities/Products";
@@ -102,6 +103,7 @@ app.use("/seller/products", products);
 app.use("/question", question);
 app.use("/cart", cart);
 app.use("/order", order);
+app.use("/search", search);
 
 app.use("/sellerInfo", sellerInfo);
 //?? RETURN REVIEW REPORT

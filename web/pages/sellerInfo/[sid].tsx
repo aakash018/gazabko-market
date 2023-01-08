@@ -72,6 +72,7 @@ const SellerInfoPage = () => {
 
   useEffect(() => {
     let ignore = false;
+    if (!sid) return;
     try {
       (async () => {
         if (!ignore) {
@@ -82,7 +83,6 @@ const SellerInfoPage = () => {
               withCredentials: true,
             }
           );
-          console.log(res.data);
           if (res.data.status === "ok") {
             setIsFollowing(res.data.isFollowed as boolean);
           }
@@ -97,7 +97,7 @@ const SellerInfoPage = () => {
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [sid]);
 
   useEffect(() => {
     (async () => {
@@ -113,6 +113,7 @@ const SellerInfoPage = () => {
         { sid: sid },
         { withCredentials: true }
       );
+      console.log(res);
       if (res.data.status === "ok") {
         setAlert({
           type: "message",
