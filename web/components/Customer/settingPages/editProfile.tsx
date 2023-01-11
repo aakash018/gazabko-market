@@ -1,27 +1,65 @@
+import axios from "axios";
 import Router from "next/router";
 import React, { useState } from "react";
 import { useAuth } from "../../../context/User";
 import { avatarsData, AvaterSelectHolder } from "../../../pages/signup";
+import { useAlert } from "../../../pages/_app";
 
 import styles from "../../../styles/components/Customer/EditProfilePage.module.scss";
 import Button from "../../shared/Button";
 import IntputField from "../../shared/Input";
 
 const EditProfile = () => {
-  const { login } = useAuth();
+  const { login, user } = useAuth();
+  const { setAlert } = useAlert();
+  const [selectedAvaatar, setSelectedAvatar] = useState<string>("");
 
-  const [page, setPage] = useState<number>(0);
+  const [selectAvaarList, setSelectAvatarList] = useState(() =>
+    avatarsData.map((data) => {
+      if (data.imgUrl === user?.avatar) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+  );
 
-  const [delivaryAdd, setDeleveryAdd] = useState("");
+  const handleInfoUpdate = () => {};
 
-  const [selectedAvaatar, setSelectedAvatar] = useState(0);
-  const [selectAvaarList, setSelectAvatarList] = useState([
-    true,
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const handleAvatarUpdate = async () => {
+    try {
+      if (
+        user &&
+        selectedAvaatar.trim() !== "" &&
+        selectedAvaatar !== user.avatar
+      ) {
+        const res = await axios.post<RespondType>(
+          `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/update/avatar`,
+          {
+            imgURL: selectedAvaatar,
+            id: user.id,
+          },
+          { withCredentials: true }
+        );
+        if (res.data.status === "ok") {
+          setAlert({
+            type: "message",
+            message: res.data.message,
+          });
+        } else {
+          setAlert({
+            type: "error",
+            message: res.data.message,
+          });
+        }
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed to update avatar",
+      });
+    }
+  };
 
   return (
     <div className={styles.editProfile}>
@@ -40,6 +78,7 @@ const EditProfile = () => {
                   // ? TO SELECT AVATAR
                   // ? FIRST UNSELECT THE SELECTED AVATAR
                   setSelectAvatarList([false, false, false, false, false]);
+                  setSelectedAvatar(avatar.imgUrl);
 
                   // ? THEN set TRUE to the one avatar clicked
                   setSelectAvatarList((prev) =>
@@ -53,14 +92,7 @@ const EditProfile = () => {
             ))}
           </div>
           <div className={styles.actBtn}>
-            <Button
-              onClick={() => {
-                login();
-                Router.push("/");
-              }}
-            >
-              Save
-            </Button>
+            <Button onClick={handleAvatarUpdate}>Save</Button>
           </div>
         </div>
       </div>

@@ -67,4 +67,33 @@ router.get("/getReview", async (req, res) => {
   }
 });
 
+router.get("/getAllReviews", validateUser, async (req, res) => {
+  try {
+    const reviews = await Review.find({
+      where: { user: { id: req.session.user } },
+      relations: {
+        product: true,
+      },
+    });
+    console.log("RRR", reviews);
+    if (reviews) {
+      res.json({
+        status: "ok",
+        message: "reviews found",
+        reviews,
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "error finding reviews",
+      });
+    }
+  } catch {
+    res.json({
+      status: "fail",
+      message: "can't query reviews",
+    });
+  }
+});
+
 export default router;

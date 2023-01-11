@@ -4,6 +4,8 @@ import {
   Column,
   BaseEntity,
   ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { User } from "./User";
 import { Products } from "./Products";
@@ -33,4 +35,10 @@ export class Order extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.order)
   user: User;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

@@ -43,13 +43,6 @@ router.post("/signup", async (req, res) => {
     .catch(console.error);
 
   try {
-    const address = new Address();
-    address.deliveryAddress = userData.delivaryAdd;
-    address.laglat = userData.mapCods;
-    address.nearestLandmark = userData.nearestLandmark;
-
-    await AppDataSource.manager.save(address);
-
     const hashPass = await bcrypt.hash(userData.password, 12);
     const user = new User();
 
@@ -60,9 +53,16 @@ router.post("/signup", async (req, res) => {
     user.username = userData.username;
     user.email = userData.email;
     user.phoneNo = userData.phone;
-    user.address = address;
 
     await AppDataSource.manager.save(user);
+
+    const address = new Address();
+    address.deliveryAddress = userData.delivaryAdd;
+    address.laglat = userData.mapCods;
+    address.nearestLandmark = userData.nearestLandmark;
+    address.user = user;
+
+    await AppDataSource.manager.save(address);
 
     await Cart.create({
       user: user,

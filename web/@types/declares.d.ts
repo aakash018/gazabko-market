@@ -1,4 +1,5 @@
 declare interface User {
+  id: number;
   username: string;
   firstName: string;
   lastName: string;
@@ -8,12 +9,15 @@ declare interface User {
   phoneNo: number;
   gender: "male" | "female" | "others";
   cart?: Cart;
-  address: {
-    deliveryAddress: string;
-    id: number;
-    lnglat: { lat: number; lng: number };
-    nearestLandmark: string;
-  };
+  address: Address[];
+}
+
+declare interface Address {
+  deliveryAddress: string;
+  id: number;
+  laglat: string;
+  nearestLandmark: string;
+  phoneNo: string;
 }
 
 declare interface RespondType {

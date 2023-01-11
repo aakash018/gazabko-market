@@ -3,7 +3,7 @@ import { AppDataSource } from "../dataSource";
 import { Products } from "../entities/Products";
 
 import { escapeLikeString } from "../../utils/escapeLikeString";
-import { Between, In } from "typeorm";
+import { Between, In, Like } from "typeorm";
 
 const router = express();
 
@@ -98,6 +98,10 @@ router.get("/getSortFilter", async (req, res) => {
 interface filteredUserReqType {
   filters: {
     brands: string[];
+    price: {
+      low: string;
+      high: string;
+    };
   };
   keyword: string;
 }
@@ -107,7 +111,14 @@ router.get("/getFilteredProducts", async (req, res) => {
   console.log(userReq);
   try {
     const products = await Products.find({
-      where: { brand: In(userReq.filters.brands) },
+      where: {
+        name: Like(`${escapeLikeString(userReq.keyword)}`),
+        brand: In(userReq.filters.brands),
+        priceAfterDiscount: Between(
+          parseInt(userReq.filters.price.low),
+          parseInt(userReq.filters.price.high)
+        ),
+      },
     });
 
     if (products) {

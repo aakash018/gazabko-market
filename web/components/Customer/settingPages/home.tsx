@@ -148,10 +148,10 @@ const SettingHomePage = () => {
                 {user?.firstName}
               </span>
               <span style={{ fontSize: "14px" }}>
-                {user?.address.nearestLandmark}
+                {user?.address[0].nearestLandmark}
               </span>
               <span style={{ fontSize: "14px" }}>
-                {user?.address.deliveryAddress}
+                {user?.address[0].deliveryAddress}
               </span>
               <span style={{ fontSize: "14px" }}>{user?.email}</span>
               <span style={{ fontSize: "14px" }}>{user?.phoneNo}</span>

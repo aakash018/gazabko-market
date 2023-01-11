@@ -49,4 +49,31 @@ router.post("/addOrder", validateUser, async (req, res) => {
   });
 });
 
+router.get("/orderHistory", validateUser, async (req, res) => {
+  try {
+    const orders = await Order.find({
+      where: { user: { id: req.session.user } },
+      relations: { product: true },
+    });
+
+    if (orders) {
+      res.json({
+        status: "ok",
+        message: "orders found",
+        orders,
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "orders not found",
+      });
+    }
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to query order ",
+    });
+  }
+});
+
 export default router;

@@ -108,6 +108,10 @@ const SearchResult: React.FC = () => {
         params: {
           filters: {
             brands: filterBrands,
+            price: {
+              low: productLowPrice,
+              high: productHighPrice,
+            },
           },
         },
       }

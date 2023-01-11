@@ -60,6 +60,16 @@ export interface ProtuctType {
   priceAfterDiscount: number;
 }
 
+export interface Order {
+  color: string;
+  id: number;
+  isGift: boolean;
+  quantity: number;
+  size?: string;
+  status: "pending" | "processing" | "delivered";
+  product?: ProtuctType;
+}
+
 export interface OnCartProductType {
   product: ProtuctType;
   quantity: number;

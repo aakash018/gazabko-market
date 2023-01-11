@@ -7,7 +7,7 @@ import ShowCase from "../../components/Customer/ShowCase";
 
 const PurchesTracker: React.FC = () => {
   return (
-    <Layout sidebar="clickable">
+    <Layout>
       <div className={styles.purchesTracker}>
         <div className={styles.tracker}>
           <OrderTracker />

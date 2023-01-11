@@ -15,19 +15,19 @@ router.post("/avatar", async (req, res) => {
 
       res.json({
         status: "ok",
-        messgage: "updated",
+        message: "updated",
       });
     } catch (e) {
       console.log(e);
       res.json({
         status: "fail",
-        messgage: "failed trying to set avatar",
+        message: "failed trying to set avatar",
       });
     }
   } else {
     res.json({
       status: "fail",
-      messgage: "no avatar choosed",
+      message: "no avatar choosed",
     });
   }
 });

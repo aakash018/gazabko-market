@@ -15,16 +15,23 @@ import L from "leaflet";
 interface Props {
   setAddress: React.Dispatch<React.SetStateAction<string>>;
   setLatLng?: React.Dispatch<React.SetStateAction<string>>;
+  lat?: number;
+  lng?: number;
 }
 
 const center = {
   lat: 27.7172,
-  lng: 85.324,
+  lng: 85.342,
 };
 
-const GetCods: React.FC<Props> = ({ setAddress, setLatLng }) => {
+const GetCods: React.FC<Props> = ({ setAddress, setLatLng, lat, lng }) => {
+  const codsRef = useRef({
+    lat: lat || 27.7172,
+    lng: lng || 85.342,
+  });
+
   const markerRef = useRef<L.Marker<any>>(null);
-  const [position, setPosition] = useState(center);
+  const [position, setPosition] = useState(codsRef.current);
   // const eventHandlers = useMemo(
   //   () => ({
   //     dragend() {
@@ -123,14 +130,23 @@ const GetCods: React.FC<Props> = ({ setAddress, setLatLng }) => {
   );
 };
 
-const Map: React.FC<Props> = ({ setAddress, setLatLng }) => {
+const Map: React.FC<Props> = ({ setAddress, setLatLng, lat, lng }) => {
+  const codsRef = useRef({
+    lat: lat || 27.7172,
+    lng: lng || 85.342,
+  });
   return (
-    <MapContainer center={center} zoom={13} scrollWheelZoom={true}>
+    <MapContainer center={codsRef.current} zoom={13} scrollWheelZoom={true}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <GetCods setAddress={setAddress} setLatLng={setLatLng} />
+      <GetCods
+        setAddress={setAddress}
+        setLatLng={setLatLng}
+        lat={lat}
+        lng={lng}
+      />
     </MapContainer>
   );
 };

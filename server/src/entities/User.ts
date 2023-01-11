@@ -51,9 +51,8 @@ export class User extends BaseEntity {
   @Column({ nullable: true, default: false })
   emailVerified: boolean;
 
-  @OneToOne(() => Address)
-  @JoinColumn()
-  address: Address;
+  @OneToMany(() => Address, (address) => address.user)
+  address: Address[];
 
   @OneToOne(() => Cart, (cart) => cart.user, { nullable: true })
   @JoinColumn()

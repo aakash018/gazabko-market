@@ -227,7 +227,6 @@ const SignUpPage: React.FC = () => {
         id: userIDforEmailVerification.current,
         imgURL: selectedAvaatar,
       });
-      console.log(res.data);
 
       if (res.data.status !== "ok") {
         return setAlert({
