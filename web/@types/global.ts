@@ -83,3 +83,14 @@ export interface Cart {
   subTotal: number;
   totalProducts: number;
 }
+
+export interface FollowerType {
+  user: {
+    firstName: string;
+    lastName: string;
+    avatar: string;
+    id: number;
+  };
+  userId: number;
+  sellerId: number;
+}

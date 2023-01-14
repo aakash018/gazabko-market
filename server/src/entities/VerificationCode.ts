@@ -8,6 +8,9 @@ export class VerificationCode extends BaseEntity {
   @Column()
   userID: number;
 
+  @Column({ nullable: true })
+  email: string;
+
   @Column()
   code: string;
 }

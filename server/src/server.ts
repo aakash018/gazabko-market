@@ -20,6 +20,8 @@ import order from "./api/order";
 import sellerInfo from "./api/sellerInfo";
 import search from "./api/search";
 import address from "./api/address";
+import sellerOrder from "./api/seller/order";
+import sellerFollowers from "./api/seller/followers";
 //?? RETURN REVIEW REPORT
 import rrr from "./api/rrr";
 import { Products } from "./entities/Products";
@@ -108,6 +110,8 @@ app.use("/search", search);
 app.use("/address", address);
 
 app.use("/sellerInfo", sellerInfo);
+app.use("/sellerOrder", sellerOrder);
+app.use("/seller/followers", sellerFollowers);
 //?? RETURN REVIEW REPORT
 app.use("/rrr", rrr);
 

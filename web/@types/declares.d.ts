@@ -10,6 +10,8 @@ declare interface User {
   gender: "male" | "female" | "others";
   cart?: Cart;
   address: Address[];
+  created_at: string;
+  updated_at: string;
 }
 
 declare interface Address {

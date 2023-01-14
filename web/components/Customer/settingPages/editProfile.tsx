@@ -1,6 +1,6 @@
 import axios from "axios";
 import Router from "next/router";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useAuth } from "../../../context/User";
 import { avatarsData, AvaterSelectHolder } from "../../../pages/signup";
 import { useAlert } from "../../../pages/_app";
@@ -10,9 +10,18 @@ import Button from "../../shared/Button";
 import IntputField from "../../shared/Input";
 
 const EditProfile = () => {
-  const { login, user } = useAuth();
+  const { login, user, setUser } = useAuth();
   const { setAlert } = useAlert();
   const [selectedAvaatar, setSelectedAvatar] = useState<string>("");
+
+  const [username, setUsername] = useState(user?.username);
+  const [firstName, setFirstName] = useState(user?.firstName);
+  const [lastName, setlastName] = useState(user?.lastName);
+  const [genderSelect, setGenderSelect] = useState(user?.gender);
+
+  const [oldPass, setOldPass] = useState("");
+  const [newPass, setNewPass] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
 
   const [selectAvaarList, setSelectAvatarList] = useState(() =>
     avatarsData.map((data) => {
@@ -24,7 +33,50 @@ const EditProfile = () => {
     })
   );
 
-  const handleInfoUpdate = () => {};
+  const handleInfoUpdate = async () => {
+    if (
+      username?.trim() === "" ||
+      firstName?.trim() === "" ||
+      lastName?.trim() === "" ||
+      genderSelect?.trim() === ""
+    ) {
+      return setAlert({
+        type: "error",
+        message: "empty fields",
+      });
+    }
+
+    try {
+      const res = await axios.post<RespondType & { user?: User }>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/update/profile`,
+        {
+          username,
+          firstName,
+          lastName,
+          gender: genderSelect,
+        },
+        { withCredentials: true }
+      );
+      console.log(res.data);
+      if (res.data.status === "ok" && setUser && res.data.user) {
+        setUser(res.data.user);
+        setAlert({
+          type: "message",
+          message: "user updated",
+        });
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed to update user",
+      });
+    }
+  };
 
   const handleAvatarUpdate = async () => {
     try {
@@ -57,6 +109,58 @@ const EditProfile = () => {
       setAlert({
         type: "error",
         message: "failed to update avatar",
+      });
+    }
+  };
+
+  const handlePasswordUpdate = async () => {
+    if (
+      oldPass.trim() === "" ||
+      newPass.trim() === "" ||
+      confirmPass.trim() === ""
+    ) {
+      return setAlert({
+        type: "error",
+        message: "empty fields",
+      });
+    }
+
+    if (newPass !== confirmPass) {
+      return setAlert({
+        type: "error",
+        message: "confirm password did not match",
+      });
+    }
+
+    try {
+      const res = await axios.post<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/update/password`,
+        {
+          newPass,
+          oldPass,
+        },
+        { withCredentials: true }
+      );
+
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+        setOldPass("");
+        setNewPass("");
+        setConfirmPass("");
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      setAlert({
+        type: "error",
+        message: "failed to update password",
       });
     }
   };
@@ -102,21 +206,33 @@ const EditProfile = () => {
             width: "300px",
           }}
         >
-          <IntputField label="Username" />
+          <IntputField
+            label="Username"
+            value={username}
+            setState={setUsername}
+          />
         </div>
         <div
           style={{
             width: "300px",
           }}
         >
-          <IntputField label="First Name" />
+          <IntputField
+            label="First Name"
+            value={firstName}
+            setState={setFirstName}
+          />
         </div>
         <div
           style={{
             width: "300px",
           }}
         >
-          <IntputField label="Last Name" />
+          <IntputField
+            label="Last Name"
+            value={lastName}
+            setState={setlastName}
+          />
         </div>
         <div
           style={{
@@ -158,13 +274,18 @@ const EditProfile = () => {
         >
           <IntputField label="Birth Date" type={"date"} />
         </div>
-        <select>
-          <option>Male</option>
-          <option>Female</option>
-          <option>Other</option>
+        <select
+          defaultValue={genderSelect}
+          onChange={(e) => setGenderSelect(e.target.value as any)}
+        >
+          <option value={"male"}>Male</option>
+          <option value={"female"}>Female</option>
+          <option value={"others"}>Others</option>
         </select>
       </div>
-      <Button className={styles.actBtn}>Save Changes</Button>
+      <Button className={styles.actBtn} onClick={handleInfoUpdate}>
+        Save Changes
+      </Button>
       <div
         style={{
           display: "flex",
@@ -178,23 +299,40 @@ const EditProfile = () => {
             width: "300px",
           }}
         >
-          <IntputField label="Old Password" type={"password"} />
+          <IntputField
+            label="Old Password"
+            type={"password"}
+            setState={setOldPass}
+            value={oldPass}
+          />
         </div>
         <div
           style={{
             width: "300px",
           }}
         >
-          <IntputField label="New Password" type={"password"} />
+          <IntputField
+            label="New Password"
+            type={"password"}
+            setState={setNewPass}
+            value={newPass}
+          />
         </div>
         <div
           style={{
             width: "300px",
           }}
         >
-          <IntputField label="Confirm Password" type={"password"} />
+          <IntputField
+            label="Confirm Password"
+            type={"password"}
+            setState={setConfirmPass}
+            value={confirmPass}
+          />
         </div>
-        <Button className={styles.actBtn}>Save Changes</Button>
+        <Button className={styles.actBtn} onClick={handlePasswordUpdate}>
+          Save Changes
+        </Button>
       </div>
     </div>
   );

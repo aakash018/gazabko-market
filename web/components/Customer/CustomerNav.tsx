@@ -98,7 +98,7 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
               </Button>
             </div>
           )}
-          {isLogedIn && user && (
+          {isLogedIn && user && user.role === "customer" && (
             <div className={styles.account}>
               <div className={styles.cartAndWishlist}>
                 <AiOutlineShoppingCart

@@ -67,7 +67,7 @@ router.post("/login", async (req, res) => {
     );
 
     if (isPasswordMatched) {
-      req.session.user = seller.id;
+      req.session.sellerID = seller.id;
       res.json({
         status: "ok",
         message: "logged in successfully",

@@ -1,12 +1,73 @@
+import axios from "axios";
 import Router from "next/router";
 import React, { useState } from "react";
 import { BsShieldLockFill } from "react-icons/bs";
 import Layout from "../../components/Customer/Layout";
 import Button from "../../components/shared/Button";
 import IntputField from "../../components/shared/Input";
+import { useAlert } from "../_app";
 
 const ChangeEmail = () => {
   const [page, setPage] = useState<1 | 2>(1);
+  const { setAlert } = useAlert();
+  const [newEmail, setNewEmail] = useState("");
+  const [code, setCode] = useState("");
+
+  const handleEmailChange = async () => {
+    try {
+      const res = await axios.post<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/update/email`,
+        {
+          email: newEmail,
+        },
+        { withCredentials: true }
+      );
+      console.log(res.data);
+      if (res.data.status === "ok") {
+        setPage(2);
+      } else {
+        setAlert({
+          type: "error",
+          message: "failed to send email",
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "unknown error sending verification email",
+      });
+    }
+  };
+
+  const verifyCodeSubmit = async () => {
+    try {
+      const res = await axios.post<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/update/verifyEmail`,
+        {
+          code,
+        },
+        { withCredentials: true }
+      );
+
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+        Router.push("/settings");
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed to update email",
+      });
+    }
+  };
 
   return (
     <Layout>
@@ -53,14 +114,18 @@ const ChangeEmail = () => {
           {page === 1 && (
             <div>
               <div>
-                <IntputField label="New Email" />
+                <IntputField
+                  label="New Email"
+                  value={newEmail}
+                  setState={setNewEmail}
+                />
               </div>
               <div
                 style={{
                   marginTop: 20,
                 }}
               >
-                <Button onClick={() => setPage(2)}>
+                <Button onClick={handleEmailChange}>
                   Send Verification Email
                 </Button>
               </div>
@@ -69,14 +134,18 @@ const ChangeEmail = () => {
           {page === 2 && (
             <div>
               <div>
-                <IntputField label="Verification Code" />
+                <IntputField
+                  label="Verification Code"
+                  value={code}
+                  setState={setCode}
+                />
               </div>
               <div
                 style={{
                   marginTop: 20,
                 }}
               >
-                <Button onClick={() => Router.push("/settings")}>Done</Button>
+                <Button onClick={verifyCodeSubmit}>Done</Button>
               </div>
             </div>
           )}

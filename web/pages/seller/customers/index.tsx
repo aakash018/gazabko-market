@@ -1,58 +1,103 @@
+import axios from "axios";
 import Router from "next/router";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { FollowerType } from "../../../@types/global";
 import CustomersInfoHolder from "../../../components/Admin/shared/CustomersInfoHolder";
 import SellerNav from "../../../components/Seller/SellerNav";
 
 import styles from "../../../styles/components/Seller/pages/CustomerPage.module.scss";
 import { TableHolder } from "../../admin/orders";
+import { useAlert } from "../../_app";
 
 type TableDef = {
   SN: number;
   Name: string;
   "Signed Up Date": string;
   "Total Items Boughts": number;
-  Status: "Verified" | "Not Verified";
-  Details: any;
 };
 
 const CustomersPage = () => {
   const searchRef = useRef<HTMLInputElement>(null);
 
-  const [rowData] = useState<TableDef[]>([
-    {
-      SN: 1,
-      "Signed Up Date": "21 Feb 2022",
-      Name: "Laxmi Bhattarai",
-      "Total Items Boughts": 20,
-      Details: "",
-      Status: "Verified",
-    },
-  ]);
+  const [recentFollower, setRecentFollower] = useState<FollowerType[]>([]);
+  const { setAlert } = useAlert();
+
+  const [rowData, setRowData] = useState<TableDef[]>([]);
 
   const [columnDefs] = useState([
     { field: "SN", width: 60 },
-    { field: "Name" },
-    { field: "Signed Up Date", width: 150 },
+    { field: "Name", width: 120 },
+    { field: "Signed Up Date", width: 200 },
     { field: "Total Items Boughts" },
-    { field: "Status", width: 150 },
-    {
-      field: "Details",
-      width: 150,
-      cellRenderer: () => (
-        <div
-          style={{
-            fontWeight: "bold",
-            color: "#5494F5",
-          }}
-          onClick={() => {
-            Router.push("/seller/customers/sdad");
-          }}
-        >
-          View
-        </div>
-      ),
-    },
   ]);
+
+  useEffect(() => {
+    let ignore = false;
+    if (!ignore) {
+      try {
+        (async () => {
+          const res = await axios.get<
+            RespondType & {
+              followers: FollowerType[];
+            }
+          >(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/followers/recentFollowers`,
+            { withCredentials: true }
+          );
+          console.log(res.data);
+          if (res.data.status === "ok" && res.data.followers) {
+            setRecentFollower(res.data.followers);
+          }
+        })();
+      } catch {}
+    }
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+    if (!ignore) {
+      try {
+        (async () => {
+          const res = await axios.get<
+            RespondType & {
+              followers?: { user: User; userId: number; sellerId: number }[];
+            }
+          >(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/followers/all`,
+            { withCredentials: true }
+          );
+
+          if (res.data.status === "ok") {
+            const allFollowers: TableDef[] | undefined =
+              res.data.followers?.map((follower, i) => ({
+                SN: i,
+                Name: follower.user.lastName,
+                "Signed Up Date": follower.user.created_at,
+                "Total Items Boughts": 10,
+              }));
+
+            setRowData(allFollowers as TableDef[]);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        })();
+      } catch {
+        setAlert({
+          type: "error",
+          message: "faied to get followers",
+        });
+      }
+    }
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   return (
     <SellerNav>
@@ -61,19 +106,19 @@ const CustomersPage = () => {
         <div className={styles.topBuyers}>
           <CustomersInfoHolder
             title="Recently Added Followers"
+            customers={recentFollower}
             onViewClick={() => {
-              Router.push("/seller/customers/newFollowers");
+              Router.push("/seller/customers/topFollowers");
             }}
-            route={"/seller/customers/fsdf"}
           />
         </div>
         <div className={styles.newCusomers}>
           <CustomersInfoHolder
             title="Top Followers This Month"
+            customers={recentFollower}
             onViewClick={() => {
               Router.push("/seller/customers/topFollowers");
             }}
-            route={"/seller/customers/fsdf"}
           />
         </div>
       </div>
@@ -83,6 +128,7 @@ const CustomersPage = () => {
           columData={columnDefs}
           inputRef={searchRef}
           title="All Followers"
+          width={620}
         />
       </div>
     </SellerNav>

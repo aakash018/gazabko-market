@@ -9,6 +9,7 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { AgGridReact } from "ag-grid-react";
 import Router from "next/router";
+import { RowClickedEvent } from "ag-grid-community";
 
 interface TableDef {
   SN: number;
@@ -26,6 +27,7 @@ interface TableHolderPros {
   columData: {}[];
   height?: number;
   width?: number;
+  onRowClick?: (event: RowClickedEvent<any>) => void;
 }
 
 export const TableHolder: React.FC<TableHolderPros> = ({
@@ -35,6 +37,7 @@ export const TableHolder: React.FC<TableHolderPros> = ({
   rowData,
   height = 400,
   width = 915,
+  onRowClick,
 }) => {
   return (
     <div className={styles.tableContainer}>
@@ -46,7 +49,15 @@ export const TableHolder: React.FC<TableHolderPros> = ({
       </div>
       <div className={styles.table}>
         <div className="ag-theme-alpine" style={{ height, width }}>
-          <AgGridReact rowData={rowData} columnDefs={columData}></AgGridReact>
+          <AgGridReact
+            onRowClicked={(event) => {
+              if (onRowClick) {
+                onRowClick(event);
+              }
+            }}
+            rowData={rowData}
+            columnDefs={columData}
+          ></AgGridReact>
         </div>
       </div>
     </div>

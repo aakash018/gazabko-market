@@ -129,6 +129,10 @@ router.post("/verification", async (req, res) => {
       .where("id = :id", { id: req.body.id })
       .execute();
 
+    await VerificationCode.delete({
+      userID: req.session.user,
+    });
+
     return res.json({
       status: "ok",
       message: "account verified",

@@ -7,7 +7,7 @@ interface Props {
 
 type authContextType = {
   user: User | null;
-
+  setUser: React.Dispatch<React.SetStateAction<User | null>> | null;
   isLogedIn: boolean;
   showBanners: boolean;
   login: (
@@ -26,6 +26,7 @@ const authContextDefaultValues: authContextType = {
   user: null,
   isLogedIn: true,
   showBanners: true,
+  setUser: null,
   login: () => {},
   logout: () => {
     return null;
@@ -130,6 +131,7 @@ const Provider: React.FC<Props> = ({ children }) => {
     login,
     logout,
     disableBanners,
+    setUser,
   };
 
   return <Context.Provider value={value}>{children}</Context.Provider>;
