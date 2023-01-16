@@ -1,6 +1,6 @@
 import { Entity, BaseEntity, ManyToOne, PrimaryColumn, Column } from "typeorm";
 import { User } from "./User";
-import { Seller } from "./Seller";
+import { Seller } from "./seller/Seller";
 
 @Entity()
 export class Follow extends BaseEntity {

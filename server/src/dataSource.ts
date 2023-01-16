@@ -7,7 +7,8 @@ import { Order } from "./entities/Orders";
 import { Products } from "./entities/Products";
 import { Answer, Question } from "./entities/QuestionAndAnswer";
 import { Review } from "./entities/Review";
-import { Seller } from "./entities/Seller";
+import { Seller } from "./entities/seller/Seller";
+import { ToBeVerified } from "./entities/seller/ToBeVerified";
 import { User } from "./entities/User";
 import { VerificationCode } from "./entities/VerificationCode";
 
@@ -32,5 +33,6 @@ export const AppDataSource = new DataSource({
     Order,
     OnCartProduct,
     Follow,
+    ToBeVerified,
   ],
 });

@@ -1,14 +1,139 @@
+import axios from "axios";
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SellerNav from "../../components/Seller/SellerNav";
 import Button from "../../components/shared/Button";
 import ImageUploader from "../../components/shared/ImageUploader";
 import IntputField from "../../components/shared/Input";
+import { useAuth } from "../../context/User";
 
 import styles from "../../styles/components/Seller/pages/Account.module.scss";
+import { useAlert } from "../_app";
 
 const Account: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<any>(null);
+  const [username, setUsername] = useState("");
+  const [storeName, setStoreName] = useState("");
+  const [storeAddress, setStoreAddress] = useState("");
+  const [contactPerson, setContactPerson] = useState("");
+  const [phoneNo, setPhoneNo] = useState("");
+  const [panNo, setPanNo] = useState("");
+  const [email, setEmail] = useState("");
+
+  const [oldPass, setOldPass] = useState("");
+  const [newPass, setNewPass] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
+
+  const { seller } = useAuth();
+  const { setAlert } = useAlert();
+  useEffect(() => {
+    if (seller) {
+      setUsername(seller.username);
+      setStoreAddress(seller.address);
+      setStoreName(seller.storeName);
+      setContactPerson(seller.contactPerson);
+      setPhoneNo(seller.phoneNo.toString());
+      setPanNo(seller.panNo.toString() || "");
+      setEmail(seller.email || "");
+    }
+  }, [seller]);
+
+  const handleInfoSubmit = async () => {
+    if (
+      username.trim() === "" ||
+      storeName.trim() === "" ||
+      storeAddress.trim() === "" ||
+      contactPerson.trim() === "" ||
+      phoneNo.trim() === ""
+    ) {
+      return setAlert({
+        type: "error",
+        message: "empty fields",
+      });
+    }
+
+    try {
+      const res = await axios.post<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/update/info`,
+        {
+          username,
+          storeAddress,
+          storeName,
+          contactPerson,
+          phoneNo,
+          panNo,
+          email,
+        },
+        { withCredentials: true }
+      );
+
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      setAlert({
+        type: "error",
+        message: "failed to send info for verification",
+      });
+    }
+  };
+
+  const handlePassSubmit = async () => {
+    if (
+      oldPass.trim() === "" ||
+      newPass.trim() === "" ||
+      confirmPass.trim() === ""
+    ) {
+      return setAlert({
+        type: "error",
+        message: "empty fields",
+      });
+    }
+
+    if (newPass !== confirmPass) {
+      return setAlert({
+        type: "error",
+        message: "confirm password didn't match",
+      });
+    }
+
+    try {
+      const res = await axios.post<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/update/password`,
+        {
+          oldPass,
+          newPass,
+        },
+        { withCredentials: true }
+      );
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      setAlert({
+        type: "error",
+        message: "failed to update password",
+      });
+    }
+  };
 
   return (
     <SellerNav>
@@ -26,22 +151,57 @@ const Account: React.FC = () => {
       <div className={styles.account}>
         <div className={styles.inputs}>
           <div className={styles.storeInfo}>
-            <div className={styles.title}>Store Inforamitions</div>
-            <IntputField label="Username" />
-            <IntputField label="Store's Name" />
-            <IntputField label="Store's Address" />
-            <IntputField label="Contact Person" />
-            <IntputField label="Phone No." />
-            <IntputField label="Email" />
-            <IntputField label="Pan No." />
-            <Button>Send for Verification</Button>
+            <div className={styles.title}>Store Information</div>
+            <IntputField
+              label="Username"
+              value={username}
+              setState={setUsername}
+            />
+            <IntputField
+              label="Store's Name"
+              value={storeName}
+              setState={setStoreName}
+            />
+            <IntputField
+              label="Store's Address"
+              value={storeAddress}
+              setState={setStoreAddress}
+            />
+            <IntputField
+              label="Contact Person"
+              value={contactPerson}
+              setState={setContactPerson}
+            />
+            <IntputField
+              label="Phone No."
+              value={phoneNo}
+              setState={setPhoneNo}
+            />
+            <IntputField label="Email" value={email} setState={setEmail} />
+            <IntputField label="Pan No." value={panNo} setState={setPanNo} />
+            <Button onClick={handleInfoSubmit}>Send for Verification</Button>
           </div>
           <div className={styles.password}>
             <div className={styles.title}>Change Password</div>
-            <IntputField label="Old Password" type={"password"} />
-            <IntputField label="New Password" type={"password"} />
-            <IntputField label="Confirm Password" type={"password"} />
-            <Button>Save</Button>
+            <IntputField
+              label="Old Password"
+              type={"password"}
+              value={oldPass}
+              setState={setOldPass}
+            />
+            <IntputField
+              label="New Password"
+              type={"password"}
+              value={newPass}
+              setState={setNewPass}
+            />
+            <IntputField
+              label="Confirm Password"
+              type={"password"}
+              value={confirmPass}
+              setState={setConfirmPass}
+            />
+            <Button onClick={handlePassSubmit}>Save</Button>
           </div>
         </div>
         <div className={styles.profilePic}>

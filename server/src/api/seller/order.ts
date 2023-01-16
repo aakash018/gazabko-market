@@ -102,4 +102,63 @@ router.get("/getOneOrderInfo", validateSeller, async (req, res) => {
   }
 });
 
+router.put("/verifyOrder", validateSeller, async (req, res) => {
+  const userReq = req.body as { oid: number };
+  if (userReq.oid) {
+    try {
+      const order = await Order.findOne({ where: { id: userReq.oid } });
+      if (order) {
+        order.status = "processing";
+        await order.save();
+
+        res.json({
+          status: "ok",
+          message: "order verified",
+        });
+      } else {
+        res.json({
+          status: "fail",
+          message: "order not found in database",
+        });
+      }
+    } catch {
+      res.json({
+        status: "fail",
+        message: "failed to update order",
+      });
+    }
+  } else {
+    res.json({
+      status: "error",
+      message: "no oid found :(",
+    });
+  }
+});
+
+router.delete("/cancelOrder", validateSeller, async (req, res) => {
+  const userReq = req.query as unknown as { oid: number };
+  if (userReq.oid) {
+    try {
+      await Order.delete({
+        id: userReq.oid,
+      });
+
+      res.json({
+        status: "ok",
+        message: "order cancel",
+      });
+    } catch {
+      res.json({
+        status: "fail",
+        message: "failed to cancel order",
+      });
+    }
+  } else {
+    res.json({
+      status: "error",
+      message: "no oid found :(",
+    });
+  }
+});
+
 export default router;

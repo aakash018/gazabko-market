@@ -12,7 +12,7 @@ import { OnCartProduct } from "./Cart/OnCartProduct";
 import { Order } from "./Orders";
 import { Question } from "./QuestionAndAnswer";
 import { Review } from "./Review";
-import { Seller } from "./Seller";
+import { Seller } from "./seller/Seller";
 
 @Entity()
 export class Products extends BaseEntity {
@@ -22,7 +22,7 @@ export class Products extends BaseEntity {
   @Column()
   name: string;
 
-  @Column({ nullable: true })
+  @Column({ default: 0 })
   rating: number;
 
   @Column()

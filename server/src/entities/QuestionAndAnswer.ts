@@ -10,7 +10,7 @@ import {
   JoinColumn,
 } from "typeorm";
 import { Products } from "./Products";
-import { Seller } from "./Seller";
+import { Seller } from "./seller/Seller";
 import { User } from "./User";
 
 @Entity()

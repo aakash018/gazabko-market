@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { Seller } from "../@types/global";
 
 interface Props {
   children: React.ReactNode;
@@ -8,6 +9,7 @@ interface Props {
 type authContextType = {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>> | null;
+  seller: Seller | null;
   isLogedIn: boolean;
   showBanners: boolean;
   login: (
@@ -24,6 +26,7 @@ type authContextType = {
 
 const authContextDefaultValues: authContextType = {
   user: null,
+  seller: null,
   isLogedIn: true,
   showBanners: true,
   setUser: null,
@@ -42,6 +45,7 @@ export function useAuth() {
 
 const Provider: React.FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [seller, setSeller] = useState<Seller | null>(null);
 
   const [isLogedIn, setLoginStatus] = useState<boolean>(false);
   const [showBanners, setShowBanners] = useState<boolean>(true);
@@ -97,7 +101,11 @@ const Provider: React.FC<Props> = ({ children }) => {
       return res.data;
     }
 
-    setUser(res.data.user);
+    if (type === "customer") {
+      setUser(res.data.user);
+    } else if (type === "seller") {
+      setSeller(res.data.user);
+    }
 
     setLoginStatus(true);
     return res.data;
@@ -126,6 +134,7 @@ const Provider: React.FC<Props> = ({ children }) => {
 
   const value = {
     user,
+    seller,
     isLogedIn,
     showBanners,
     login,

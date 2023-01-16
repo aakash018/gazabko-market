@@ -7,9 +7,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Follow } from "./Follow";
-import { Products } from "./Products";
-import { Answer } from "./QuestionAndAnswer";
+import { Follow } from "../Follow";
+import { Products } from "../Products";
+import { Answer } from "../QuestionAndAnswer";
 
 @Entity()
 export class Seller extends BaseEntity {
@@ -34,8 +34,8 @@ export class Seller extends BaseEntity {
   @Column()
   contactPerson: string;
 
-  @Column()
-  phoneNo: number;
+  @Column({ type: "bigint" })
+  phoneNo: string;
 
   @Column({ default: "seller" })
   role: string;

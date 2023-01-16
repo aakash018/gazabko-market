@@ -23,41 +23,104 @@ const OrdersDetails = () => {
 
   const { setAlert } = useAlert();
 
-  useEffect(() => {
-    (async () => {
-      if (oid) {
-        try {
-          setLoading(true);
-          const res = await axios.get<
-            RespondType & { order: Order; userLastName: string }
-          >(
-            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/sellerOrder/getOneOrderInfo`,
-            {
-              params: { oid },
-              withCredentials: true,
-            }
-          );
-          setLoading(false);
-          if (res.data.status === "ok") {
-            setOrderDetails({
-              ...res.data.order,
-              userLastName: res.data.userLastName,
-            });
-          } else {
-            setAlert({
-              type: "error",
-              message: res.data.message,
-            });
+  const fetchOrder = async () => {
+    if (oid) {
+      try {
+        setLoading(true);
+        const res = await axios.get<
+          RespondType & { order: Order; userLastName: string }
+        >(
+          `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/sellerOrder/getOneOrderInfo`,
+          {
+            params: { oid },
+            withCredentials: true,
           }
-        } catch {
+        );
+        setLoading(false);
+        if (res.data.status === "ok") {
+          setOrderDetails({
+            ...res.data.order,
+            userLastName: res.data.userLastName,
+          });
+        } else {
           setAlert({
             type: "error",
-            message: "failed to fetch data",
+            message: res.data.message,
           });
         }
+      } catch {
+        setAlert({
+          type: "error",
+          message: "failed to fetch data",
+        });
       }
-    })();
+    }
+  };
+
+  useEffect(() => {
+    fetchOrder();
   }, [oid]);
+
+  const handleVerifyOrder = async () => {
+    try {
+      const res = await axios.put<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/sellerOrder/verifyOrder`,
+        {
+          oid,
+        },
+        { withCredentials: true }
+      );
+
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+        fetchOrder();
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      setAlert({
+        type: "error",
+        message: "failed to verify order",
+      });
+    }
+  };
+
+  const handleCancelOrder = async () => {
+    try {
+      const res = await axios.delete<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/sellerOrder/cancelOrder`,
+        {
+          params: { oid },
+          withCredentials: true,
+        }
+      );
+
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+        Router.push("/seller/orders");
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch (e) {
+      setAlert({
+        type: "error",
+        message: "failed to cancel order",
+      });
+    }
+  };
 
   return (
     <SellerNav>
@@ -183,8 +246,17 @@ const OrdersDetails = () => {
               <div className={styles.statusControl}>
                 <div className={styles.mainTitle}>Order Status Control</div>
                 <div className={styles.actBtn}>
-                  <Button>Verify Order</Button>
-                  <Button color="error">Cancle Order</Button>
+                  {orderDetails.status === "pending" && (
+                    <>
+                      <Button onClick={handleVerifyOrder}>Verify Order</Button>
+                      <Button color="error" onClick={handleCancelOrder}>
+                        Cancel Order
+                      </Button>
+                    </>
+                  )}
+                  {orderDetails.status !== "pending" && (
+                    <h2>Order already verified</h2>
+                  )}
                 </div>
               </div>
             </div>

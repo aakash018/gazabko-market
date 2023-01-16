@@ -22,6 +22,7 @@ import search from "./api/search";
 import address from "./api/address";
 import sellerOrder from "./api/seller/order";
 import sellerFollowers from "./api/seller/followers";
+import sellerUpdate from "./api/seller/update";
 //?? RETURN REVIEW REPORT
 import rrr from "./api/rrr";
 import { Products } from "./entities/Products";
@@ -112,6 +113,7 @@ app.use("/address", address);
 app.use("/sellerInfo", sellerInfo);
 app.use("/sellerOrder", sellerOrder);
 app.use("/seller/followers", sellerFollowers);
+app.use("/seller/update", sellerUpdate);
 //?? RETURN REVIEW REPORT
 app.use("/rrr", rrr);
 

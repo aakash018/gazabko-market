@@ -1,7 +1,7 @@
 import express from "express";
 import validateUser from "../middleware/validateUser";
 import { Products } from "../entities/Products";
-import { Seller } from "../entities/Seller";
+import { Seller } from "../entities/seller/Seller";
 
 import { Follow } from "../entities/Follow";
 import { User } from "../entities/User";

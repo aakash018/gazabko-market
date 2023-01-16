@@ -1,5 +1,5 @@
 import express from "express";
-import { Seller } from "../../entities/Seller";
+import { Seller } from "../../entities/seller/Seller";
 
 import bcrypt, { hash } from "bcrypt";
 import { AppDataSource } from "../../dataSource";
@@ -13,7 +13,7 @@ interface SellerRegisterData {
   address: string;
   password: string;
   contactPerson: string;
-  phoneNo: number;
+  phoneNo: string;
   panNo: number;
 }
 
@@ -46,10 +46,6 @@ router.post("/sellerRegister", async (req, res) => {
   }
 });
 
-router.get("/login", (_, res) => {
-  res.send("HERE");
-});
-
 router.post("/login", async (req, res) => {
   const sellerInputData: { username: string; password: string } = req.body;
 
@@ -68,10 +64,11 @@ router.post("/login", async (req, res) => {
 
     if (isPasswordMatched) {
       req.session.sellerID = seller.id;
+      Reflect.deleteProperty(seller, "password");
       res.json({
         status: "ok",
         message: "logged in successfully",
-        seller: seller,
+        user: seller,
       });
     } else {
       res.json({

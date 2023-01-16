@@ -1,6 +1,6 @@
 import { AgGridReact } from "ag-grid-react";
 import Router from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaBoxOpen } from "react-icons/fa";
 import { FiPackage } from "react-icons/fi";
 import {
@@ -19,6 +19,8 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { BiEdit, BiHide } from "react-icons/bi";
 import { BsFillPatchQuestionFill } from "react-icons/bs";
+import axios from "axios";
+import { ProtuctType } from "../../../@types/global";
 
 type TableDef = {
   SN: number;
@@ -31,62 +33,7 @@ type TableDef = {
 };
 
 const ProductsPage = () => {
-  const [rowData] = useState<TableDef[]>([
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-    },
-  ]);
+  const [rowData] = useState<TableDef[]>([]);
 
   const [columnDefs] = useState([
     { field: "SN", width: 70 },
@@ -125,6 +72,26 @@ const ProductsPage = () => {
       width: 135,
     },
   ]);
+
+  useEffect(() => {
+    let ignore = false;
+    if (!ignore) {
+      (async () => {
+        const res = await axios.get<RespondType & { products?: ProtuctType[] }>(
+          `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/topSellingProducts`,
+          {
+            withCredentials: true,
+          }
+        );
+        if (res.data.status === "ok") {
+        }
+      })();
+    }
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const handleInfoCardRoute = (route: string) => {
     Router.push(`/seller/products/${route}`);
