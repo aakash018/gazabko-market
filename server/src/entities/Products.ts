@@ -84,7 +84,7 @@ export class Products extends BaseEntity {
   @ManyToOne(() => Seller, (seller) => seller.products)
   seller: Seller;
 
-  @OneToMany(() => Review, (review) => review.review)
+  @OneToMany(() => Review, (review) => review.product)
   review: Review[];
 
   @CreateDateColumn()

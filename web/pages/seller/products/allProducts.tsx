@@ -1,6 +1,6 @@
 import { AgGridReact } from "ag-grid-react";
 import Router from "next/router";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import SearchBar from "../../../components/Admin/shared/SearchBar";
 import SellerNav from "../../../components/Seller/SellerNav";
@@ -9,6 +9,7 @@ import styles from "../../../styles/components/Seller/pages/AllProducts.module.s
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
+import axios from "axios";
 
 type TableDef = {
   SN: number;
@@ -22,68 +23,7 @@ type TableDef = {
 };
 
 const AllProducts = () => {
-  const [rowData] = useState<TableDef[]>([
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Reviews: "",
-      Edit: "",
-      "Hide Item": "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      Reviews: "",
-      "Hide Item": "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-      Reviews: "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-      Reviews: "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-      Reviews: "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-      Reviews: "",
-    },
-  ]);
+  const [rowData] = useState<TableDef[]>([]);
 
   const [columnDefs] = useState([
     { field: "SN", width: 70 },
@@ -138,6 +78,23 @@ const AllProducts = () => {
       ),
     },
   ]);
+
+  const fetchProductsWithCat = async (cat: string = "All Products") => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/products/allProducts`,
+        {
+          withCredentials: true,
+          params: {
+            category: cat,
+          },
+        }
+      );
+      console.log(res.data);
+    } catch {}
+  };
+
+  useEffect(() => {}, []);
 
   const searchRef = useRef<HTMLInputElement>(null);
   return (

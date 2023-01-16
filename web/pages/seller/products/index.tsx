@@ -21,58 +21,37 @@ import { BiEdit, BiHide } from "react-icons/bi";
 import { BsFillPatchQuestionFill } from "react-icons/bs";
 import axios from "axios";
 import { ProtuctType } from "../../../@types/global";
+import { useAlert } from "../../_app";
 
 type TableDef = {
   SN: number;
   Product: string;
-  Vendor: string;
+  Rating: number;
+  Brand: string;
   "Item Sold": number;
   "Item Status": "In Stock" | "Out of Stock";
-  Edit: any;
-  "Hide Item": any;
+  id: number;
 };
 
-const ProductsPage = () => {
-  const [rowData] = useState<TableDef[]>([]);
+interface CountRespondType {
+  outOfStock: number;
+  total: number;
+  reviews: number;
+  questions: number;
+}
 
+const ProductsPage = () => {
+  const [rowData, setRowData] = useState<TableDef[]>([]);
+  const { setAlert } = useAlert();
   const [columnDefs] = useState([
     { field: "SN", width: 70 },
     { field: "Product", width: 220 },
     { field: "Item Sold", width: 135 },
     { field: "Item Status", width: 135 },
-    {
-      field: "Edit",
-      width: 135,
-      cellRenderer: () => (
-        <div
-          onClick={() => Router.push("/seller/products/add")}
-          style={{
-            fontSize: "25px",
-            color: "var(--theme-color)",
-          }}
-        >
-          <BiEdit style={{ cursor: "pointer" }} />
-        </div>
-      ),
-    },
-    {
-      field: "Details",
-      cellRenderer: () => (
-        <div
-          onClick={() => Router.push("/seller/products/sdfsfd")}
-          style={{
-            fontWeight: "bold",
-            color: "var(--theme-color)",
-            cursor: "pointer",
-          }}
-        >
-          View
-        </div>
-      ),
-      width: 135,
-    },
+    { field: "Brand", width: 150 },
+    { field: "Rating", width: 135 },
   ]);
-
+  const [dataCount, setDataCount] = useState<CountRespondType | null>(null);
   useEffect(() => {
     let ignore = false;
     if (!ignore) {
@@ -83,7 +62,20 @@ const ProductsPage = () => {
             withCredentials: true,
           }
         );
-        if (res.data.status === "ok") {
+        if (res.data.status === "ok" && res.data.products) {
+          const topProductsTable: TableDef[] = res.data.products.map(
+            (product, i) => ({
+              SN: i + 1,
+              "Item Sold": product.timesBought,
+              Product: product.name,
+              "Item Status":
+                product.totalStock > 0 ? "In Stock" : "Out of Stock",
+              Brand: product.brand,
+              Rating: product.rating,
+              id: product.id,
+            })
+          );
+          setRowData(topProductsTable);
         }
       })();
     }
@@ -93,6 +85,33 @@ const ProductsPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await axios.get<RespondType & { count?: CountRespondType }>(
+          `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/getProductsCount`,
+          {
+            withCredentials: true,
+          }
+        );
+
+        if (res.data.status === "ok" && res.data.count) {
+          setDataCount(res.data.count);
+        } else {
+          setAlert({
+            type: "error",
+            message: res.data.message,
+          });
+        }
+      } catch {
+        setAlert({
+          type: "error",
+          message: "failed to load count",
+        });
+      }
+    })();
+  }, []);
+
   const handleInfoCardRoute = (route: string) => {
     Router.push(`/seller/products/${route}`);
   };
@@ -100,76 +119,79 @@ const ProductsPage = () => {
   return (
     <SellerNav>
       <h1>Products</h1>
-      <div className={styles.options}>
-        <EditOptionsButton
-          icon={<MdOutlineAdd />}
-          text={"Add Products"}
-          bgColor={"#5494F5"}
-          onClick={() => {
-            handleInfoCardRoute("add");
-          }}
-        />
-        <InfoCard
-          amount={52}
-          bgColor={"#00AB77"}
-          title="Total Product"
-          onViewClick={() => {
-            handleInfoCardRoute("allProducts");
-          }}
-        >
-          <FiPackage />
-        </InfoCard>
-        <InfoCard
-          amount={52}
-          bgColor={"#F36868"}
-          title="Products out of stock"
-          onViewClick={() => {
-            handleInfoCardRoute("outOfStock");
-          }}
-        >
-          <FaBoxOpen />
-        </InfoCard>
-        <InfoCard
-          amount={52}
-          bgColor={"#9E1EEC"}
-          title="Products Reviews"
-          onViewClick={() => {
-            handleInfoCardRoute("productReviews");
-          }}
-        >
-          <MdReviews />
-        </InfoCard>
-        <InfoCard
-          amount={52}
-          bgColor={"#EC1E5C"}
-          title="Products Reported"
-          onViewClick={() => {
-            handleInfoCardRoute("productReports");
-          }}
-        >
-          <MdOutlineReportProblem />
-        </InfoCard>
-        <InfoCard
-          amount={9}
-          bgColor={"#9b9e36"}
-          title="Questions Asked"
-          onViewClick={() => {
-            handleInfoCardRoute("questionsAsked");
-          }}
-        >
-          <BsFillPatchQuestionFill />
-        </InfoCard>
-        <InfoCard
-          amount={2}
-          bgColor={"#a11e3f"}
-          title="Hidden Products"
-          onViewClick={() => {
-            handleInfoCardRoute("hiddenProducts");
-          }}
-        >
-          <BiHide />
-        </InfoCard>
-      </div>
+      {!dataCount && <h2>Loading...</h2>}
+      {dataCount && (
+        <div className={styles.options}>
+          <EditOptionsButton
+            icon={<MdOutlineAdd />}
+            text={"Add Products"}
+            bgColor={"#5494F5"}
+            onClick={() => {
+              handleInfoCardRoute("add");
+            }}
+          />
+          <InfoCard
+            amount={dataCount.total}
+            bgColor={"#00AB77"}
+            title="Total Product"
+            onViewClick={() => {
+              handleInfoCardRoute("allProducts");
+            }}
+          >
+            <FiPackage />
+          </InfoCard>
+          <InfoCard
+            amount={dataCount.outOfStock}
+            bgColor={"#F36868"}
+            title="Products out of stock"
+            onViewClick={() => {
+              handleInfoCardRoute("outOfStock");
+            }}
+          >
+            <FaBoxOpen />
+          </InfoCard>
+          <InfoCard
+            amount={dataCount.reviews}
+            bgColor={"#9E1EEC"}
+            title="Products Reviews"
+            onViewClick={() => {
+              handleInfoCardRoute("productReviews");
+            }}
+          >
+            <MdReviews />
+          </InfoCard>
+          <InfoCard
+            amount={52}
+            bgColor={"#EC1E5C"}
+            title="Products Reported"
+            onViewClick={() => {
+              handleInfoCardRoute("productReports");
+            }}
+          >
+            <MdOutlineReportProblem />
+          </InfoCard>
+          <InfoCard
+            amount={dataCount.questions}
+            bgColor={"#9b9e36"}
+            title="Questions Asked"
+            onViewClick={() => {
+              handleInfoCardRoute("questionsAsked");
+            }}
+          >
+            <BsFillPatchQuestionFill />
+          </InfoCard>
+          <InfoCard
+            amount={2}
+            bgColor={"#a11e3f"}
+            title="Hidden Products"
+            onViewClick={() => {
+              handleInfoCardRoute("hiddenProducts");
+            }}
+          >
+            <BiHide />
+          </InfoCard>
+        </div>
+      )}
 
       <div className={styles.table}>
         <div className={styles.title}>
@@ -179,7 +201,15 @@ const ProductsPage = () => {
           className={`ag-theme-alpine ${styles.main}`}
           style={{ height: 400, width: 850 }}
         >
-          <AgGridReact rowData={rowData} columnDefs={columnDefs}></AgGridReact>
+          <AgGridReact
+            rowData={rowData}
+            columnDefs={columnDefs}
+            onRowClicked={(event) => {
+              if (event.data) {
+                Router.push(`/seller/products/id?pid=${event.data.id}`);
+              }
+            }}
+          ></AgGridReact>
         </div>
       </div>
     </SellerNav>

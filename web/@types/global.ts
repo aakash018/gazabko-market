@@ -42,6 +42,7 @@ export interface ProtuctType {
   id: number;
   name: string;
   price: number;
+  rating: number;
   discount: number;
   description: string;
   totalStock: number;

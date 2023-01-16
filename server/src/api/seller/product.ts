@@ -4,6 +4,9 @@ import { Products } from "../../entities/Products";
 
 import sanitizeHtml from "sanitize-html";
 import validateSeller from "../../middleware/validateSeller";
+import { Equal, LessThanOrEqual } from "typeorm";
+import { Review } from "../../entities/Review";
+import { Question } from "../../entities/QuestionAndAnswer";
 
 const router = express();
 
@@ -83,26 +86,32 @@ router.post("/add", validateSeller, async (req, res) => {
   }
 });
 
-router.get("/info", validateSeller, async (req, res) => {
-  const parsedData = req.query as unknown as { id: number };
-
-  const product = await Products.findOne({
-    where: { id: parsedData.id },
-    relations: {
-      seller: true,
-    },
-  });
-
-  if (product) {
-    res.json({
-      status: "ok",
-      message: "product found",
-      product: product,
+router.get("/info", async (req, res) => {
+  const parsedData = req.query as unknown as { pid: number };
+  try {
+    const product = await Products.findOneOrFail({
+      where: { id: parsedData.pid },
+      relations: {
+        seller: true,
+      },
     });
-  } else {
+
+    if (product) {
+      res.json({
+        status: "ok",
+        message: "product found",
+        product: product,
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "no product found",
+      });
+    }
+  } catch {
     res.json({
       status: "fail",
-      message: "no product found",
+      message: "failed to find the product",
     });
   }
 });
@@ -111,14 +120,16 @@ router.get("/topSellingProducts", validateSeller, async (req, res) => {
   try {
     const products = await Products.find({
       where: { seller: { id: req.session.sellerID } },
+      // select: {
+      //   name: true,
+      //   timesBought: true,
+      //   totalStock: true,
+      //   rating: true,
+      //   brand: true,
+      // },
       order: { timesBought: "DESC" },
-      select: {
-        name: true,
-        timesBought: true,
-        totalStock: true,
-        rating: true,
-        brand: true,
-      },
+      skip: 0,
+      take: 10,
     });
     if (products) {
       res.json({
@@ -139,5 +150,76 @@ router.get("/topSellingProducts", validateSeller, async (req, res) => {
     });
   }
 });
+
+router.get("/outOfStock", validateSeller, async (req, res) => {
+  try {
+    const products = await Products.find({
+      where: {
+        seller: { id: req.session.sellerID },
+        totalStock: LessThanOrEqual(0),
+      },
+    });
+
+    res.json({
+      status: "ok",
+      message: "products found",
+      products,
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to find products",
+    });
+  }
+});
+
+router.get("/getProductsCount", validateSeller, async (req, res) => {
+  try {
+    const outOfStock = await Products.countBy({
+      totalStock: Equal(0),
+      seller: { id: req.session.sellerID },
+    });
+    const total = await Products.countBy({
+      seller: { id: req.session.sellerID },
+    });
+    const reviews = await Review.countBy({
+      product: { seller: { id: req.session.sellerID } },
+    });
+    const questions = await Question.countBy({
+      product: { seller: { id: req.session.sellerID } },
+    });
+
+    res.json({
+      status: "ok",
+      message: "counts loaded",
+      count: { outOfStock, total, reviews, questions },
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to load counts",
+    });
+  }
+});
+
+// router.get("/getProductsWithCat", validateSeller, async(req,res) => {
+//   const userReq = req.query as unknown as {category: string}
+
+//   try {
+//     let products;
+//     if(userReq.category === "All Products") {
+//       products = await Products.find({take: 10, where: {seller: {id: req.session.sellerID}}})
+//     } else {
+//       products = await Products.find({
+//         where: {seller: {id: req.session.sellerID},
+//         category:
+
+//       }
+//       })
+//     }
+//   } catch {
+
+//   }
+// });
 
 export default router;
