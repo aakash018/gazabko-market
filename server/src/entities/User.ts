@@ -64,6 +64,15 @@ export class User extends BaseEntity {
   @OneToMany(() => Question, (question) => question.user)
   questions: Question[];
 
+  @Column({ default: null })
+  isVerified: boolean;
+
+  @Column({ default: 0 })
+  totalItemsBought: number;
+
+  @Column({ default: 0 })
+  totalMoneySpent: number;
+
   @OneToMany(() => Order, (order) => order.user)
   order: Order[];
 

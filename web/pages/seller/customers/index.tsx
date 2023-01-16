@@ -1,7 +1,8 @@
 import axios from "axios";
 import Router from "next/router";
+import { userAgent } from "next/server";
 import React, { useEffect, useRef, useState } from "react";
-import { FollowerType } from "../../../@types/global";
+import { FollowerResponseType } from "../../../@types/global";
 import CustomersInfoHolder from "../../../components/Admin/shared/CustomersInfoHolder";
 import SellerNav from "../../../components/Seller/SellerNav";
 
@@ -14,18 +15,22 @@ type TableDef = {
   Name: string;
   "Signed Up Date": string;
   "Total Items Boughts": number;
+  Uid: number;
 };
 
 const CustomersPage = () => {
   const searchRef = useRef<HTMLInputElement>(null);
 
-  const [recentFollower, setRecentFollower] = useState<FollowerType[]>([]);
+  const [recentFollower, setRecentFollower] = useState<FollowerResponseType[]>(
+    []
+  );
   const { setAlert } = useAlert();
 
   const [rowData, setRowData] = useState<TableDef[]>([]);
 
   const [columnDefs] = useState([
     { field: "SN", width: 60 },
+    { field: "Uid" },
     { field: "Name", width: 120 },
     { field: "Signed Up Date", width: 200 },
     { field: "Total Items Boughts" },
@@ -38,7 +43,7 @@ const CustomersPage = () => {
         (async () => {
           const res = await axios.get<
             RespondType & {
-              followers: FollowerType[];
+              followers: FollowerResponseType[];
             }
           >(
             `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/followers/recentFollowers`,
@@ -77,6 +82,7 @@ const CustomersPage = () => {
                 Name: follower.user.lastName,
                 "Signed Up Date": follower.user.created_at,
                 "Total Items Boughts": 10,
+                Uid: follower.user.id,
               }));
 
             setRowData(allFollowers as TableDef[]);
@@ -107,18 +113,12 @@ const CustomersPage = () => {
           <CustomersInfoHolder
             title="Recently Added Followers"
             customers={recentFollower}
-            onViewClick={() => {
-              Router.push("/seller/customers/topFollowers");
-            }}
           />
         </div>
         <div className={styles.newCusomers}>
           <CustomersInfoHolder
             title="Top Followers This Month"
             customers={recentFollower}
-            onViewClick={() => {
-              Router.push("/seller/customers/topFollowers");
-            }}
           />
         </div>
       </div>
@@ -128,7 +128,10 @@ const CustomersPage = () => {
           columData={columnDefs}
           inputRef={searchRef}
           title="All Followers"
-          width={620}
+          width={790}
+          onRowClick={(event) => {
+            Router.push(`/seller/customers/${event.data.Uid}`);
+          }}
         />
       </div>
     </SellerNav>

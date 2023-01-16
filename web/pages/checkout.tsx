@@ -10,6 +10,7 @@ import Layout from "../components/Customer/Layout";
 import Button from "../components/shared/Button";
 import IntputField from "../components/shared/Input";
 import PrivatePage from "../components/shared/PrivatePage";
+import { useAuth } from "../context/User";
 
 import styles from "../styles/components/Customer/pages/Checkout.module.scss";
 
@@ -46,8 +47,7 @@ const deliveryAddressPageData: DeliveryAddressPage[] = [
 const CheckoutPage = () => {
   const { cart, setCart } = useCart();
   const { setAlert } = useAlert();
-
-  const [newAddress, setNewAddress] = useState("");
+  const { user } = useAuth();
 
   const [showMap, setShowMap] = useState(false);
 
@@ -55,9 +55,16 @@ const CheckoutPage = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [subTotalPrice, setSubTotalPrice] = useState(0);
 
-  const [selectedAddress, setSelectedAddress] = useState<DeliveryAddressPage>(
-    deliveryAddressPageData[0]
-  );
+  const [newDeliveryAddress, setNewDeliveryAddress] = useState("");
+  const [newNearestLandark, setNewNearestLandmark] = useState("");
+  const [newLatLng, setNewLatLng] = useState("");
+
+  const [selectedAddress, setSelectedAddress] = useState<number>(1);
+  const [address, setAddress] = useState<{
+    deliveryAddress: string;
+    nearestLandmark: string;
+    latlng: string;
+  }>();
 
   const [loading, setLoading] = useState(false);
 
@@ -149,16 +156,19 @@ const CheckoutPage = () => {
     }
   }, [cart?.products]);
 
-  const handleChangeDeliveryAddress = (page: 1 | 2 | 3) => {
-    setSelectedAddress(deliveryAddressPageData[page - 1]);
+  const handleChangeDeliveryAddress = (page: number) => {
+    setSelectedAddress(page);
+    setAddress(user?.address[page - 1]);
   };
 
   const handleSubmit = async () => {
     try {
+      console.log(address);
       const res = await axios.post<RespondType>(
         `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/order/addOrder`,
         {
           products: cart?.products,
+          address: address || user?.address[0],
         },
         { withCredentials: true }
       );
@@ -210,6 +220,8 @@ const CheckoutPage = () => {
                     <div className={styles.itemsBeingBought}>
                       <div className={styles.title}>
                         <div>Items in the cart</div>
+                        <div>Size</div>
+                        <div>Color</div>
                         <div>Is this a gift?</div>
                       </div>
                       {cart?.products && (
@@ -217,8 +229,21 @@ const CheckoutPage = () => {
                           {cart?.products.map((product, i) => (
                             <li key={i}>
                               <Link href={`/products/${product.product.id}`}>
-                                {product.product.name}
+                                <div
+                                  style={{
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    width: 100,
+                                  }}
+                                >
+                                  {product.product.name}
+                                </div>
                               </Link>
+                              <section>{product.sizes}</section>
+                              <section style={{ marginRight: 20 }}>
+                                {product.color}
+                              </section>
                               <input
                                 type={"checkbox"}
                                 onChange={(e) => handleIsGiftCheck(e, i)}
@@ -270,30 +295,16 @@ const CheckoutPage = () => {
                 <div className={styles.header}>
                   <h3>Default Delivery Address</h3>
                   <div className={styles.setAddresses}>
-                    <div
-                      className={`${styles.page} ${
-                        selectedAddress.pageNo === 1 ? styles.selected : ""
-                      }`}
-                      onClick={() => handleChangeDeliveryAddress(1)}
-                    >
-                      1
-                    </div>
-                    <div
-                      className={`${styles.page} ${
-                        selectedAddress.pageNo === 2 ? styles.selected : ""
-                      }`}
-                      onClick={() => handleChangeDeliveryAddress(2)}
-                    >
-                      2
-                    </div>
-                    <div
-                      className={`${styles.page} ${
-                        selectedAddress.pageNo === 3 ? styles.selected : ""
-                      }`}
-                      onClick={() => handleChangeDeliveryAddress(3)}
-                    >
-                      3
-                    </div>
+                    {user?.address.map((_, i) => (
+                      <div
+                        className={`${styles.page} ${
+                          selectedAddress === i + 1 ? styles.selected : ""
+                        }`}
+                        onClick={() => handleChangeDeliveryAddress(i + 1)}
+                      >
+                        {i + 1}
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <div className={styles.addressInfo}>
@@ -311,13 +322,16 @@ const CheckoutPage = () => {
                     <div className={styles.infoTab}>
                       <div className={styles.tag}>Address</div>
                       <div className={styles.info}>
-                        {selectedAddress.deliveryAddress}
+                        {/* page no starts with one but array index with 0 so that - 1 */}
+                        {address?.deliveryAddress ||
+                          user?.address[0].deliveryAddress}
                       </div>
                     </div>
                     <div className={styles.infoTab}>
                       <div className={styles.tag}>Nearest Landmark</div>
                       <div className={styles.info}>
-                        {selectedAddress.NearestLandMark}
+                        {address?.nearestLandmark ||
+                          user?.address[0].nearestLandmark}
                       </div>
                     </div>
                   </section>
@@ -337,14 +351,35 @@ const CheckoutPage = () => {
               {showMap && (
                 <div className={styles.map} id="map">
                   <div className={styles.mapHolder}>
-                    <Map setAddress={setNewAddress} />
+                    <Map
+                      setAddress={setNewDeliveryAddress}
+                      setLatLng={setNewLatLng}
+                    />
                   </div>
                   <div className={styles.addressInput}>
-                    <IntputField label="Delivery Address" value={newAddress} />
-                    <IntputField label="Nearest Landmark" />
+                    <IntputField
+                      label="Delivery Address"
+                      value={newDeliveryAddress}
+                    />
+                    <IntputField
+                      label="Nearest Landmark"
+                      setState={setNewNearestLandmark}
+                      value={newNearestLandark}
+                    />
                   </div>
                   <div className={styles.actBtn}>
-                    <Button>Save</Button>
+                    <Button
+                      onClick={() => {
+                        setAddress({
+                          deliveryAddress: newDeliveryAddress,
+                          nearestLandmark: newNearestLandark,
+                          latlng: newLatLng,
+                        });
+                        setShowMap(false);
+                      }}
+                    >
+                      Save
+                    </Button>
                     <Button
                       color="error"
                       onClick={() => {

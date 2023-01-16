@@ -25,5 +25,5 @@ export class Address extends BaseEntity {
   nearestLandmark: string;
 
   @Column()
-  laglat: string;
+  latlng: string;
 }

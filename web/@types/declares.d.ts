@@ -17,7 +17,7 @@ declare interface User {
 declare interface Address {
   deliveryAddress: string;
   id: number;
-  laglat: string;
+  latlng: string;
   nearestLandmark: string;
   phoneNo: string;
 }

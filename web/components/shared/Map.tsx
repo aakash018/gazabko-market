@@ -11,6 +11,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 
 import L from "leaflet";
+import { useAlert } from "../../pages/_app";
 
 interface Props {
   setAddress: React.Dispatch<React.SetStateAction<string>>;
@@ -32,6 +33,7 @@ const GetCods: React.FC<Props> = ({ setAddress, setLatLng, lat, lng }) => {
 
   const markerRef = useRef<L.Marker<any>>(null);
   const [position, setPosition] = useState(codsRef.current);
+  const { setAlert } = useAlert();
   // const eventHandlers = useMemo(
   //   () => ({
   //     dragend() {
@@ -88,36 +90,42 @@ const GetCods: React.FC<Props> = ({ setAddress, setLatLng, lat, lng }) => {
       if (setLatLng) {
         setLatLng(JSON.stringify(e.latlng));
       }
-
-      fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${e.latlng.lat}&lon=${e.latlng.lng}`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          setAddress(
-            `${
-              data.address.amenity != undefined
-                ? data.address.amenity + ", "
-                : ""
-            }` +
+      try {
+        fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${e.latlng.lat}&lon=${e.latlng.lng}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setAddress(
               `${
-                data.address.neighbourhood != undefined
-                  ? data.address.neighbourhood + ", "
+                data.address.amenity != undefined
+                  ? data.address.amenity + ", "
                   : ""
               }` +
-              `${
-                data.address.suburb != undefined
-                  ? data.address.suburb + ", "
-                  : ""
-              }` +
-              `${data.address.postcode ? data.address.postcode + "-" : ""}` +
-              data.address.municipality +
-              ", " +
-              data.address.region +
-              ", " +
-              data.address.country
-          );
+                `${
+                  data.address.neighbourhood != undefined
+                    ? data.address.neighbourhood + ", "
+                    : ""
+                }` +
+                `${
+                  data.address.suburb != undefined
+                    ? data.address.suburb + ", "
+                    : ""
+                }` +
+                `${data.address.postcode ? data.address.postcode + "-" : ""}` +
+                data.address.municipality +
+                ", " +
+                data.address.region +
+                ", " +
+                data.address.country
+            );
+          });
+      } catch {
+        setAlert({
+          type: "error",
+          message: "failed to load delivery address",
         });
+      }
     },
   });
 

@@ -69,4 +69,37 @@ router.get("/getOrdersByStatus", validateSeller, async (req, res) => {
   }
 });
 
+router.get("/getOneOrderInfo", validateSeller, async (req, res) => {
+  const userReq = req.query as unknown as { oid: number };
+  try {
+    const order = await Order.findOne({
+      where: { id: userReq.oid },
+      relations: {
+        product: true,
+        user: true,
+      },
+    });
+    if (order) {
+      const userLastName = order.user.lastName;
+      Reflect.deleteProperty(order, "user");
+      res.json({
+        status: "ok",
+        message: "order found",
+        userLastName: userLastName,
+        order,
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "order info not found",
+      });
+    }
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to query order",
+    });
+  }
+});
+
 export default router;

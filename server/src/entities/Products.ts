@@ -66,6 +66,9 @@ export class Products extends BaseEntity {
   @Column()
   category: string;
 
+  @Column({ default: 0 })
+  timesBought: number;
+
   @Column()
   sku: number;
 

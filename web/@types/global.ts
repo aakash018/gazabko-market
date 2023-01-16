@@ -58,6 +58,9 @@ export interface ProtuctType {
   color?: string;
   seller: Seller;
   priceAfterDiscount: number;
+  timesBought: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Order {
@@ -67,6 +70,11 @@ export interface Order {
   quantity: number;
   size?: string;
   status: "pending" | "processing" | "delivered";
+  deliveryAddress: string;
+  nearestLandmark: string;
+  latlng: string;
+  created_at: string;
+  updated_at: string;
   product?: ProtuctType;
 }
 
@@ -84,7 +92,7 @@ export interface Cart {
   totalProducts: number;
 }
 
-export interface FollowerType {
+export interface FollowerResponseType {
   user: {
     firstName: string;
     lastName: string;
@@ -93,4 +101,13 @@ export interface FollowerType {
   };
   userId: number;
   sellerId: number;
+}
+
+export interface FollowerType {
+  lastName: string;
+  itemsBoughtFromStore: number;
+  totalMoneySpentAtStore: number;
+  joinedDate: string;
+  isVerified: boolean;
+  avatar: string;
 }

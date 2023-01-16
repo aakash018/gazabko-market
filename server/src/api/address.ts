@@ -47,7 +47,7 @@ router.post("/addAddress", validateUser, async (req, res) => {
     if (user) {
       await Address.create({
         deliveryAddress: userReq.deliveryAddress,
-        laglat: userReq.laglng,
+        latlng: userReq.laglng,
         nearestLandmark: userReq.nearestLandmark,
         phoneNo: userReq.phoneNo,
         user: user,

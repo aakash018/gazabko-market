@@ -36,6 +36,15 @@ export class Order extends BaseEntity {
   @ManyToOne(() => User, (user) => user.order)
   user: User;
 
+  @Column()
+  deliveryAddress: string;
+
+  @Column()
+  nearestLandmark: string;
+
+  @Column()
+  latlng: string;
+
   @CreateDateColumn()
   created_at: Date;
 

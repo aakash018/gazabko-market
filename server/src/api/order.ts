@@ -9,11 +9,16 @@ const router = express();
 
 interface AddProductsReqType {
   products: OnCartProduct[];
+  address: {
+    deliveryAddress: string;
+    nearestLandmark: string;
+    latlng: string;
+  };
 }
 
 router.post("/addOrder", validateUser, async (req, res) => {
   const userReq = req.body as AddProductsReqType;
-
+  console.log(userReq);
   const user = await User.findOne({ where: { id: req.session.user } });
 
   if (!user) return;
@@ -27,8 +32,16 @@ router.post("/addOrder", validateUser, async (req, res) => {
         user: user as any,
         product: cartProduct.product,
         isGift: cartProduct.isGift,
+        deliveryAddress: userReq.address.deliveryAddress,
+        nearestLandmark: userReq.address.nearestLandmark,
+        latlng: userReq.address.latlng,
       }).save();
+      res.json({
+        status: "ok",
+        message: "order placed",
+      });
     } catch (e) {
+      console.log(e);
       if (e.code === "23505") {
         res.json({
           status: "fail",
@@ -41,11 +54,6 @@ router.post("/addOrder", validateUser, async (req, res) => {
         });
       }
     }
-  });
-
-  res.json({
-    status: "ok",
-    message: "order placed",
   });
 });
 

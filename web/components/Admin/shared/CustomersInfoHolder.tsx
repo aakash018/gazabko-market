@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Router from "next/router";
 import React from "react";
-import { FollowerType } from "../../../@types/global";
+import { FollowerResponseType, FollowerType } from "../../../@types/global";
 
 import styles from "../../../styles/components/shared/Admin/CustomersInfoHolder.module.scss";
 import Button from "../../shared/Button";
@@ -41,15 +41,10 @@ const UserHolder: React.FC<UserHolderProps> = ({ name, route, img }) => {
 
 interface Props {
   title: string;
-  onViewClick: () => void;
-  customers: FollowerType[];
+  customers: FollowerResponseType[];
 }
 
-const CustomersInfoHolder: React.FC<Props> = ({
-  title,
-  onViewClick,
-  customers,
-}) => {
+const CustomersInfoHolder: React.FC<Props> = ({ title, customers }) => {
   return (
     <div className={styles.customersInfoHolder}>
       <div className={styles.title}>{title}</div>
@@ -62,9 +57,6 @@ const CustomersInfoHolder: React.FC<Props> = ({
             img={customer.user.avatar}
           />
         ))}
-      </div>
-      <div className={styles.actBtn}>
-        <Button onClick={onViewClick}>View All</Button>
       </div>
     </div>
   );

@@ -58,7 +58,7 @@ router.post("/signup", async (req, res) => {
 
     const address = new Address();
     address.deliveryAddress = userData.delivaryAdd;
-    address.laglat = userData.mapCods;
+    address.latlng = userData.mapCods;
     address.nearestLandmark = userData.nearestLandmark;
     address.user = user;
 
