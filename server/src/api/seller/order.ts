@@ -161,4 +161,47 @@ router.delete("/cancelOrder", validateSeller, async (req, res) => {
   }
 });
 
+router.get("/orderCounts", validateSeller, async (req, res) => {
+  try {
+    const pendingCount = await Order.countBy({
+      status: "pending",
+      product: { seller: { id: req.session.sellerID } },
+    });
+    const processingCount = await Order.count({
+      where: {
+        product: { seller: { id: req.session.sellerID } },
+        status: "processing",
+      },
+    });
+    const deliveredCount = await Order.countBy({
+      status: "delivered",
+      product: { seller: { id: req.session.sellerID } },
+    });
+
+    console.log(
+      await Order.count({
+        where: {
+          product: { seller: { id: req.session.sellerID } },
+          status: "processing",
+        },
+      })
+    );
+
+    res.json({
+      status: "ok",
+      message: "count found",
+      count: {
+        pendingCount,
+        processingCount,
+        deliveredCount,
+      },
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to find counts",
+    });
+  }
+});
+
 export default router;

@@ -143,7 +143,8 @@ router.get("/topSellingProducts", validateSeller, async (req, res) => {
         message: "products not found",
       });
     }
-  } catch {
+  } catch (e) {
+    console.log(e);
     res.json({
       status: "fail",
       message: "failed to find products",

@@ -7,6 +7,7 @@ import SellerNav from "../../../components/Seller/SellerNav";
 
 import styles from "../../../styles/components/Seller/pages/OrdersPage.module.scss";
 import { TableHolder } from "../../admin/orders";
+import { useAlert } from "../../_app";
 
 interface TableDef {
   SN: number;
@@ -18,12 +19,22 @@ interface TableDef {
   Color: string;
 }
 
+interface CountType {
+  pendingCount: number;
+  processingCount: number;
+  deliveredCount: number;
+}
+
 const OrdersPage = () => {
   const recentOrdSearchRef = useRef<HTMLInputElement>(null);
   const allOrdSearchRef = useRef<HTMLInputElement>(null);
   const caancledOrdSearchRef = useRef<HTMLInputElement>(null);
 
+  const { setAlert } = useAlert();
+
   const [rowData, setRowData] = useState<TableDef[]>([]);
+
+  const [dataCount, setDataCount] = useState<CountType | null>(null);
 
   const [columnDefs] = useState([
     { field: "SN", width: 60 },
@@ -49,6 +60,40 @@ const OrdersPage = () => {
       ),
     },
   ]);
+
+  useEffect(() => {
+    let ignore = false;
+    if (!ignore) {
+      (async () => {
+        try {
+          const res = await axios.get<RespondType & { count?: CountType }>(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/sellerOrder/orderCounts`,
+            {
+              withCredentials: true,
+            }
+          );
+          console.log(res.data);
+          if (res.data.status === "ok" && res.data.count) {
+            setDataCount(res.data.count);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        } catch (e) {
+          console.log(e);
+          setAlert({
+            type: "error",
+            message: "failed to load counts",
+          });
+        }
+      })();
+    }
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   useEffect(() => {
     let ignore = false;
@@ -81,20 +126,26 @@ const OrdersPage = () => {
       <h1>Orders</h1>
       <div className={styles.orders}>
         <div className={styles.infoTabs}>
-          <OrderingInfo
-            processingClick={() => {
-              Router.push("/seller/orders/processing");
-            }}
-            deliveredClick={() => {
-              Router.push("/seller/orders/delivered");
-            }}
-            pendingClick={() => {
-              Router.push("/seller/orders/pending");
-            }}
-            cancledClick={() => {
-              Router.push("/seller/orders/cancledOrders");
-            }}
-          />
+          {dataCount === null && <h2>Lodging...</h2>}
+          {dataCount && (
+            <OrderingInfo
+              pendingCount={dataCount!.pendingCount}
+              deliveredCount={dataCount!.deliveredCount}
+              processingCount={dataCount!.processingCount}
+              processingClick={() => {
+                Router.push("/seller/orders/processing");
+              }}
+              deliveredClick={() => {
+                Router.push("/seller/orders/delivered");
+              }}
+              pendingClick={() => {
+                Router.push("/seller/orders/pending");
+              }}
+              cancledClick={() => {
+                Router.push("/seller/orders/cancledOrders");
+              }}
+            />
+          )}
         </div>
         <div className={styles.tables}>
           <TableHolder

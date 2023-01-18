@@ -12,6 +12,9 @@ interface Props {
   processingClick?: () => void;
   deliveredClick?: () => void;
   cancledClick?: () => void;
+  pendingCount: number;
+  deliveredCount: number;
+  processingCount: number;
 }
 
 const OrderingInfo: React.FC<Props> = ({
@@ -19,10 +22,13 @@ const OrderingInfo: React.FC<Props> = ({
   processingClick,
   deliveredClick,
   cancledClick,
+  deliveredCount,
+  pendingCount,
+  processingCount,
 }) => (
   <div className={styles.orderingInfo}>
     <InfoCard
-      amount={46}
+      amount={pendingCount}
       title="Orders Pending"
       bgColor="#5494f5"
       onViewClick={pendingClick}
@@ -30,7 +36,7 @@ const OrderingInfo: React.FC<Props> = ({
       <MdOutlinePendingActions />
     </InfoCard>
     <InfoCard
-      amount={46}
+      amount={processingCount}
       title="Orders Processing"
       bgColor="#f36868"
       onViewClick={processingClick}
@@ -38,7 +44,7 @@ const OrderingInfo: React.FC<Props> = ({
       <FaTruckMoving />
     </InfoCard>
     <InfoCard
-      amount={46}
+      amount={deliveredCount}
       title="Orders Delivered"
       bgColor="#00ab77"
       onViewClick={deliveredClick}
