@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import "reflect-metadata";
 import cors from "cors";
 import { AppDataSource } from "./dataSource";
+import nodemailer from "nodemailer";
 
 //? express session and redis
 import connectRedis from "connect-redis";
@@ -72,6 +73,21 @@ app.use(cookieParser());
 //? Parser MiddleWare
 app.use(express.json() as RequestHandler);
 app.use(express.urlencoded({ extended: false }) as RequestHandler);
+
+//? Email sender
+export const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  auth: {
+    user: process.env.SMTP_USERNAME,
+    pass: process.env.SMTP_PASSWORD,
+  },
+});
+
+transporter
+  .verify()
+  .then(() => console.log("TRANSPORTER VERIFIED"))
+  .catch(console.error);
 
 //? Database INIT
 

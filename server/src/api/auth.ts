@@ -3,13 +3,12 @@ import { AppDataSource } from "..//dataSource";
 import { Address } from "../entities/Address";
 import { User } from "../entities/User";
 
-import nodemailer from "nodemailer";
 import { generateCode } from "../../utils/generateRandomCode";
 import { VerificationCode } from "../entities/VerificationCode";
-
 import bcrypt from "bcrypt";
 import validateUser from "../middleware/validateUser";
 import { Cart } from "../entities/Cart/Cart";
+import { transporter } from "../server";
 
 const router = express();
 
@@ -28,20 +27,6 @@ interface SignUpPayloadType {
 
 router.post("/signup", async (req, res) => {
   const userData: SignUpPayloadType = req.body;
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    auth: {
-      user: process.env.SMTP_USERNAME,
-      pass: process.env.SMTP_PASSWORD,
-    },
-  });
-
-  transporter
-    .verify()
-    .then(() => console.log("YOYO"))
-    .catch(console.error);
-
   try {
     const hashPass = await bcrypt.hash(userData.password, 12);
     const user = new User();
@@ -244,6 +229,126 @@ router.get("/logout", (req, res) => {
       status: "fail",
       message: "no session found!",
     });
+  }
+});
+
+router.post("/forgotPassword", async (req, res) => {
+  const { email } = req.body as { email: string };
+  if (email || email.trim() === "") {
+    try {
+      const user = await User.findOneByOrFail({
+        email: email,
+      });
+      if (user) {
+        const verifyCode = generateCode();
+        await VerificationCode.create({
+          email,
+          userID: user.id,
+          code: verifyCode,
+        }).save();
+        await transporter.sendMail({
+          from: process.env.SMTP_PASSWORD, // sender address
+          to: email, // list of receivers
+          subject: "Verification Email", // Subject line
+          text: `YOUR RECOVERY CODE IS ${verifyCode}`, // plain text body
+        });
+        res.json({
+          status: "ok",
+          message: "email send",
+        });
+      } else {
+        res.json({
+          status: "fail",
+          message: "no user found with this email",
+        });
+      }
+    } catch {
+      res.json({
+        status: "fail",
+        message: "failed to send email!",
+      });
+    }
+  } else {
+    res.json({
+      status: "fail",
+      message: "no email found",
+    });
+  }
+});
+
+router.post("/verifyRecoverCode", async (req, res) => {
+  const { email, recoverCode } = req.body as {
+    email: string;
+    recoverCode: string;
+  };
+
+  if (email || recoverCode) {
+    try {
+      const verifyCode = await VerificationCode.findOne({
+        where: { email: email },
+      });
+      if (verifyCode?.code === recoverCode) {
+        VerificationCode.delete({
+          email: email,
+        });
+        res.json({
+          status: "ok",
+          message: "code verified",
+        });
+      } else {
+        res.json({
+          status: "fail",
+          message: "incorrect recovery code",
+        });
+      }
+    } catch {
+      res.json({
+        status: "fail",
+        message: "failed to verify code",
+      });
+    }
+  } else {
+    res.json({
+      status: "fail",
+      message: "no email or code found",
+    });
+  }
+});
+
+router.post("/setNewForgottenPassword", async (req, res) => {
+  const { email, newPass } = req.body as { email: string; newPass: string };
+
+  if (email || newPass) {
+    try {
+      const user = await AppDataSource.getRepository(User)
+        .createQueryBuilder("user")
+        .select("user")
+        .where({ email: email })
+        .addSelect("user.password")
+        .getOne();
+
+      const hashPass = await bcrypt.hash(newPass, 12);
+
+      if (user) {
+        user.password = hashPass;
+        await user.save();
+
+        res.json({
+          status: "ok",
+          message: "password changed",
+        });
+      } else {
+        res.json({
+          status: "fail",
+          message: "user not found",
+        });
+      }
+    } catch {
+      res.json({
+        status: "fail",
+        message: "failed to change password",
+      });
+    }
   }
 });
 

@@ -85,3 +85,53 @@
         gap: 15px;
     }
 }
+
+.forgotPassword {
+    padding: 10px;
+    border: 1px solid var(--line-gray);
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 400px;
+    .info {
+        font-size: 1.3rem;
+    }
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+.code {
+    padding: 10px;
+    border: 1px solid var(--line-gray);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .info {
+        font-size: 1.3rem;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+.changePassword {
+    padding: 10px;
+    border: 1px solid var(--line-gray);
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+}
