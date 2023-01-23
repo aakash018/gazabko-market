@@ -19,6 +19,17 @@ export interface Seller {
   productCount?: number;
 }
 
+export interface AdminType {
+  id: string;
+  username: string;
+  email?: string;
+  address?: string;
+  contactPerson?: string;
+  phoneNo: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export interface ProtuctPayloadType {
   productName: string;
   price: number;

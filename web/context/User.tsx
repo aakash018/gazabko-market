@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Seller } from "../@types/global";
+import { AdminType, Seller } from "../@types/global";
 
 interface Props {
   children: React.ReactNode;
@@ -10,6 +10,7 @@ type authContextType = {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>> | null;
   seller: Seller | null;
+  admin: AdminType | null;
   isLogedIn: boolean;
   showBanners: boolean;
   login: (
@@ -27,6 +28,7 @@ type authContextType = {
 const authContextDefaultValues: authContextType = {
   user: null,
   seller: null,
+  admin: null,
   isLogedIn: true,
   showBanners: true,
   setUser: null,
@@ -46,6 +48,7 @@ export function useAuth() {
 const Provider: React.FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [seller, setSeller] = useState<Seller | null>(null);
+  const [admin, setAdmin] = useState<AdminType | null>(null);
 
   const [isLogedIn, setLoginStatus] = useState<boolean>(false);
   const [showBanners, setShowBanners] = useState<boolean>(true);
@@ -77,7 +80,7 @@ const Provider: React.FC<Props> = ({ children }) => {
     username: string,
     password: string,
     type: "seller" | "admin" | "customer"
-  ) => {
+  ): Promise<RespondType & { user: any }> => {
     let url;
 
     if (type === "customer") {
@@ -85,10 +88,10 @@ const Provider: React.FC<Props> = ({ children }) => {
     } else if (type === "seller") {
       url = `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/sellerAuth/login`;
     } else {
-      url = `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/adminAuth/login`;
+      url = `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/auth/login`;
     }
 
-    const res = await axios.post(
+    const res = await axios.post<RespondType & { user: any }>(
       url,
       {
         username: username,
@@ -105,6 +108,8 @@ const Provider: React.FC<Props> = ({ children }) => {
       setUser(res.data.user);
     } else if (type === "seller") {
       setSeller(res.data.user);
+    } else if (type === "admin") {
+      setAdmin(res.data.user);
     }
 
     setLoginStatus(true);
@@ -135,6 +140,7 @@ const Provider: React.FC<Props> = ({ children }) => {
   const value = {
     user,
     seller,
+    admin,
     isLogedIn,
     showBanners,
     login,

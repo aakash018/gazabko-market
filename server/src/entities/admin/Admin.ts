@@ -1,9 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 @Entity()
 export class Admin extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column({ default: "admin" })
   username: string;
@@ -11,7 +18,7 @@ export class Admin extends BaseEntity {
   @Column({ nullable: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   address: string;
 
   @Column({
@@ -19,15 +26,15 @@ export class Admin extends BaseEntity {
   })
   password: string;
 
-  @Column()
+  @Column({ nullable: true })
   contactPerson: string;
 
-  @Column()
-  phoneNo: number;
+  @Column({ nullable: true, type: "bigint" })
+  phoneNo: string;
 
-  @Column({ default: false })
-  isVerified: boolean;
+  @CreateDateColumn()
+  created_at: Date;
 
-  @Column({ nullable: true })
-  panNo: number;
+  @UpdateDateColumn()
+  updated_at: Date;
 }

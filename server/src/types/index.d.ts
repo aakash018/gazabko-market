@@ -3,6 +3,7 @@ declare global {
     interface SessionData {
       user: number;
       sellerID: number;
+      adminID: string;
     }
   }
 }

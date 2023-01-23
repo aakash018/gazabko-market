@@ -24,9 +24,11 @@ import address from "./api/address";
 import sellerOrder from "./api/seller/order";
 import sellerFollowers from "./api/seller/followers";
 import sellerUpdate from "./api/seller/update";
+import adminAuth from "./api/admin/auth";
 //?? RETURN REVIEW REPORT
 import rrr from "./api/rrr";
 import { Products } from "./entities/Products";
+import { Admin } from "./entities/admin/Admin";
 
 const app = express();
 const PORT = 5000;
@@ -92,15 +94,20 @@ transporter
 //? Database INIT
 
 AppDataSource.initialize()
-  .then(() => {
-    // User.delete({});
-    // Review.delete({});
-    // Address.delete({});
-    // Question.delete({});
-    // Cart.delete({});
-    // OnCartProduct.delete({});
-    // Seller.delete({});
-    console.log("Data Source Initialized");
+  .then(async () => {
+    const admin = await Admin.find({});
+
+    if (admin.length !== 0) {
+      console.log("ADMIN");
+      app.listen(PORT, () => {
+        console.log("SERVER IS RUNNING at ", PORT);
+      });
+    } else {
+      await Admin.create({}).save();
+      app.listen(PORT, () => {
+        console.log("SERVER IS RUNNING at ", PORT);
+      });
+    }
   })
   .catch((e) => {
     console.log("Error initializing Data Source !!!", e);
@@ -130,9 +137,11 @@ app.use("/sellerInfo", sellerInfo);
 app.use("/sellerOrder", sellerOrder);
 app.use("/seller/followers", sellerFollowers);
 app.use("/seller/update", sellerUpdate);
+
+app.use("/admin/auth", adminAuth);
 //?? RETURN REVIEW REPORT
 app.use("/rrr", rrr);
 
-app.listen(PORT, () => {
-  console.log("SERVER IS RUNNING at ", PORT);
-});
+// app.listen(PORT, () => {
+//   console.log("SERVER IS RUNNING at ", PORT);
+// });

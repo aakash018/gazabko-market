@@ -1,4 +1,12 @@
-import { Entity, BaseEntity, ManyToOne, PrimaryColumn, Column } from "typeorm";
+import {
+  Entity,
+  BaseEntity,
+  ManyToOne,
+  PrimaryColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { User } from "./User";
 import { Seller } from "./seller/Seller";
 
@@ -21,4 +29,10 @@ export class Follow extends BaseEntity {
 
   @ManyToOne(() => Seller, (seller) => seller.followers)
   seller: Seller;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

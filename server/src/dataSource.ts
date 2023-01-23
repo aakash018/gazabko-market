@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
 import { Address } from "./entities/Address";
+import { Admin } from "./entities/admin/Admin";
 import { Cart } from "./entities/Cart/Cart";
 import { OnCartProduct } from "./entities/Cart/OnCartProduct";
 import { Follow } from "./entities/Follow";
@@ -26,6 +27,7 @@ export const AppDataSource = new DataSource({
     Cart,
     Products,
     VerificationCode,
+    Admin,
     Seller,
     Review,
     Question,
