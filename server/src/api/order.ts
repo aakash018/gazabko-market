@@ -18,14 +18,13 @@ interface AddProductsReqType {
 
 router.post("/addOrder", validateUser, async (req, res) => {
   const userReq = req.body as AddProductsReqType;
-  console.log(userReq);
-  const user = await User.findOne({ where: { id: req.session.user } });
+  try {
+    const user = await User.findOne({ where: { id: req.session.user } });
 
-  if (!user) return;
+    if (!user) throw "No user found";
 
-  userReq.products.forEach(async (cartProduct) => {
-    try {
-      await Order.create({
+    const orders = userReq.products.map((cartProduct) => {
+      const entity = Order.create({
         quantity: cartProduct.quantity,
         size: cartProduct.sizes,
         color: cartProduct.color,
@@ -35,26 +34,21 @@ router.post("/addOrder", validateUser, async (req, res) => {
         deliveryAddress: userReq.address.deliveryAddress,
         nearestLandmark: userReq.address.nearestLandmark,
         latlng: userReq.address.latlng,
-      }).save();
-      res.json({
-        status: "ok",
-        message: "order placed",
       });
-    } catch (e) {
-      console.log(e);
-      if (e.code === "23505") {
-        res.json({
-          status: "fail",
-          message: "order already placed",
-        });
-      } else {
-        res.json({
-          status: "fail",
-          message: "failed to order placed",
-        });
-      }
-    }
-  });
+      return entity;
+    });
+
+    await Order.insert(orders);
+    res.json({
+      status: "ok",
+      message: "order placed",
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to place message",
+    });
+  }
 });
 
 router.get("/orderHistory", validateUser, async (req, res) => {
