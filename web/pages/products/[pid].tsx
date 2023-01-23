@@ -133,19 +133,19 @@ const ProductDisplay: React.FC = () => {
     if (!ignore) {
       (async () => {
         setLoading(true);
-
+        if (!pid) return;
         //? GETTING PRODUCT INFO
         try {
           const res = await axios.get<RespondType & { product?: ProtuctType }>(
             `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/info`,
             {
               params: {
-                id: pid,
+                pid: pid,
               },
               withCredentials: true,
             }
           );
-
+          console.log(res.data, pid);
           if (res.data.status === "ok") {
             setProduct(res.data!.product);
             setLoading(false);
@@ -307,9 +307,9 @@ const ProductDisplay: React.FC = () => {
                       }`}
                       date={question.created_at}
                       replyAvatarUrl={"/images/brand.png"}
-                      reply="type c not available "
-                      replyDate="23 September 2004"
-                      replyName="Golden Xyz Superstore"
+                      reply={question.answer}
+                      replyDate={question.updated_at}
+                      replyName={product.seller.storeName}
                       key={i}
                     />
                   ))}

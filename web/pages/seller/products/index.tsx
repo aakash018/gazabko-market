@@ -38,6 +38,7 @@ interface CountRespondType {
   total: number;
   reviews: number;
   questions: number;
+  hiddenProducts: number;
 }
 
 const ProductsPage = () => {
@@ -181,7 +182,7 @@ const ProductsPage = () => {
             <BsFillPatchQuestionFill />
           </InfoCard>
           <InfoCard
-            amount={2}
+            amount={dataCount.hiddenProducts}
             bgColor={"#a11e3f"}
             title="Hidden Products"
             onViewClick={() => {

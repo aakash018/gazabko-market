@@ -6,39 +6,9 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne,
-  JoinColumn,
 } from "typeorm";
 import { Products } from "./Products";
-import { Seller } from "./seller/Seller";
 import { User } from "./User";
-
-@Entity()
-export class Answer extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  question: string;
-
-  @Column()
-  answer: number;
-
-  @Column()
-  productID: number;
-
-  @ManyToOne(() => User, (user) => user.questions)
-  user: User;
-
-  @ManyToOne(() => Seller, (seller) => seller.answers)
-  seller: User;
-
-  @CreateDateColumn()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  updated_at: Date;
-}
 
 @Entity()
 export class Question extends BaseEntity {
@@ -57,9 +27,11 @@ export class Question extends BaseEntity {
   @ManyToOne(() => Products, (product) => product.questions)
   product: Products;
 
-  @OneToOne(() => Answer, { nullable: true })
-  @JoinColumn()
-  answer: Answer;
+  @Column({ default: false })
+  answered: boolean;
+
+  @Column({ nullable: true })
+  answer: string;
 
   @CreateDateColumn()
   created_at: Date;

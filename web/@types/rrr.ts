@@ -8,6 +8,8 @@ export interface ReviewType {
   id: number;
   user?: User;
   product?: ProtuctType;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface QuestionType {

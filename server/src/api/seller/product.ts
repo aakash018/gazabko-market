@@ -30,7 +30,9 @@ interface ProtuctPayloadType {
 }
 
 router.get("/", async (_, res) => {
-  const products = await Products.find({});
+  const products = await Products.find({
+    where: { isHidden: false },
+  });
 
   res.json({
     status: "ok",
@@ -88,6 +90,7 @@ router.post("/add", validateSeller, async (req, res) => {
 
 router.get("/info", async (req, res) => {
   const parsedData = req.query as unknown as { pid: number };
+  console.log("PID", parsedData);
   try {
     const product = await Products.findOneOrFail({
       where: { id: parsedData.pid },
@@ -188,17 +191,162 @@ router.get("/getProductsCount", validateSeller, async (req, res) => {
     });
     const questions = await Question.countBy({
       product: { seller: { id: req.session.sellerID } },
+      answered: false,
     });
-
+    const hiddenProducts = await Products.countBy({
+      seller: { id: req.session.sellerID },
+      isHidden: true,
+    });
     res.json({
       status: "ok",
       message: "counts loaded",
-      count: { outOfStock, total, reviews, questions },
+      count: { outOfStock, total, reviews, questions, hiddenProducts },
     });
   } catch {
     res.json({
       status: "fail",
       message: "failed to load counts",
+    });
+  }
+});
+
+router.get("/getReviews", validateSeller, async (req, res) => {
+  try {
+    const reviews = await Review.find({
+      where: { product: { seller: { id: req.session.sellerID } } },
+      relations: {
+        product: true,
+        user: true,
+      },
+    });
+    if (reviews) {
+      res.json({
+        status: "ok",
+        message: "reviews found",
+        reviews,
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "no reviews found",
+      });
+    }
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to load reviews",
+    });
+  }
+});
+
+router.get("/getQuestions", validateSeller, async (req, res) => {
+  try {
+    const questions = await Question.find({
+      where: {
+        product: { seller: { id: req.session.sellerID } },
+        answered: false,
+      },
+      relations: {
+        product: true,
+        user: true,
+      },
+    });
+    if (questions) {
+      res.json({
+        status: "ok",
+        message: "questions asked",
+        questions,
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "no reviews found",
+      });
+    }
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to load questions  ",
+    });
+  }
+});
+
+router.post("/addAnswer", validateSeller, async (req, res) => {
+  const userReq = req.body as { answer: string; questionId: number };
+  console.log(userReq);
+  if (userReq.answer && userReq.questionId) {
+    try {
+      await Question.update(
+        { id: userReq.questionId },
+        { answer: userReq.answer, answered: true }
+      );
+      res.json({
+        status: "ok",
+        message: "question updated",
+      });
+    } catch {
+      res.json({
+        status: "fail",
+        message: "failed to add answer",
+      });
+    }
+  } else {
+    res.json({
+      status: "fail",
+      message: "no user data found",
+    });
+  }
+});
+
+router.put("/hideProduct", validateSeller, async (req, res) => {
+  const userReq = req.body as { productID: number };
+  try {
+    await Products.update({ id: userReq.productID }, { isHidden: true });
+    res.json({
+      status: "ok",
+      message: "product now hidden",
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to hide product",
+    });
+  }
+});
+
+router.put("/unhideProduct", validateSeller, async (req, res) => {
+  const userReq = req.body as { productID: number };
+  try {
+    await Products.update({ id: userReq.productID }, { isHidden: false });
+    res.json({
+      status: "ok",
+      message: "product now unhidden",
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to unhide product",
+    });
+  }
+});
+
+router.get("/hiddenProducts", validateSeller, async (req, res) => {
+  try {
+    const hiddenProducts = await Products.find({
+      where: {
+        seller: { id: req.session.sellerID },
+        isHidden: true,
+      },
+    });
+    res.json({
+      status: "ok",
+      message: "products found",
+      hiddenProducts,
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to find products",
     });
   }
 });

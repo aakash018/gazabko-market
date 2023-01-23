@@ -1,22 +1,25 @@
 import Image from "next/image";
 import React from "react";
+import { ReviewType } from "../../../@types/rrr";
 import styles from "../../../styles/components/Admin/ProductReviewHolder.module.scss";
 import Button from "../../shared/Button";
 
 interface Props {
   showViewVendor?: boolean;
+  review: ReviewType;
 }
 
-const ProductReviewHolder: React.FC<Props> = ({ showViewVendor = true }) => {
+const ProductReviewHolder: React.FC<Props> = ({
+  showViewVendor = true,
+  review,
+}) => {
   return (
     <div className={styles.productReviewHolder}>
       <div className={styles.img}>
         <Image src={"/images/shoes.jpg"} width={200} height={200} />
       </div>
       <div className={styles.info}>
-        <div className={styles.productName}>
-          Goldstar G10 Starlite 4 Black/Red Shoes For Men
-        </div>
+        <div className={styles.productName}>{review.product?.name}</div>
         <div className={styles.priceAndView}>
           <div className={styles.price}>Rs. 2200</div>
           <Button>View Product</Button>

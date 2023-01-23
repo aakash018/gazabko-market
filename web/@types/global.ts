@@ -49,6 +49,7 @@ export interface ProtuctType {
   offer?: string;
   sizes?: string;
   tags: string;
+  isHidden: boolean;
   category: string;
   subCategory: string;
   subsubCategory?: string;

@@ -5,7 +5,7 @@ import { OnCartProduct } from "./entities/Cart/OnCartProduct";
 import { Follow } from "./entities/Follow";
 import { Order } from "./entities/Orders";
 import { Products } from "./entities/Products";
-import { Answer, Question } from "./entities/QuestionAndAnswer";
+import { Question } from "./entities/QuestionAndAnswer";
 import { Review } from "./entities/Review";
 import { Seller } from "./entities/seller/Seller";
 import { ToBeVerified } from "./entities/seller/ToBeVerified";
@@ -29,7 +29,6 @@ export const AppDataSource = new DataSource({
     Seller,
     Review,
     Question,
-    Answer,
     Order,
     OnCartProduct,
     Follow,
