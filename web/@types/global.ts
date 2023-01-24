@@ -86,6 +86,7 @@ export interface Order {
   deliveryAddress: string;
   nearestLandmark: string;
   latlng: string;
+  user?: User;
   created_at: string;
   updated_at: string;
   product?: ProtuctType;

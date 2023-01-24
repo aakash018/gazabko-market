@@ -1,162 +1,37 @@
+import axios from "axios";
 import Router from "next/router";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TableHolder } from ".";
+import { Order } from "../../../@types/global";
 import AdminLayout from "../../../components/Admin/AdminNav";
+import { useAlert } from "../../_app";
 
 interface TableDef {
   SN: number;
   Product: string;
-  Buyer: string;
-  Quntity: number;
+  Quantity: number;
+  Color?: string;
+  Size?: string;
   "Order No": number;
-  Status: "Verified" | "Not Verified";
 }
 
 const Pending: React.FC = () => {
   const searchRef = useRef<HTMLInputElement>(null);
-
-  const [rowData] = useState<TableDef[]>([
-    {
-      SN: 1,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 2,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 3,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 4,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 5,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 6,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 7,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 8,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 9,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 10,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 11,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 12,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 13,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 14,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 15,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 16,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-  ]);
+  const [Loading, setLoading] = useState(false);
+  const [rowData, setRowData] = useState<TableDef[]>([]);
+  const { setAlert } = useAlert();
 
   const [columnDefs] = useState([
     { field: "SN", width: 60 },
     { field: "Product" },
-    { field: "Buyer" },
-    { field: "Quntity", width: 150 },
-    { field: "Order No" },
+    { field: "Quantity", width: 100 },
+    { field: "Order No", width: 160, resizable: true },
+    { field: "Color", width: 100 },
+    { field: "Size", width: 100 },
     {
       field: "Details",
       cellRenderer: () => (
         <div
-          onClick={() => Router.push("/admin/orders/54545465465")}
           style={{
             color: "var(--theme-color)",
             fontWeight: "bold",
@@ -168,6 +43,51 @@ const Pending: React.FC = () => {
       ),
     },
   ]);
+
+  useEffect(() => {
+    let ignore = false;
+    if (!ignore) {
+      (async () => {
+        setLoading(true);
+        try {
+          const res = await axios.get<
+            RespondType & { processingOrders?: Order[] }
+          >(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/orders/getProcessingOrders`,
+            {
+              withCredentials: true,
+            }
+          );
+          setLoading(false);
+          console.log(res.data);
+          if (res.data.status === "ok" && res.data.processingOrders) {
+            const processingOrders: TableDef[] = res.data.processingOrders.map(
+              (order, i) => ({
+                SN: i + 1,
+                Product: order.product!.name,
+                "Order No": order.id,
+                Quantity: order.quantity,
+                Size: order.size,
+                Color: order.color,
+                id: order.id,
+              })
+            );
+            setRowData(processingOrders);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        } catch {
+          setAlert({
+            type: "error",
+            message: "failed to load data",
+          });
+        }
+      })();
+    }
+  }, []);
 
   return (
     <AdminLayout>
@@ -184,6 +104,11 @@ const Pending: React.FC = () => {
           columData={columnDefs}
           rowData={rowData}
           height={800}
+          onCellClicked={(e) => {
+            if (e.colDef.field === "Details") {
+              Router.push(`/admin/orders/id?oid=${e.data.id}`);
+            }
+          }}
         />
       </div>
     </AdminLayout>

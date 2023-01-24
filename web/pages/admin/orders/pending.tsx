@@ -53,15 +53,17 @@ const Pending: React.FC = () => {
       (async () => {
         setLoading(true);
         try {
-          const res = await axios.get<RespondType & { orders?: Order[] }>(
-            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/sellerOrder/pendingOrders`,
+          const res = await axios.get<
+            RespondType & { pendingOrders?: Order[] }
+          >(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/orders/getPendingOrders`,
             {
               withCredentials: true,
             }
           );
           setLoading(false);
-          if (res.data.status === "ok" && res.data.orders) {
-            const pendingOrders: TableDef[] = res.data.orders.map(
+          if (res.data.status === "ok" && res.data.pendingOrders) {
+            const pendingOrders: TableDef[] = res.data.pendingOrders.map(
               (order, i) => ({
                 SN: i,
                 Product: order.product!.name,
@@ -69,6 +71,7 @@ const Pending: React.FC = () => {
                 Quantity: order.quantity,
                 Size: order.size,
                 Color: order.color,
+                id: order.id,
               })
             );
             setRowData(pendingOrders);

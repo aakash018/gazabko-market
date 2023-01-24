@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AdminLayout from "../../../components/Admin/AdminNav";
 import OrderingInfo from "../../../components/Admin/OrderingInfo";
 import SearchBar from "../../../components/Admin/shared/SearchBar";
@@ -9,7 +9,11 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { AgGridReact } from "ag-grid-react";
 import Router from "next/router";
-import { RowClickedEvent } from "ag-grid-community";
+import { CellClickedEvent, RowClickedEvent } from "ag-grid-community";
+import axios from "axios";
+import { useAlert } from "../../_app";
+import { Order } from "../../../@types/global";
+import Quantity from "../../../components/shared/Customer/Quantity";
 
 interface TableDef {
   SN: number;
@@ -17,7 +21,8 @@ interface TableDef {
   Buyer: string;
   Quntity: number;
   "Order No": number;
-  Status: "Verified" | "Not Verified";
+  Status: string;
+  id: number;
 }
 
 interface TableHolderPros {
@@ -28,6 +33,7 @@ interface TableHolderPros {
   height?: number;
   width?: number;
   onRowClick?: (event: RowClickedEvent<any>) => void;
+  onCellClicked?: (event: CellClickedEvent) => void;
 }
 
 export const TableHolder: React.FC<TableHolderPros> = ({
@@ -38,6 +44,7 @@ export const TableHolder: React.FC<TableHolderPros> = ({
   height = 400,
   width = 915,
   onRowClick,
+  onCellClicked,
 }) => {
   return (
     <div className={styles.tableContainer}>
@@ -57,6 +64,11 @@ export const TableHolder: React.FC<TableHolderPros> = ({
             }}
             rowData={rowData}
             columnDefs={columData}
+            onCellClicked={(e: CellClickedEvent) => {
+              if (onCellClicked) {
+                onCellClicked(e);
+              }
+            }}
           ></AgGridReact>
         </div>
       </div>
@@ -68,65 +80,17 @@ const Orders = () => {
   const recentOrdSearchRef = useRef<HTMLInputElement>(null);
   const allOrdSearchRef = useRef<HTMLInputElement>(null);
   const caancledOrdSearchRef = useRef<HTMLInputElement>(null);
+  const { setAlert } = useAlert();
 
-  const [rowData] = useState<TableDef[]>([
-    {
-      SN: 1,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 2,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 3,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 4,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 5,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 6,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-    {
-      SN: 7,
-      Product: "A random Product",
-      "Order No": 654654646464,
-      Buyer: "Laxmi Bhattarai",
-      Status: "Verified",
-      Quntity: 15,
-    },
-  ]);
+  const [countLoading, setCountLoading] = useState(false);
+
+  const [ordersCount, setOrdersCount] = useState<{
+    pending: number;
+    processing: number;
+    delivered: number;
+  } | null>(null);
+
+  const [rowData, setRowData] = useState<TableDef[]>([]);
 
   const [columnDefs] = useState([
     { field: "SN", width: 60 },
@@ -139,7 +103,6 @@ const Orders = () => {
       width: 100,
       cellRenderer: () => (
         <div
-          onClick={() => Router.push("/admin/orders/54545465465")}
           style={{
             color: "var(--theme-color)",
             fontWeight: "bold",
@@ -152,25 +115,111 @@ const Orders = () => {
     },
   ]);
 
+  useEffect(() => {
+    let ignore = false;
+    if (!ignore) {
+      (async () => {
+        try {
+          setCountLoading(true);
+          const res = await axios.get<
+            RespondType & {
+              counts?: {
+                pending: number;
+                processing: number;
+                delivered: number;
+              };
+            }
+          >(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/getCounts/getOrdersCount`,
+            { withCredentials: true }
+          );
+          setCountLoading(false);
+
+          if (res.data.status === "ok" && res.data.counts) {
+            setOrdersCount(res.data.counts);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        } catch {
+          setAlert({
+            type: "error",
+            message: "failed to load orders count",
+          });
+        }
+      })();
+
+      (async () => {
+        try {
+          const res = await axios.get<RespondType & { recentOrders?: Order[] }>(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/orders/getRecentOrders`,
+            { withCredentials: true }
+          );
+
+          if (res.data.status === "ok" && res.data.recentOrders) {
+            const recOrder: TableDef[] = res.data.recentOrders.map(
+              (order, i) => {
+                return {
+                  SN: i + 1,
+                  "Order No": order.id,
+                  Buyer: `${order.user?.firstName} ${order.user?.lastName}`,
+                  Quntity: order.quantity,
+                  Status: order.status,
+                  Product: order.product!.name,
+                  id: order.id,
+                };
+              }
+            );
+
+            setRowData(recOrder);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        } catch (e) {
+          console.log(e);
+          setAlert({
+            type: "error",
+            message: "failed to load orders",
+          });
+        }
+      })();
+    }
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   return (
     <AdminLayout>
       <h1>Orders</h1>
       <div className={styles.orders}>
         <div className={styles.infoTabs}>
-          <OrderingInfo
-            processingClick={() => {
-              Router.push("/admin/orders/processing");
-            }}
-            deliveredClick={() => {
-              Router.push("/admin/orders/delivered");
-            }}
-            pendingClick={() => {
-              Router.push("/admin/orders/pending");
-            }}
-            cancledClick={() => {
-              Router.push("/admin/orders/cancledOrders");
-            }}
-          />
+          {countLoading && <h2>Loading...</h2>}
+
+          {ordersCount !== null && !countLoading && (
+            <OrderingInfo
+              deliveredCount={ordersCount!.delivered}
+              pendingCount={ordersCount!.pending}
+              processingCount={ordersCount!.processing}
+              processingClick={() => {
+                Router.push("/admin/orders/processing");
+              }}
+              deliveredClick={() => {
+                Router.push("/admin/orders/delivered");
+              }}
+              pendingClick={() => {
+                Router.push("/admin/orders/pending");
+              }}
+              cancledClick={() => {
+                Router.push("/admin/orders/cancledOrders");
+              }}
+            />
+          )}
         </div>
         <div className={styles.tables}>
           <TableHolder
@@ -178,6 +227,11 @@ const Orders = () => {
             title="Recent Orders"
             columData={columnDefs}
             rowData={rowData}
+            onCellClicked={(e) => {
+              if (e.colDef.field === "Details") {
+                Router.push(`/admin/orders/id?oid=${e.data.id}`);
+              }
+            }}
           />
           <TableHolder
             inputRef={allOrdSearchRef}

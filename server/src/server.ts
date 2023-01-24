@@ -24,7 +24,10 @@ import address from "./api/address";
 import sellerOrder from "./api/seller/order";
 import sellerFollowers from "./api/seller/followers";
 import sellerUpdate from "./api/seller/update";
+
 import adminAuth from "./api/admin/auth";
+import orders from "./api/admin/orders";
+import adminCounts from "./api/admin/getCounts";
 //?? RETURN REVIEW REPORT
 import rrr from "./api/rrr";
 import { Products } from "./entities/Products";
@@ -139,6 +142,8 @@ app.use("/seller/followers", sellerFollowers);
 app.use("/seller/update", sellerUpdate);
 
 app.use("/admin/auth", adminAuth);
+app.use("/admin/getCounts", adminCounts);
+app.use("/admin/orders", orders);
 //?? RETURN REVIEW REPORT
 app.use("/rrr", rrr);
 
