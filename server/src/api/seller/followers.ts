@@ -21,13 +21,21 @@ router.get("/recentFollowers", validateSeller, async (req, res) => {
       relations: {
         user: true,
       },
+      take: 5,
     });
+
+    const followersToSend = followers.map((follower) => ({
+      firstName: follower.user.firstName,
+      lastName: follower.user.lastName,
+      avatar: follower.user.avatar,
+      id: follower.user.id,
+    }));
 
     if (followers) {
       res.json({
         status: "ok",
         message: "followers found",
-        followers,
+        followers: followersToSend,
       });
     } else {
       res.json({

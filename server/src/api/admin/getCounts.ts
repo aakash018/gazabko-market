@@ -20,7 +20,7 @@ router.get("/getSellerCounts", validateAdmin, async (_, res) => {
     }, 0);
 
     const deactivated = sellers.reduce((acc, el) => {
-      if (el.isHidden === true) return acc + 1;
+      if (el.isBanned === true) return acc + 1;
       else return acc;
     }, 0);
 

@@ -141,7 +141,7 @@ router.post("/login", async (req, res) => {
     .leftJoinAndSelect("user.address", "address")
     .leftJoinAndSelect("user.cart", "cart")
     .getOne();
-  if (user) {
+  if (user && !user.isBanned) {
     const isPasswordCorrect = await bcrypt.compare(
       userLoginInfo.password,
       user.password
@@ -161,6 +161,11 @@ router.post("/login", async (req, res) => {
         message: "password incorrect",
       });
     }
+  } else if (user?.isBanned) {
+    res.json({
+      status: "fail",
+      message: "user is banned by admin",
+    });
   } else {
     res.json({
       status: "fail",

@@ -56,7 +56,7 @@ router.post("/login", async (req, res) => {
     .addSelect("seller.password")
     .getOne();
 
-  if (seller) {
+  if (seller && !seller.isBanned) {
     const isPasswordMatched = await bcrypt.compare(
       sellerInputData.password,
       seller.password
@@ -82,6 +82,11 @@ router.post("/login", async (req, res) => {
         message: "seller not verified",
       });
     }
+  } else if (seller?.isBanned) {
+    res.json({
+      status: "fail",
+      message: "seller banned by admin",
+    });
   } else {
     res.json({
       status: "fail",

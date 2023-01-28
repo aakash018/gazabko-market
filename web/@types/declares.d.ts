@@ -3,7 +3,9 @@ declare interface User {
   username: string;
   firstName: string;
   lastName: string;
+  totalItemsBought: number;
   email: string;
+  isBanned: boolean;
   avatar: string;
   role: "customer" | "seller" | "admin";
   phoneNo: number;

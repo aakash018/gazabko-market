@@ -54,6 +54,9 @@ export class User extends BaseEntity {
   @OneToMany(() => Address, (address) => address.user)
   address: Address[];
 
+  @Column({ default: false })
+  isBanned: boolean;
+
   @OneToOne(() => Cart, (cart) => cart.user, { nullable: true })
   @JoinColumn()
   cart: Cart;

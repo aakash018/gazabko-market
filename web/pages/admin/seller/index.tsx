@@ -15,12 +15,14 @@ import axios from "axios";
 import { setLabels } from "react-chartjs-2/dist/utils";
 import { count } from "console";
 import { useAlert } from "../../_app";
+import { Seller } from "../../../@types/global";
 
 interface TableDef {
   SN: number;
   "Vendor's Name": string;
-  "Items sold last month": number;
+  "Items sold": number;
   Details: any;
+  id: number;
 }
 
 interface SellerCountType {
@@ -30,69 +32,14 @@ interface SellerCountType {
 }
 
 const VendorPage = () => {
-  const [rowData] = useState<TableDef[]>([
-    {
-      SN: 1,
-      "Vendor's Name": "Laxmi Store",
-      "Items sold last month": 40,
-      Details: "",
-    },
-    {
-      SN: 1,
-      "Vendor's Name": "Laxmi Store",
-      "Items sold last month": 40,
-      Details: "",
-    },
-    {
-      SN: 3,
-      "Vendor's Name": "Laxmi Store",
-      "Items sold last month": 40,
-      Details: "",
-    },
-    {
-      SN: 5,
-      "Vendor's Name": "Laxmi Store",
-      "Items sold last month": 40,
-      Details: "",
-    },
-    {
-      SN: 6,
-      "Vendor's Name": "Laxmi Store",
-      "Items sold last month": 40,
-      Details: "",
-    },
-    {
-      SN: 7,
-      "Vendor's Name": "Laxmi Store",
-      "Items sold last month": 40,
-      Details: "",
-    },
-    {
-      SN: 8,
-      "Vendor's Name": "Laxmi Store",
-      "Items sold last month": 40,
-      Details: "",
-    },
-    {
-      SN: 9,
-      "Vendor's Name": "Laxmi Store",
-      "Items sold last month": 40,
-      Details: "",
-    },
-    {
-      SN: 10,
-      "Vendor's Name": "Laxmi Store",
-      "Items sold last month": 40,
-      Details: "",
-    },
-  ]);
+  const [rowData, setRowData] = useState<TableDef[]>([]);
 
   const { setAlert } = useAlert();
 
   const [columnDefs] = useState([
     { field: "SN", width: 60 },
     { field: "Vendor's Name" },
-    { field: "Items sold last month" },
+    { field: "Items sold" },
     {
       field: "Details",
       width: 90,
@@ -103,7 +50,6 @@ const VendorPage = () => {
             fontWeight: "bold",
             cursor: "pointer",
           }}
-          onClick={() => Router.push("/admin/seller/laxmi-store")}
         >
           View
         </div>
@@ -127,6 +73,39 @@ const VendorPage = () => {
 
           if (res.data.status === "ok" && res.data.count) {
             setSellerCount(res.data.count);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        } catch {
+          setAlert({
+            type: "error",
+            message: "failed to load counts",
+          });
+        }
+      })();
+      (async () => {
+        try {
+          const res = await axios.get<RespondType & { sellers?: Seller[] }>(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/seller/topSellers`,
+            {
+              withCredentials: true,
+            }
+          );
+
+          if (res.data.status === "ok" && res.data.sellers) {
+            const sellerTableRow: TableDef[] = res.data.sellers.map(
+              (seller, i) => ({
+                SN: i + 1,
+                "Items sold": seller.itemsSold,
+                "Vendor's Name": seller.storeName,
+                Details: "",
+                id: seller.id,
+              })
+            );
+            setRowData(sellerTableRow);
           } else {
             setAlert({
               type: "error",
@@ -188,20 +167,16 @@ const VendorPage = () => {
           )}
         </div>
         <div className={styles.topVendors}>
-          <div className={styles.title}>Top Vendors of Last Month</div>
+          <div className={styles.title}>Top Sellers</div>
           <div className="ag-theme-alpine" style={{ height: 450, width: 580 }}>
             <AgGridReact
               rowData={rowData}
               columnDefs={columnDefs}
-            ></AgGridReact>
-          </div>
-        </div>
-        <div className={styles.topVendors}>
-          <div className={styles.title}>Vendors Verified this month</div>
-          <div className="ag-theme-alpine" style={{ height: 450, width: 580 }}>
-            <AgGridReact
-              rowData={rowData}
-              columnDefs={columnDefs}
+              onCellClicked={(e) => {
+                if (e.colDef.field === "Details" && e.data) {
+                  Router.push(`/admin/seller/id?sid=${e.data.id}`);
+                }
+              }}
             ></AgGridReact>
           </div>
         </div>

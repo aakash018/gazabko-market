@@ -42,6 +42,9 @@ export class Seller extends BaseEntity {
   @Column({ default: "seller" })
   role: string;
 
+  @Column({ default: 0 })
+  rating: number;
+
   @Column({ default: false })
   isVerified: boolean;
 
@@ -58,6 +61,9 @@ export class Seller extends BaseEntity {
     nullable: true,
   })
   followers: Follow[];
+
+  @Column({ default: false })
+  isBanned: boolean;
 
   @CreateDateColumn()
   created_at: Date;

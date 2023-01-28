@@ -42,9 +42,14 @@ const UserHolder: React.FC<UserHolderProps> = ({ name, route, img }) => {
 interface Props {
   title: string;
   customers: FollowerResponseType[];
+  type?: "seller" | "admin";
 }
 
-const CustomersInfoHolder: React.FC<Props> = ({ title, customers }) => {
+const CustomersInfoHolder: React.FC<Props> = ({
+  title,
+  customers,
+  type = "seller",
+}) => {
   return (
     <div className={styles.customersInfoHolder}>
       <div className={styles.title}>{title}</div>
@@ -52,9 +57,9 @@ const CustomersInfoHolder: React.FC<Props> = ({ title, customers }) => {
         {customers.map((customer, i) => (
           <UserHolder
             key={i}
-            name={`${customer.user.lastName}`}
-            route={`/seller/customers/${customer.userId}`}
-            img={customer.user.avatar}
+            name={`${customer.lastName}`}
+            route={`/${type}/customers/id?uid=${customer.id}`}
+            img={customer.avatar}
           />
         ))}
       </div>

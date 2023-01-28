@@ -9,11 +9,13 @@ export interface Seller {
   id: number;
   username: string;
   email: string;
+  isBanned: boolean;
   storeName: string;
   address: string;
   contactPerson: string;
   phoneNo: string;
   role: "seller";
+  rating: number;
   isVerified: boolean;
   panNo: string;
   productCount?: number;
@@ -111,14 +113,10 @@ export interface Cart {
 }
 
 export interface FollowerResponseType {
-  user: {
-    firstName: string;
-    lastName: string;
-    avatar: string;
-    id: number;
-  };
-  userId: number;
-  sellerId: number;
+  firstName: string;
+  lastName: string;
+  avatar: string;
+  id: number;
 }
 
 export interface FollowerType {

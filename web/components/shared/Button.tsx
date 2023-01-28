@@ -35,7 +35,7 @@ const Button: React.FC<Props> = ({
         disabled={disable}
       >
         {icon}
-        {children}
+        {disable ? "Loading..." : children}
       </button>
     </div>
   );
