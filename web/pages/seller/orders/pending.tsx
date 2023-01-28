@@ -93,7 +93,7 @@ const Pending: React.FC = () => {
           rowData={rowData}
           height={800}
           onRowClick={(e) => {
-            Router.push(`/seller/orders/${e.data["Order No"]}`);
+            Router.push(`/seller/orders/id?oid=${e.data["Order No"]}`);
           }}
         />
       </div>

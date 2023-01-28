@@ -12,11 +12,14 @@ export interface Seller {
   storeName: string;
   address: string;
   contactPerson: string;
-  phoneNo: number;
+  phoneNo: string;
   role: "seller";
   isVerified: boolean;
-  panNo: number;
+  panNo: string;
   productCount?: number;
+  itemsSold: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface AdminType {
@@ -90,6 +93,7 @@ export interface Order {
   created_at: string;
   updated_at: string;
   product?: ProtuctType;
+  state: "received" | "outForDelivery" | null;
 }
 
 export interface OnCartProductType {

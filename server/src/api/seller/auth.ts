@@ -14,7 +14,7 @@ interface SellerRegisterData {
   password: string;
   contactPerson: string;
   phoneNo: string;
-  panNo: number;
+  panNo: string;
 }
 
 router.post("/sellerRegister", async (req, res) => {
@@ -56,29 +56,35 @@ router.post("/login", async (req, res) => {
     .addSelect("seller.password")
     .getOne();
 
-  if (seller && seller.isVerified !== false) {
+  if (seller) {
     const isPasswordMatched = await bcrypt.compare(
       sellerInputData.password,
       seller.password
     );
-
-    if (isPasswordMatched) {
-      req.session.sellerID = seller.id;
-      Reflect.deleteProperty(seller, "password");
-      res.json({
-        status: "ok",
-        message: "logged in successfully",
-        user: seller,
-      });
+    if (seller.isVerified) {
+      if (isPasswordMatched) {
+        req.session.sellerID = seller.id;
+        Reflect.deleteProperty(seller, "password");
+        res.json({
+          status: "ok",
+          message: "logged in successfully",
+          user: seller,
+        });
+      } else {
+        res.json({
+          status: "fail",
+          message: "password didn't match",
+        });
+      }
     } else {
       res.json({
         status: "fail",
-        message: "password didn't match",
+        message: "seller not verified",
       });
     }
   } else {
     res.json({
-      stayus: "fail",
+      status: "fail",
       message: "seller not found",
     });
   }

@@ -27,6 +27,9 @@ export class Seller extends BaseEntity {
   @Column()
   address: string;
 
+  @Column({ default: false })
+  isHidden: boolean;
+
   @Column({ select: false })
   password: string;
 
@@ -39,11 +42,14 @@ export class Seller extends BaseEntity {
   @Column({ default: "seller" })
   role: string;
 
-  @Column({ default: true })
+  @Column({ default: false })
   isVerified: boolean;
 
   @Column({ nullable: true })
-  panNo: number;
+  panNo: string;
+
+  @Column({ default: 0 })
+  itemsSold: number;
 
   @OneToMany(() => Products, (product) => product.seller)
   products: Products[];

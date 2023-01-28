@@ -36,6 +36,8 @@ const OrdersDetails = () => {
             withCredentials: true,
           }
         );
+
+        console.log(res.data);
         setLoading(false);
         if (res.data.status === "ok") {
           setOrderDetails({
@@ -101,7 +103,6 @@ const OrdersDetails = () => {
           withCredentials: true,
         }
       );
-
       if (res.data.status === "ok") {
         setAlert({
           type: "message",

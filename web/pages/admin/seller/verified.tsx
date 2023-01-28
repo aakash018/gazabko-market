@@ -1,5 +1,5 @@
 import { AgGridReact } from "ag-grid-react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AdminLayout from "../../../components/Admin/AdminNav";
 import SearchBar from "../../../components/Admin/shared/SearchBar";
 
@@ -8,6 +8,8 @@ import styles from "../../../styles/components/Admin/pages/VerifiedSellers.modul
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import Router from "next/router";
+import axios from "axios";
+import { Seller } from "../../../@types/global";
 
 type TableDef = {
   SN: number;
@@ -16,181 +18,13 @@ type TableDef = {
   "Signed Up Date": string;
   "Total Items": number;
   Details: any;
+  id: number;
 };
 
 const Verified = () => {
   const searchInput = useRef<HTMLInputElement>(null);
 
-  const [rowData] = useState<TableDef[]>([
-    {
-      SN: 1,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 2,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 3,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 4,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 5,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 6,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 7,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Items Sold": 20,
-      "Total Items": 40,
-      Details: "",
-    },
-    {
-      SN: 8,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 9,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 10,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 11,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 12,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 13,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 14,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 15,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 16,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 17,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 18,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 19,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 20,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-    {
-      SN: 21,
-      "Vendor's Name": "Laxmi Store",
-      "Signed Up Date": "27 June 2022",
-      "Total Items": 40,
-      "Items Sold": 20,
-      Details: "",
-    },
-  ]);
+  const [rowData, setRowData] = useState<TableDef[]>([]);
 
   const [columnDefs] = useState([
     { field: "SN", width: 60 },
@@ -208,13 +42,53 @@ const Verified = () => {
             fontWeight: "bold",
             cursor: "pointer",
           }}
-          onClick={() => Router.push("/admin/seller/laxmi-store")}
         >
           View
         </div>
       ),
     },
   ]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    if (!ignore) {
+      (async () => {
+        try {
+          const res = await axios.get<
+            RespondType & { verifiedSellers?: Seller[] }
+          >(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/seller/getVerifiedSeller`,
+            {
+              withCredentials: true,
+            }
+          );
+          console.log();
+          if (res.data.status === "ok" && res.data.verifiedSellers) {
+            const vriSeller: TableDef[] = res.data.verifiedSellers.map(
+              (seller, i) => {
+                return {
+                  SN: i + 1,
+                  "Items Sold": seller.itemsSold,
+                  "Vendor's Name": seller.storeName,
+                  "Total Items": seller.productCount as number,
+                  "Signed Up Date": seller.created_at,
+                  Details: "",
+                  id: seller.id,
+                };
+              }
+            );
+
+            setRowData(vriSeller);
+          }
+        } catch {}
+      })();
+    }
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   return (
     <AdminLayout>
@@ -234,6 +108,11 @@ const Verified = () => {
               <AgGridReact
                 rowData={rowData}
                 columnDefs={columnDefs}
+                onCellClicked={(e) => {
+                  if (e.colDef.field === "Details" && e.data) {
+                    Router.push(`/admin/seller/id?sid=${e.data.id}`);
+                  }
+                }}
               ></AgGridReact>
             </div>
           </div>

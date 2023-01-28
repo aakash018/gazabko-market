@@ -8,9 +8,10 @@ interface Props {
   storeName: string;
   address: string;
   personName: string;
-  phoneNo: number;
-  panNo: number | "N/A";
+  phoneNo: string;
+  panNo: string | "N/A";
   email: string | "N/A";
+  onVerifyRequest: () => void;
 }
 
 const PendingSellerVefHolder: React.FC<Props> = ({
@@ -20,6 +21,7 @@ const PendingSellerVefHolder: React.FC<Props> = ({
   personName,
   phoneNo,
   storeName,
+  onVerifyRequest,
 }) => {
   return (
     <div className={styles.pendingSellerVefHolder}>
@@ -59,7 +61,7 @@ const PendingSellerVefHolder: React.FC<Props> = ({
         </div>
 
         <div className={styles.actBtn}>
-          <Button>Verify</Button>
+          <Button onClick={onVerifyRequest}>Verify</Button>
           <Button color="error">Dismiss</Button>
         </div>
       </div>

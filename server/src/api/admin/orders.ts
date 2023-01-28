@@ -132,4 +132,71 @@ router.get("/getOneOrderInfo", validateAdmin, async (req, res) => {
   }
 });
 
+router.post("/verifyReceivedOrder", validateAdmin, async (req, res) => {
+  try {
+    const userReq = (await req.body) as { oid: number };
+
+    await Order.update(
+      {
+        id: userReq.oid,
+      },
+      { status: "processing", state: "received" }
+    );
+
+    res.json({
+      status: "ok",
+      message: "order status updated",
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed o update order",
+    });
+  }
+});
+router.post("/verifyOutForDelivery", validateAdmin, async (req, res) => {
+  try {
+    const userReq = (await req.body) as { oid: number };
+
+    await Order.update(
+      {
+        id: userReq.oid,
+      },
+      { status: "processing", state: "outForDelivery" }
+    );
+
+    res.json({
+      status: "ok",
+      message: "order status updated",
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed o update order",
+    });
+  }
+});
+
+router.post("/verifyDelivered", validateAdmin, async (req, res) => {
+  try {
+    const userReq = (await req.body) as { oid: number };
+
+    await Order.update(
+      {
+        id: userReq.oid,
+      },
+      { status: "delivered" }
+    );
+
+    res.json({
+      status: "ok",
+      message: "order status updated",
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed o update order",
+    });
+  }
+});
 export default router;

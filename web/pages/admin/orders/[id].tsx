@@ -3,6 +3,8 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { GiCheckMark } from "react-icons/gi";
+import { MdOutlineReorder } from "react-icons/md";
 import { json } from "stream/consumers";
 import { Order } from "../../../@types/global";
 import AdminLayout from "../../../components/Admin/AdminNav";
@@ -29,38 +31,114 @@ const OrderDetails = () => {
 
   const { setAlert } = useAlert();
 
+  const fetchDate = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get<RespondType & { order?: Order }>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/orders/getOneOrderInfo`,
+        {
+          params: { oid },
+          withCredentials: true,
+        }
+      );
+      setLoading(false);
+      console.log(res.data);
+      if (res.data.status === "ok" && res.data.order) {
+        setOrder(res.data.order);
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed to load order",
+      });
+    }
+  };
+
   useEffect(() => {
     let ignore = false;
     if (!ignore && oid) {
-      (async () => {
-        try {
-          setLoading(true);
-          const res = await axios.get<RespondType & { order?: Order }>(
-            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/orders/getOneOrderInfo`,
-            {
-              params: { oid },
-              withCredentials: true,
-            }
-          );
-          setLoading(false);
-          console.log(res.data);
-          if (res.data.status === "ok" && res.data.order) {
-            setOrder(res.data.order);
-          } else {
-            setAlert({
-              type: "error",
-              message: res.data.message,
-            });
-          }
-        } catch {
-          setAlert({
-            type: "error",
-            message: "failed to load order",
-          });
-        }
-      })();
+      fetchDate();
     }
   }, [oid]);
+
+  const handleReceivedOrder = async () => {
+    try {
+      const res = await axios.post<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/orders/verifyReceivedOrder`,
+        {
+          oid,
+        },
+        { withCredentials: true }
+      );
+
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+        fetchDate();
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed  to update order status",
+      });
+    }
+  };
+
+  const handleOutForDeliveryOrder = async () => {
+    try {
+      const res = await axios.post<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/orders/verifyOutForDelivery`,
+        {
+          oid,
+        },
+        { withCredentials: true }
+      );
+
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+        fetchDate();
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed  to update order status",
+      });
+    }
+  };
+  const handleDeliveredOrder = async () => {
+    try {
+      const res = await axios.post<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/orders/verifyDelivered`,
+        {
+          oid,
+        },
+        { withCredentials: true }
+      );
+
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+        fetchDate();
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed  to update order status",
+      });
+    }
+  };
 
   return (
     <AdminLayout>
@@ -221,30 +299,68 @@ const OrderDetails = () => {
             </div>
             <div className={styles.statusControl}>
               <div className={styles.mainTitle}>Order Status Control</div>
-              <div className={styles.statusHolder}>
-                <div className={styles.text}>Order Verified by Vendor</div>
-                <div className={styles.button}>
-                  <IntputField type={"checkbox"} />
+              {order.status === "pending" && (
+                <div
+                  className={styles.statusHolder}
+                  style={{ color: "var(--theme-red)" }}
+                >
+                  Order yet to be verified by the seller
                 </div>
-              </div>
+              )}
+              {order.status !== "pending" && (
+                <div className={styles.statusHolder}>
+                  <div className={styles.text}>Order Verified by Vendor</div>
+                  <GiCheckMark color="green" size={20} />
+                </div>
+              )}
+
               <div className={styles.statusHolder}>
                 <div className={styles.text}>Order Recieved</div>
                 <div className={styles.button}>
-                  <IntputField type={"checkbox"} />
+                  {order.status === "processing" && order.state === null && (
+                    <Button color="default" onClick={handleReceivedOrder}>
+                      VERIFY
+                    </Button>
+                  )}
+                  {order.state === "received" ||
+                    (order.state === "outForDelivery" && (
+                      <GiCheckMark color="green" size={20} />
+                    ))}
                 </div>
               </div>
+
               <div className={styles.statusHolder}>
                 <div className={styles.text}>Order Out for Delivery</div>
                 <div className={styles.button}>
-                  <IntputField type={"checkbox"} />
+                  {order.state === "received" && (
+                    <Button color="default" onClick={handleOutForDeliveryOrder}>
+                      VERIFY
+                    </Button>
+                  )}
+                  {order.state === "outForDelivery" && (
+                    <GiCheckMark color="green" size={20} />
+                  )}
                 </div>
               </div>
-              <div className={styles.statusHolder}>
-                <div className={styles.text}>Order Delivered Successfully</div>
-                <div className={styles.button}>
-                  <IntputField type={"checkbox"} />
+
+              {
+                <div className={styles.statusHolder}>
+                  <div className={styles.text}>
+                    Order Delivered Successfully
+                  </div>
+                  {order.status === "processing" &&
+                    order.state === "outForDelivery" && (
+                      <div className={styles.button}>
+                        <Button color="default" onClick={handleDeliveredOrder}>
+                          VERIFY
+                        </Button>
+                      </div>
+                    )}
+                  {order.status === "delivered" && (
+                    <GiCheckMark color="green" size={20} />
+                  )}
                 </div>
-              </div>
+              }
             </div>
           </div>
         </div>

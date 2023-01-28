@@ -91,8 +91,12 @@ const SellerSignup = () => {
             <div>
               <IntputField label="Email (Optional)" input={email} />
               <IntputField label="Pan No. (Optional)" input={panNo} />
-              <IntputField label="Password" input={password} />
-              <IntputField label="Confirm Password" input={cpassword} />
+              <IntputField label="Password" input={password} type="password" />
+              <IntputField
+                label="Confirm Password"
+                input={cpassword}
+                type="password"
+              />
             </div>
           </div>
           <div className={styles.actBtn}>

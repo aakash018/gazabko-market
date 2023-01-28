@@ -236,6 +236,7 @@ const ProductDisplay: React.FC = () => {
               category={{ name: "Women's Clothing", url: "womens-clothing" }}
               subCategory={{ name: "Fashion", url: "fashion" }}
             />
+
             <ProductInfoDisplay
               id={product.id}
               totalStock={product!.totalStock}

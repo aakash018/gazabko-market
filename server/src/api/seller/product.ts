@@ -43,47 +43,42 @@ router.get("/", async (_, res) => {
 
 router.post("/add", validateSeller, async (req, res) => {
   const productDetails: ProtuctPayloadType = req.body;
+
   const cleanDesc = sanitizeHtml(productDetails.description);
-  if (req.session.user) {
-    const seller = await Seller.findOne({
-      where: { id: req.session.user },
-    });
-    try {
-      if (seller && seller.isVerified) {
-        const product = await Products.create({
-          brand: productDetails.brand,
-          category: productDetails.category,
-          name: productDetails.productName,
-          price: productDetails.price,
-          description: cleanDesc,
-          offers: productDetails.offer,
-          totalStock: productDetails.totalStock,
-          store: seller.storeName,
-          sku: productDetails.sku,
-          sizes: productDetails.sizes,
-          images: productDetails.images,
-          tags: productDetails.tags,
-          discount: productDetails.discount,
-          seller: seller,
-          color: productDetails.color,
-          priceAfterDiscount: productDetails.price - productDetails.discount,
-        }).save();
-        console.log(product);
-      }
-      res.json({
-        status: "ok",
-        message: "product added",
-      });
-    } catch {
-      res.send({
-        status: "fail",
-        message: "failed to add product",
-      });
+
+  const seller = await Seller.findOne({
+    where: { id: req.session.sellerID },
+  });
+  try {
+    if (seller && seller.isVerified) {
+      const product = await Products.create({
+        brand: productDetails.brand,
+        category: productDetails.category,
+        name: productDetails.productName,
+        price: productDetails.price,
+        description: cleanDesc,
+        offers: productDetails.offer,
+        totalStock: productDetails.totalStock,
+        store: seller.storeName,
+        sku: productDetails.sku,
+        sizes: productDetails.sizes,
+        images: productDetails.images,
+        tags: productDetails.tags,
+        discount: productDetails.discount,
+        seller: seller,
+        color: productDetails.color,
+        priceAfterDiscount: productDetails.price - productDetails.discount,
+      }).save();
+      console.log(product);
     }
-  } else {
     res.json({
+      status: "ok",
+      message: "product added",
+    });
+  } catch {
+    res.send({
       status: "fail",
-      message: "not auth",
+      message: "failed to add product",
     });
   }
 });

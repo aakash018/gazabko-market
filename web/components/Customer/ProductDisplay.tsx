@@ -299,7 +299,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
                   <HiOutlineLocationMarker />
                 </span>
                 {!user && <span>Not logged in</span>}
-                {user && <span>{user?.address.deliveryAddress}</span>}
+                {user && <span>{user?.address[0].deliveryAddress}</span>}
               </div>
             </div>
             <div className={styles.containers} style={{ alignItems: "center" }}>

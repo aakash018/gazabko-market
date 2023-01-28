@@ -27,6 +27,9 @@ export class Order extends BaseEntity {
   @Column({ nullable: true })
   color: string;
 
+  @Column({ nullable: true })
+  state: "received" | "outForDelivery";
+
   @Column({ default: "pending" })
   status: "pending" | "processing" | "delivered";
 
