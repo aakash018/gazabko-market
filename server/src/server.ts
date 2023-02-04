@@ -31,6 +31,7 @@ import adminCounts from "./api/admin/getCounts";
 import adminSeller from "./api/admin/seller";
 import adminProducts from "./api/admin/products";
 import adminCustomers from "./api/admin/customers";
+import adminAccount from "./api/admin/account";
 //?? RETURN REVIEW REPORT
 import rrr from "./api/rrr";
 import { Products } from "./entities/Products";
@@ -150,6 +151,8 @@ app.use("/admin/orders", orders);
 app.use("/admin/seller", adminSeller);
 app.use("/admin/products", adminProducts);
 app.use("/admin/customers", adminCustomers);
+app.use("/admin/customers", adminCustomers);
+app.use("/admin/account", adminAccount);
 //?? RETURN REVIEW REPORT
 app.use("/rrr", rrr);
 

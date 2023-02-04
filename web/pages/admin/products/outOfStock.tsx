@@ -1,5 +1,5 @@
 import { AgGridReact } from "ag-grid-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from "../../../styles/components/Admin/pages/outOfStock.module.scss";
 
@@ -9,149 +9,96 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 import Router from "next/router";
 import AdminLayout from "../../../components/Admin/AdminNav";
 import Button from "../../../components/shared/Button";
+import axios from "axios";
+import { ProtuctType } from "../../../@types/global";
+import { useAlert } from "../../_app";
 
 type TableDef = {
   SN: number;
   Product: string;
   Vendor: string;
-  "Stock ended at": string;
+  "Items Sold": number;
   "View Product": any;
-  "View Vendor": any;
+  Edit: any;
+  id: number;
 };
 
 const OutOfStock = () => {
-  const [rowData] = useState<TableDef[]>([
-    {
-      SN: 1,
-      "Stock ended at": "27 June 2022",
-      Product: "xyz",
-      "View Product": "",
-      "View Vendor": "",
-      Vendor: "abc",
-    },
-    {
-      SN: 2,
-      "Stock ended at": "27 June 2022",
-      Product: "xyz",
-      "View Product": "",
-      "View Vendor": "",
-      Vendor: "abc",
-    },
-    {
-      SN: 3,
-      "Stock ended at": "27 June 2022",
-      Product: "xyz",
-      "View Product": "",
-      "View Vendor": "",
-      Vendor: "abc",
-    },
-    {
-      SN: 4,
-      "Stock ended at": "27 June 2022",
-      Product: "xyz",
-      "View Product": "",
-      "View Vendor": "",
-      Vendor: "abc",
-    },
-    {
-      SN: 5,
-      "Stock ended at": "27 June 2022",
-      Product: "xyz",
-      "View Product": "",
-      "View Vendor": "",
-      Vendor: "abc",
-    },
-    {
-      SN: 6,
-      "Stock ended at": "27 June 2022",
-      Product: "xyz",
-      "View Product": "",
-      "View Vendor": "",
-      Vendor: "abc",
-    },
-    {
-      SN: 7,
-      "Stock ended at": "27 June 2022",
-      Product: "xyz",
-      "View Product": "",
-      "View Vendor": "",
-      Vendor: "abc",
-    },
-    {
-      SN: 8,
-      "Stock ended at": "27 June 2022",
-      Product: "xyz",
-      "View Product": "",
-      "View Vendor": "",
-      Vendor: "abc",
-    },
-    {
-      SN: 8,
-      "Stock ended at": "27 June 2022",
-      Product: "xyz",
-      "View Product": "",
-      "View Vendor": "",
-      Vendor: "abc",
-    },
-    {
-      SN: 9,
-      "Stock ended at": "27 June 2022",
-      Product: "xyz",
-      "View Product": "",
-      "View Vendor": "",
-      Vendor: "abc",
-    },
-    {
-      SN: 10,
-      "Stock ended at": "27 June 2022",
-      Product: "xyz",
-      "View Product": "",
-      "View Vendor": "",
-      Vendor: "abc",
-    },
-  ]);
+  const [rowData, setRowData] = useState<TableDef[]>([]);
+
+  const { setAlert } = useAlert();
 
   const [columnDefs] = useState([
     { field: "SN", width: 60 },
     { field: "Product" },
     { field: "Vendor" },
-    { field: "Stock ended at" },
+    { field: "Items Sold" },
     {
       field: "View Product",
       cellRenderer: () => {
         return (
           <div
-            onClick={() => Router.push("/admin/edit/editProducts/5867ds")}
             style={{
               display: "flex",
               alignItems: "center",
               height: "100%",
+              color: "var(--theme-color)",
+              fontWeight: "bold",
             }}
           >
-            <Button>View</Button>
-          </div>
-        );
-      },
-    },
-    {
-      field: "View Vendor",
-      width: 170,
-      cellRenderer: () => {
-        return (
-          <div
-            onClick={() => Router.push("/admin/seller/dsfsdfds")}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              height: "100%",
-            }}
-          >
-            <Button>View</Button>
+            View
           </div>
         );
       },
     },
   ]);
+
+  useEffect(() => {
+    let ignore = false;
+    if (!ignore) {
+      (async () => {
+        try {
+          const res = await axios.get<
+            RespondType & { outOfStockProducts?: ProtuctType[] }
+          >(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/products/productsOutOfStock`,
+            {
+              withCredentials: true,
+            }
+          );
+
+          if (res.data.status === "ok" && res.data.outOfStockProducts) {
+            const productForTable: TableDef[] = res.data.outOfStockProducts.map(
+              (product, i) => ({
+                SN: i + 1,
+                Product: product.name,
+                Vendor: product.store as string,
+                "Items Sold": product.timesBought,
+                Edit: "",
+                "View Product": "",
+                id: product.id,
+              })
+            );
+
+            setRowData(productForTable);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        } catch {
+          setAlert({
+            type: "error",
+            message: "failed to load info",
+          });
+        }
+      })();
+      return () => {
+        ignore = true;
+      };
+    }
+  }, []);
 
   return (
     <AdminLayout>
@@ -159,14 +106,25 @@ const OutOfStock = () => {
         <h1>Products Out of Stock</h1>
       </div>
       <div className={styles.outOfStock}>
-        <div className={styles.table}>
+        <div
+          className={styles.table}
+          style={{
+            display: "grid",
+            placeContent: "center",
+          }}
+        >
           <div
             className="ag-theme-alpine"
-            style={{ height: "500px", width: "100%" }}
+            style={{ height: "500px", width: "870px" }}
           >
             <AgGridReact
               rowData={rowData}
               columnDefs={columnDefs}
+              onCellClicked={(e) => {
+                if (e.colDef.field === "View Product" && e.data) {
+                  Router.push(`/admin/products/id?pid=${e.data.id}`);
+                }
+              }}
             ></AgGridReact>
           </div>
         </div>

@@ -8,6 +8,7 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
+import { Offers } from "./admin/Offers";
 import { OnCartProduct } from "./Cart/OnCartProduct";
 import { Order } from "./Orders";
 import { Question } from "./QuestionAndAnswer";
@@ -34,7 +35,7 @@ export class Products extends BaseEntity {
   @Column()
   totalStock: number;
 
-  @Column()
+  @Column({ nullable: true })
   store: string;
 
   @Column({ type: "text", nullable: true })
@@ -55,7 +56,7 @@ export class Products extends BaseEntity {
   @Column({ nullable: true })
   priceAfterDiscount: number;
 
-  @Column({ nullable: true })
+  @ManyToOne(() => Offers, (offer) => offer.products, { nullable: true })
   offers: string;
 
   @Column({ nullable: true })
@@ -81,8 +82,11 @@ export class Products extends BaseEntity {
   @OneToMany(() => OnCartProduct, (onCart) => onCart.product)
   onCartProduct: OnCartProduct[];
 
-  @ManyToOne(() => Seller, (seller) => seller.products)
+  @ManyToOne(() => Seller, (seller) => seller.products, { nullable: true })
   seller: Seller;
+
+  @Column({ default: false })
+  isByAdmin: boolean;
 
   @OneToMany(() => Review, (review) => review.product)
   review: Review[];

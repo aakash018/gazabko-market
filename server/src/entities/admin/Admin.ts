@@ -12,6 +12,9 @@ export class Admin extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Column({ nullable: true })
+  name: string;
+
   @Column({ default: "admin" })
   username: string;
 
@@ -23,6 +26,7 @@ export class Admin extends BaseEntity {
 
   @Column({
     default: "$2a$12$Hsq9VyAjDdjVIoIGVkmFeO3oeTJAVxqMUaobKRglD63S8DuqgiFDO",
+    select: false,
   })
   password: string;
 

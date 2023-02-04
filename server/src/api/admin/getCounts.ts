@@ -2,6 +2,8 @@ import express from "express";
 import validateAdmin from "../../middleware/validateAdmin";
 import { Order } from "../../entities/Orders";
 import { Seller } from "../../entities/seller/Seller";
+import { Products } from "../../entities/Products";
+import { Review } from "../../entities/Review";
 
 const router = express();
 
@@ -84,6 +86,33 @@ router.get("/getOrdersCount", validateAdmin, async (_, res) => {
       message: "failed to load order counts",
     });
   }
+});
+
+router.get("/getProductCounts", validateAdmin, async (_, res) => {
+  try {
+    const products = await Products.createQueryBuilder("product")
+      // .leftJoinAndSelect("seller.products", "products")
+      // .loadRelationCountAndMap("product.reviewsCount", "product.review")
+      //   .loadRelationCountAndMap("product.", "seller.products")
+      .getMany();
+
+    const reviewsCount = await Review.count({});
+
+    const outOfStockCount = products.reduce((acc, el) => {
+      if (el.totalStock <= 0) return acc + 1;
+      else return acc;
+    }, 0);
+
+    res.json({
+      status: "ok",
+      message: "counts found",
+      counts: {
+        allProductsCount: products.length,
+        reviewsCount,
+        outOfStockCount,
+      },
+    });
+  } catch {}
 });
 
 export default router;

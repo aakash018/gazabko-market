@@ -26,6 +26,7 @@ export interface Seller {
 
 export interface AdminType {
   id: string;
+  name: string;
   username: string;
   email?: string;
   address?: string;

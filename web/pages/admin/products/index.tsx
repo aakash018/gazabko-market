@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from "../../../styles/components/Admin/pages/EditProducts.module.scss";
 
@@ -19,6 +19,10 @@ import { BiEdit } from "react-icons/bi";
 import AdminLayout from "../../../components/Admin/AdminNav";
 import EditOptionsButton from "../../../components/Admin/shared/EditOptionsButton";
 import InfoCard from "../../../components/Admin/shared/InfoCard";
+import axios from "axios";
+import { setDefaultResultOrder } from "dns";
+import { useAlert } from "../../_app";
+import { ProtuctType } from "../../../@types/global";
 
 type TableDef = {
   SN: number;
@@ -27,66 +31,21 @@ type TableDef = {
   "Item Sold": number;
   "Item Status": "In Stock" | "Out of Stock";
   Edit: any;
-  "Hide Item": any;
+  Details: any;
+  id: number;
 };
 
+interface CountResponse {
+  allProductsCount: number;
+  reviewsCount: number;
+  outOfStockCount: number;
+}
+
 const EditProducts: React.FC = () => {
-  const [rowData] = useState<TableDef[]>([
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-    },
-  ]);
+  const [rowData, setRowData] = useState<TableDef[]>([]);
+
+  const { setAlert } = useAlert();
+  const [counts, setCounts] = useState<CountResponse | null>(null);
 
   const [columnDefs] = useState([
     { field: "SN", width: 70 },
@@ -113,7 +72,6 @@ const EditProducts: React.FC = () => {
       field: "Details",
       cellRenderer: () => (
         <div
-          onClick={() => Router.push("/admin/products/18598787")}
           style={{
             fontWeight: "bold",
             color: "var(--theme-color)",
@@ -127,6 +85,74 @@ const EditProducts: React.FC = () => {
     },
   ]);
 
+  useEffect(() => {
+    let ignore = false;
+    if (!ignore) {
+      (async () => {
+        try {
+          const resCounts = await axios.get<
+            RespondType & { counts?: CountResponse }
+          >(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/getCounts/getProductCounts`,
+            {
+              withCredentials: true,
+            }
+          );
+
+          if (resCounts.data.status === "ok" && resCounts.data.counts) {
+            setCounts(resCounts.data.counts);
+          } else {
+            setAlert({
+              type: "error",
+              message: resCounts.data.message,
+            });
+          }
+
+          const res = await axios.get<
+            RespondType & { topProducts?: ProtuctType[] }
+          >(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/products/topProducts`,
+            {
+              withCredentials: true,
+            }
+          );
+
+          if (res.data.status === "ok" && res.data.topProducts) {
+            const productForTable: TableDef[] = res.data.topProducts.map(
+              (product, i) => ({
+                SN: i + 1,
+                Product: product.name,
+                Vendor: product.store as string,
+                "Item Sold": product.timesBought,
+                "Item Status":
+                  product.totalStock === 0 ? "Out of Stock" : "In Stock",
+                Edit: "",
+                Details: "",
+                id: product.id,
+              })
+            );
+
+            setRowData(productForTable);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        } catch {
+          setAlert({
+            type: "error",
+            message: "failed to load info",
+          });
+        }
+      })();
+    }
+
+    return () => {
+      ignore = false;
+    };
+  }, []);
+
   const handleInfoCardRoute = (route: string) => {
     Router.push(`/admin/products/${route}`);
   };
@@ -138,64 +164,69 @@ const EditProducts: React.FC = () => {
           <h1>Edit Products</h1>
         </div>
         <div className={styles.options}>
-          <EditOptionsButton
-            icon={<MdOutlineAdd />}
-            text={"Add Products"}
-            bgColor={"#5494F5"}
-            onClick={() => {
-              handleInfoCardRoute("add");
-            }}
-          />
-          <InfoCard
-            amount={52}
-            bgColor={"#00AB77"}
-            title="Total Product"
-            onViewClick={() => {
-              handleInfoCardRoute("allProducts");
-            }}
-          >
-            <FiPackage />
-          </InfoCard>
-          <InfoCard
-            amount={52}
-            bgColor={"#F36868"}
-            title="Products out of stock"
-            onViewClick={() => {
-              handleInfoCardRoute("outOfStock");
-            }}
-          >
-            <FaBoxOpen />
-          </InfoCard>
-          <InfoCard
-            amount={52}
-            bgColor={"#9E1EEC"}
-            title="Products Reviews"
-            onViewClick={() => {
-              handleInfoCardRoute("productReviews");
-            }}
-          >
-            <MdReviews />
-          </InfoCard>
-          <InfoCard
-            amount={52}
-            bgColor={"#EC1E5C"}
-            title="Products Reported"
-            onViewClick={() => {
-              handleInfoCardRoute("productReports");
-            }}
-          >
-            <MdOutlineReportProblem />
-          </InfoCard>
-          <InfoCard
-            amount={52}
-            bgColor={"#48bdbd"}
-            title="Products Returned"
-            onViewClick={() => {
-              handleInfoCardRoute("productsReturned");
-            }}
-          >
-            <MdOutlineReportProblem />
-          </InfoCard>
+          {counts && (
+            <>
+              {" "}
+              <EditOptionsButton
+                icon={<MdOutlineAdd />}
+                text={"Add Products"}
+                bgColor={"#5494F5"}
+                onClick={() => {
+                  handleInfoCardRoute("add");
+                }}
+              />
+              <InfoCard
+                amount={counts.allProductsCount}
+                bgColor={"#00AB77"}
+                title="Total Product"
+                onViewClick={() => {
+                  handleInfoCardRoute("allProducts");
+                }}
+              >
+                <FiPackage />
+              </InfoCard>
+              <InfoCard
+                amount={counts.outOfStockCount}
+                bgColor={"#F36868"}
+                title="Products out of stock"
+                onViewClick={() => {
+                  handleInfoCardRoute("outOfStock");
+                }}
+              >
+                <FaBoxOpen />
+              </InfoCard>
+              <InfoCard
+                amount={counts.reviewsCount}
+                bgColor={"#9E1EEC"}
+                title="Products Reviews"
+                onViewClick={() => {
+                  handleInfoCardRoute("productReviews");
+                }}
+              >
+                <MdReviews />
+              </InfoCard>
+              <InfoCard
+                amount={52}
+                bgColor={"#EC1E5C"}
+                title="Products Reported"
+                onViewClick={() => {
+                  handleInfoCardRoute("productReports");
+                }}
+              >
+                <MdOutlineReportProblem />
+              </InfoCard>
+              <InfoCard
+                amount={52}
+                bgColor={"#48bdbd"}
+                title="Products Returned"
+                onViewClick={() => {
+                  handleInfoCardRoute("productsReturned");
+                }}
+              >
+                <MdOutlineReportProblem />
+              </InfoCard>{" "}
+            </>
+          )}
         </div>
         <div className={styles.table}>
           <div className={styles.title}>
@@ -208,6 +239,11 @@ const EditProducts: React.FC = () => {
             <AgGridReact
               rowData={rowData}
               columnDefs={columnDefs}
+              onCellClicked={(e) => {
+                if (e.colDef.field === "Details") {
+                  Router.push(`/admin/products/id?pid=${e.data?.id}`);
+                }
+              }}
             ></AgGridReact>
           </div>
         </div>

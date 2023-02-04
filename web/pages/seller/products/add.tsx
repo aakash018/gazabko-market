@@ -4,7 +4,7 @@ import AddProdducts from "../../../components/shared/AddProdducts";
 const Add: React.FC = () => {
   return (
     <div>
-      <AddProdducts />
+      <AddProdducts type="seller" />
     </div>
   );
 };

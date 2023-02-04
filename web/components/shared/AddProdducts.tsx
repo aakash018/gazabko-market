@@ -23,7 +23,7 @@ import axios from "axios";
 import { ProtuctPayloadType } from "../../@types/global";
 import { useAlert } from "../../pages/_app";
 
-const AddProdducts: React.FC = () => {
+const AddProdducts: React.FC<{ type: "seller" | "admin" }> = ({ type }) => {
   const { setAlert } = useAlert();
 
   const [tagsList, setTagsList] = useState<string[]>([]);
@@ -100,7 +100,11 @@ const AddProdducts: React.FC = () => {
     };
 
     const res = await axios.post<{ status: "ok" | "fail"; message: string }>(
-      `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/add`,
+      `${
+        type === "seller"
+          ? `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/add`
+          : `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/products/addProduct`
+      }`,
       payload,
       { withCredentials: true }
     );
@@ -110,7 +114,9 @@ const AddProdducts: React.FC = () => {
         type: "message",
         message: res.data.message,
       });
-      Router.push("/seller/products");
+      type === "seller"
+        ? Router.push("/seller/products")
+        : Router.push("/admin/products");
     } else {
       setAlert({
         type: "error",

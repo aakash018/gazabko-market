@@ -7,27 +7,9 @@ import validateSeller from "../../middleware/validateSeller";
 import { Equal, LessThanOrEqual } from "typeorm";
 import { Review } from "../../entities/Review";
 import { Question } from "../../entities/QuestionAndAnswer";
+import { ProductPayloadType } from "src/types/global";
 
 const router = express();
-
-interface ProtuctPayloadType {
-  productName: string;
-  price: number;
-  discount: number;
-  description: string;
-  totalStock: number;
-  offer?: string;
-  sizes?: string;
-  tags: string;
-  category: string;
-  subCategory: string;
-  subsubCategory?: string;
-  sku: number;
-  brand: string;
-  images: string;
-  store: string;
-  color: string;
-}
 
 router.get("/", async (_, res) => {
   const products = await Products.find({
@@ -42,7 +24,7 @@ router.get("/", async (_, res) => {
 });
 
 router.post("/add", validateSeller, async (req, res) => {
-  const productDetails: ProtuctPayloadType = req.body;
+  const productDetails: ProductPayloadType = req.body;
 
   const cleanDesc = sanitizeHtml(productDetails.description);
 
