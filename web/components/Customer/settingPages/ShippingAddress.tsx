@@ -153,13 +153,14 @@ const ShippingAddress = () => {
           withCredentials: true,
         }
       );
+      console.log(res.data);
       if (res.data.status === "ok" && res.data.address) {
         setPhoneNo(res.data.address.phoneNo);
         setDeliveryAddress(res.data.address.deliveryAddress);
         setNearestLandmark(res.data.address.nearestLandmark);
         setLoadedLatLng([
-          JSON.parse(res.data.address.laglat).lat,
-          JSON.parse(res.data.address.laglat).lng,
+          JSON.parse(res.data.address.latlng).lat,
+          JSON.parse(res.data.address.latlng).lng,
         ]);
         setIsEditModalOpen(true);
       } else {
