@@ -56,8 +56,11 @@ export class Products extends BaseEntity {
   @Column({ nullable: true })
   priceAfterDiscount: number;
 
-  @ManyToOne(() => Offers, (offer) => offer.products, { nullable: true })
-  offers: string;
+  @ManyToOne(() => Offers, (offer) => offer.products, {
+    nullable: true,
+    onDelete: "SET NULL",
+  })
+  offers: Offers;
 
   @Column({ nullable: true })
   sizes: string;

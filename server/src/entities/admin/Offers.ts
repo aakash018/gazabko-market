@@ -17,11 +17,11 @@ export class Offers extends BaseEntity {
   @Column({ nullable: true })
   name: string;
 
-  @Column()
+  @Column({ type: Date })
   starting_date: Date;
 
-  @Column()
-  ending_date: string;
+  @Column({ type: Date })
+  ending_date: Date;
 
   @Column({ default: false })
   show_on_homepage: boolean;

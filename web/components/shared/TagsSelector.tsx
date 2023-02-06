@@ -10,6 +10,7 @@ interface Props {
   label: string;
   placeholder?: string;
   onTagsClick?: () => void;
+  onSaveRequest?: (input: string) => void;
 }
 
 const TagsSelector: React.FC<Props> = ({
@@ -18,14 +19,19 @@ const TagsSelector: React.FC<Props> = ({
   label,
   placeholder,
   onTagsClick,
+  onSaveRequest,
 }) => {
   const [inputData, setInputData] = useState("");
 
   const handelSelect = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
       if (inputData.trim() !== "") {
-        if (listState.includes(inputData)) return;
-        setListState((prev) => [...prev, inputData]);
+        if (onSaveRequest) {
+          onSaveRequest(inputData);
+        } else {
+          if (listState.includes(inputData)) return;
+          setListState((prev) => [...prev, inputData]);
+        }
         setInputData("");
       }
     }

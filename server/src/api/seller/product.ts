@@ -14,6 +14,9 @@ const router = express();
 router.get("/", async (_, res) => {
   const products = await Products.find({
     where: { isHidden: false },
+    relations: {
+      offers: true,
+    },
   });
 
   res.json({
@@ -39,7 +42,6 @@ router.post("/add", validateSeller, async (req, res) => {
         name: productDetails.productName,
         price: productDetails.price,
         description: cleanDesc,
-        offers: productDetails.offer,
         totalStock: productDetails.totalStock,
         store: seller.storeName,
         sku: productDetails.sku,

@@ -63,7 +63,6 @@ export interface ProtuctType {
   discount: number;
   description: string;
   totalStock: number;
-  offer?: string;
   sizes?: string;
   tags: string;
   isHidden: boolean;
@@ -73,6 +72,7 @@ export interface ProtuctType {
   sku: number;
   brand: string;
   images: string;
+  offers?: OfferType;
   store?: string;
   color?: string;
   seller: Seller;
@@ -127,4 +127,17 @@ export interface FollowerType {
   joinedDate: string;
   isVerified: boolean;
   avatar: string;
+}
+
+export interface OfferType {
+  id: string;
+  name: string;
+  starting_date: Date;
+  ending_date: Date;
+  show_on_homepage: boolean;
+  common_discount: boolean;
+  discount: number | null;
+  products?: ProtuctType[];
+  created_at: Date;
+  updated_at: Date;
 }

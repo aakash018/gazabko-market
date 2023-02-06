@@ -20,14 +20,18 @@ interface Props {
   noOfProducts?: number;
 
   type?: "products" | "brand";
+  isOffer?: boolean;
+  offerDiscount?: number;
 }
 
 const ShowCase: React.FC<Props> = ({
   includeTimer,
   expireDate,
   title,
+  isOffer = false,
   products,
   noOfProducts = 4,
+  offerDiscount,
   type = "products",
 }) => {
   return (
@@ -74,16 +78,37 @@ const ShowCase: React.FC<Props> = ({
         {products &&
           products.length !== 0 &&
           products.map((product, i) => {
-            return (
-              <ProductHolder
-                key={i}
-                mp={product.price}
-                discount={product.discount ? product.discount : 0}
-                rating={4.1}
-                productName={product.name}
-                id={product.id}
-              />
-            );
+            if (isOffer && offerDiscount) {
+              return (
+                <ProductHolder
+                  key={i}
+                  mp={product.price}
+                  discount={Math.ceil((product.price / 100) * offerDiscount)}
+                  rating={4.1}
+                  productName={product.name}
+                  id={product.id}
+                />
+              );
+            } else {
+              return (
+                <ProductHolder
+                  key={i}
+                  mp={product.price}
+                  discount={
+                    product.offers?.common_discount && product.offers.discount
+                      ? Math.ceil(
+                          (product.price / 100) * product.offers.discount
+                        )
+                      : product.discount
+                      ? product.discount
+                      : 0
+                  }
+                  rating={4.1}
+                  productName={product.name}
+                  id={product.id}
+                />
+              );
+            }
           })}
       </section>
     </div>

@@ -15,6 +15,8 @@ import Button from "../components/shared/Button";
 import { customStyles } from "../modalStyle";
 import CatogriesGridBox from "../components/Customer/CatogriesGridBox";
 import axios from "axios";
+import { OfferType, ProtuctType } from "../@types/global";
+import { useAlert } from "./_app";
 
 const Home = () => {
   const [bannerModalIsOpen, setIsOpen] = useState(false);
@@ -22,8 +24,9 @@ const Home = () => {
   const { isLogedIn, showBanners, disableBanners } = useAuth();
 
   const [modalLoginReminderOpen, setIsLoginReminderOpen] = useState(false);
-  const [products, setProducts] = useState([]);
-
+  const [products, setProducts] = useState<ProtuctType[]>([]);
+  const [offers, setOffers] = useState<OfferType[]>([]);
+  const { setAlert } = useAlert();
   function closeModal() {
     setIsOpen(false);
   }
@@ -52,11 +55,40 @@ const Home = () => {
     let ignore = false;
     if (!ignore) {
       (async () => {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products`,
-          { withCredentials: true }
-        );
-        setProducts(res.data.products);
+        try {
+          const res = await axios.get<RespondType & { offers?: OfferType[] }>(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/offers/getOffers`,
+            { withCredentials: true }
+          );
+          if (res.data.status === "ok" && res.data.offers) {
+            console.log(res.data);
+            setOffers(res.data.offers);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+
+          const productRes = await axios.get<
+            RespondType & { products?: ProtuctType[] }
+          >(`${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products`);
+
+          if (productRes.data.status === "ok" && productRes.data.products) {
+            console.log(productRes.data.products);
+            setProducts(productRes.data.products);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        } catch {
+          setAlert({
+            type: "error",
+            message: "failed to load offers",
+          });
+        }
       })();
     }
     return () => {
@@ -103,12 +135,17 @@ const Home = () => {
               </div>
             </Modal>
             <Banner />
-            <ShowCase
-              includeTimer={true}
-              expireDate={new Date("Jan 26, 2022 23:37:25").getTime()}
-              title={"Today's deal"}
-              products={products.slice(0, 5)}
-            />
+
+            {offers.length !== 0 && (
+              <ShowCase
+                includeTimer={true}
+                expireDate={new Date(offers[0].ending_date).getTime()}
+                title={offers[0].name}
+                products={offers[0].products}
+                isOffer={offers[0].common_discount}
+                offerDiscount={offers[0].discount as number}
+              />
+            )}
             <div className={styles.midBanner}>
               <Image
                 src={"/images/sale.png"}
@@ -119,13 +156,20 @@ const Home = () => {
                 alt="middle"
               />
             </div>
-            <ShowCase
-              includeTimer={true}
-              expireDate={new Date("Jan 28, 2023 15:37:25").getTime()}
-              title={"Big Sale"}
-              noOfProducts={5}
-              products={products.slice(3, 8)}
-            />
+            {offers.map((offer, i) => {
+              if (i !== 0)
+                return (
+                  <ShowCase
+                    includeTimer={true}
+                    expireDate={new Date(offer.ending_date).getTime()}
+                    title={offer.name}
+                    noOfProducts={5}
+                    isOffer={offer.common_discount}
+                    offerDiscount={offer.discount as number}
+                    products={offer.products}
+                  />
+                );
+            })}
             <div className={styles.catogriesGrid}>
               <div className={styles.title}>Catogries</div>
               <CatogriesGridBox />

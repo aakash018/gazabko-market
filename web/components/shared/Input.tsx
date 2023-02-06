@@ -1,4 +1,4 @@
-import React, { LegacyRef } from "react";
+import React, { InputHTMLAttributes, LegacyRef } from "react";
 import styles from "../../styles/components/shared/Input.module.scss";
 
 interface Props {
@@ -14,6 +14,7 @@ interface Props {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
   style?: React.CSSProperties;
+  min?: string | number | undefined;
 }
 
 const IntputField: React.FC<Props> = ({
@@ -29,6 +30,7 @@ const IntputField: React.FC<Props> = ({
   onChange,
   onBlur,
   style,
+  min,
 }) => {
   const handleChaange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (setState) {
@@ -43,6 +45,7 @@ const IntputField: React.FC<Props> = ({
         {label}
       </label>
       <input
+        min={min}
         type={type}
         id={id}
         placeholder={placeholder}

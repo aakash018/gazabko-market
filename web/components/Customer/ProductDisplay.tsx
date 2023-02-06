@@ -231,25 +231,32 @@ const ProductInfoDisplay: React.FC<Props> = ({
               </div>
             ))}
         </section>
-        <Quantity
-          quantityInput={quantity}
-          setQuantity={setQuantity}
-          totalStock={totalStock}
-        />
+        {totalStock > 0 && (
+          <Quantity
+            quantityInput={quantity}
+            setQuantity={setQuantity}
+            totalStock={totalStock}
+          />
+        )}
         <div> {totalStock} items remaining in stock </div>
         <section className={styles.productDisplay__productInfo_actionBtns}>
-          <Button onClick={handleBuyNow} color="error">
-            <span>
-              <BsBagPlusFill />
-            </span>
-            <span>Buy Now</span>
-          </Button>
-          <Button onClick={handleAddToCart}>
-            <span>
-              <BsFillCartPlusFill />
-            </span>
-            <span>Add Cart</span>
-          </Button>
+          {totalStock <= 0 && <h2>Product is Out of stock</h2>}
+          {totalStock > 0 && (
+            <>
+              <Button onClick={handleBuyNow} color="error">
+                <span>
+                  <BsBagPlusFill />
+                </span>
+                <span>Buy Now</span>
+              </Button>
+              <Button onClick={handleAddToCart}>
+                <span>
+                  <BsFillCartPlusFill />
+                </span>
+                <span>Add Cart</span>
+              </Button>{" "}
+            </>
+          )}
         </section>
         <section className={styles.productDisplay__productInfo_aditionalInfo}>
           <section className={styles.policy}>

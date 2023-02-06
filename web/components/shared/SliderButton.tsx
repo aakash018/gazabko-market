@@ -1,17 +1,15 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "../../styles/components/shared/SliderButton.module.scss";
 
 interface Props {
   onClick?: () => void;
+  originState: boolean;
+  setState: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SliderButton: React.FC<Props> = ({ onClick }) => {
-  const buttonCircle = useRef<HTMLDivElement>(null);
-  const button = useRef<HTMLDivElement>(null);
-
+const SliderButton: React.FC<Props> = ({ onClick, originState, setState }) => {
   const handleClick = () => {
-    buttonCircle.current?.classList.toggle(styles.active);
-    button.current?.classList.toggle(styles.activeBtn);
+    setState((prev) => !prev);
 
     if (onClick) {
       onClick();
@@ -19,8 +17,13 @@ const SliderButton: React.FC<Props> = ({ onClick }) => {
   };
 
   return (
-    <div className={styles.sliderBtn} onClick={handleClick} ref={button}>
-      <div className={styles.innerCircle} ref={buttonCircle}></div>
+    <div
+      className={`${styles.sliderBtn} ${originState ? styles.activeBtn : ""}`}
+      onClick={handleClick}
+    >
+      <div
+        className={`${styles.innerCircle} ${originState ? styles.active : ""} `}
+      ></div>
     </div>
   );
 };

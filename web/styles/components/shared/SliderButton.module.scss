@@ -14,23 +14,21 @@ $buttonCircle-width: 20px;
 
     cursor: pointer;
     transition: all 0.3s ease-in;
+}
+.innerCircle {
+    width: $buttonCircle-width;
+    height: $buttonCircle-width;
 
-    .innerCircle {
-        width: $buttonCircle-width;
-        height: $buttonCircle-width;
+    border-radius: 50%;
+    background-color: var(--default-red);
 
-        border-radius: 50%;
-        background-color: var(--default-red);
-
-        transition: all 0.3s ease-in;
-    }
-
-    .active {
-        transform: translateX(calc($button-width - $buttonCircle-width));
-        background-color: var(--theme-color);
-    }
+    transition: all 0.3s ease-in;
 }
 
+.active {
+    transform: translateX(calc($button-width - $buttonCircle-width));
+    background-color: var(--theme-color);
+}
 .activeBtn {
     background-color: var(--theme-light);
 }

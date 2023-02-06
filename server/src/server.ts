@@ -13,6 +13,7 @@ import { createClient } from "redis";
 //? api routes and database models/entities
 import auth from "./api/auth";
 import update from "./api/update";
+import offers from "./api/offers";
 import sellerAuth from "./api/seller/auth";
 import products from "./api/seller/product";
 import question from "./api/question";
@@ -32,6 +33,7 @@ import adminSeller from "./api/admin/seller";
 import adminProducts from "./api/admin/products";
 import adminCustomers from "./api/admin/customers";
 import adminAccount from "./api/admin/account";
+import adminOffers from "./api/admin/edit/offers";
 //?? RETURN REVIEW REPORT
 import rrr from "./api/rrr";
 import { Products } from "./entities/Products";
@@ -139,6 +141,7 @@ app.use("/cart", cart);
 app.use("/order", order);
 app.use("/search", search);
 app.use("/address", address);
+app.use("/offers", offers);
 
 app.use("/sellerInfo", sellerInfo);
 app.use("/sellerOrder", sellerOrder);
@@ -153,6 +156,7 @@ app.use("/admin/products", adminProducts);
 app.use("/admin/customers", adminCustomers);
 app.use("/admin/customers", adminCustomers);
 app.use("/admin/account", adminAccount);
+app.use("/admin/offers", adminOffers);
 //?? RETURN REVIEW REPORT
 app.use("/rrr", rrr);
 
