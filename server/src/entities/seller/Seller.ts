@@ -6,7 +6,9 @@ import {
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from "typeorm";
+import { Category } from "../admin/Cateogries";
 import { Follow } from "../Follow";
 import { Products } from "../Products";
 
@@ -61,6 +63,9 @@ export class Seller extends BaseEntity {
     nullable: true,
   })
   followers: Follow[];
+
+  @ManyToOne(() => Category, (category) => category.sellers)
+  category: Category;
 
   @Column({ default: false })
   isBanned: boolean;

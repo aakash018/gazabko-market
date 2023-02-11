@@ -240,7 +240,14 @@ const ProductDisplay: React.FC = () => {
             <ProductInfoDisplay
               id={product.id}
               totalStock={product!.totalStock}
-              discount={product!.discount as number}
+              discount={
+                product!.offers?.common_discount
+                  ? Math.ceil(
+                      (product.price / 100) *
+                        (product.offers.discount as number)
+                    )
+                  : (product.discount as number)
+              }
               mp={product!.price}
               name={product!.name}
               rating={4.7}

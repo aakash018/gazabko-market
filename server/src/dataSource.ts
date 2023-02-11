@@ -1,7 +1,10 @@
 import { DataSource } from "typeorm";
 import { Address } from "./entities/Address";
 import { Admin } from "./entities/admin/Admin";
+import { Category } from "./entities/admin/Cateogries";
 import { Offers } from "./entities/admin/Offers";
+import { SubCategory } from "./entities/admin/SubCategories";
+import { SubSubCategory } from "./entities/admin/SubSubCategory";
 import { Cart } from "./entities/Cart/Cart";
 import { OnCartProduct } from "./entities/Cart/OnCartProduct";
 import { Follow } from "./entities/Follow";
@@ -37,5 +40,8 @@ export const AppDataSource = new DataSource({
     OnCartProduct,
     Follow,
     ToBeVerified,
+    Category,
+    SubCategory,
+    SubSubCategory,
   ],
 });

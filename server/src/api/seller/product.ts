@@ -69,12 +69,13 @@ router.post("/add", validateSeller, async (req, res) => {
 
 router.get("/info", async (req, res) => {
   const parsedData = req.query as unknown as { pid: number };
-  console.log("PID", parsedData);
+
   try {
     const product = await Products.findOneOrFail({
       where: { id: parsedData.pid },
       relations: {
         seller: true,
+        offers: true,
       },
     });
 

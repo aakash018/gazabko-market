@@ -5,12 +5,13 @@ import SelectedItemHolder from "../Admin/shared/SelectedItemHolder";
 import IntputField from "./Input";
 
 interface Props {
-  listState: string[];
-  setListState: React.Dispatch<React.SetStateAction<string[]>>;
+  listState: any[];
+  setListState: React.Dispatch<React.SetStateAction<any[]>>;
   label: string;
   placeholder?: string;
-  onTagsClick?: () => void;
+  onTagsClick?: (item: string) => void;
   onSaveRequest?: (input: string) => void;
+  onTagAdd?: () => void;
 }
 
 const TagsSelector: React.FC<Props> = ({
@@ -20,6 +21,7 @@ const TagsSelector: React.FC<Props> = ({
   placeholder,
   onTagsClick,
   onSaveRequest,
+  onTagAdd,
 }) => {
   const [inputData, setInputData] = useState("");
 
@@ -37,8 +39,15 @@ const TagsSelector: React.FC<Props> = ({
     }
   };
 
-  const handelCancelSelect = (select: string) => {
-    setListState((prev) => prev.filter((item) => item !== select));
+  const handelCancelSelect = (
+    select: string,
+    type: "list" | "obj" = "list"
+  ) => {
+    if (type === "list") {
+      setListState((prev) => prev.filter((item) => item !== select));
+    } else {
+      setListState((prev) => prev.filter((item) => item.subsubCats !== select));
+    }
   };
 
   return (
@@ -55,11 +64,19 @@ const TagsSelector: React.FC<Props> = ({
       <div className={styles.selectedItem}>
         {listState.map((item, i) => (
           <SelectedItemHolder
-            content={item}
+            content={item.subsubCats || item}
             key={i}
-            onTagClick={onTagsClick}
+            onTagClick={() => {
+              if (onTagsClick) {
+                onTagsClick(item);
+              }
+            }}
             onCancel={() => {
-              handelCancelSelect(item);
+              if (item.subsubCats) {
+                handelCancelSelect(item.subsubCats, "obj");
+              } else {
+                handelCancelSelect(item, "list");
+              }
             }}
           />
         ))}

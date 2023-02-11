@@ -8,6 +8,7 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
+import { Category } from "./admin/Cateogries";
 import { Offers } from "./admin/Offers";
 import { OnCartProduct } from "./Cart/OnCartProduct";
 import { Order } from "./Orders";
@@ -67,8 +68,8 @@ export class Products extends BaseEntity {
   @Column({ nullable: true })
   color: string;
 
-  @Column()
-  category: string;
+  @ManyToOne(() => Category, (category) => category.products)
+  category: Category[];
 
   @Column({ default: 0 })
   timesBought: number;
