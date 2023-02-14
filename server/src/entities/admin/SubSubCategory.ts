@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
 } from "typeorm";
+import { Products } from "../Products";
 import { SubCategory } from "./SubCategories";
 
 @Entity()
@@ -14,8 +15,11 @@ export class SubSubCategory extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   name: string;
+
+  @ManyToOne(() => Products, (product) => product.subsubCategory)
+  products: Products[];
 
   @ManyToOne(() => SubCategory, (subcategory) => subcategory.subsubCategories)
   subcategory: SubCategory;

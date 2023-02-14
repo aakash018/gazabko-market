@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { TbArrowBack } from "react-icons/tb";
 
@@ -20,8 +20,9 @@ import { customStyles } from "../../modalStyle";
 import SelectedItemHolder from "../Admin/shared/SelectedItemHolder";
 import MultipleImageUploader from "./MultipleImageUploader";
 import axios from "axios";
-import { ProtuctPayloadType } from "../../@types/global";
+import { Category, ProtuctPayloadType } from "../../@types/global";
 import { useAlert } from "../../pages/_app";
+import { GiH2O } from "react-icons/gi";
 
 const AddProdducts: React.FC<{ type: "seller" | "admin" }> = ({ type }) => {
   const { setAlert } = useAlert();
@@ -49,27 +50,73 @@ const AddProdducts: React.FC<{ type: "seller" | "admin" }> = ({ type }) => {
   const [value, setValue] = useState("");
   const [images, setImages] = useState<any[]>([]);
   const [colorList, setColorList] = useState<string[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [selectedSubCat, setSelectedSubCat] = useState("");
+  const [selectedSubSubCat, setSelectedSubSubCat] = useState("");
+
+  useEffect(() => {
+    let ignore = false;
+
+    if (!ignore) {
+      (async () => {
+        try {
+          const res = await axios.get<RespondType & { categories: Category[] }>(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/category/getAllCategories`
+          );
+
+          if (res.data.status === "ok") {
+            setCategories(res.data.categories);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        } catch {
+          setAlert({
+            type: "error",
+            message: "failed to connect to server",
+          });
+        }
+      })();
+    }
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const handelCatSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (categoriesList.includes(e.target.value)) return;
-    setCategoriesList((prev) => [...prev, e.target.value]);
+    setSelectedCategory(e.target.value);
+    setSelectedSubCat("");
+    setSelectedSubSubCat("");
   };
 
-  const handelCancelCatSelect = (select: string) => {
-    setCategoriesList((prev) => prev.filter((item) => item !== select));
+  const handleSubCatSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedSubCat(e.target.value);
+    setSelectedSubSubCat("");
+  };
+
+  const handleSubSubCatSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedSubSubCat(e.target.value);
   };
 
   const handleSubmit = async () => {
+    console.log(selectedCategory, selectedSubCat, selectedSubSubCat);
     if (
       productName.current?.value.trim() === "" ||
       brand.current?.value.trim() === "" ||
       price.current?.value.trim() === "" ||
       totalStock.current?.value.trim() === "" ||
       tagsList.length === 0 ||
-      categoriesList.length === 0 ||
       sku.current?.value.trim() === "" ||
       images.length === 0 ||
-      value.trim() === ""
+      value.trim() === "" ||
+      selectedCategory.trim() === "" ||
+      selectedSubCat.trim() === "" ||
+      selectedSubSubCat.trim() === ""
     ) {
       return setAlert({
         type: "error",
@@ -89,8 +136,9 @@ const AddProdducts: React.FC<{ type: "seller" | "admin" }> = ({ type }) => {
       price: parseInt(price.current!.value),
       totalStock: parseInt(totalStock.current!.value),
       tags: JSON.stringify(tagsList),
-      category: JSON.stringify(categoriesList),
-      subCategory: JSON.stringify(subCategoriesList),
+      category: selectedCategory,
+      subCategory: selectedSubCat,
+      subsubCategory: selectedSubSubCat,
       sku: parseInt(sku.current!.value),
       images: JSON.stringify(images),
       description: value,
@@ -135,178 +183,205 @@ const AddProdducts: React.FC<{ type: "seller" | "admin" }> = ({ type }) => {
         onRequestClose={() => setOpenSubCatModal(false)}
       >
         <div className={styles.subCatModal}>
-          <TagsSelector
-            label="Add Sub Category"
-            listState={subCategoriesList}
-            setListState={setSubCategoriesList}
-          />
-          <TagsSelector
-            label="Add Sub Sub Category"
-            listState={subSubCategoriesList}
-            setListState={setSubSubCategoriesList}
-          />
           <Button>Save</Button>
         </div>
       </Modal>
-      <div className={styles.addProducts}>
-        <div className={styles.nav}>
-          <Button
-            icon={<TbArrowBack />}
-            onClick={() => {
-              router.back();
-            }}
-          >
-            Back
-          </Button>
-        </div>
-        <div className={styles.contentContainer}>
-          <div className={styles.content}>
-            <div>
-              <h1>Add Product</h1>
-            </div>
-            <div className={styles.mainForm}>
-              <form>
-                <div className={styles.upperPart}>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "15px",
-                    }}
-                  >
-                    <IntputField label="Product's Name" input={productName} />
-                    <IntputField label="Price" input={price} />
-                    <div className={styles.discount}>
-                      <IntputField
-                        label="Discount"
-                        type={"number"}
-                        input={discount}
-                      />
-                      <select
-                        onChange={(e) => {
-                          setDiscountType(
-                            e.target.value as "percentage" | "amount"
-                          );
-                        }}
-                        value={discountType}
-                      >
-                        <option value={"percentage"}>percentage</option>
-                        <option value={"amount"}>amount</option>
-                      </select>
-                    </div>
-                    <IntputField
-                      label="Total Stock"
-                      type={"number"}
-                      input={totalStock}
-                    />
-                    <div className={styles.dealsSection}>
-                      <h2>Add to offer</h2>
-                      <div className={styles.offers}>
-                        <select>
-                          <option value={undefined}>None</option>
-                          <option value="Dashain Offer">Dashain Offer</option>
-                          <option value="Big Sale">Big Sale</option>
-                          <option value="Flash Sale">Flash Sale</option>
+      {loading && <h2>Loading...</h2>}
+      {!loading && (
+        <div className={styles.addProducts}>
+          <div className={styles.nav}>
+            <Button
+              icon={<TbArrowBack />}
+              onClick={() => {
+                router.back();
+              }}
+            >
+              Back
+            </Button>
+          </div>
+          <div className={styles.contentContainer}>
+            <div className={styles.content}>
+              <div>
+                <h1>Add Product</h1>
+              </div>
+              <div className={styles.mainForm}>
+                <form>
+                  <div className={styles.upperPart}>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "15px",
+                      }}
+                    >
+                      <IntputField label="Product's Name" input={productName} />
+                      <IntputField label="Price" input={price} />
+                      <div className={styles.discount}>
+                        <IntputField
+                          label="Discount"
+                          type={"number"}
+                          input={discount}
+                        />
+                        <select
+                          onChange={(e) => {
+                            setDiscountType(
+                              e.target.value as "percentage" | "amount"
+                            );
+                          }}
+                          value={discountType}
+                        >
+                          <option value={"percentage"}>percentage</option>
+                          <option value={"amount"}>amount</option>
                         </select>
                       </div>
-                    </div>
-                    <div className={styles.selectors}>
-                      <TagsSelector
-                        label="Sizes"
-                        listState={sizeList}
-                        setListState={setSizeList}
+                      <IntputField
+                        label="Total Stock"
+                        type={"number"}
+                        input={totalStock}
                       />
-                      <TagsSelector
-                        label="Color"
-                        listState={colorList}
-                        setListState={setColorList}
-                      />
-                      <TagsSelector
-                        label="Tags"
-                        listState={tagsList}
-                        setListState={setTagsList}
-                      />
-                      <div className={styles.catSelector}>
-                        <div className={styles.categoriesSelect}>
-                          <div className={styles.label}>Add catogries</div>
-                          <select onChange={handelCatSelect}>
-                            <option value={"Women's Fashion"}>
-                              Women's Fashion
-                            </option>
-                            <option value={"Men's Fashion"}>
-                              Men's Fashion
-                            </option>
-                            <option value={"Electronic Devices"}>
-                              Electronic Devices
-                            </option>
-                            <option value={"Health & Fitness"}>
-                              Health & Fitness
-                            </option>
-                            <option value={"Games"}>Games</option>
-                            <option value={"Gazabko Drinks"}>
-                              Gazabko Drinks
-                            </option>
+                      {/* <div className={styles.dealsSection}>
+                        <h2>Add to offer</h2>
+                        <div className={styles.offers}>
+                          <select>
+                            <option value={undefined}>None</option>
+                            <option value="Dashain Offer">Dashain Offer</option>
+                            <option value="Big Sale">Big Sale</option>
+                            <option value="Flash Sale">Flash Sale</option>
                           </select>
-                          <div className={styles.selectedItem}>
-                            {categoriesList.map((cat, i) => (
-                              <SelectedItemHolder
-                                content={cat}
-                                key={i}
-                                onCancel={() => {
-                                  handelCancelCatSelect(cat);
-                                }}
-                              />
-                            ))}
+                        </div>
+                      </div> */}
+                      <div className={styles.selectors}>
+                        <TagsSelector
+                          label="Sizes"
+                          listState={sizeList}
+                          setListState={setSizeList}
+                        />
+                        <TagsSelector
+                          label="Color"
+                          listState={colorList}
+                          setListState={setColorList}
+                        />
+                        <TagsSelector
+                          label="Tags"
+                          listState={tagsList}
+                          setListState={setTagsList}
+                        />
+                        <div className={styles.catSelector}>
+                          <div className={styles.categoriesSelect}>
+                            <div className={styles.label}>Add catogries</div>
+                            <select onChange={handelCatSelect}>
+                              <option value="" disabled selected hidden>
+                                Select an option
+                              </option>
+                              {categories.map((cat, i) => (
+                                <option value={cat.name} key={i}>
+                                  {cat.name}
+                                </option>
+                              ))}
+                            </select>
+                            {/* <div className={styles.selectedItem}>
+                              {categoriesList.map((cat, i) => (
+                                <SelectedItemHolder
+                                  content={cat}
+                                  key={i}
+                                  onCancel={() => {
+                                    handelCancelCatSelect(cat);
+                                  }}
+                                />
+                              ))}
+                            </div> */}
                           </div>
                         </div>
-                        {categoriesList.length !== 0 && (
-                          <Button
-                            onClick={() => {
-                              setOpenSubCatModal(true);
-                            }}
-                          >
-                            Add Sub-Categories
-                          </Button>
+                        {selectedCategory.trim() !== "" && (
+                          <>
+                            <h3>Select Sub Category</h3>
+                            <select
+                              onChange={handleSubCatSelect}
+                              value={selectedSubCat}
+                            >
+                              <option value="" disabled selected hidden>
+                                Select an option
+                              </option>
+                              {categories.length !== 0 &&
+                                selectedCategory !== "" &&
+                                categories
+                                  .filter(
+                                    (cat) => cat.name === selectedCategory
+                                  )[0]
+                                  .subCatagories.map((subcat, i) => (
+                                    <option value={subcat.name} key={i}>
+                                      {subcat.name}
+                                    </option>
+                                  ))}
+                            </select>
+                          </>
+                        )}
+                        {selectedSubCat.trim() !== "" && (
+                          <>
+                            <h3>Select Sub Sub Category</h3>
+                            <select
+                              onChange={handleSubSubCatSelect}
+                              value={selectedSubSubCat}
+                            >
+                              <option value="" disabled selected hidden>
+                                Select an option
+                              </option>
+                              {categories.length !== 0 &&
+                                selectedCategory !== "" &&
+                                categories
+                                  .filter(
+                                    (cat) => cat.name === selectedCategory
+                                  )[0]
+                                  .subCatagories.filter(
+                                    (subcat) => subcat.name === selectedSubCat
+                                  )[0]
+                                  .subsubCategories.map((subcat, i) => (
+                                    <option value={subcat.name} key={i}>
+                                      {subcat.name}
+                                    </option>
+                                  ))}
+                            </select>
+                          </>
                         )}
                       </div>
                     </div>
+                    <div className={styles.imagesContainer}>
+                      <MultipleImageUploader
+                        width={200}
+                        height={200}
+                        selectedImage={selectedImage}
+                        setSelectedImage={setSelectedImage}
+                        images={images}
+                        setImages={setImages}
+                      />
+                    </div>
                   </div>
-                  <div className={styles.imagesContainer}>
-                    <MultipleImageUploader
-                      width={200}
-                      height={200}
-                      selectedImage={selectedImage}
-                      setSelectedImage={setSelectedImage}
-                      images={images}
-                      setImages={setImages}
+                  <div className={styles.skuAndBrand}>
+                    <IntputField label="SKU" type={"number"} input={sku} />
+                    <IntputField label="Brand" input={brand} />
+                  </div>
+                  <div className={styles.producttDetails}>
+                    <h2>Product Details</h2>
+                    <ReactQuill
+                      theme="snow"
+                      value={value}
+                      onChange={setValue}
+                      className={styles.textEditor}
                     />
+                    ;
                   </div>
-                </div>
-                <div className={styles.skuAndBrand}>
-                  <IntputField label="SKU" type={"number"} input={sku} />
-                  <IntputField label="Brand" input={brand} />
-                </div>
-                <div className={styles.producttDetails}>
-                  <h2>Product Details</h2>
-                  <ReactQuill
-                    theme="snow"
-                    value={value}
-                    onChange={setValue}
-                    className={styles.textEditor}
-                  />
-                  ;
-                </div>
-                <div className={styles.actBtn}>
-                  <Button color="success" onClick={handleSubmit}>
-                    Save
-                  </Button>
-                  <Button>View</Button>
-                </div>
-              </form>
+                  <div className={styles.actBtn}>
+                    <Button color="success" onClick={handleSubmit}>
+                      Save
+                    </Button>
+                    <Button>View</Button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

@@ -141,3 +141,24 @@ export interface OfferType {
   created_at: Date;
   updated_at: Date;
 }
+
+export interface SubSubCategory {
+  id: string;
+  name: string;
+  created_at: Date;
+  updatedAt: Date;
+}
+
+export interface SubCategory {
+  id: string;
+  name: string;
+  subsubCategories: SubSubCategory[];
+  commission: number;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  subCatagories: SubCategory[];
+  commission: number;
+}

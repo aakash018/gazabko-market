@@ -21,6 +21,7 @@ import cart from "./api/cart";
 import order from "./api/order";
 import sellerInfo from "./api/sellerInfo";
 import search from "./api/search";
+import category from "./api/category";
 import address from "./api/address";
 import sellerOrder from "./api/seller/order";
 import sellerFollowers from "./api/seller/followers";
@@ -143,6 +144,7 @@ app.use("/order", order);
 app.use("/search", search);
 app.use("/address", address);
 app.use("/offers", offers);
+app.use("/category", category);
 
 app.use("/sellerInfo", sellerInfo);
 app.use("/sellerOrder", sellerOrder);

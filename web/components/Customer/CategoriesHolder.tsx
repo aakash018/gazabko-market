@@ -1,31 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "../../styles/components/Customer/CategoriesHolder.module.scss";
-
-interface GrandCategoriesProps {
-  name: string;
-  url: string;
-}
-
-interface SubCategoriesProps {
-  name: string;
-  url: string;
-  grandCategories: GrandCategoriesProps[];
-}
-
-interface CategoriesProps {
-  name: string;
-  subCategories: SubCategoriesProps[];
-}
+import { Category, SubCategory, SubSubCategory } from "../../@types/global";
+import axios from "axios";
+import { useAlert } from "../../pages/_app";
 
 const GrandCategories = ({
   grandCategory,
+  category,
+  subCategory,
 }: {
-  grandCategory: GrandCategoriesProps;
+  grandCategory: SubSubCategory;
+  category: Category;
+  subCategory: SubCategory;
 }) => {
   return (
     <div className={styles.bannerSliderGrandCategoriesDiv}>
-      <Link href={`/catogries/${grandCategory.url}`}>
+      <Link
+        href={`/catogries/${encodeURIComponent(
+          category.name
+        )}/${encodeURIComponent(subCategory.name)}/${encodeURIComponent(
+          grandCategory.name
+        )}`}
+      >
         <a>
           <span className={styles.bannerSliderGrandCategoryName}>
             {grandCategory.name}
@@ -38,8 +35,10 @@ const GrandCategories = ({
 
 const SubCategories = ({
   subCategory,
+  category,
 }: {
-  subCategory: SubCategoriesProps;
+  subCategory: SubCategory;
+  category: Category;
 }) => {
   const [show, setShow] = useState(false);
 
@@ -49,7 +48,7 @@ const SubCategories = ({
       onMouseOver={() => setShow(true)}
       onMouseOut={() => setShow(false)}
     >
-      <Link href={`/catogries/${subCategory.url}`}>
+      <Link href={`/catogries/${subCategory}`}>
         <a>
           <span className={styles.bannerSliderSubCategoryName}>
             {subCategory.name}
@@ -58,9 +57,11 @@ const SubCategories = ({
       </Link>
       {show ? (
         <div className={styles.bannerSliderGrandCategoriesDivContainer}>
-          {subCategory.grandCategories.map((grandcategory, i) => {
+          {subCategory.subsubCategories.map((grandcategory, i) => {
             return (
               <GrandCategories
+                category={category}
+                subCategory={subCategory}
                 grandCategory={grandcategory}
                 key={`grandcategory-${i}`}
               />
@@ -74,7 +75,7 @@ const SubCategories = ({
   );
 };
 
-const Categories = ({ category }: { category: CategoriesProps }) => {
+const Categories = ({ category }: { category: Category }) => {
   const [show, setShow] = useState(false);
 
   return (
@@ -92,9 +93,10 @@ const Categories = ({ category }: { category: CategoriesProps }) => {
       </Link>
       {show ? (
         <div className={styles.bannerSliderSubCategoriesDivContainer}>
-          {category.subCategories.map((subcategory, i) => {
+          {category.subCatagories.map((subcategory, i) => {
             return (
               <SubCategories
+                category={category}
                 subCategory={subcategory}
                 key={`subcategory-${i}`}
               />
@@ -108,130 +110,38 @@ const Categories = ({ category }: { category: CategoriesProps }) => {
   );
 };
 
-const categories = [
-  {
-    name: "Women's Fashion",
-    subCategories: [
-      {
-        name: "Clothing",
-        url: "clothing",
-        grandCategories: [{ name: "Jeans", url: "jeans" }],
-      },
-    ],
-  },
-  {
-    name: "Health & Beauty",
-    subCategories: [
-      {
-        name: "Clothing",
-        url: "clothing",
-        grandCategories: [{ name: "Jeans", url: "jeans" }],
-      },
-    ],
-  },
-  {
-    name: "Men's Fashion",
-    subCategories: [
-      {
-        name: "Clothing",
-        url: "clothing",
-        grandCategories: [{ name: "Jeans", url: "jeans" }],
-      },
-    ],
-  },
-  {
-    name: "Watches, Bags, Jewellery",
-    subCategories: [
-      {
-        name: "Clothing",
-        url: "clothing",
-        grandCategories: [{ name: "Jeans", url: "jeans" }],
-      },
-    ],
-  },
-  {
-    name: "Electronic Devices",
-    subCategories: [
-      {
-        name: "Clothing",
-        url: "clothing",
-        grandCategories: [{ name: "Jeans", url: "jeans" }],
-      },
-    ],
-  },
-  {
-    name: "TV & Home Appliances",
-    subCategories: [
-      {
-        name: "Clothing",
-        url: "clothing",
-        grandCategories: [{ name: "Jeans", url: "jeans" }],
-      },
-    ],
-  },
-  {
-    name: "Electronic Accessories",
-    subCategories: [
-      {
-        name: "Clothing",
-        url: "clothing",
-        grandCategories: [{ name: "Jeans", url: "jeans" }],
-      },
-    ],
-  },
-  {
-    name: "Groceries & Pets",
-    subCategories: [
-      {
-        name: "Clothing",
-        url: "clothing",
-        grandCategories: [{ name: "Jeans", url: "jeans" }],
-      },
-    ],
-  },
-  {
-    name: "Babies & Toys",
-    subCategories: [
-      {
-        name: "Clothing",
-        url: "clothing",
-        grandCategories: [{ name: "Jeans", url: "jeans" }],
-      },
-    ],
-  },
-  {
-    name: "Home & Lifestyle",
-    subCategories: [
-      {
-        name: "Clothing",
-        url: "clothing",
-        grandCategories: [{ name: "Jeans", url: "jeans" }],
-      },
-    ],
-  },
-  {
-    name: "Sports & Outdoor",
-    subCategories: [
-      {
-        name: "Clothing",
-        url: "clothing",
-        grandCategories: [{ name: "Jeans", url: "jeans" }],
-      },
-    ],
-  },
-  {
-    name: "Motors, Tools & DIY",
-    subCategories: [
-      {
-        name: "Clothing",
-        url: "clothing",
-        grandCategories: [{ name: "Jeans", url: "jeans" }],
-      },
-    ],
-  },
-];
-
 const CategoriesHolder = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const { setAlert } = useAlert();
+  useEffect(() => {
+    let ignore = false;
+
+    (async () => {
+      try {
+        const res = await axios.get<RespondType & { categories: Category[] }>(
+          `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/category/getAllCategories`
+        );
+        if (res.data.status === "ok") {
+          setCategories(res.data.categories);
+        } else {
+          setAlert({
+            type: "error",
+            message: res.data.message,
+          });
+        }
+      } catch {
+        setAlert({
+          type: "error",
+          message: "failed to connect to server",
+        });
+      }
+    })();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   return (
     <div className={styles.bannerSliderCategoriesDivContainer}>
       {categories.map((category, i: number) => {

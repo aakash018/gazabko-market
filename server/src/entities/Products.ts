@@ -10,6 +10,8 @@ import {
 } from "typeorm";
 import { Category } from "./admin/Cateogries";
 import { Offers } from "./admin/Offers";
+import { SubCategory } from "./admin/SubCategories";
+import { SubSubCategory } from "./admin/SubSubCategory";
 import { OnCartProduct } from "./Cart/OnCartProduct";
 import { Order } from "./Orders";
 import { Question } from "./QuestionAndAnswer";
@@ -63,13 +65,19 @@ export class Products extends BaseEntity {
   })
   offers: Offers;
 
+  @ManyToOne(() => SubCategory, (subCategory) => subCategory.products)
+  subCategory: SubCategory;
+
+  @ManyToOne(() => SubSubCategory, (subsubCategory) => subsubCategory.products)
+  subsubCategory: SubCategory;
+
   @Column({ nullable: true })
   sizes: string;
   @Column({ nullable: true })
   color: string;
 
   @ManyToOne(() => Category, (category) => category.products)
-  category: Category[];
+  category: Category;
 
   @Column({ default: 0 })
   timesBought: number;

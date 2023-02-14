@@ -16,7 +16,7 @@ export class Category extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   name: string;
 
   @Column({ default: 0 })

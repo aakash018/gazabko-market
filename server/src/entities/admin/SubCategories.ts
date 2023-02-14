@@ -8,6 +8,7 @@ import {
   OneToMany,
   ManyToOne,
 } from "typeorm";
+import { Products } from "../Products";
 import { Category } from "./Cateogries";
 import { SubSubCategory } from "./SubSubCategory";
 
@@ -16,7 +17,7 @@ export class SubCategory extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   name: string;
 
   @Column({ default: 0 })
@@ -24,6 +25,9 @@ export class SubCategory extends BaseEntity {
 
   @ManyToOne(() => Category, (category) => category.subCatagories)
   category: Category;
+
+  @OneToMany(() => Products, (product) => product.subCategory)
+  products: Products[];
 
   @OneToMany(() => SubSubCategory, (subsubcat) => subsubcat.subcategory, {
     cascade: true,

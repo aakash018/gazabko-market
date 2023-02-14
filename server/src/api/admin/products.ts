@@ -1,4 +1,5 @@
 import express from "express";
+import { Category } from "../../entities/admin/Cateogries";
 import { ProductPayloadType } from "src/types/global";
 import { LessThanOrEqual } from "typeorm";
 import { Products } from "../../entities/Products";
@@ -77,28 +78,54 @@ router.get("/productsOutOfStock", validateAdmin, async (_, res) => {
 router.post("/addProduct", validateAdmin, async (req, res) => {
   const adminReq = req.body as ProductPayloadType;
 
-  try {
-    await Products.create({
-      name: adminReq.productName,
-      brand: adminReq.brand,
-      price: adminReq.price,
-      totalStock: adminReq.totalStock,
-      description: adminReq.description,
-      images: adminReq.images,
-      tags: adminReq.tags,
-      discount: adminReq.discount,
-      sizes: adminReq.sizes,
-      store: "admin",
-      color: adminReq.color,
-      category: adminReq.category,
-      sku: adminReq.sku,
-      isByAdmin: true,
-    }).save();
+  const category = await Category.findOne({
+    where: {
+      name: adminReq.category,
+      subCatagories: {
+        name: adminReq.subCategory,
+        subsubCategories: {
+          name: adminReq.subsubCategory,
+        },
+      },
+    },
+    relations: {
+      subCatagories: {
+        subsubCategories: true,
+      },
+    },
+  });
 
-    res.json({
-      status: "ok",
-      message: "product added",
-    });
+  try {
+    if (category) {
+      await Products.create({
+        name: adminReq.productName,
+        brand: adminReq.brand,
+        price: adminReq.price,
+        totalStock: adminReq.totalStock,
+        description: adminReq.description,
+        category: category,
+        subCategory: category.subCatagories[0],
+        subsubCategory: category.subCatagories[0].subsubCategories[0],
+        images: adminReq.images,
+        tags: adminReq.tags,
+        discount: adminReq.discount,
+        sizes: adminReq.sizes,
+        store: "admin",
+        color: adminReq.color,
+        sku: adminReq.sku,
+        isByAdmin: true,
+      }).save();
+
+      res.json({
+        status: "ok",
+        message: "product added",
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "failed linking seller or category",
+      });
+    }
   } catch {
     res.json({
       status: "fail",

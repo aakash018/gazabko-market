@@ -7,7 +7,8 @@ import validateSeller from "../../middleware/validateSeller";
 import { Equal, LessThanOrEqual } from "typeorm";
 import { Review } from "../../entities/Review";
 import { Question } from "../../entities/QuestionAndAnswer";
-import { ProductPayloadType } from "src/types/global";
+import { ProductPayloadType } from "../../types/global";
+import { Category } from "../../entities/admin/Cateogries";
 
 const router = express();
 
@@ -31,19 +32,39 @@ router.post("/add", validateSeller, async (req, res) => {
 
   const cleanDesc = sanitizeHtml(productDetails.description);
 
-  const seller = await Seller.findOne({
-    where: { id: req.session.sellerID },
-  });
   try {
-    if (seller && seller.isVerified) {
-      const product = await Products.create({
+    const seller = await Seller.findOne({
+      where: { id: req.session.sellerID },
+    });
+
+    const category = await Category.findOne({
+      where: {
+        name: productDetails.category,
+        subCatagories: {
+          name: productDetails.subCategory,
+          subsubCategories: {
+            name: productDetails.subsubCategory,
+          },
+        },
+      },
+      relations: {
+        subCatagories: {
+          subsubCategories: true,
+        },
+      },
+    });
+
+    if (seller && seller.isVerified && category) {
+      await Products.create({
         brand: productDetails.brand,
-        category: productDetails.category,
         name: productDetails.productName,
         price: productDetails.price,
         description: cleanDesc,
         totalStock: productDetails.totalStock,
         store: seller.storeName,
+        category: category,
+        subCategory: category.subCatagories[0],
+        subsubCategory: category.subCatagories[0].subsubCategories[0],
         sku: productDetails.sku,
         sizes: productDetails.sizes,
         images: productDetails.images,
@@ -53,14 +74,18 @@ router.post("/add", validateSeller, async (req, res) => {
         color: productDetails.color,
         priceAfterDiscount: productDetails.price - productDetails.discount,
       }).save();
-      console.log(product);
+      res.json({
+        status: "ok",
+        message: "product added",
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "failed linking seller or category",
+      });
     }
-    res.json({
-      status: "ok",
-      message: "product added",
-    });
   } catch {
-    res.send({
+    res.json({
       status: "fail",
       message: "failed to add product",
     });
