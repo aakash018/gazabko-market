@@ -37,7 +37,6 @@ const OrdersDetails = () => {
           }
         );
 
-        console.log(res.data);
         setLoading(false);
         if (res.data.status === "ok") {
           setOrderDetails({
@@ -133,7 +132,10 @@ const OrdersDetails = () => {
           <h2>Order No. {orderDetails.id}</h2>
           <div className={styles.orderDetails}>
             <div className={styles.tracker}>
-              <OrderTracker />
+              <OrderTracker
+                orderState={orderDetails.state}
+                orderStatus={orderDetails.status}
+              />
             </div>
             <div className={styles.info}>
               <div className={styles.product}>

@@ -78,6 +78,30 @@ router.get("/orderHistory", validateUser, async (req, res) => {
   }
 });
 
+router.get("/orderDetails", validateUser, async (req, res) => {
+  const { oid } = req.query as unknown as { oid: number };
+
+  try {
+    const order = await Order.findOne({
+      where: { id: oid },
+      relations: {
+        product: true,
+      },
+    });
+
+    res.json({
+      status: "ok",
+      message: "order found",
+      order,
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to find product",
+    });
+  }
+});
+
 // UwU
 
 export default router;

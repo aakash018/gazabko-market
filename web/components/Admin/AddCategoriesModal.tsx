@@ -14,12 +14,14 @@ interface Props {
   catName?: string;
   subCategory?: string[];
   catCommision?: string;
+  afterSubmit?: () => void;
 }
 
 const AddCategoriesModal: React.FC<Props> = ({
   catCommision = "0",
   catName = "",
   subCategory = [],
+  afterSubmit,
 }) => {
   const [catNameInput, setCatName] = useState(catName);
   const [catCommisionInput, setCatCommision] = useState(catCommision);
@@ -59,6 +61,9 @@ const AddCategoriesModal: React.FC<Props> = ({
           type: "message",
           message: res.data.message,
         });
+        if (afterSubmit) {
+          afterSubmit();
+        }
       } else {
         setAlert({
           type: "error",

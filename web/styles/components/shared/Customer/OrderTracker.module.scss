@@ -16,8 +16,13 @@
         z-index: 1;
 
         transform: translateY(-100%);
+        background-color: var(--line-gray);
 
-        background-color: var(--theme-color);
+        .colorPart {
+            background-color: var(--theme-color);
+            width: 0%;
+            height: 2px;
+        }
     }
 
     .tags {

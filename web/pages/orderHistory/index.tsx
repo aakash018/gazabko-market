@@ -47,6 +47,7 @@ const OrderHistoryPage: React.FC = () => {
       {orders.length !== 0 &&
         orders.map((order, i) => (
           <OrderHistoryProduct
+            order={order}
             product={order.product as ProtuctType}
             status={order.status}
             key={i}

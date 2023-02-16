@@ -181,12 +181,19 @@ router.post("/verifyDelivered", validateAdmin, async (req, res) => {
   try {
     const userReq = (await req.body) as { oid: number };
 
-    await Order.update(
-      {
-        id: userReq.oid,
+    const order = await Order.findOne({
+      where: { id: userReq.oid },
+      relations: {
+        product: true,
       },
-      { status: "delivered" }
-    );
+    });
+
+    if (order?.product) {
+      order.product.timesBought = order.product.timesBought + 1;
+      order.status = "delivered";
+      order.product.save();
+      order.save();
+    }
 
     res.json({
       status: "ok",

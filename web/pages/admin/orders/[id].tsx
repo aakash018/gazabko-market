@@ -147,7 +147,7 @@ const OrderDetails = () => {
       {!loading && order !== null && (
         <div className={styles.orderDetails}>
           <div className={styles.tracker}>
-            <OrderTracker />
+            <OrderTracker orderState={order.state} orderStatus={order.status} />
           </div>
           <div className={styles.info}>
             <div className={styles.product}>

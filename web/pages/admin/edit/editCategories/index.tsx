@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminLayout from "../../../../components/Admin/AdminNav";
 
 import { AgGridReact } from "ag-grid-react";
@@ -15,10 +15,13 @@ import { MdDetails } from "react-icons/md";
 import AddCategoriesModal from "../../../../components/Admin/AddCategoriesModal";
 import { customStyles } from "../../../../modalStyle";
 import Router from "next/router";
+import axios from "axios";
+import { Category } from "../../../../@types/global";
+import { useAlert } from "../../../_app";
 
 type TableCol = {
   SN: number;
-  Icon: any;
+  id: string;
   "Category Name": string;
   Products: number;
   Vendors: number;
@@ -29,72 +32,7 @@ type TableCol = {
 const EditCategories = () => {
   const [addCatModal, setAddCatModal] = useState(false);
   const [editCatModal, setEditCatModal] = useState(false);
-  const [rowData] = useState<TableCol[]>([
-    {
-      SN: 1,
-      Icon: "",
-      "Category Name": "sdd",
-      Products: 45,
-      Vendors: 4,
-      Delete: "",
-      Edit: "",
-    },
-    {
-      SN: 2,
-      Icon: "",
-      "Category Name": "sdd",
-      Products: 45,
-      Vendors: 4,
-      Delete: "",
-      Edit: "",
-    },
-
-    {
-      SN: 3,
-      Icon: "",
-      "Category Name": "sdd",
-      Products: 45,
-      Vendors: 4,
-      Delete: "",
-      Edit: "",
-    },
-    {
-      SN: 4,
-      Icon: "",
-      "Category Name": "sdd",
-      Products: 45,
-      Vendors: 4,
-      Delete: "",
-      Edit: "",
-    },
-    {
-      SN: 5,
-      Icon: "",
-      "Category Name": "sdd",
-      Products: 45,
-      Vendors: 4,
-      Delete: "",
-      Edit: "",
-    },
-    {
-      SN: 6,
-      Icon: "",
-      "Category Name": "sdd",
-      Products: 45,
-      Vendors: 4,
-      Delete: "",
-      Edit: "",
-    },
-    {
-      SN: 7,
-      Icon: "",
-      "Category Name": "sdd",
-      Products: 45,
-      Vendors: 4,
-      Delete: "",
-      Edit: "",
-    },
-  ]);
+  const [rowData, setRowData] = useState<TableCol[]>([]);
 
   const [columnDefs] = useState([
     { field: "SN", width: 55 },
@@ -141,6 +79,52 @@ const EditCategories = () => {
     },
   ]);
 
+  const { setAlert } = useAlert();
+
+  const fetchData = async () => {
+    try {
+      const res = await axios.get<RespondType & { categories?: Category[] }>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/category/getCatsForTable`,
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.data.status === "ok" && res.data.categories) {
+        const catForTable: TableCol[] = res.data.categories.map((cat, i) => ({
+          SN: i + 1,
+          Products: (cat as any).productCount,
+          "Category Name": cat.name,
+          Vendors: (cat as any).sellerCount,
+          Delete: "",
+          Edit: "",
+          id: cat.id,
+        }));
+
+        setRowData(catForTable);
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed to connect to server",
+      });
+    }
+  };
+
+  useEffect(() => {
+    let ignore = false;
+    if (!ignore) {
+      fetchData();
+    }
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   const handleModalOpen = () => {
     setAddCatModal(true);
   };
@@ -155,7 +139,12 @@ const EditCategories = () => {
         onRequestClose={handleModalClose}
         style={customStyles}
       >
-        <AddCategoriesModal />
+        <AddCategoriesModal
+          afterSubmit={() => {
+            setAddCatModal(false);
+            fetchData();
+          }}
+        />
       </Modal>
       <Modal
         isOpen={editCatModal}

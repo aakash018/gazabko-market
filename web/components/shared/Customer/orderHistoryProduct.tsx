@@ -1,19 +1,20 @@
 import Image from "next/image";
 import Router from "next/router";
 import React from "react";
-import { ProtuctType } from "../../../@types/global";
+import { Order, ProtuctType } from "../../../@types/global";
 import styles from "../../../styles/components/shared/Customer/orderHistoryProducts.module.scss";
 
 interface Props {
   product: ProtuctType;
   status: "pending" | "processing" | "delivered";
+  order: Order;
 }
-const OrderHistoryProduct: React.FC<Props> = ({ product, status }) => {
+const OrderHistoryProduct: React.FC<Props> = ({ product, status, order }) => {
   return (
     <div
       className={styles.orderHistoryProduct}
       onClick={() => {
-        Router.push(`/orderHistory/${product.id}`);
+        Router.push(`/orderHistory/id?oid=${order.id}`);
       }}
     >
       <section className={styles.productImg}>
@@ -26,14 +27,15 @@ const OrderHistoryProduct: React.FC<Props> = ({ product, status }) => {
       </section>
       <section className={styles.info}>
         <section className={styles.title}>
-          <div className={styles.orderNumber}>Order #204188020499183</div>
-          <div className={styles.orderTime}>Placed on 01 Aug 2022 09:31:44</div>
+          <div className={styles.orderNumber}>Order #{order.id}</div>
+          <div className={styles.orderTime}>
+            Placed on {order.created_at.split("T")[0]}
+          </div>
         </section>
         <div className={styles.name}>{product.name}</div>
 
         <div className={styles.status}>{status}</div>
       </section>
-      <div className={styles.date}>Delivered on 13 Jan 2022</div>
     </div>
   );
 };

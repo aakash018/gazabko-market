@@ -88,17 +88,12 @@ router.get("/getAllCategories", async (_, res) => {
   }
 });
 
-router.get("/getCatsForTable", async (_, res) => {
+router.get("/getCatsForTable", validateAdmin, async (_, res) => {
   try {
     const categories = await AppDataSource.getRepository(Category)
       .createQueryBuilder("category")
-      .loadRelationCountAndMap("productCount", "category.products")
-      .loadRelationCountAndMap("sellerCount", "category.seller")
-      .leftJoinAndSelect("category.subCatagories", "subCatagories")
-      .leftJoinAndSelect(
-        "category.subCatagories.subsubCategories",
-        "subCatagories.subsubCategories"
-      )
+      .loadRelationCountAndMap("category.productCount", "category.products")
+      .loadRelationCountAndMap("category.sellerCount", "category.sellers")
       .getMany();
 
     res.json({
@@ -106,7 +101,8 @@ router.get("/getCatsForTable", async (_, res) => {
       message: "found",
       categories,
     });
-  } catch {
+  } catch (e) {
+    console.log(e);
     res.json({
       status: "fail",
       message: "failed to load category",
