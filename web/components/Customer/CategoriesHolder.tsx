@@ -109,39 +109,10 @@ const Categories = ({ category }: { category: Category }) => {
     </div>
   );
 };
-
-const CategoriesHolder = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const { setAlert } = useAlert();
-  useEffect(() => {
-    let ignore = false;
-
-    (async () => {
-      try {
-        const res = await axios.get<RespondType & { categories: Category[] }>(
-          `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/category/getAllCategories`
-        );
-        if (res.data.status === "ok") {
-          setCategories(res.data.categories);
-        } else {
-          setAlert({
-            type: "error",
-            message: res.data.message,
-          });
-        }
-      } catch {
-        setAlert({
-          type: "error",
-          message: "failed to connect to server",
-        });
-      }
-    })();
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
-
+interface Props {
+  categories: Category[];
+}
+const CategoriesHolder: React.FC<Props> = ({ categories }) => {
   return (
     <div className={styles.bannerSliderCategoriesDivContainer}>
       {categories.map((category, i: number) => {

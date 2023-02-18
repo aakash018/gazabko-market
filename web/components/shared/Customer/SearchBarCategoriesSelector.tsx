@@ -1,3 +1,5 @@
+import { Category } from "../../../@types/global";
+
 const categoriesList = [
   "Women's Fashion",
   "Health & Beauty",
@@ -15,9 +17,10 @@ const categoriesList = [
 
 interface Props {
   height: string;
+  categories: Category[];
 }
 
-const SearchBarCategoriesSelector = ({ height }: Props) => {
+const SearchBarCategoriesSelector = ({ height, categories }: Props) => {
   return (
     <div>
       <select
@@ -31,10 +34,13 @@ const SearchBarCategoriesSelector = ({ height }: Props) => {
         }}
       >
         <option value="all">All Categories</option>
-        {categoriesList.map((category, index) => {
+        {categories.map((category, index) => {
           return (
-            <option key={`searchbar-category-option-${index}`} value={category}>
-              {category}
+            <option
+              key={`searchbar-category-option-${index}`}
+              value={category.name}
+            >
+              {category.name}
             </option>
           );
         })}

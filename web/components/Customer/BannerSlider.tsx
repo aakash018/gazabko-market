@@ -2,6 +2,9 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import CategoriesHolder from "./CategoriesHolder";
 import styles from "../../styles/components/Customer/BannerSlider.module.scss";
+import axios from "axios";
+import { Category } from "../../@types/global";
+import { useAlert } from "../../pages/_app";
 
 const sliderImages = [
   {
@@ -23,7 +26,8 @@ const sliderImages = [
 
 const BannerSlider = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
+  const [categories, setCategories] = useState<Category[]>([]);
+  const { setAlert } = useAlert();
   const setIndex = (index: number) => {
     if (index >= sliderImages.length) {
       setCurrentImageIndex(0);
@@ -48,12 +52,42 @@ const BannerSlider = () => {
     };
   }, [increaseIndex]);
 
+  useEffect(() => {
+    let ignore = false;
+
+    (async () => {
+      try {
+        const res = await axios.get<RespondType & { categories: Category[] }>(
+          `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/category/getAllCategories`
+        );
+        console.log(res.data);
+        if (res.data.status === "ok") {
+          setCategories(res.data.categories);
+        } else {
+          setAlert({
+            type: "error",
+            message: res.data.message,
+          });
+        }
+      } catch {
+        setAlert({
+          type: "error",
+          message: "failed to connect to server",
+        });
+      }
+    })();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   return (
     <div
       className={styles.bannerSlider}
       style={{ background: sliderImages[currentImageIndex].backgroundColor }}
     >
-      <CategoriesHolder />
+      <CategoriesHolder categories={categories} />
       <div style={{ position: "relative", width: "100%" }}>
         {sliderImages.map((images, i) => {
           return (

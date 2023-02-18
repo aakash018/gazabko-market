@@ -8,6 +8,9 @@ import { useAuth } from "../../context/User";
 import { AiFillHeart, AiOutlineShoppingCart } from "react-icons/ai";
 import Link from "next/link";
 import CategoriesHolderMenu from "./CategoriesHolderMenu";
+import { Category } from "../../@types/global";
+import axios from "axios";
+import { useAlert } from "../../pages/_app";
 
 interface Props {
   sliderCategories: boolean;
@@ -19,7 +22,8 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
 
   const [show, setShow] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
-
+  const { setAlert } = useAlert();
+  const [categories, setCategories] = useState<Category[]>([]);
   const controlNavbar = () => {
     if (typeof window !== "undefined") {
       if (!sliderCategories) {
@@ -50,6 +54,36 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
     }
   }, [lastScrollY]);
 
+  useEffect(() => {
+    let ignore = false;
+
+    (async () => {
+      try {
+        const res = await axios.get<RespondType & { categories: Category[] }>(
+          `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/category/getAllCategories`
+        );
+        console.log(res.data);
+        if (res.data.status === "ok") {
+          setCategories(res.data.categories);
+        } else {
+          setAlert({
+            type: "error",
+            message: res.data.message,
+          });
+        }
+      } catch {
+        setAlert({
+          type: "error",
+          message: "failed to connect to server",
+        });
+      }
+    })();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   const handleShoProfileOpions = () => {
     setShowProfileOptions((prev) => !prev);
   };
@@ -76,7 +110,9 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
               onClick={() => Router.push("/")}
             />
           </section>
-          <SearchBarCustomer />
+          {categories.length !== 0 && (
+            <SearchBarCustomer categries={categories} />
+          )}
           {!isLogedIn && (
             <div className={styles.actionBtns}>
               <Button
@@ -159,15 +195,11 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
           )}
         </div>
         <div className={`${styles.catogry}  ${show && styles.active} `}>
-          <div className={styles.text}>
-            <CategoriesHolderMenu />
-          </div>
-
-          {/* {categories.map((category, i: number) => {
-          return (
-            <Categories category={category} key={`categories-home-page-${i}`} />
-          );
-        })} */}
+          {categories.length !== 0 && (
+            <div className={styles.text}>
+              <CategoriesHolderMenu categories={categories} />
+            </div>
+          )}
         </div>
       </nav>
     </header>

@@ -56,23 +56,25 @@ const QuestionsHolder: React.FC<QuestionsHolderProps> = ({
         </div>
         <div className={styles.qus}>{question}</div>
       </div>
-      <div className={styles.replies}>
-        <div className={styles.profile}>
-          <div className={styles.avatar}>
-            <Image
-              src={replyAvatarUrl}
-              width={50}
-              height={50}
-              objectFit="cover"
-            />
+      {reply && (
+        <div className={styles.replies}>
+          <div className={styles.profile}>
+            <div className={styles.avatar}>
+              <Image
+                src={replyAvatarUrl}
+                width={50}
+                height={50}
+                objectFit="cover"
+              />
+            </div>
+            <div className={styles.info}>
+              <div className={styles.name}>{replyName}</div>
+              <div className={styles.date}>{replyDate}</div>
+            </div>
           </div>
-          <div className={styles.info}>
-            <div className={styles.name}>{replyName}</div>
-            <div className={styles.date}>{replyDate}</div>
-          </div>
+          <div className={styles.qus}>{reply}</div>
         </div>
-        <div className={styles.qus}>{reply}</div>
-      </div>
+      )}
     </div>
   );
 };

@@ -3,8 +3,13 @@ import styles from "../../../styles/components/shared/Customer/SearchBar.module.
 import { BsSearch } from "react-icons/bs";
 import Router from "next/router";
 import SearchBarCategoriesSelector from "./SearchBarCategoriesSelector";
+import { Category } from "../../../@types/global";
 
-const SearchBarCustomer: React.FC = () => {
+interface Props {
+  categries: Category[];
+}
+
+const SearchBarCustomer: React.FC<Props> = ({ categries }) => {
   const searchInput = useRef<HTMLInputElement>(null);
 
   const [showOutline, setShowOutline] = useState(false);
@@ -37,7 +42,7 @@ const SearchBarCustomer: React.FC = () => {
         onFocus={() => setShowOutline(true)}
         onBlur={() => setShowOutline(false)}
       >
-        <SearchBarCategoriesSelector height="40px" />
+        <SearchBarCategoriesSelector height="40px" categories={categries} />
         <div style={{ height: "40px" }}>
           <input
             style={{

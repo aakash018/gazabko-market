@@ -2,23 +2,34 @@ import { useState } from "react";
 import styles from "../../styles/components/Customer/CategoriesHolderMenu.module.scss";
 import CategoriesHolder from "../../components/Customer/CategoriesHolder";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
+import { Category } from "../../@types/global";
 
-const CategoriesHolderMenu = () => {
+interface Props {
+  categories: Category[];
+}
+
+const CategoriesHolderMenu: React.FC<Props> = ({ categories }) => {
   const [showCategories, setShowCategories] = useState(false);
 
   return (
-    <div className={styles.categoryHolderMenu} onMouseOver={() => setShowCategories(true)} onMouseOut={() => setShowCategories(false)}>
+    <div
+      className={styles.categoryHolderMenu}
+      onMouseOver={() => setShowCategories(true)}
+      onMouseOut={() => setShowCategories(false)}
+    >
       <button>
         Categories &nbsp;
         <span>{showCategories ? <AiOutlineUp /> : <AiOutlineDown />}</span>
       </button>
 
-      {showCategories ?
+      {showCategories ? (
         <div style={{ position: "absolute", top: "100%" }}>
-          <CategoriesHolder />
-        </div> : <></>}
+          <CategoriesHolder categories={categories} />
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
-
   );
 };
 
