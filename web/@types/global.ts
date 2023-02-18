@@ -90,9 +90,11 @@ export interface Order {
   size?: string;
   status: "pending" | "processing" | "delivered";
   deliveryAddress: string;
+  price: number;
   nearestLandmark: string;
   latlng: string;
   user?: User;
+  offer?: OfferType;
   created_at: string;
   updated_at: string;
   product?: ProtuctType;

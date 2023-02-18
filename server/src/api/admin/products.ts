@@ -101,6 +101,7 @@ router.post("/addProduct", validateAdmin, async (req, res) => {
         name: adminReq.productName,
         brand: adminReq.brand,
         price: adminReq.price,
+        priceAfterDiscount: adminReq.price - adminReq.discount,
         totalStock: adminReq.totalStock,
         description: adminReq.description,
         category: category,

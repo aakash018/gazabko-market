@@ -8,9 +8,21 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 
 import Image from "next/image";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Router from "next/router";
 import { useAuth } from "../../../context/User";
+import axios from "axios";
+import { Order } from "../../../@types/global";
+import { useAlert } from "../../../pages/_app";
+
+interface TableDef {
+  "Order #": string;
+  "Placed On": string;
+  Items: string;
+  Price: number;
+  Actions: any;
+  Quantity: number;
+}
 
 const SettingHomePage = () => {
   const { user } = useAuth();
@@ -19,7 +31,8 @@ const SettingHomePage = () => {
     { field: "Order #", maxWidth: 90 },
     { field: "Placed On", maxWidth: 170 },
     { field: "Items" },
-    { field: "Total" },
+    { field: "Price", maxWidth: 90 },
+    { field: "Quantity", maxWidth: 110 },
     {
       field: "Actions",
       cellRenderer: () => (
@@ -29,39 +42,58 @@ const SettingHomePage = () => {
             color: "var(--theme-color)",
             cursor: "pointer",
           }}
-          onClick={() => {
-            Router.push(`/settings/manage/1`);
-          }}
         >
           Manage
         </div>
       ),
     },
   ]);
+  const { setAlert } = useAlert();
 
-  const [rowData] = useState([
-    {
-      "Order #": "1",
-      "Placed On": `${new Date().getFullYear()}/${new Date().getMonth()}/${new Date().getDate()}`,
-      Items: "Jeans Pant",
-      Total: "Rs. 1999",
-      Actions: "Manage",
-    },
-    {
-      "Order #": "2",
-      "Placed On": `${new Date().getFullYear()}/${new Date().getMonth()}/${new Date().getDate()}`,
-      Items: "Jeans Pant",
-      Total: "Rs. 1999",
-      Actions: "Manage",
-    },
-    {
-      "Order #": "3",
-      "Placed On": `${new Date().getFullYear()}/${new Date().getMonth()}/${new Date().getDate()}`,
-      Items: "Jeans Pant",
-      Total: "Rs. 1999",
-      Actions: "Manage",
-    },
-  ]);
+  const [rowData, setRowData] = useState<TableDef[]>([]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    if (!ignore) {
+      (async () => {
+        try {
+          const res = await axios.get<RespondType & { orders?: Order[] }>(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/order/orderHistory`,
+            { withCredentials: true }
+          );
+          if (res.data.status === "ok" && res.data.orders) {
+            const orderHistoryTable: TableDef[] = res.data.orders.map(
+              (order, i) => ({
+                "Order #": order.id as unknown as string,
+                "Placed On": order.created_at.split("T")[0],
+                Actions: "",
+                Items: (order as any).product.name,
+                Price: order.price,
+                Quantity: order.quantity,
+              })
+            );
+
+            setRowData(orderHistoryTable);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        } catch {
+          setAlert({
+            type: "error",
+            message: "failed to connect to server",
+          });
+        }
+      })();
+    }
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   if (!user) {
     return <h2>Loading...</h2>;
@@ -164,11 +196,16 @@ const SettingHomePage = () => {
         <div style={{ marginTop: "20px" }}>
           <div
             className="ag-theme-alpine"
-            style={{ width: 870, height: "200px" }}
+            style={{ width: 870, height: "400px" }}
           >
             <AgGridReact
               rowData={rowData}
               columnDefs={columnData}
+              onCellClicked={(e) => {
+                if (e.colDef.field === "Actions") {
+                  Router.push(`settings/manage/${e.data?.["Order #"]}`);
+                }
+              }}
             ></AgGridReact>
           </div>
         </div>

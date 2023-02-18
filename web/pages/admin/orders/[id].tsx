@@ -160,21 +160,21 @@ const OrderDetails = () => {
                   <div className={styles.data}>{order?.product?.name}</div>
                 </div>
                 <div className={styles.infoHolder}>
-                  <div className={styles.title}>Original Price</div>
+                  <div className={styles.title}>Product Original Price</div>
                   <div className={styles.data}>Rs. {order?.product?.price}</div>
                 </div>
                 <div className={styles.infoHolder}>
-                  <div className={styles.title}>Discount</div>
+                  <div className={styles.title}>Product Discount</div>
                   <div className={styles.data}>
                     Rs. {order?.product?.discount || 0}
                   </div>
                 </div>
                 <div className={styles.infoHolder}>
                   <div className={styles.title}>Shipping Charge</div>
-                  <div className={styles.data}>Rs. 65</div>
+                  <div className={styles.data}>Rs. 60</div>
                 </div>
                 <div className={styles.infoHolder}>
-                  <div className={styles.title}>Total Charge For 1 Item</div>
+                  <div className={styles.title}>Product Price</div>
                   <div className={styles.data}>
                     Rs. {order?.product?.priceAfterDiscount}
                   </div>
@@ -190,6 +190,30 @@ const OrderDetails = () => {
                   <div className={styles.data}>
                     Rs. {order!.product!.priceAfterDiscount * order!.quantity}
                   </div>
+                </div>
+                {order.offer && (
+                  <>
+                    <div className={styles.infoHolder}>
+                      <div className={styles.title}>Offer</div>
+                      <div className={styles.data}>{order.offer.name}</div>
+                    </div>
+                    <div className={styles.infoHolder}>
+                      <div className={styles.title}>Offer has discount ?</div>
+                      <div className={styles.data}>
+                        {order.offer.common_discount ? "Yes" : "No"}
+                      </div>
+                    </div>
+                    <div className={styles.infoHolder}>
+                      <div className={styles.title}>Offer's Discount</div>
+                      <div className={styles.data}>
+                        {order.offer.discount} %
+                      </div>
+                    </div>
+                  </>
+                )}
+                <div className={styles.infoHolder}>
+                  <div className={styles.title}>Total Order Price</div>
+                  <div className={styles.data}>{order.price}</div>
                 </div>
                 <div className={styles.infoHolder}>
                   <div className={styles.title}>Vendor</div>

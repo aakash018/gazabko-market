@@ -30,6 +30,17 @@ router.post("/addOrder", validateUser, async (req, res) => {
         color: cartProduct.color,
         user: user as any,
         product: cartProduct.product,
+        // all this crap is to find real price in case if the product belongs to offer or not
+        price:
+          (cartProduct.product.offers &&
+          cartProduct.product.offers.common_discount
+            ? cartProduct.product.price -
+              cartProduct.product.price *
+                (cartProduct.product.offers.discount / 100)
+            : cartProduct.product.priceAfterDiscount) * cartProduct.quantity,
+        offer: cartProduct.product.offers
+          ? cartProduct.product.offers
+          : undefined,
         isGift: cartProduct.isGift,
         deliveryAddress: userReq.address.deliveryAddress,
         nearestLandmark: userReq.address.nearestLandmark,
@@ -43,10 +54,11 @@ router.post("/addOrder", validateUser, async (req, res) => {
       status: "ok",
       message: "order placed",
     });
-  } catch {
+  } catch (e) {
+    console.log(e);
     res.json({
       status: "fail",
-      message: "failed to place message",
+      message: "failed to place order",
     });
   }
 });
@@ -56,6 +68,13 @@ router.get("/orderHistory", validateUser, async (req, res) => {
     const orders = await Order.find({
       where: { user: { id: req.session.user } },
       relations: { product: true },
+      select: {
+        product: {
+          name: true,
+          images: true,
+          priceAfterDiscount: true,
+        },
+      },
     });
 
     if (orders) {

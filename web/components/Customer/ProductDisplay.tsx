@@ -62,10 +62,14 @@ const ProductInfoDisplay: React.FC<Props> = ({
   const [selectedColor, setSelectedColor] = useState("");
   const { setCart } = useCart();
 
+  // TODO for subTotal also add offer
   const handleBuyNow = () => {
     if (setCart) {
       setCart({
-        subTotal: mp - discount,
+        subTotal:
+          product.offers?.common_discount && product.offers.discount
+            ? product.price - product.price * (product.offers.discount / 100)
+            : mp - discount,
         totalProducts: 1,
         products: [
           {
@@ -184,7 +188,14 @@ const ProductInfoDisplay: React.FC<Props> = ({
           </section>
         </div>
         <section className={styles.productDisplay__productInfo_price}>
-          <PriceHolder discount={discount} mp={mp} />
+          <PriceHolder
+            discount={
+              product.offers?.common_discount && product.offers.discount
+                ? product.price * (product.offers.discount / 100)
+                : discount
+            }
+            mp={mp}
+          />
         </section>
         {sizes && (
           <section

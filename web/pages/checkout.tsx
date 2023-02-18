@@ -24,26 +24,6 @@ type DeliveryAddressPage = {
   NearestLandMark: string;
 };
 
-const deliveryAddressPageData: DeliveryAddressPage[] = [
-  {
-    pageNo: 1,
-    deliveryAddress:
-      "Deva Arcade, Lut Chok, Thamel, 14292-Kathmandu, Bagmati Pradesh, Nepal",
-    NearestLandMark: "Deva Arcade",
-  },
-  {
-    pageNo: 2,
-    deliveryAddress:
-      "Nepal Academy School, 44618-Nagarjun, Bagmati Pradesh, Nepal",
-    NearestLandMark: "Nepal Academy School",
-  },
-  {
-    pageNo: 3,
-    deliveryAddress: "Pnachkanya, 44618-Nagarjun, Bagmati Pradesh, Nepal",
-    NearestLandMark: "Standard Co. Ed Highschool",
-  },
-];
-
 const CheckoutPage = () => {
   const { cart, setCart } = useCart();
   const { setAlert } = useAlert();
@@ -68,28 +48,28 @@ const CheckoutPage = () => {
 
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      if (!cart) {
-        setLoading(true);
-        const res = await axios.get<RespondType & { cart?: Cart }>(
-          `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/cart/getCart`,
-          {
-            withCredentials: true,
-          }
-        );
-        if (res.data.status === "ok" && res.data.cart && setCart) {
-          setCart(res.data.cart);
-          setLoading(false);
-        } else {
-          setAlert({
-            type: "error",
-            message: "no cart found",
-          });
-        }
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     if (!cart) {
+  //       setLoading(true);
+  //       const res = await axios.get<RespondType & { cart?: Cart }>(
+  //         `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/cart/getCart`,
+  //         {
+  //           withCredentials: true,
+  //         }
+  //       );
+  //       if (res.data.status === "ok" && res.data.cart && setCart) {
+  //         setCart(res.data.cart);
+  //         setLoading(false);
+  //       } else {
+  //         setAlert({
+  //           type: "error",
+  //           message: "no cart found",
+  //         });
+  //       }
+  //     }
+  //   })();
+  // }, []);
 
   const handleIsGiftCheck = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -133,28 +113,17 @@ const CheckoutPage = () => {
   };
 
   useEffect(() => {
-    if (cart?.products) {
-      setSubTotalPrice(
-        cart!.products.reduce((accumulator, product) => {
-          return (
-            accumulator +
-            (product.product.price - product.product.discount) *
-              product.quantity
-          );
-        }, 0)
-      );
-      setTotalPrice(
-        cart!.products.reduce((accumulator, product) => {
-          return (
-            accumulator +
-            (product.product.price - product.product.discount) *
-              product.quantity +
-            giftWrapTotal
-          );
-        }, 0)
-      );
+    if (cart) {
+      setSubTotalPrice(cart.subTotal);
+      setTotalPrice(cart.subTotal + 60);
+    } else {
+      setAlert({
+        type: "error",
+        message: "can't access this page directly",
+      });
+      Router.push("/");
     }
-  }, [cart?.products]);
+  }, []);
 
   const handleChangeDeliveryAddress = (page: number) => {
     setSelectedAddress(page);

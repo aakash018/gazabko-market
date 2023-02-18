@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from "typeorm";
+import { Order } from "../Orders";
 import { Products } from "../Products";
 
 @Entity()
@@ -34,6 +35,9 @@ export class Offers extends BaseEntity {
 
   @OneToMany(() => Products, (product) => product.offers)
   products: Products[];
+
+  @OneToMany(() => Order, (order) => order.offer)
+  orders: Order[];
 
   @CreateDateColumn()
   created_at: Date;

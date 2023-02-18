@@ -63,11 +63,24 @@ const Cart: React.FC = () => {
         setTotalPrice(
           cart!.products.reduce((accumulator, product, i) => {
             if (checkList[i]) {
-              return (
-                accumulator +
-                (product.product.price - product.product.discount) *
-                  product.quantity
-              );
+              if (
+                product.product.offers?.common_discount &&
+                product.product.offers.discount
+              ) {
+                return (
+                  accumulator +
+                  (product.product.price -
+                    (product.product.price * product.product.offers.discount) /
+                      100) *
+                    product.quantity
+                );
+              } else {
+                return (
+                  accumulator +
+                  (product.product.price - product.product.discount) *
+                    product.quantity
+                );
+              }
             } else {
               return accumulator;
             }
@@ -182,7 +195,13 @@ const Cart: React.FC = () => {
                         check={checkList[i]}
                         onChecked={() => onItemCheck(i)}
                         name={product.product.name}
-                        discount={product.product.discount}
+                        discount={
+                          product.product.offers?.common_discount &&
+                          product.product.offers.discount
+                            ? product.product.price *
+                              (product.product.offers.discount / 100)
+                            : product.product.discount
+                        }
                         mp={product.product.price}
                         quantity={product.quantity}
                         key={i}
@@ -226,8 +245,8 @@ const Cart: React.FC = () => {
                         }
                         if (setCart) {
                           setCart({
-                            subTotal: subTotal,
-                            totalProducts: 0,
+                            subTotal: totalPrice,
+                            totalProducts: selectedProducts.length,
                             products: selectedProducts,
                           });
                         }

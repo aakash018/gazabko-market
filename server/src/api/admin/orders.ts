@@ -115,7 +115,10 @@ router.get("/getOneOrderInfo", validateAdmin, async (req, res) => {
     const order = await Order.findOneOrFail({
       where: { id: adminReq.oid },
       relations: {
-        product: true,
+        product: {
+          offers: true,
+        },
+        offer: true,
         user: true,
       },
     });

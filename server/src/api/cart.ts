@@ -38,8 +38,6 @@ router.post("/addToCart", validateUser, async (req, res) => {
     });
   }
 
-  console.log(cart);
-
   try {
     if (cart && product) {
       await OnCartProduct.create({
@@ -82,7 +80,9 @@ router.get("/getCart", validateUser, async (req, res) => {
       where: { user: { id: req.session.user } },
       relations: {
         products: {
-          product: true,
+          product: {
+            offers: true,
+          },
         },
       },
     });

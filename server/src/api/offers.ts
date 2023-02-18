@@ -9,8 +9,8 @@ router.get("/getOffers", async (_, res) => {
     const offers = await AppDataSource.getRepository(Offers)
       .createQueryBuilder("offer")
       .where("offer.show_on_homepage = true")
-      // .andWhere("offer.starting_date <= :today", { today: new Date() })
-      // .andWhere("offer.ending_date >= :today", { today: new Date() })
+      .andWhere("offer.starting_date <= :today", { today: new Date() })
+      .andWhere("offer.ending_date >= :today", { today: new Date() })
       .leftJoinAndSelect("offer.products", "products")
       .limit(5)
       .getMany();

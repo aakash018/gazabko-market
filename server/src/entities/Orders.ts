@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import { User } from "./User";
 import { Products } from "./Products";
+import { Offers } from "./admin/Offers";
 
 @Entity()
 export class Order extends BaseEntity {
@@ -33,11 +34,17 @@ export class Order extends BaseEntity {
   @Column({ default: "pending" })
   status: "pending" | "processing" | "delivered";
 
+  @ManyToOne(() => Offers, (offer) => offer.orders)
+  offer: Offers;
+
   @ManyToOne(() => Products, (product) => product.order)
   product: Products;
 
   @ManyToOne(() => User, (user) => user.order)
   user: User;
+
+  @Column()
+  price: number;
 
   @Column()
   deliveryAddress: string;
