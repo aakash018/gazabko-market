@@ -107,7 +107,7 @@ router.get("/orderDetails", validateUser, async (req, res) => {
         product: true,
       },
     });
-
+    console.log("ORDER", order);
     res.json({
       status: "ok",
       message: "order found",

@@ -1,6 +1,8 @@
 //?? RETURN REVIEW REPORT
 
 import express from "express";
+import { Order } from "../entities/Orders";
+import { Return } from "../entities/Return";
 import { Products } from "../entities/Products";
 import { Review } from "../entities/Review";
 import { User } from "../entities/User";
@@ -92,6 +94,52 @@ router.get("/getAllReviews", validateUser, async (req, res) => {
     res.json({
       status: "fail",
       message: "can't query reviews",
+    });
+  }
+});
+
+router.post("/returnProduct", async (req, res) => {
+  const userReq = req.body as { oid: any; message: string };
+
+  try {
+    const returnEntity = Return.create({
+      message: userReq.message,
+    });
+
+    const order = await Order.findOne({
+      where: { id: userReq.oid },
+    });
+
+    if (order) {
+      order.isToBeReturned = true;
+      order.return = returnEntity;
+
+      order.save();
+      res.json({
+        status: "ok",
+        message: "return request set",
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "can't find requested order",
+      });
+    }
+
+    // await Order.update(
+    //   {
+    //     id: userReq.oid,
+    //   },
+    //   {
+    //     isToBeReturned: true,
+    //     return: returnEntity,
+    //   }
+    // );
+  } catch (e) {
+    console.log(e);
+    res.json({
+      status: "fail",
+      message: "failed to send return request",
     });
   }
 });

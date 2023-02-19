@@ -68,8 +68,10 @@ const ProductInfoDisplay: React.FC<Props> = ({
       setCart({
         subTotal:
           product.offers?.common_discount && product.offers.discount
-            ? product.price - product.price * (product.offers.discount / 100)
-            : mp - discount,
+            ? (product.price -
+                product.price * (product.offers.discount / 100)) *
+              quantity
+            : (mp - discount) * quantity,
         totalProducts: 1,
         products: [
           {

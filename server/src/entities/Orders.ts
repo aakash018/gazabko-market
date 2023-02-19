@@ -6,10 +6,13 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
+  JoinColumn,
 } from "typeorm";
 import { User } from "./User";
 import { Products } from "./Products";
 import { Offers } from "./admin/Offers";
+import { Return } from "./Return";
 
 @Entity()
 export class Order extends BaseEntity {
@@ -45,6 +48,13 @@ export class Order extends BaseEntity {
 
   @Column()
   price: number;
+
+  @OneToOne(() => Return, { cascade: true })
+  @JoinColumn()
+  return: Return;
+
+  @Column({ default: false })
+  isToBeReturned: boolean;
 
   @Column()
   deliveryAddress: string;

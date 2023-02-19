@@ -11,6 +11,7 @@ import { Follow } from "./entities/Follow";
 import { Order } from "./entities/Orders";
 import { Products } from "./entities/Products";
 import { Question } from "./entities/QuestionAndAnswer";
+import { Return } from "./entities/Return";
 import { Review } from "./entities/Review";
 import { Seller } from "./entities/seller/Seller";
 import { ToBeVerified } from "./entities/seller/ToBeVerified";
@@ -43,5 +44,6 @@ export const AppDataSource = new DataSource({
     Category,
     SubCategory,
     SubSubCategory,
+    Return,
   ],
 });
