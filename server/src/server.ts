@@ -26,6 +26,7 @@ import address from "./api/address";
 import sellerOrder from "./api/seller/order";
 import sellerFollowers from "./api/seller/followers";
 import sellerUpdate from "./api/seller/update";
+import sellerCommission from "./api/seller/comission";
 
 import adminAuth from "./api/admin/auth";
 import orders from "./api/admin/orders";
@@ -150,6 +151,7 @@ app.use("/sellerInfo", sellerInfo);
 app.use("/sellerOrder", sellerOrder);
 app.use("/seller/followers", sellerFollowers);
 app.use("/seller/update", sellerUpdate);
+app.use("/seller/commission", sellerCommission);
 
 app.use("/admin/auth", adminAuth);
 app.use("/admin/getCounts", adminCounts);

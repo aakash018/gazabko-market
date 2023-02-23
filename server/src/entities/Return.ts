@@ -15,6 +15,12 @@ export class Return extends BaseEntity {
   @Column()
   message: string;
 
+  @Column({ default: false })
+  requestAccepted: boolean;
+
+  @Column({ default: false })
+  requestRejected: boolean;
+
   @CreateDateColumn()
   created_at: Date;
 

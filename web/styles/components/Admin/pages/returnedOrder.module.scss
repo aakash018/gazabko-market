@@ -1,0 +1,33 @@
+.returnMessageHolder {
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 12px rgba(100, 100, 100, 0.575);
+    border-radius: 10px;
+    min-width: 400px;
+    max-width: 600px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    font-size: 1.3rem;
+
+    .product {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .user {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        margin-bottom: 20px;
+    }
+
+    .actBtn {
+        display: flex;
+        gap: 30px;
+    }
+}

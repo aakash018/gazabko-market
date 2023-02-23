@@ -21,7 +21,9 @@ export class SubSubCategory extends BaseEntity {
   @ManyToOne(() => Products, (product) => product.subsubCategory)
   products: Products[];
 
-  @ManyToOne(() => SubCategory, (subcategory) => subcategory.subsubCategories)
+  @ManyToOne(() => SubCategory, (subcategory) => subcategory.subsubCategories, {
+    onDelete: "CASCADE",
+  })
   subcategory: SubCategory;
 
   //   @OneToMany(() => )

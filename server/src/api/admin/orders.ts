@@ -1,4 +1,5 @@
 import express from "express";
+import { Return } from "../../entities/Return";
 import { Order } from "../../entities/Orders";
 import validateAdmin from "../../middleware/validateAdmin";
 
@@ -193,6 +194,7 @@ router.post("/verifyDelivered", validateAdmin, async (req, res) => {
 
     if (order?.product) {
       order.product.timesBought = order.product.timesBought + 1;
+      order.product.totalStock = order.product.totalStock - 1;
       order.status = "delivered";
       order.product.save();
       order.save();
@@ -209,4 +211,67 @@ router.post("/verifyDelivered", validateAdmin, async (req, res) => {
     });
   }
 });
+
+router.get("/returnedOrders", validateAdmin, async (_, res) => {
+  try {
+    const returns = await Order.find({
+      order: { created_at: "DESC" },
+      relations: {
+        return: true,
+        product: true,
+        user: true,
+      },
+      select: {
+        id: true,
+        created_at: true,
+        user: {
+          avatar: true,
+          firstName: true,
+          lastName: true,
+        },
+        product: {
+          name: true,
+          images: true,
+        },
+      },
+    });
+
+    res.json({
+      status: "ok",
+      message: "returns found",
+      returns,
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to find returns",
+    });
+  }
+});
+
+router.put("/acceptReturn", validateAdmin, async (req, res) => {
+  const adminReq = req.body as { returnid: any };
+
+  try {
+    await Return.update(
+      {
+        id: adminReq.returnid,
+      },
+      {
+        requestAccepted: true,
+      }
+    );
+
+    res.json({
+      status: "ok",
+      message: "return request accepted",
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to accept request",
+    });
+  }
+});
+
 export default router;

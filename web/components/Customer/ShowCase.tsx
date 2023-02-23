@@ -95,7 +95,11 @@ const ShowCase: React.FC<Props> = ({
                   key={i}
                   mp={product.price}
                   discount={
-                    product.offers?.common_discount && product.offers.discount
+                    product.offers &&
+                    product.offers!.starting_date <= new Date() &&
+                    product.offers!.ending_date >= new Date() &&
+                    product.offers?.common_discount &&
+                    product.offers.discount
                       ? Math.ceil(
                           (product.price / 100) * product.offers.discount
                         )

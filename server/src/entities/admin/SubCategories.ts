@@ -23,7 +23,9 @@ export class SubCategory extends BaseEntity {
   @Column({ default: 0 })
   commission: number;
 
-  @ManyToOne(() => Category, (category) => category.subCatagories)
+  @ManyToOne(() => Category, (category) => category.subCatagories, {
+    onDelete: "CASCADE",
+  })
   category: Category;
 
   @OneToMany(() => Products, (product) => product.subCategory)

@@ -33,6 +33,8 @@ router.post("/addOrder", validateUser, async (req, res) => {
         // all this crap is to find real price in case if the product belongs to offer or not
         price:
           (cartProduct.product.offers &&
+          cartProduct.product.offers!.starting_date <= new Date() &&
+          cartProduct.product.offers!.ending_date >= new Date() &&
           cartProduct.product.offers.common_discount
             ? cartProduct.product.price -
               cartProduct.product.price *
@@ -105,9 +107,10 @@ router.get("/orderDetails", validateUser, async (req, res) => {
       where: { id: oid },
       relations: {
         product: true,
+        return: true,
       },
     });
-    console.log("ORDER", order);
+
     res.json({
       status: "ok",
       message: "order found",

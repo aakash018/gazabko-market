@@ -25,7 +25,7 @@ type TableCol = {
   "Category Name": string;
   Products: number;
   Vendors: number;
-  Edit: any;
+  // Edit: any;
   Delete: any;
 };
 
@@ -39,18 +39,18 @@ const EditCategories = () => {
     { field: "Category Name", resizable: true },
     { field: "Products", width: 115 },
     { field: "Vendors", width: 115 },
-    {
-      field: "Edit",
-      width: 115,
-      // cellStyle: "center",
-      cellRenderer: () => {
-        return (
-          <div onClick={() => setEditCatModal(true)}>
-            <AiFillEdit color="#5F97B9" size={20} />
-          </div>
-        );
-      },
-    },
+    // {
+    //   field: "Edit",
+    //   width: 115,
+    //   // cellStyle: "center",
+    //   cellRenderer: () => {
+    //     return (
+    //       <div>
+    //         <AiFillEdit color="#5F97B9" size={20} />
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       field: "Delete",
       width: 115,
@@ -89,6 +89,7 @@ const EditCategories = () => {
           withCredentials: true,
         }
       );
+
       if (res.data.status === "ok" && res.data.categories) {
         const catForTable: TableCol[] = res.data.categories.map((cat, i) => ({
           SN: i + 1,
@@ -132,6 +133,38 @@ const EditCategories = () => {
   const handleModalClose = () => {
     setAddCatModal(false);
   };
+
+  const handleDeleteCat = async (id: string) => {
+    try {
+      const res = await axios.delete<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/category/deleteCategory`,
+        {
+          params: {
+            cid: id,
+          },
+          withCredentials: true,
+        }
+      );
+      if (res.data.status === "ok") {
+        fetchData();
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed to connect to server",
+      });
+    }
+  };
+
   return (
     <>
       <Modal
@@ -171,11 +204,23 @@ const EditCategories = () => {
           </div>
           <div
             className={` ${styles.table} ag-theme-alpine`}
-            style={{ height: 350, width: "850px", overflow: "hidden" }}
+            style={{ height: 350, width: "750px", overflow: "hidden" }}
           >
             <AgGridReact
               rowData={rowData}
               columnDefs={columnDefs}
+              onCellClicked={(e) => {
+                if (e.colDef.field === "Delete") {
+                  if (e.data?.Products !== 0) {
+                    setAlert({
+                      type: "error",
+                      message: "can't delete a category with product in it",
+                    });
+                  } else {
+                    handleDeleteCat(e.data.id);
+                  }
+                }
+              }}
             ></AgGridReact>
           </div>
         </div>

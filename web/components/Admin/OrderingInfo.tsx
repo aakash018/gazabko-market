@@ -11,20 +11,22 @@ interface Props {
   pendingClick?: () => void;
   processingClick?: () => void;
   deliveredClick?: () => void;
-  cancledClick?: () => void;
+  returnedClick?: () => void;
   pendingCount: number;
   deliveredCount: number;
   processingCount: number;
+  returnedCount: number;
 }
 
 const OrderingInfo: React.FC<Props> = ({
   pendingClick,
   processingClick,
   deliveredClick,
-  cancledClick,
+  returnedClick,
   deliveredCount,
   pendingCount,
   processingCount,
+  returnedCount,
 }) => (
   <div className={styles.orderingInfo}>
     <InfoCard
@@ -52,10 +54,10 @@ const OrderingInfo: React.FC<Props> = ({
       <AiFillCheckCircle />
     </InfoCard>
     <InfoCard
-      amount={46}
-      title="Cancled Orders"
+      amount={returnedCount}
+      title="Returned Orders"
       bgColor="#cc54de"
-      onViewClick={cancledClick}
+      onViewClick={returnedClick}
     >
       <MdCancel />
     </InfoCard>

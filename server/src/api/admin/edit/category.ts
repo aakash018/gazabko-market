@@ -110,4 +110,49 @@ router.get("/getCatsForTable", validateAdmin, async (_, res) => {
   }
 });
 
+router.get("/getCatsDetails", validateAdmin, async (req, res) => {
+  const adminReq = req.query as unknown as { cid: string };
+  try {
+    const category = await Category.findOne({
+      where: { id: adminReq.cid },
+      relations: {
+        subCatagories: {
+          subsubCategories: true,
+        },
+      },
+    });
+
+    res.json({
+      status: "ok",
+      message: "category found",
+      category,
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to find category",
+    });
+  }
+});
+
+router.delete("/deleteCategory", validateAdmin, async (req, res) => {
+  const adminReq = req.query as unknown as { cid: string };
+
+  try {
+    await Category.delete({
+      id: adminReq.cid,
+    });
+
+    res.json({
+      status: "ok",
+      message: "category deleted",
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to delete category",
+    });
+  }
+});
+
 export default router;

@@ -64,6 +64,9 @@ const Cart: React.FC = () => {
           cart!.products.reduce((accumulator, product, i) => {
             if (checkList[i]) {
               if (
+                product.product.offers &&
+                product.product.offers!.starting_date <= new Date() &&
+                product.product.offers!.ending_date >= new Date() &&
                 product.product.offers?.common_discount &&
                 product.product.offers.discount
               ) {
@@ -196,6 +199,9 @@ const Cart: React.FC = () => {
                         onChecked={() => onItemCheck(i)}
                         name={product.product.name}
                         discount={
+                          product.product.offers &&
+                          product.product.offers!.starting_date <= new Date() &&
+                          product.product.offers!.ending_date >= new Date() &&
                           product.product.offers?.common_discount &&
                           product.product.offers.discount
                             ? product.product.price *

@@ -54,7 +54,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
   const { user } = useAuth();
   const [quantity, setQuantity] = useState(1);
   const { setAlert } = useAlert();
-
+  console.log(discount);
   const [displayImageURL, setDisplayImageURL] = useState("/images/shoes.jpg");
   const [selectedSize, setSelectedSize] = useState<string | undefined>(
     undefined
@@ -66,12 +66,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
   const handleBuyNow = () => {
     if (setCart) {
       setCart({
-        subTotal:
-          product.offers?.common_discount && product.offers.discount
-            ? (product.price -
-                product.price * (product.offers.discount / 100)) *
-              quantity
-            : (mp - discount) * quantity,
+        subTotal: (mp - discount) * quantity,
         totalProducts: 1,
         products: [
           {
@@ -92,7 +87,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
       {
         productID: id,
         productName: name,
-        price: mp,
+        price: mp - discount,
         quantity: quantity,
         sizes: selectedSize,
         color: selectedColor,
@@ -190,14 +185,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
           </section>
         </div>
         <section className={styles.productDisplay__productInfo_price}>
-          <PriceHolder
-            discount={
-              product.offers?.common_discount && product.offers.discount
-                ? product.price * (product.offers.discount / 100)
-                : discount
-            }
-            mp={mp}
-          />
+          <PriceHolder discount={discount} mp={mp} />
         </section>
         {sizes && (
           <section

@@ -116,28 +116,41 @@ const UserInput: React.FC<{
             <InputField placeholder="Subject" />
           </div>
         )}
-        <textarea
-          placeholder={title !== "Review" ? "write a message" : "write review"}
-          ref={
-            title === "Review"
-              ? reviewRef
-              : title === "Report"
-              ? returnRef
-              : reportRef
-          }
-        ></textarea>
-        <Button
-          onClick={() => {
-            if (title === "Review") {
-              handleSubmit();
-            } else if (title === "Return") {
-              handleReturnRequest();
-            } else {
-            }
-          }}
-        >
-          {title === "Return" ? "Send Return Request" : "Post"}
-        </Button>
+
+        {title === "Return" && order.return?.requestAccepted ? (
+          <h3>Your return request has been accepted</h3>
+        ) : title === "Return" && order.return?.requestRejected ? (
+          <h3>
+            Your request was rejected. Please contact admins for further details
+          </h3>
+        ) : (
+          <>
+            <textarea
+              placeholder={
+                title !== "Review" ? "write a message" : "write review"
+              }
+              ref={
+                title === "Review"
+                  ? reviewRef
+                  : title === "Report"
+                  ? returnRef
+                  : reportRef
+              }
+            ></textarea>
+            <Button
+              onClick={() => {
+                if (title === "Review") {
+                  handleSubmit();
+                } else if (title === "Return") {
+                  handleReturnRequest();
+                } else {
+                }
+              }}
+            >
+              {title === "Return" ? "Send Return Request" : "Post"}
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

@@ -55,6 +55,13 @@ router.get("/getOrdersCount", validateAdmin, async (_, res) => {
       }
     }, 0);
 
+    const returned = orders.reduce((acc, el) => {
+      if (el.isToBeReturned === true) {
+        return acc + 1;
+      } else {
+        return acc;
+      }
+    }, 0);
     const processing = orders.reduce((acc, el) => {
       if (el.status === "processing") {
         return acc + 1;
@@ -78,6 +85,7 @@ router.get("/getOrdersCount", validateAdmin, async (_, res) => {
         pending,
         delivered,
         processing,
+        returned,
       },
     });
   } catch {

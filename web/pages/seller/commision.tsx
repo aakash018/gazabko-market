@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AdminLayout from "../../components/Admin/AdminNav";
 import Button from "../../components/shared/Button";
 import IntputField from "../../components/shared/Input";
@@ -7,6 +7,22 @@ import { TableHolder } from "../admin/orders";
 
 import Modal from "react-modal";
 import SellerNav from "../../components/Seller/SellerNav";
+import axios from "axios";
+import { Category, SubCategory } from "../../@types/global";
+import { useAlert } from "../_app";
+
+interface CategoryTableDef {
+  SN: number;
+  "Category Name": string;
+  Commission: string;
+}
+
+interface SubCAtegoryTableDef {
+  SN: number;
+  "Sub Category Name": string;
+  "Belonging Category": string;
+  Commission: string;
+}
 
 const EditCommision = () => {
   const searchCatRef = useRef<HTMLInputElement>(null);
@@ -14,101 +30,22 @@ const EditCommision = () => {
   const [comissionRate, setCommisionRate] = useState("300");
   const [comissionRateModal, setCommisionRateModal] = useState(false);
 
-  const [catRowData] = useState([
-    {
-      SN: 1,
-      "Category Name": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-    {
-      SN: 2,
-      "Category Name": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-    {
-      SN: 3,
-      "Category Name": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-    {
-      SN: 4,
-      "Category Name": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-    {
-      SN: 5,
-      "Category Name": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-    {
-      SN: 6,
-      "Category Name": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-  ]);
+  const [catRowData, setCatRowData] = useState<CategoryTableDef[]>([]);
+  const { setAlert } = useAlert();
 
   const [catColumnDef] = useState([
     { field: "SN", width: 60 },
     { field: "Category Name", resizable: true },
-    { field: "Commision" },
+    { field: "Commission" },
   ]);
 
-  const [subCatRowData] = useState([
-    {
-      SN: 1,
-      "Sub Category Name": "Jeans",
-      "Belonging Category": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-    {
-      SN: 2,
-      "Sub Category Name": "Jeans",
-      "Belonging Category": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-    {
-      SN: 3,
-      "Sub Category Name": "Jeans",
-      "Belonging Category": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-    {
-      SN: 4,
-      "Sub Category Name": "Jeans",
-      "Belonging Category": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-    {
-      SN: 5,
-      "Sub Category Name": "Jeans",
-      "Belonging Category": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-    {
-      SN: 6,
-      "Sub Category Name": "Jeans",
-      "Belonging Category": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-  ]);
+  const [subCatRowData, setSubCatRowData] = useState<SubCAtegoryTableDef[]>([]);
 
   const [subCatColumnDef] = useState([
     { field: "SN", width: 60 },
     { field: "Sub Category Name", resizable: true },
     { field: "Belonging Category", resizable: true },
-    { field: "Commision" },
+    { field: "Commission" },
   ]);
 
   const [productRowData] = useState([
@@ -162,6 +99,59 @@ const EditCommision = () => {
     { field: "Belonging Category", resizable: true },
     { field: "Commision" },
   ]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    if (!ignore) {
+      (async () => {
+        try {
+          const res = await axios.get<
+            RespondType & { categories: Category[]; subCategory: SubCategory[] }
+          >(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/commission/getCategoryCommission`,
+            {
+              withCredentials: true,
+            }
+          );
+
+          if (res.data.status === "ok") {
+            const catCommissionTable: CategoryTableDef[] =
+              res.data.categories.map((category, i) => ({
+                SN: i + 1,
+                "Category Name": category.name,
+                Commission: `Rs. ${category.commission}`,
+              }));
+
+            const sunCatCommissionTable: SubCAtegoryTableDef[] =
+              res.data.subCategory.map((category, i) => ({
+                SN: i + 1,
+                "Belonging Category": (category as any).category,
+                "Sub Category Name": category.name,
+                Commission: `Rs. ${category.commission}`,
+              }));
+
+            setCatRowData(catCommissionTable);
+            setSubCatRowData(sunCatCommissionTable);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        } catch {
+          setAlert({
+            type: "error",
+            message: "failed to connect to server",
+          });
+        }
+      })();
+    }
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   return (
     <SellerNav>

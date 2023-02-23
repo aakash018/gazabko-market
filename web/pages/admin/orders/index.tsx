@@ -88,6 +88,7 @@ const Orders = () => {
     pending: number;
     processing: number;
     delivered: number;
+    returned: number;
   } | null>(null);
 
   const [rowData, setRowData] = useState<TableDef[]>([]);
@@ -127,6 +128,7 @@ const Orders = () => {
                 pending: number;
                 processing: number;
                 delivered: number;
+                returned: number;
               };
             }
           >(
@@ -206,6 +208,7 @@ const Orders = () => {
               deliveredCount={ordersCount!.delivered}
               pendingCount={ordersCount!.pending}
               processingCount={ordersCount!.processing}
+              returnedCount={ordersCount!.returned}
               processingClick={() => {
                 Router.push("/admin/orders/processing");
               }}
@@ -215,8 +218,8 @@ const Orders = () => {
               pendingClick={() => {
                 Router.push("/admin/orders/pending");
               }}
-              cancledClick={() => {
-                Router.push("/admin/orders/cancledOrders");
+              returnedClick={() => {
+                Router.push("/admin/orders/returnedOrders");
               }}
             />
           )}

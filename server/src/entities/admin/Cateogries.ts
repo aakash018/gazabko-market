@@ -30,6 +30,7 @@ export class Category extends BaseEntity {
 
   @OneToMany(() => SubCategory, (subcat) => subcat.category, {
     cascade: true,
+    onDelete: "CASCADE",
   })
   subCatagories: SubCategory[];
 

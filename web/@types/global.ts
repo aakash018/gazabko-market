@@ -82,6 +82,15 @@ export interface ProtuctType {
   updated_at: string;
 }
 
+export interface ReturnMessageType {
+  id: string;
+  message: string;
+  created_at: string;
+  updated_at: string;
+  requestAccepted: boolean;
+  requestRejected: boolean;
+}
+
 export interface Order {
   color: string;
   id: number;
@@ -91,6 +100,8 @@ export interface Order {
   status: "pending" | "processing" | "delivered";
   deliveryAddress: string;
   price: number;
+  isToBeReturned: boolean;
+  return?: ReturnMessageType;
   nearestLandmark: string;
   latlng: string;
   user?: User;
