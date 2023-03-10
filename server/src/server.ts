@@ -36,6 +36,7 @@ import adminProducts from "./api/admin/products";
 import adminCustomers from "./api/admin/customers";
 import adminAccount from "./api/admin/account";
 import adminOffers from "./api/admin/edit/offers";
+import analytics from "./api/seller/analytics";
 import adminCategory from "./api/admin/edit/category";
 //?? RETURN REVIEW REPORT
 import rrr from "./api/rrr";
@@ -152,6 +153,7 @@ app.use("/sellerOrder", sellerOrder);
 app.use("/seller/followers", sellerFollowers);
 app.use("/seller/update", sellerUpdate);
 app.use("/seller/commission", sellerCommission);
+app.use("/seller/analytics", analytics);
 
 app.use("/admin/auth", adminAuth);
 app.use("/admin/getCounts", adminCounts);

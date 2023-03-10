@@ -3,6 +3,7 @@ import validateSeller from "../../middleware/validateSeller";
 import { Order } from "../../entities/Orders";
 import { Follow } from "../../entities/Follow";
 import { Products } from "../../entities/Products";
+import { User } from "src/entities/User";
 
 const router = express();
 
@@ -10,14 +11,6 @@ router.get("/", validateSeller, async (req, res) => {
   try {
     const result = await Order.createQueryBuilder("entity")
       .leftJoin("entity.product", "product")
-      .where({
-        status: "delivered",
-        product: {
-          seller: {
-            id: req.session.sellerID,
-          },
-        },
-      })
       .select("DATE_TRUNC('month', entity.created_at::timestamp)", "date")
       .addSelect("SUM(entity.price)", "count")
       .groupBy("date")
@@ -28,19 +21,13 @@ router.get("/", validateSeller, async (req, res) => {
       .leftJoin("entity.product", "product")
       .where({
         status: "delivered",
-        product: {
-          seller: {
-            id: req.session.sellerID,
-          },
-        },
       })
       .select("DATE_TRUNC('month', entity.created_at::timestamp)", "date")
       .addSelect("COUNT(*)", "count")
       .groupBy("date")
       .orderBy("date")
       .getRawMany();
-    const followers = await Follow.createQueryBuilder("follow")
-      .where({ sellerId: req.session.sellerID })
+    const followers = await User.createQueryBuilder("follow")
       .select("DATE_TRUNC('month', follow.created_at::timestamp)", "date")
       .addSelect("COUNT(*)", "count")
       .groupBy("date")

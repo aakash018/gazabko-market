@@ -5,9 +5,11 @@ import { Line } from "react-chartjs-2";
 interface Props {
   subTitle: string;
   amount: number;
+  labels: string[];
+  data: number[];
 }
 
-const LineGraphInfo: React.FC<Props> = ({ subTitle, amount }) => {
+const LineGraphInfo: React.FC<Props> = ({ subTitle, amount, data, labels }) => {
   return (
     <div className={styles.lineGraphInfo}>
       <div className={styles.header}>
@@ -17,24 +19,11 @@ const LineGraphInfo: React.FC<Props> = ({ subTitle, amount }) => {
       <div className={styles.chart}>
         <Line
           data={{
-            labels: [
-              "Jan",
-              "Feb",
-              "Mar",
-              "Apr",
-              "May",
-              "Jun",
-              "Juy",
-              "Aug",
-              "Sep",
-              "Oct",
-              "Nov",
-              "Dec",
-            ],
+            labels: labels,
             datasets: [
               {
                 label: "Total Customer",
-                data: [13, 44, 34, 15, 56, 34, 83, 25, 88, 35, 35, 35],
+                data: data,
                 fill: false,
                 borderColor: "rgb(255, 99, 132)",
                 tension: 0.1,

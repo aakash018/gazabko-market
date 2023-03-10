@@ -14,7 +14,7 @@ const CustomerDetails = () => {
   const [followerInfo, setFollowerInfo] = useState<FollowerType | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { uid } = router.query;
+  const { id, uid } = router.query;
 
   const { setAlert } = useAlert();
 

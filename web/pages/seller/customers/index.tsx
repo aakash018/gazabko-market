@@ -80,7 +80,7 @@ const CustomersPage = () => {
               res.data.followers?.map((follower, i) => ({
                 SN: i,
                 Name: follower.user.lastName,
-                "Signed Up Date": follower.user.created_at,
+                "Signed Up Date": follower.user.created_at.split("T")[0],
                 "Total Items Boughts": 10,
                 Uid: follower.user.id,
               }));
@@ -130,7 +130,7 @@ const CustomersPage = () => {
           title="All Followers"
           width={790}
           onRowClick={(event) => {
-            Router.push(`/seller/customers/${event.data.Uid}`);
+            Router.push(`/seller/customers/id?uid=${event.data.Uid}`);
           }}
         />
       </div>

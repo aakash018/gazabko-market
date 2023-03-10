@@ -249,9 +249,7 @@ const CheckoutPage = () => {
                       )}
                       <section className={`${styles.data} ${styles.total}`}>
                         <span className={styles.title}>Total: </span>
-                        <span className={styles.number}>
-                          Rs. {totalPrice + 60}{" "}
-                        </span>
+                        <span className={styles.number}>Rs. {totalPrice} </span>
                       </section>
                       <section className={styles.actionBtn}>
                         <Button onClick={handleSubmit}>CONFIRM ORDER</Button>

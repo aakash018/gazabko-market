@@ -26,10 +26,24 @@ const Pending: React.FC = () => {
   const [columnDefs] = useState([
     { field: "SN", width: 60 },
     { field: "Product" },
-    { field: "Quntity", width: 150 },
+    { field: "Quantity", width: 150 },
     { field: "Order No" },
     { field: "Size", width: 70 },
     { field: "Color", width: 80 },
+    {
+      field: "Details",
+      cellRenderer: () => (
+        <div
+          style={{
+            fontWeight: "bold",
+            color: "var(--theme-color)",
+            cursor: "pointer",
+          }}
+        >
+          View
+        </div>
+      ),
+    },
   ]);
 
   useEffect(() => {
@@ -93,8 +107,10 @@ const Pending: React.FC = () => {
             columData={columnDefs}
             rowData={rowData}
             height={800}
-            onRowClick={(event) => {
-              Router.push(`/seller/order/${event.data["Order No"]}`);
+            onCellClicked={(event) => {
+              if (event.colDef.field === "Details") {
+                Router.push(`/seller/orders/id?oid=${event.data["Order No"]}`);
+              }
             }}
           />
         )}
