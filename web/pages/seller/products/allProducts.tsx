@@ -1,30 +1,34 @@
 import { AgGridReact } from "ag-grid-react";
 import Router from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { BiEdit } from "react-icons/bi";
 import SearchBar from "../../../components/Admin/shared/SearchBar";
 import SellerNav from "../../../components/Seller/SellerNav";
 
 import styles from "../../../styles/components/Seller/pages/AllProducts.module.scss";
-
+import { Category, ProtuctType } from "../../../@types/global";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import axios from "axios";
+import { useAlert } from "../../_app";
+import { SelectionChangedEvent } from "ag-grid-community";
 
 type TableDef = {
   SN: number;
   Product: string;
-  Vendor: string;
   "Item Sold": number;
   "Item Status": string;
-  Reviews: string;
-  Edit: any;
-  "Hide Item": any;
 };
 
 const AllProducts = () => {
-  const [rowData] = useState<TableDef[]>([]);
-
+  const [rowData, setRowData] = useState<TableDef[]>([]);
+  const { setAlert } = useAlert();
   const [columnDefs] = useState([
     { field: "SN", width: 70 },
     { field: "Product", width: 190 },
@@ -78,7 +82,7 @@ const AllProducts = () => {
       ),
     },
   ]);
-
+  const [categories, setCategories] = useState<Category[]>([]);
   const fetchProductsWithCat = async (cat: string = "All Products") => {
     try {
       const res = await axios.get(
@@ -94,7 +98,88 @@ const AllProducts = () => {
     } catch {}
   };
 
-  useEffect(() => {}, []);
+  const handleCatChange = async (e: FormEvent<HTMLSelectElement>) => {
+    console.log("RAN");
+    try {
+      const res = await axios.get<RespondType & { products: ProtuctType[] }>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/getProductsWithCat`,
+        {
+          params: {
+            category: e.currentTarget.value,
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (res.data.status === "ok") {
+        const productTable: TableDef[] = res.data.products.map((prod, i) => ({
+          SN: i + 1,
+          "Item Sold": prod.timesBought,
+          Product: prod.name,
+          "Item Status": prod.totalStock > 0 ? "In Stock" : "Out of Stock",
+        }));
+        console.log(res.data);
+        setRowData(productTable);
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      setAlert({
+        type: "error",
+        message: "failed to connect to server",
+      });
+    }
+  };
+
+  useEffect(() => {
+    let ignore = false;
+    if (!ignore) {
+      (async () => {
+        try {
+          const res = await axios.get<
+            RespondType & { products?: ProtuctType[]; categories: Category[] }
+          >(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/getAllProducts`,
+            { withCredentials: true }
+          );
+
+          if (res.data.status === "ok" && res.data.products) {
+            const productTable: TableDef[] = res.data.products.map(
+              (product, i) => ({
+                SN: i + 1,
+                Product: product.name,
+                "Item Sold": product.timesBought,
+                "Item Status":
+                  product.totalStock > 0 ? "In Stock" : "Out Of Stock",
+              })
+            );
+            // console.log(productTable);
+            setRowData(productTable);
+
+            setCategories(res.data.categories);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        } catch {
+          setAlert({
+            type: "error",
+            message: "failed to connect to servers",
+          });
+        }
+      })();
+    }
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const searchRef = useRef<HTMLInputElement>(null);
   return (
@@ -103,15 +188,14 @@ const AllProducts = () => {
       <div className={styles.allProducts}>
         <div className={styles.categories}>
           <h2>Choose Category</h2>
-          <select>
+          <select onChange={handleCatChange}>
             <option value={"All Categories"}>All Categories</option>
-            <option value={"Women's Fashion"}>Women's Fashion</option>
-            <option value={"Men's Fashion"}>Men's Fashion</option>
-            <option value={"Health And Beauty"}>Health And Beauty</option>
-            <option value={"TV & Home Appliance"}>TV & Home Appliance</option>
-            <option value={"Babies & Toys"}>abies & Toys</option>
-            <option value={"Home & Lifestyle"}>Home & Lifestyle</option>
-            <option value={"Sports & Outdoor"}>Sports & Outdoor</option>
+
+            {categories.map((cat, i) => (
+              <option value={cat.name} key={i}>
+                {cat.name}
+              </option>
+            ))}
           </select>
         </div>
         <div className={styles.tableContainer}>

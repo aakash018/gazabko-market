@@ -1,13 +1,12 @@
 import express from "express";
-import validateSeller from "../../middleware/validateSeller";
+import { Seller } from "../../entities/seller/Seller";
 import { Order } from "../../entities/Orders";
-import { Follow } from "../../entities/Follow";
-import { Products } from "../../entities/Products";
-import { User } from "src/entities/User";
+import { User } from "../../entities/User";
+import validateAdmin from "../../middleware/validateAdmin";
 
 const router = express();
 
-router.get("/", validateSeller, async (req, res) => {
+router.get("/", validateAdmin, async (req, res) => {
   try {
     const result = await Order.createQueryBuilder("entity")
       .leftJoin("entity.product", "product")
@@ -33,6 +32,15 @@ router.get("/", validateSeller, async (req, res) => {
       .groupBy("date")
       .orderBy("date")
       .getRawMany();
+
+    const seller = await Seller.createQueryBuilder("follow")
+      .select("DATE_TRUNC('month', follow.created_at::timestamp)", "date")
+      .addSelect("COUNT(*)", "count")
+      .groupBy("date")
+      .orderBy("date")
+      .getRawMany();
+
+    console.log(seller);
 
     // const mostSoldProduct = await Order.createQueryBuilder("order")
     //   .where("EXTRACT(month FROM order.created_at) = :month", {
@@ -63,7 +71,7 @@ router.get("/", validateSeller, async (req, res) => {
       message: "order with months found",
       orderWithMonth: result,
       followersWithMonth: followers,
-      noOfOrdersByMonth: monthlyOrder,
+      noOfOrdersByMonth: seller,
     });
   } catch (e) {
     console.log(e);

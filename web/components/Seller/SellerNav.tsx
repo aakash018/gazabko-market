@@ -9,6 +9,9 @@ import styles from "../../styles/components/Seller/SellerNav.module.scss";
 import { TbTruckDelivery } from "react-icons/tb";
 import { FaPercentage } from "react-icons/fa";
 import NotificationHolder from "../shared/NotificationHolder";
+import axios from "axios";
+import { useAuth } from "../../context/User";
+import { useAlert } from "../../pages/_app";
 
 interface Props {
   children: React.ReactNode;
@@ -17,7 +20,33 @@ interface Props {
 const SellerNav: React.FC<Props> = ({ children }) => {
   const [notiOpen, setNotiOpen] = useState(false);
   const [orderOpen, setOrderOpen] = useState(false);
+
+  const { setAlert } = useAlert();
+  const { logout } = useAuth();
   const [warningOpen, setWarningOpen] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      const res = await logout();
+      if (res?.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.message,
+        });
+        Router.push("/seller");
+      } else {
+        setAlert({
+          type: "error",
+          message: "error logging out",
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed to connect to server",
+      });
+    }
+  };
 
   return (
     <>
@@ -115,7 +144,7 @@ const SellerNav: React.FC<Props> = ({ children }) => {
             </Button>
           </div>
           <div className={styles.logoutBtn}>
-            <Button look="outlined" color="error">
+            <Button look="outlined" color="error" onClick={handleLogout}>
               <span style={{ color: "var(--default-red)", fontWeight: 700 }}>
                 LOGOUT
               </span>

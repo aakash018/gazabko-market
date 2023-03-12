@@ -225,7 +225,7 @@ router.get("/logout", (req, res) => {
         res.clearCookie("qid");
         res.json({
           status: "ok",
-          message: "logged out sucessufully",
+          message: "logged out successfully",
         });
       }
     });

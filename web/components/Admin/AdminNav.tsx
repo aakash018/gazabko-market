@@ -4,21 +4,15 @@ import Image from "next/image";
 import Button from "../shared/Button";
 import { MdSpaceDashboard } from "react-icons/md";
 import { AiFillDollarCircle, AiFillEdit } from "react-icons/ai";
-import {
-  BiBell,
-  BiHappyBeaming,
-  BiMessage,
-  BiNotification,
-  BiPackage,
-} from "react-icons/bi";
+import { BiHappyBeaming } from "react-icons/bi";
 import { RiAccountCircleFill } from "react-icons/ri";
 
 import { FiPackage } from "react-icons/fi";
 import Router from "next/router";
-import { IoMdWarning } from "react-icons/io";
 import NotificationHolder from "../shared/NotificationHolder";
-import { BsTruck } from "react-icons/bs";
 import { FaTruck } from "react-icons/fa";
+import { useAlert } from "../../pages/_app";
+import { useAuth } from "../../context/User";
 
 interface Props {
   children: React.ReactNode;
@@ -28,9 +22,34 @@ const AdminLayout: React.FC<Props> = ({ children }) => {
   const [notiOpen, setNotiOpen] = useState(false);
   const [orderOpen, setOrderOpen] = useState(false);
   const [warningOpen, setWarningOpen] = useState(false);
+  const { setAlert } = useAlert();
+  const { logout } = useAuth();
 
   const handleToggleNoti = () => {
     setNotiOpen((prev) => !prev);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const res = await logout();
+      if (res?.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.message,
+        });
+        Router.push("/admin");
+      } else {
+        setAlert({
+          type: "error",
+          message: "error logging out",
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed to connect to server",
+      });
+    }
   };
 
   return (
@@ -133,7 +152,7 @@ const AdminLayout: React.FC<Props> = ({ children }) => {
             </Button>
           </div>
           <div className={styles.logoutBtn}>
-            <Button look="filled" color="error">
+            <Button look="filled" color="error" onClick={handleLogout}>
               LOGOUT
             </Button>
           </div>

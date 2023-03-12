@@ -27,6 +27,40 @@ router.get("/", async (_, res) => {
   });
 });
 
+router.get("/getAllProducts", validateSeller, async (req, res) => {
+  try {
+    const products = await Products.find({
+      where: { seller: { id: req.session.sellerID } },
+      select: {
+        id: true,
+        name: true,
+        timesBought: true,
+        totalStock: true,
+      },
+      order: { name: "ASC" },
+      take: 10,
+    });
+
+    const categories = await Category.find({
+      select: {
+        name: true,
+      },
+    });
+
+    res.json({
+      status: "ok",
+      message: "products found",
+      products,
+      categories,
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to get data",
+    });
+  }
+});
+
 router.post("/add", validateSeller, async (req, res) => {
   const productDetails: ProductPayloadType = req.body;
 
@@ -356,24 +390,56 @@ router.get("/hiddenProducts", validateSeller, async (req, res) => {
   }
 });
 
-// router.get("/getProductsWithCat", validateSeller, async(req,res) => {
-//   const userReq = req.query as unknown as {category: string}
+router.get("/getProductsWithCat", validateSeller, async (req, res) => {
+  const userReq = req.query as unknown as { category: string };
 
-//   try {
-//     let products;
-//     if(userReq.category === "All Products") {
-//       products = await Products.find({take: 10, where: {seller: {id: req.session.sellerID}}})
-//     } else {
-//       products = await Products.find({
-//         where: {seller: {id: req.session.sellerID},
-//         category:
+  try {
+    let products;
+    if (userReq.category === "All Categories") {
+      products = await Products.find({
+        where: { seller: { id: req.session.sellerID } },
+      });
+    } else {
+      products = await Products.find({
+        where: {
+          seller: { id: req.session.sellerID },
+          category: {
+            name: userReq.category,
+          },
+        },
+        select: {
+          name: true,
+          timesBought: true,
+          totalStock: true,
+        },
+      });
 
-//       }
-//       })
-//     }
-//   } catch {
-
-//   }
-// });
+      // console.table(
+      //   await Products.find({
+      //     select: {
+      //       name: true,
+      //       category: {
+      //         name: true,
+      //       },
+      //     },
+      //     relations: {
+      //       category: true,
+      //     },
+      //   })
+      // );
+    }
+    console.log(products);
+    res.json({
+      status: "ok",
+      message: "products found",
+      products,
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to find products",
+    });
+  }
+});
 
 export default router;

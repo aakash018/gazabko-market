@@ -27,13 +27,14 @@ const Account: React.FC = () => {
   const { seller } = useAuth();
   const { setAlert } = useAlert();
   useEffect(() => {
+    console.log(seller);
     if (seller) {
       setUsername(seller.username);
       setStoreAddress(seller.address);
       setStoreName(seller.storeName);
       setContactPerson(seller.contactPerson);
       setPhoneNo(seller.phoneNo.toString());
-      setPanNo(seller.panNo.toString() || "");
+      setPanNo(seller.panNo || "");
       setEmail(seller.email || "");
     }
   }, [seller]);

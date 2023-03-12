@@ -107,6 +107,7 @@ const Provider: React.FC<Props> = ({ children }) => {
     if (type === "customer") {
       setUser(res.data.user);
     } else if (type === "seller") {
+      console.log(res.data);
       setSeller(res.data.user);
     } else if (type === "admin") {
       setAdmin(res.data.user);

@@ -34,6 +34,7 @@ import adminCounts from "./api/admin/getCounts";
 import adminSeller from "./api/admin/seller";
 import adminProducts from "./api/admin/products";
 import adminCustomers from "./api/admin/customers";
+import adminAnalytics from "./api/admin/analytics";
 import adminAccount from "./api/admin/account";
 import adminOffers from "./api/admin/edit/offers";
 import analytics from "./api/seller/analytics";
@@ -165,6 +166,7 @@ app.use("/admin/customers", adminCustomers);
 app.use("/admin/account", adminAccount);
 app.use("/admin/offers", adminOffers);
 app.use("/admin/category", adminCategory);
+app.use("/admin/analytics", adminAnalytics);
 //?? RETURN REVIEW REPORT
 app.use("/rrr", rrr);
 

@@ -22,7 +22,7 @@ const LineGraphInfo: React.FC<Props> = ({ subTitle, amount, data, labels }) => {
             labels: labels,
             datasets: [
               {
-                label: "Total Customer",
+                label: subTitle,
                 data: data,
                 fill: false,
                 borderColor: "rgb(255, 99, 132)",
