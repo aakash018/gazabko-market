@@ -83,23 +83,8 @@ const AllProducts = () => {
     },
   ]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const fetchProductsWithCat = async (cat: string = "All Products") => {
-    try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/products/allProducts`,
-        {
-          withCredentials: true,
-          params: {
-            category: cat,
-          },
-        }
-      );
-      console.log(res.data);
-    } catch {}
-  };
 
   const handleCatChange = async (e: FormEvent<HTMLSelectElement>) => {
-    console.log("RAN");
     try {
       const res = await axios.get<RespondType & { products: ProtuctType[] }>(
         `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/getProductsWithCat`,
@@ -157,7 +142,6 @@ const AllProducts = () => {
                   product.totalStock > 0 ? "In Stock" : "Out Of Stock",
               })
             );
-            // console.log(productTable);
             setRowData(productTable);
 
             setCategories(res.data.categories);

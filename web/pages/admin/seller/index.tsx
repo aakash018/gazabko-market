@@ -1,7 +1,7 @@
 import { AgGridReact } from "ag-grid-react";
 import React, { useEffect, useState } from "react";
 import { BiCheckCircle } from "react-icons/bi";
-import { MdDisabledVisible, MdPending, MdWarning } from "react-icons/md";
+import { MdDisabledVisible, MdPending } from "react-icons/md";
 import AdminLayout from "../../../components/Admin/AdminNav";
 import InfoCard from "../../../components/Admin/shared/InfoCard";
 
@@ -10,10 +10,7 @@ import styles from "../../../styles/components/Admin/pages/SellerPage.module.scs
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import Router from "next/router";
-import { TbDisabled } from "react-icons/tb";
 import axios from "axios";
-import { setLabels } from "react-chartjs-2/dist/utils";
-import { count } from "console";
 import { useAlert } from "../../_app";
 import { Seller } from "../../../@types/global";
 

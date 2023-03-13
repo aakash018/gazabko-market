@@ -264,7 +264,7 @@ const DashPage: React.FC = () => {
                 deliveredCount={ordersCount!.delivered}
                 pendingCount={ordersCount!.pending}
                 returnedCount={ordersCount!.returned}
-                processingCount={ordersCount!.pending}
+                processingCount={ordersCount!.processing}
                 processingClick={() => {
                   Router.push("/admin/orders/processing");
                 }}

@@ -408,6 +408,7 @@ router.get("/getProductsWithCat", validateSeller, async (req, res) => {
           },
         },
         select: {
+          id: true,
           name: true,
           timesBought: true,
           totalStock: true,

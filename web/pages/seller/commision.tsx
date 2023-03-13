@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import AdminLayout from "../../components/Admin/AdminNav";
 import Button from "../../components/shared/Button";
 import IntputField from "../../components/shared/Input";
 import { customStyles } from "../../modalStyle";
@@ -10,6 +9,7 @@ import SellerNav from "../../components/Seller/SellerNav";
 import axios from "axios";
 import { Category, SubCategory } from "../../@types/global";
 import { useAlert } from "../_app";
+import Router from "next/router";
 
 interface CategoryTableDef {
   SN: number;
@@ -24,8 +24,16 @@ interface SubCAtegoryTableDef {
   Commission: string;
 }
 
+interface ProductComTableDef {
+  SN: number;
+  "Product's Name": string;
+  Commission: number;
+  id: any;
+}
+
 const EditCommision = () => {
   const searchCatRef = useRef<HTMLInputElement>(null);
+  const [productComLoading, setProductComLoading] = useState(false);
 
   const [comissionRate, setCommisionRate] = useState("300");
   const [comissionRateModal, setCommisionRateModal] = useState(false);
@@ -48,56 +56,28 @@ const EditCommision = () => {
     { field: "Commission" },
   ]);
 
-  const [productRowData] = useState([
-    {
-      SN: 1,
-      "Product's Name": "Golden Princess Shoes",
-      "Belonging Category": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-    {
-      SN: 2,
-      "Product's Name": "Golden Princess Shoes",
-      "Belonging Category": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-    {
-      SN: 3,
-      "Product's Name": "Golden Princess Shoes",
-      "Belonging Category": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-    {
-      SN: 4,
-      "Product's Name": "Golden Princess Shoes",
-      "Belonging Category": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-    {
-      SN: 5,
-      "Product's Name": "Golden Princess Shoes",
-      "Belonging Category": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-    {
-      SN: 6,
-      "Product's Name": "Golden Princess Shoes",
-      "Belonging Category": "Women's Fassion",
-      Commision: "Rs. 300",
-      "Edit Commision": "",
-    },
-  ]);
+  const [productRowData, setProductRowData] = useState<ProductComTableDef[]>(
+    []
+  );
 
   const [productColoumDef] = useState([
     { field: "SN", width: 60 },
     { field: "Product's Name", resizable: true },
-    { field: "Belonging Category", resizable: true },
-    { field: "Commision" },
+    { field: "Commission" },
+    {
+      field: "Details",
+      cellRenderer: () => (
+        <div
+          style={{
+            color: "var(--theme-color)",
+            cursor: "pointer",
+            fontWeight: "bold",
+          }}
+        >
+          View
+        </div>
+      ),
+    },
   ]);
 
   useEffect(() => {
@@ -140,6 +120,53 @@ const EditCommision = () => {
             });
           }
         } catch {
+          setAlert({
+            type: "error",
+            message: "failed to connect to server",
+          });
+        }
+      })();
+
+      (async () => {
+        try {
+          setProductComLoading(true);
+          const res = await axios.get<
+            RespondType & {
+              commissions?: {
+                product: {
+                  name: string;
+                  id: string;
+                };
+                commission: number;
+              }[];
+            }
+          >(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/commission/getProductCommission`,
+            {
+              withCredentials: true,
+            }
+          );
+          console.log(res.data);
+          if (res.data.status === "ok" && res.data.commissions) {
+            const productComTable: ProductComTableDef[] =
+              res.data.commissions?.map((pro, i) => ({
+                "Product's Name": pro.product.name,
+                SN: i + 1,
+                Commission: pro.commission,
+                id: pro.product.id,
+              }));
+
+            setProductRowData(productComTable);
+            setProductComLoading(false);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        } catch (e) {
+          console.log(e);
+          setProductComLoading(false);
           setAlert({
             type: "error",
             message: "failed to connect to server",
@@ -206,13 +233,21 @@ const EditCommision = () => {
           inputRef={searchCatRef}
           width={665}
         />
-        <TableHolder
-          columData={productColoumDef}
-          rowData={productRowData}
-          title="Unique Commision For Products Uploaded"
-          inputRef={searchCatRef}
-          width={665}
-        />
+        {productComLoading && <h2>Loading...</h2>}
+        {!productComLoading && (
+          <TableHolder
+            columData={productColoumDef}
+            rowData={productRowData}
+            title="Unique Commision For Products Uploaded"
+            inputRef={searchCatRef}
+            width={665}
+            onCellClicked={(e) => {
+              if (e.colDef.field === "Details") {
+                Router.push(`/seller/products/id?pid=${e.data.id}`);
+              }
+            }}
+          />
+        )}
       </div>
     </SellerNav>
   );

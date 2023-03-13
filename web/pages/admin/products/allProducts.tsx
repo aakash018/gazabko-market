@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { FaTshirt, FaFan, FaHeartbeat } from "react-icons/fa";
 import { GiAmpleDress } from "react-icons/gi";
 import { IoMdBeer } from "react-icons/io";
@@ -15,6 +15,9 @@ import Router from "next/router";
 import { BiEdit } from "react-icons/bi";
 import AdminLayout from "../../../components/Admin/AdminNav";
 import SearchBar from "../../../components/Admin/shared/SearchBar";
+import axios from "axios";
+import { ProtuctType, Category } from "../../../@types/global";
+import { useAlert } from "../../_app";
 
 type TableDef = {
   SN: number;
@@ -22,76 +25,15 @@ type TableDef = {
   Vendor: string;
   "Item Sold": number;
   "Item Status": string;
-  Reviews: string;
-  Edit: any;
-  "Hide Item": any;
+  id: any;
 };
 
 const AllProducts = () => {
   const searchRef = useRef<HTMLInputElement>(null);
 
-  const [rowData] = useState<TableDef[]>([
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Reviews: "",
-      Edit: "",
-      "Hide Item": "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      Reviews: "",
-      "Hide Item": "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-      Reviews: "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-      Reviews: "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-      Reviews: "",
-    },
-    {
-      SN: 1,
-      Product: "xyz",
-      Vendor: "xyz",
-      "Item Sold": 45,
-      "Item Status": "In Stock",
-      Edit: "",
-      "Hide Item": "",
-      Reviews: "",
-    },
-  ]);
+  const [rowData, setRowData] = useState<TableDef[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const { setAlert } = useAlert();
 
   const [columnDefs] = useState([
     { field: "SN", width: 70 },
@@ -99,37 +41,21 @@ const AllProducts = () => {
     { field: "Vendor", width: 190 },
     { field: "Item Sold", width: 135 },
     { field: "Item Status", width: 135 },
-    {
-      field: "Review",
-      width: 135,
-      cellRenderer: () => (
-        <div
-          onClick={() => Router.push("/admin/edit/editProducts/productReviews")}
-          style={{
-            fontWeight: "bold",
-            color: "var(--theme-color)",
-            cursor: "pointer",
-          }}
-        >
-          View
-        </div>
-      ),
-    },
-    {
-      field: "Edit",
-      width: 105,
-      cellRenderer: () => (
-        <div
-          onClick={() => Router.push("/admin/edit/editProducts/add")}
-          style={{
-            fontSize: "25px",
-            color: "var(--theme-color)",
-          }}
-        >
-          <BiEdit style={{ cursor: "pointer" }} />
-        </div>
-      ),
-    },
+    // {
+    //   field: "Edit",
+    //   width: 105,
+    //   cellRenderer: () => (
+    //     <div
+    //       onClick={() => Router.push("/admin/edit/editProducts/add")}
+    //       style={{
+    //         fontSize: "25px",
+    //         color: "var(--theme-color)",
+    //       }}
+    //     >
+    //       <BiEdit style={{ cursor: "pointer" }} />
+    //     </div>
+    //   ),
+    // },
     {
       field: "Details",
       width: 105,
@@ -148,6 +74,91 @@ const AllProducts = () => {
     },
   ]);
 
+  useEffect(() => {
+    let ignore = false;
+    if (!ignore) {
+      (async () => {
+        try {
+          const res = await axios.get<
+            RespondType & { products?: ProtuctType[]; categories: Category[] }
+          >(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/products/getAllProducts`,
+            { withCredentials: true }
+          );
+          console.log(res.data);
+          if (res.data.status === "ok" && res.data.products) {
+            const productTable: TableDef[] = res.data.products.map(
+              (product, i) => ({
+                SN: i + 1,
+                Product: product.name,
+                "Item Sold": product.timesBought,
+                Vendor: product.seller ? product.seller.storeName : "Admin",
+                id: product.id,
+                "Item Status":
+                  product.totalStock > 0 ? "In Stock" : "Out Of Stock",
+              })
+            );
+
+            setRowData(productTable);
+
+            setCategories(res.data.categories);
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        } catch (e) {
+          console.log(e);
+          setAlert({
+            type: "error",
+            message: "failed to connect to servers",
+          });
+        }
+      })();
+    }
+    return () => {
+      ignore = true;
+    };
+  }, []);
+  const handleCatChange = async (e: FormEvent<HTMLSelectElement>) => {
+    try {
+      const res = await axios.get<RespondType & { products: ProtuctType[] }>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/products/getProductsWithCat`,
+        {
+          params: {
+            category: e.currentTarget.value,
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (res.data.status === "ok") {
+        const productTable: TableDef[] = res.data.products.map((prod, i) => ({
+          SN: i + 1,
+          "Item Sold": prod.timesBought,
+          Product: prod.name,
+          Vendor: prod.seller ? prod.seller.storeName : "Admin",
+          id: prod.id,
+          "Item Status": prod.totalStock > 0 ? "In Stock" : "Out of Stock",
+        }));
+
+        setRowData(productTable);
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      setAlert({
+        type: "error",
+        message: "failed to connect to server",
+      });
+    }
+  };
+
   return (
     <AdminLayout>
       <div>
@@ -155,29 +166,16 @@ const AllProducts = () => {
       </div>
       <div className={styles.allProducts}>
         <div className={styles.categories}>
-          <div className={styles.title}>
-            <h2>Catogries</h2>
-          </div>
-          <div className={styles.list}>
-            <div className={styles.catHolder}>
-              <GiAmpleDress size={"25px"} className={styles.catogryIcon} />
-            </div>
-            <div className={styles.catHolder}>
-              <FaTshirt size={"25px"} className={styles.catogryIcon} />
-            </div>
-            <div className={styles.catHolder}>
-              <FaFan size={"25px"} className={styles.catogryIcon} />
-            </div>
-            <div className={styles.catHolder}>
-              <RiComputerFill size={"25px"} className={styles.catogryIcon} />
-            </div>
-            <div className={styles.catHolder}>
-              <FaHeartbeat size={"25px"} className={styles.catogryIcon} />
-            </div>
-            <div className={styles.catHolder}>
-              <IoMdBeer size={"25px"} className={styles.catogryIcon} />
-            </div>
-          </div>
+          <h2>Choose Category</h2>
+          <select onChange={handleCatChange}>
+            <option value={"All Categories"}>All Categories</option>
+
+            {categories.map((cat, i) => (
+              <option value={cat.name} key={i}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className={styles.table}>
           <div className={styles.search}>
@@ -185,11 +183,16 @@ const AllProducts = () => {
           </div>
           <div
             className={`ag-theme-alpine ${styles.main}`}
-            style={{ height: 350, width: "100%" }}
+            style={{ height: 450, width: 850 }}
           >
             <AgGridReact
               rowData={rowData}
               columnDefs={columnDefs}
+              onCellClicked={(e) => {
+                if (e.colDef.field === "Details") {
+                  Router.push(`/admin/products/id?pid=${e.data!.id}`);
+                }
+              }}
             ></AgGridReact>
           </div>
         </div>

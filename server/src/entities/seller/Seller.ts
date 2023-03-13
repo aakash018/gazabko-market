@@ -7,8 +7,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToOne,
 } from "typeorm";
 import { Category } from "../admin/Cateogries";
+import { ProductCommission } from "../admin/SellerProductCommission";
 import { Follow } from "../Follow";
 import { Products } from "../Products";
 
@@ -66,6 +68,9 @@ export class Seller extends BaseEntity {
 
   @ManyToOne(() => Category, (category) => category.sellers)
   category: Category;
+
+  @OneToOne(() => ProductCommission, (commission) => commission.seller)
+  productCommission: ProductCommission;
 
   @Column({ default: false })
   isBanned: boolean;

@@ -1,4 +1,5 @@
 import express from "express";
+import { ProductCommission } from "../../entities/admin/SellerProductCommission";
 import { Category } from "../../entities/admin/Cateogries";
 import { SubCategory } from "../../entities/admin/SubCategories";
 import validateSeller from "../../middleware/validateSeller";
@@ -45,6 +46,37 @@ router.get("/getCategoryCommission", validateSeller, async (_, res) => {
     res.json({
       status: "fail",
       message: "failed to find commissions",
+    });
+  }
+});
+
+router.get("/getProductCommission", validateSeller, async (req, res) => {
+  try {
+    const commissions = await ProductCommission.find({
+      where: {
+        sellerID: req.session.sellerID,
+      },
+      relations: {
+        product: true,
+      },
+      select: {
+        product: {
+          name: true,
+          id: true,
+        },
+        commission: true,
+      },
+    });
+
+    res.json({
+      status: "ok",
+      message: "data found",
+      commissions,
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to find data",
     });
   }
 });

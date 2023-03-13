@@ -36,7 +36,7 @@ const SellerInfoPage: React.FC = () => {
   const [comissionRateModal, setCommisionRateModal] = useState(false);
 
   const searchRef = useRef<HTMLInputElement>(null);
-
+  const [selectedProductID, setSelectedProductID] = useState();
   const [rowData, setRowData] = useState<TableDef[]>([]);
   const [columnDef] = useState([
     { field: "SN", width: 60 },
@@ -263,6 +263,40 @@ const SellerInfoPage: React.FC = () => {
       });
     }
   };
+
+  const handleCommissionSubmit = async () => {
+    try {
+      console.log(sid);
+      const res = await axios.post<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/seller/addProductCommission`,
+        {
+          sid: sid,
+          pid: selectedProductID,
+          commission: comissionRate,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed to connect to server",
+      });
+    }
+  };
+
   return (
     <AdminLayout>
       <Modal
@@ -284,7 +318,7 @@ const SellerInfoPage: React.FC = () => {
             marginTop: "10px",
           }}
         >
-          <Button>Save</Button>
+          <Button onClick={handleCommissionSubmit}>Save</Button>
           <Button
             color="error"
             onClick={() => {
@@ -399,6 +433,8 @@ const SellerInfoPage: React.FC = () => {
               onCellClicked={(e) => {
                 if (e.colDef.field === "Details") {
                   Router.push(`/admin/products/id?pid=${e.data.id}`);
+                } else if (e.colDef.field === "Edit Commision") {
+                  setSelectedProductID(e.data.id);
                 }
               }}
             />

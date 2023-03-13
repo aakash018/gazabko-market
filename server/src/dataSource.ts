@@ -3,6 +3,7 @@ import { Address } from "./entities/Address";
 import { Admin } from "./entities/admin/Admin";
 import { Category } from "./entities/admin/Cateogries";
 import { Offers } from "./entities/admin/Offers";
+import { ProductCommission } from "./entities/admin/SellerProductCommission";
 import { SubCategory } from "./entities/admin/SubCategories";
 import { SubSubCategory } from "./entities/admin/SubSubCategory";
 import { Cart } from "./entities/Cart/Cart";
@@ -38,6 +39,7 @@ export const AppDataSource = new DataSource({
     Review,
     Question,
     Order,
+    ProductCommission,
     OnCartProduct,
     Follow,
     ToBeVerified,

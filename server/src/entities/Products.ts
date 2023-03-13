@@ -6,10 +6,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToOne,
   OneToMany,
 } from "typeorm";
 import { Category } from "./admin/Cateogries";
 import { Offers } from "./admin/Offers";
+import { ProductCommission } from "./admin/SellerProductCommission";
 import { SubCategory } from "./admin/SubCategories";
 import { SubSubCategory } from "./admin/SubSubCategory";
 import { OnCartProduct } from "./Cart/OnCartProduct";
@@ -81,6 +83,9 @@ export class Products extends BaseEntity {
 
   @Column({ default: 0 })
   timesBought: number;
+
+  @OneToOne(() => ProductCommission, (commission) => commission)
+  commission: ProductCommission;
 
   @Column()
   sku: number;

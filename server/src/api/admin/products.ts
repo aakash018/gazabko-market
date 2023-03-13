@@ -32,6 +32,43 @@ router.get("/oneProductDetail", validateAdmin, async (req, res) => {
   }
 });
 
+router.get("/getAllProducts", validateAdmin, async (req, res) => {
+  try {
+    const products = await Products.find({
+      relations: { seller: true },
+      select: {
+        id: true,
+        seller: {
+          storeName: true,
+        },
+        name: true,
+        timesBought: true,
+        totalStock: true,
+      },
+      order: { name: "ASC" },
+      take: 10,
+    });
+
+    const categories = await Category.find({
+      select: {
+        name: true,
+      },
+    });
+
+    res.json({
+      status: "ok",
+      message: "products found",
+      products,
+      categories,
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to get data",
+    });
+  }
+});
+
 router.get("/topProducts", validateAdmin, async (_, res) => {
   try {
     const topProducts = await Products.find({
@@ -134,5 +171,54 @@ router.post("/addProduct", validateAdmin, async (req, res) => {
     });
   }
 });
+router.get("/getProductsWithCat", validateAdmin, async (req, res) => {
+  const userReq = req.query as unknown as { category: string };
 
+  try {
+    let products;
+    if (userReq.category === "All Categories") {
+      products = await Products.find({
+        relations: { seller: true },
+        select: {
+          name: true,
+          seller: { storeName: true },
+          timesBought: true,
+          totalStock: true,
+          id: true,
+        },
+      });
+    } else {
+      products = await Products.find({
+        relations: {
+          seller: true,
+        },
+        where: {
+          category: {
+            name: userReq.category,
+          },
+        },
+        select: {
+          id: true,
+          seller: {
+            storeName: true,
+          },
+          name: true,
+          timesBought: true,
+          totalStock: true,
+        },
+      });
+    }
+
+    res.json({
+      status: "ok",
+      message: "products found",
+      products,
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to find products",
+    });
+  }
+});
 export default router;

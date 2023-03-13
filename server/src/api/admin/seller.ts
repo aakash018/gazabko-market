@@ -1,4 +1,5 @@
 import express from "express";
+import { ProductCommission } from "../../entities/admin/SellerProductCommission";
 import { Products } from "../../entities/Products";
 import { Seller } from "../../entities/seller/Seller";
 import validateAdmin from "../../middleware/validateAdmin";
@@ -244,6 +245,42 @@ router.get("/deactivatedSellers", validateAdmin, async (_, res) => {
     res.json({
       status: "fail",
       message: "failed to find sellers",
+    });
+  }
+});
+
+router.post("/addProductCommission", validateAdmin, async (req, res) => {
+  const adminReq = req.body as { pid: number; commission: number; sid: string };
+  console.log(adminReq);
+  try {
+    const product = await Products.findOneBy({ id: adminReq.pid });
+    const seller = await Seller.findOneBy({ id: parseInt(adminReq.sid) });
+
+    console.log(seller);
+
+    if (product && seller) {
+      await ProductCommission.create({
+        commission: adminReq.commission,
+        productID: adminReq.pid,
+        sellerID: parseInt(adminReq.sid),
+        seller: seller,
+        product,
+      }).save();
+
+      res.json({
+        status: "ok",
+        message: "commission updated",
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "failed to find product or seller",
+      });
+    }
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to update commission",
     });
   }
 });
