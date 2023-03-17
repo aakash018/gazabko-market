@@ -15,6 +15,7 @@ import { Follow } from "./Follow";
 import { Order } from "./Orders";
 import { Question } from "./QuestionAndAnswer";
 import { Review } from "./Review";
+import { Wishlist } from "./Wishlist";
 
 @Entity()
 export class User extends BaseEntity {
@@ -26,6 +27,10 @@ export class User extends BaseEntity {
 
   @Column()
   lastName: string;
+
+  @OneToOne(() => Wishlist, (Wishlist) => Wishlist.user)
+  @JoinColumn()
+  wishlist: Wishlist;
 
   @Column({ unique: true })
   username: string;

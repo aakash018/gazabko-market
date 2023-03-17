@@ -9,6 +9,7 @@ import bcrypt from "bcrypt";
 import validateUser from "../middleware/validateUser";
 import { Cart } from "../entities/Cart/Cart";
 import { transporter } from "../server";
+import { Wishlist } from "../entities/Wishlist";
 
 const router = express();
 
@@ -53,6 +54,10 @@ router.post("/signup", async (req, res) => {
       user: user,
     }).save();
 
+    await Wishlist.create({
+      user: user,
+    }).save();
+
     const verifyCode = generateCode();
 
     await VerificationCode.create({
@@ -77,13 +82,14 @@ router.post("/signup", async (req, res) => {
       id: user.id,
     });
   } catch (e) {
+    console.log(e);
     if (e.code === "23505") {
-      res.status(500).json({
+      res.json({
         status: "fail",
         message: "duplicate user",
       });
     } else {
-      res.status(500).json({
+      res.json({
         status: "fail",
         message: "internal server error",
       });

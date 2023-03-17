@@ -12,10 +12,10 @@ export class Address extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.address)
+  @ManyToOne(() => User, (user) => user.address, { onDelete: "CASCADE" })
   user: User;
 
-  @Column({ type: "bigint" })
+  @Column({ type: "bigint", nullable: true })
   phoneNo: string;
 
   @Column()

@@ -9,6 +9,10 @@
     background-color: var(--box-bg);
     position: relative;
 
+    &:hover {
+        background-color: var(--box-bg-hover);
+    }
+
     .info {
         display: flex;
         flex-direction: column;

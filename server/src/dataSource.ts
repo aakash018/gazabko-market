@@ -18,6 +18,8 @@ import { Seller } from "./entities/seller/Seller";
 import { ToBeVerified } from "./entities/seller/ToBeVerified";
 import { User } from "./entities/User";
 import { VerificationCode } from "./entities/VerificationCode";
+import { Wishlist } from "./entities/Wishlist";
+import { WishlistProducts } from "./entities/WishListToProduct";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -26,7 +28,7 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   synchronize: true,
-  logging: true,
+  logging: false,
   entities: [
     User,
     Address,
@@ -40,6 +42,8 @@ export const AppDataSource = new DataSource({
     Question,
     Order,
     ProductCommission,
+    Wishlist,
+    WishlistProducts,
     OnCartProduct,
     Follow,
     ToBeVerified,

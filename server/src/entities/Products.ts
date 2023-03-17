@@ -19,6 +19,7 @@ import { Order } from "./Orders";
 import { Question } from "./QuestionAndAnswer";
 import { Review } from "./Review";
 import { Seller } from "./seller/Seller";
+import { WishlistProducts } from "./WishListToProduct";
 
 @Entity()
 export class Products extends BaseEntity {
@@ -86,6 +87,12 @@ export class Products extends BaseEntity {
 
   @OneToOne(() => ProductCommission, (commission) => commission)
   commission: ProductCommission;
+
+  @OneToMany(
+    () => WishlistProducts,
+    (WishlistProducts) => WishlistProducts.product
+  )
+  wishlists: WishlistProducts[];
 
   @Column()
   sku: number;

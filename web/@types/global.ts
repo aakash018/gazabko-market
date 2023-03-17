@@ -75,6 +75,7 @@ export interface ProtuctType {
   offers?: OfferType;
   store?: string;
   color?: string;
+  wishlist: WishlistProductsType[];
   seller: Seller;
   priceAfterDiscount: number;
   timesBought: number;
@@ -174,4 +175,20 @@ export interface Category {
   name: string;
   subCatagories: SubCategory[];
   commission: number;
+}
+
+export interface WishlistProductsType {
+  id: string;
+  product?: ProtuctType;
+  wishlist?: WishlistType;
+  liked: boolean;
+  productID: string;
+  wishlistID: string;
+  created_at: Date;
+}
+
+export interface WishlistType {
+  id: string;
+  user: User;
+  items: WishlistProductsType[];
 }

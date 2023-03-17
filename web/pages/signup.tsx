@@ -170,7 +170,7 @@ const SignUpPage: React.FC = () => {
         setLoading(false);
         return setAlert({
           type: "error",
-          message: "error doing signup",
+          message: response.data.message,
         });
       }
 

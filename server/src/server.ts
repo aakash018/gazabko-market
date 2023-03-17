@@ -21,6 +21,7 @@ import cart from "./api/cart";
 import order from "./api/order";
 import sellerInfo from "./api/sellerInfo";
 import search from "./api/search";
+import wishlist from "./api/wishlist";
 import category from "./api/category";
 import address from "./api/address";
 import sellerOrder from "./api/seller/order";
@@ -136,6 +137,10 @@ app.get("/", async (_, res) => {
   });
 });
 
+app.get("/", (_, res) => {
+  res.send("SERVER IS RUNNING");
+});
+
 //? ROUTERS
 app.use("/auth", auth);
 app.use("/update", update);
@@ -145,6 +150,7 @@ app.use("/question", question);
 app.use("/cart", cart);
 app.use("/order", order);
 app.use("/search", search);
+app.use("/wishlist", wishlist);
 app.use("/address", address);
 app.use("/offers", offers);
 app.use("/category", category);

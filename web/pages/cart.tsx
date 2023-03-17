@@ -198,6 +198,7 @@ const Cart: React.FC = () => {
                         check={checkList[i]}
                         onChecked={() => onItemCheck(i)}
                         name={product.product.name}
+                        totalStock={product.product.totalStock}
                         discount={
                           product.product.offers &&
                           product.product.offers!.starting_date <= new Date() &&

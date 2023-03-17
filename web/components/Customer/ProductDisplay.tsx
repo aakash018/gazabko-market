@@ -7,6 +7,8 @@ import {
   BsBagPlusFill,
   BsCashStack,
   BsFillCartPlusFill,
+  BsHeart,
+  BsHeartFill,
   BsStarFill,
   BsStarHalf,
 } from "react-icons/bs";
@@ -104,6 +106,36 @@ const ProductInfoDisplay: React.FC<Props> = ({
       setAlert({
         type: "error",
         message: res.data.message,
+      });
+    }
+  };
+
+  const handleAddToWishlist = async () => {
+    try {
+      const res = await axios.post<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/wishlist/add`,
+        {
+          pid: id,
+        },
+        { withCredentials: true }
+      );
+
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      setAlert({
+        type: "error",
+        message: "faield to connect to servers",
       });
     }
   };
@@ -259,6 +291,12 @@ const ProductInfoDisplay: React.FC<Props> = ({
             </>
           )}
         </section>
+        <Button color="success" look="outlined" onClick={handleAddToWishlist}>
+          <span>
+            <BsHeartFill style={{ color: "var(--default-red)" }} size="2rem" />{" "}
+          </span>
+          <span>Add to Wishlist</span>
+        </Button>
         <section className={styles.productDisplay__productInfo_aditionalInfo}>
           <section className={styles.policy}>
             <span>Return Policy</span>
