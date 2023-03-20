@@ -14,7 +14,7 @@ import { useAlert } from "../_app";
 
 const SearchResult: React.FC = () => {
   const router = useRouter();
-  const { parameter } = router.query;
+  const { search, parameter } = router.query;
 
   const [priceRangeSlider, setPriceRangeSlider] = useState([0, 100]);
   const [products, setProducts] = useState<ProtuctType[]>([]);
@@ -41,6 +41,7 @@ const SearchResult: React.FC = () => {
         {
           params: {
             keyword: parameter,
+            category: search,
           },
         }
       );
@@ -66,7 +67,7 @@ const SearchResult: React.FC = () => {
     return () => {
       ignore = true;
     };
-  }, [parameter]);
+  }, [parameter, search]);
 
   const handleSortByChange = async (e: ChangeEvent<HTMLSelectElement>) => {
     console.log(e.target.value);
@@ -181,7 +182,7 @@ const SearchResult: React.FC = () => {
             <section className={styles.catToSearchIn}>
               <SideBarNav
                 title="Category to Search In "
-                options={["Electronics", "Men's Fassion", "Women's Fassion"]}
+                options={["Electronics", "Men's Fashion", "Women's Fashion"]}
               />
             </section>
             <section className={styles.priceRange}>

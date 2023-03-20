@@ -136,6 +136,7 @@ const SellerPage = () => {
 
   const [loading, setLoading] = useState(false);
   const { setAlert } = useAlert();
+
   const [monthlyOrder, setMonthlyOrder] = useState<{
     label: string[];
     data: number[];
@@ -148,6 +149,11 @@ const SellerPage = () => {
     label: string[];
     data: number[];
   }>();
+
+  const [topProductsCount, setTopProductsCount] = useState<
+    [{ [key: string]: number }, string[]] | null
+  >(null);
+
   useEffect(() => {
     let ignore = false;
     if (!ignore) {
@@ -173,6 +179,9 @@ const SellerPage = () => {
               orderWithMonth?: orderWithMonth[];
               followersWithMonth?: orderWithMonth[];
               noOfOrdersByMonth?: orderWithMonth[];
+              mostBoughtProductCount?: {
+                [key: string]: number;
+              };
             }
           >(`${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/analytics`, {
             withCredentials: true,
@@ -180,7 +189,8 @@ const SellerPage = () => {
           if (
             res.data.status === "ok" &&
             res.data.orderWithMonth &&
-            res.data.followersWithMonth
+            res.data.followersWithMonth &&
+            res.data.mostBoughtProductCount
           ) {
             const monthlyDataLabels = res.data.orderWithMonth.map(
               (ele) => labels[new Date(ele.date).getMonth()]
@@ -205,6 +215,11 @@ const SellerPage = () => {
             const noOfMonthlyOrderData = res.data.noOfOrdersByMonth!.map(
               (ele) => ele.count
             );
+
+            setTopProductsCount([
+              res.data.mostBoughtProductCount,
+              Object.keys(res.data.mostBoughtProductCount),
+            ]);
 
             setMonthlyOrder({
               data: monthlyOrderData,
@@ -282,38 +297,41 @@ const SellerPage = () => {
               />
             </div>
             <div className={styles.doughnutCharts}>
-              <DashInfoHolder
+              {/* <DashInfoHolder
                 totalEarning={37575}
                 first={{
                   name: "Gazabko Bar",
-                  amount: 12_500,
+                  amount: "Rs 12_500",
                 }}
                 second={{
-                  name: "Women’s Fasion",
-                  amount: 13000,
+                  name: "Women’s Fashion",
+                  amount: "Rs 13000",
                 }}
                 third={{
                   name: "Electronic Devices",
-                  amount: 8000,
+                  amount: "Rs 8000",
                 }}
                 onClick={() => {}}
-              />
-              <DashInfoHolder
-                totalEarning={314}
-                first={{
-                  name: "NEKO glasses",
-                  amount: 134,
-                }}
-                second={{
-                  name: "5star Wears",
-                  amount: 45,
-                }}
-                third={{
-                  name: "Xiomi 42’ Smart TV",
-                  amount: 21,
-                }}
-                onClick={() => {}}
-              />
+              /> */}
+              {topProductsCount && (
+                <DashInfoHolder
+                  title="Most Sold Products This Most"
+                  totalEarning={314}
+                  first={{
+                    name: topProductsCount[1][0],
+                    amount: `${topProductsCount[0][topProductsCount[1][0]]}`,
+                  }}
+                  second={{
+                    name: topProductsCount[1][1],
+                    amount: `${topProductsCount[0][topProductsCount[1][1]]}`,
+                  }}
+                  third={{
+                    name: topProductsCount[1][2],
+                    amount: `${topProductsCount[0][topProductsCount[1][2]]}`,
+                  }}
+                  onClick={() => {}}
+                />
+              )}
             </div>
             <div className={styles.earningGraph}>
               <span>Your Monthly Sales</span>

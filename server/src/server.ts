@@ -14,23 +14,25 @@ import { createClient } from "redis";
 import auth from "./api/auth";
 import update from "./api/update";
 import offers from "./api/offers";
-import sellerAuth from "./api/seller/auth";
-import products from "./api/seller/product";
-import question from "./api/question";
+import brand from "./api/brand";
 import cart from "./api/cart";
 import order from "./api/order";
-import sellerInfo from "./api/sellerInfo";
+import question from "./api/question";
+import products from "./api/seller/product";
 import search from "./api/search";
-import wishlist from "./api/wishlist";
 import category from "./api/category";
 import address from "./api/address";
+import wishlist from "./api/wishlist";
+import orders from "./api/admin/orders";
+
+import sellerAuth from "./api/seller/auth";
+import sellerInfo from "./api/sellerInfo";
 import sellerOrder from "./api/seller/order";
 import sellerFollowers from "./api/seller/followers";
 import sellerUpdate from "./api/seller/update";
 import sellerCommission from "./api/seller/comission";
 
 import adminAuth from "./api/admin/auth";
-import orders from "./api/admin/orders";
 import adminCounts from "./api/admin/getCounts";
 import adminSeller from "./api/admin/seller";
 import adminProducts from "./api/admin/products";
@@ -42,7 +44,6 @@ import analytics from "./api/seller/analytics";
 import adminCategory from "./api/admin/edit/category";
 //?? RETURN REVIEW REPORT
 import rrr from "./api/rrr";
-import { Products } from "./entities/Products";
 import { Admin } from "./entities/admin/Admin";
 
 const app = express();
@@ -128,15 +129,6 @@ AppDataSource.initialize()
     console.log("Error initializing Data Source !!!", e);
   });
 
-app.get("/", async (_, res) => {
-  console.log(
-    await Products.findOne({ where: { id: 2 }, relations: { seller: true } })
-  );
-  res.json({
-    status: "working",
-  });
-});
-
 app.get("/", (_, res) => {
   res.send("SERVER IS RUNNING");
 });
@@ -154,6 +146,7 @@ app.use("/wishlist", wishlist);
 app.use("/address", address);
 app.use("/offers", offers);
 app.use("/category", category);
+app.use("/brand", brand);
 
 app.use("/sellerInfo", sellerInfo);
 app.use("/sellerOrder", sellerOrder);

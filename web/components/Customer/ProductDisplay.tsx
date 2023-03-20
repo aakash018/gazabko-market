@@ -204,7 +204,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
           </section>
           <section style={{ marginTop: "5px", fontSize: "1.3rem" }}>
             Brand:{" "}
-            <Link href="/brand/goldstar">
+            <Link href={`/brand/brand?name=${brand}`}>
               <span
                 style={{
                   color: "var(--theme-color)",

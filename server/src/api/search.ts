@@ -8,7 +8,7 @@ import { Between, In, Like } from "typeorm";
 const router = express();
 
 router.get("/", async (req, res) => {
-  const userReq = req.query as unknown as { keyword: string };
+  const userReq = req.query as unknown as { keyword: string; category: string };
 
   if (!userReq.keyword) {
     res.json({
@@ -17,21 +17,54 @@ router.get("/", async (req, res) => {
     });
   } else {
     try {
-      const products = await AppDataSource.getRepository(Products)
-        .createQueryBuilder("products")
-        .where("LOWER(products.name) LIKE LOWER(:name)", {
-          name: `%${escapeLikeString(userReq.keyword)}%`,
-        })
-        .limit(16)
-        .getMany();
+      if (userReq.category === "All Categories") {
+        const products = await AppDataSource.getRepository(Products)
+          .createQueryBuilder("products")
+          .where("Lower(products.name) LIKE LOWER(:name)", {
+            name: `%${escapeLikeString(userReq.keyword)}%`,
+          })
+          .limit(16)
+          .getMany();
 
-      console.log(products);
-      res.json({
-        status: "ok",
-        message: "products queried",
-        products,
-      });
-    } catch {
+        res.json({
+          status: "ok",
+          message: "products queried",
+          products,
+        });
+      } else {
+        const products = await AppDataSource.getRepository(Products)
+          .createQueryBuilder("product")
+          .leftJoin("product.category", "category")
+          .leftJoin("product.offers", "offers")
+          .where("LOWER(product.name) LIKE LOWER(:name)", {
+            name: `%${escapeLikeString(userReq.keyword)}%`,
+          })
+          .andWhere("category.name LIKE :category", {
+            category: userReq.category,
+          })
+          .select([
+            "product.id",
+            "product.name",
+            "product.price",
+            "product.priceAfterDiscount",
+            "product.discount",
+            "product.timesBought",
+            "offers.common_discount",
+            "offers.discount",
+            "offers.ending_date",
+            "offers.starting_date",
+          ])
+          .limit(16)
+          .getMany();
+
+        res.json({
+          status: "ok",
+          message: "products queried",
+          products,
+        });
+      }
+    } catch (e) {
+      console.log(e);
       res.json({
         status: "fail",
         message: "failed to return data",
@@ -108,7 +141,6 @@ interface filteredUserReqType {
 
 router.get("/getFilteredProducts", async (req, res) => {
   const userReq = req.query as unknown as filteredUserReqType;
-  console.log(userReq);
   try {
     const products = await Products.find({
       where: {

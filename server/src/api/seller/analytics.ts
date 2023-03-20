@@ -2,7 +2,6 @@ import express from "express";
 import validateSeller from "../../middleware/validateSeller";
 import { Order } from "../../entities/Orders";
 import { Follow } from "../../entities/Follow";
-import { Products } from "../../entities/Products";
 
 const router = express();
 
@@ -27,7 +26,6 @@ router.get("/", validateSeller, async (req, res) => {
     const monthlyOrder = await Order.createQueryBuilder("entity")
       .leftJoin("entity.product", "product")
       .where({
-        status: "delivered",
         product: {
           seller: {
             id: req.session.sellerID,
@@ -39,6 +37,7 @@ router.get("/", validateSeller, async (req, res) => {
       .groupBy("date")
       .orderBy("date")
       .getRawMany();
+
     const followers = await Follow.createQueryBuilder("follow")
       .where({ sellerId: req.session.sellerID })
       .select("DATE_TRUNC('month', follow.created_at::timestamp)", "date")
@@ -47,29 +46,46 @@ router.get("/", validateSeller, async (req, res) => {
       .orderBy("date")
       .getRawMany();
 
-    // const mostSoldProduct = await Order.createQueryBuilder("order")
-    //   .where("EXTRACT(month FROM order.created_at) = :month", {
-    //     month: new Date().getMonth(),
-    //   })
+    const mostSoldProductRaw = await Order.createQueryBuilder("order")
+      .leftJoinAndSelect("order.product", "product")
+      .leftJoin("product.seller", "seller")
+      .where("EXTRACT(month FROM order.created_at) = :month", {
+        month: new Date().getMonth(),
+      })
+      .andWhere("order.status = 'delivered'")
+      .andWhere("seller.id = :id", { id: req.session.sellerID })
+      .select("product.name")
+      .groupBy("product.id, order.id")
+      .orderBy("count(product.id)", "ASC")
+      .getRawMany();
+
+    // const topCategories = await Order.createQueryBuilder("order")
     //   .leftJoinAndSelect("order.product", "product")
-    //   .select("product.name, COUNT(product.name) as count")
-    //   //   .addSelect("COUNT(product.id)", "count")
-    //   .groupBy("product.id, order.id")
-    //   .orderBy("count(product.id)", "ASC")
-    //   //   .limit(3)
-    //   .getRawMany();
-
-    // const mostSoldProduct = await Products.createQueryBuilder("product")
-    //   .leftJoinAndSelect("product.order", "order")
+    //   .leftJoin("product.seller", "seller")
+    //   .leftJoin("product.category", "category")
     //   .where("EXTRACT(month FROM order.created_at) = :month", {
     //     month: new Date().getMonth(),
     //   })
-    //   .loadRelationCountAndMap("product.orderCount", "order")
-    //   .select(["product.name"])
-    //   .groupBy("product.name, order.id")
+    //   .andWhere("order.status = 'delivered'")
+    //   .andWhere("seller.id = :id", { id: req.session.sellerID })
+    //   .select("category.name")
+    //   .addSelect("SUM(order.price)", "count")
+    //   .groupBy("category.id, order.id")
+    //   .orderBy("count(category.id)", "ASC")
     //   .getRawMany();
 
-    // console.log(mostSoldProduct);
+    // console.log(topCategories);
+
+    let mostBoughtProductCount: { [key: string]: number } = {};
+
+    mostSoldProductRaw.forEach((product) => {
+      if (mostBoughtProductCount[product.product_name]) {
+        mostBoughtProductCount[product.product_name] =
+          mostBoughtProductCount[product.product_name] + 1;
+      } else {
+        mostBoughtProductCount[product.product_name] = 1;
+      }
+    });
 
     res.json({
       status: "ok",
@@ -77,6 +93,7 @@ router.get("/", validateSeller, async (req, res) => {
       orderWithMonth: result,
       followersWithMonth: followers,
       noOfOrdersByMonth: monthlyOrder,
+      mostBoughtProductCount,
     });
   } catch (e) {
     console.log(e);

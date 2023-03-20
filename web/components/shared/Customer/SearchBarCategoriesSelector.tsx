@@ -18,9 +18,14 @@ const categoriesList = [
 interface Props {
   height: string;
   categories: Category[];
+  setCategory: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SearchBarCategoriesSelector = ({ height, categories }: Props) => {
+const SearchBarCategoriesSelector = ({
+  height,
+  categories,
+  setCategory,
+}: Props) => {
   return (
     <div>
       <select
@@ -32,8 +37,13 @@ const SearchBarCategoriesSelector = ({ height, categories }: Props) => {
           width: "180px",
           textOverflow: "ellipsis",
         }}
+        onChange={(e) => {
+          setCategory(e.target.value);
+        }}
       >
-        <option value="all">All Categories</option>
+        <option value="All Categories" selected>
+          All Categories
+        </option>
         {categories.map((category, index) => {
           return (
             <option

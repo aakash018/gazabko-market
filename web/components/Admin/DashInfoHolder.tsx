@@ -6,7 +6,7 @@ import styles from "../../styles/components/Admin/DashInfoHolder.module.scss";
 
 type TopItemsType = {
   name: string;
-  amount: number;
+  amount: string;
 };
 
 interface Props {
@@ -24,14 +24,14 @@ const DashInfoHolder: React.FC<Props> = ({
   second,
   third,
   onClick,
-  title = "Total Month Earning",
+  title,
 }) => {
   return (
     <div>
       <div className={styles.chartContainer} onClick={onClick}>
         <div className={styles.info}>
           <div className={styles.totals}>
-            <div className={styles.amount}>Rs. {totalEarning}</div>
+            {/* <div className={styles.amount}>Rs. {totalEarning}</div> */}
             <div className={styles.subTitle}>{title}</div>
           </div>
           <div className={styles.topItems}>
@@ -41,21 +41,21 @@ const DashInfoHolder: React.FC<Props> = ({
                   <div className={styles.first}></div>
                   <span className={styles.item}>{first.name}</span>
                 </div>
-                <span className={styles.amount}>Rs {first.amount}</span>
+                <span className={styles.amount}> {first.amount}</span>
               </li>
               <li>
                 <div className={styles.label}>
                   <div className={styles.second}></div>
                   <span className={styles.item}>{second.name}</span>
                 </div>
-                <span className={styles.amount}>Rs {second.amount}</span>
+                <span className={styles.amount}>{second.amount}</span>
               </li>
               <li>
                 <div className={styles.label}>
                   <div className={styles.third}></div>
                   <span className={styles.item}>{third.name}</span>
                 </div>
-                <span className={styles.amount}>Rs {third.amount}</span>
+                <span className={styles.amount}>{third.amount}</span>
               </li>
             </ul>
           </div>

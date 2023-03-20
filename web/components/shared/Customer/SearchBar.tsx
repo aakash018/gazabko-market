@@ -11,7 +11,7 @@ interface Props {
 
 const SearchBarCustomer: React.FC<Props> = ({ categries }) => {
   const searchInput = useRef<HTMLInputElement>(null);
-
+  const [selectedCat, setSelectedCat] = useState<string>("All Categories");
   const [showOutline, setShowOutline] = useState(false);
 
   const search = () => {
@@ -19,7 +19,11 @@ const SearchBarCustomer: React.FC<Props> = ({ categries }) => {
       searchInput.current?.value.trim() !== "" &&
       searchInput.current?.value
     ) {
-      Router.push(`/search/${encodeURIComponent(searchInput.current?.value)}`);
+      Router.push(
+        `/search/${encodeURIComponent(
+          selectedCat
+        )}?parameter=${encodeURIComponent(searchInput.current?.value)}`
+      );
     }
   };
 
@@ -42,7 +46,11 @@ const SearchBarCustomer: React.FC<Props> = ({ categries }) => {
         onFocus={() => setShowOutline(true)}
         onBlur={() => setShowOutline(false)}
       >
-        <SearchBarCategoriesSelector height="40px" categories={categries} />
+        <SearchBarCategoriesSelector
+          height="40px"
+          categories={categries}
+          setCategory={setSelectedCat}
+        />
         <div style={{ height: "40px" }}>
           <input
             style={{
