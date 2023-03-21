@@ -5,7 +5,7 @@ import styles from "../../styles/components/Seller/SellerDashTabs.module.scss";
 
 interface Props {
   icon: React.ReactNode;
-  number: number;
+  number: string;
   text: string;
 }
 

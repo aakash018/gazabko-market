@@ -66,9 +66,8 @@ export interface ProtuctType {
   sizes?: string;
   tags: string;
   isHidden: boolean;
-  category: string;
-  subCategory: string;
-  subsubCategory?: string;
+  category: Category;
+
   sku: number;
   brand: string;
   images: string;

@@ -16,14 +16,15 @@ const Wishlist: React.FC = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const res = await axios.get<RespondType & { wishlist: WishlistType }>(
+      const res = await axios.get<RespondType & { wishlist?: WishlistType }>(
         `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/wishlist/getWishList`,
         {
           withCredentials: true,
         }
       );
+
       setLoading(false);
-      if (res.data.status === "ok") {
+      if (res.data.status === "ok" && res.data.wishlist) {
         setItems(res.data.wishlist.items);
       } else {
         setAlert({
@@ -31,7 +32,8 @@ const Wishlist: React.FC = () => {
           message: res.data.message,
         });
       }
-    } catch {
+    } catch (e) {
+      console.log(e);
       setLoading(false);
       setAlert({
         type: "error",

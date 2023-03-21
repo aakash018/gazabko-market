@@ -3,6 +3,7 @@ import { Seller } from "../../entities/seller/Seller";
 
 import bcrypt, { hash } from "bcrypt";
 import { AppDataSource } from "../../dataSource";
+import validateSeller from "../../middleware/validateSeller";
 
 const router = express();
 
@@ -91,6 +92,36 @@ router.post("/login", async (req, res) => {
     res.json({
       status: "fail",
       message: "seller not found",
+    });
+  }
+});
+
+router.get("/me", validateSeller, async (req, res) => {
+  try {
+    const seller = await Seller.findOne({
+      where: {
+        id: req.session.sellerID,
+      },
+      select: {
+        username: true,
+        storeName: true,
+        address: true,
+        contactPerson: true,
+        phoneNo: true,
+        email: true,
+        panNo: true,
+      },
+    });
+
+    res.json({
+      status: "ok",
+      message: "data found",
+      seller,
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to find data",
     });
   }
 });

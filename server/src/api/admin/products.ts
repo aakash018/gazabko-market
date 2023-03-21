@@ -4,6 +4,7 @@ import { ProductPayloadType } from "src/types/global";
 import { LessThanOrEqual } from "typeorm";
 import { Products } from "../../entities/Products";
 import validateAdmin from "../../middleware/validateAdmin";
+import { Review } from "../../entities/Review";
 
 const router = express();
 
@@ -32,7 +33,7 @@ router.get("/oneProductDetail", validateAdmin, async (req, res) => {
   }
 });
 
-router.get("/getAllProducts", validateAdmin, async (req, res) => {
+router.get("/getAllProducts", validateAdmin, async (_, res) => {
   try {
     const products = await Products.find({
       relations: { seller: true },
@@ -221,4 +222,48 @@ router.get("/getProductsWithCat", validateAdmin, async (req, res) => {
     });
   }
 });
+
+router.get("/getReviews", validateAdmin, async (_, res) => {
+  try {
+    const reviews = await Review.find({
+      relations: {
+        user: true,
+        product: true,
+      },
+      select: {
+        id: true,
+        review: true,
+        rating: true,
+        created_at: true,
+        product: {
+          name: true,
+          images: true,
+          priceAfterDiscount: true,
+        },
+        user: {
+          firstName: true,
+          lastName: true,
+          avatar: true,
+        },
+      },
+      order: {
+        created_at: "DESC",
+      },
+      take: 16,
+    });
+
+    res.json({
+      status: "ok",
+      message: "reviews found",
+      reviews,
+    });
+  } catch (e) {
+    console.log(e);
+    res.json({
+      status: "fail",
+      message: "failed to find reviews",
+    });
+  }
+});
+
 export default router;

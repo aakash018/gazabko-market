@@ -222,10 +222,10 @@ const SellerInfoPage = () => {
                       {seller?.productCount}
                     </section>
                   </section>
-                  <section className={styles.totalProduct}>
+                  {/* <section className={styles.totalProduct}>
                     <section className={styles.title}>Total Items Sold</section>
                     <section className={styles.number}>13</section>
-                  </section>
+                  </section> */}
                 </div>
               </section>
               <div className="line" style={{ marginTop: 30 }}></div>

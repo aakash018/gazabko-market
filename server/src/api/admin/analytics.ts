@@ -6,7 +6,7 @@ import validateAdmin from "../../middleware/validateAdmin";
 
 const router = express();
 
-router.get("/", validateAdmin, async (req, res) => {
+router.get("/", validateAdmin, async (_, res) => {
   try {
     const result = await Order.createQueryBuilder("entity")
       .leftJoin("entity.product", "product")
@@ -16,16 +16,16 @@ router.get("/", validateAdmin, async (req, res) => {
       .orderBy("date")
       .getRawMany();
 
-    const monthlyOrder = await Order.createQueryBuilder("entity")
-      .leftJoin("entity.product", "product")
-      .where({
-        status: "delivered",
-      })
-      .select("DATE_TRUNC('month', entity.created_at::timestamp)", "date")
-      .addSelect("COUNT(*)", "count")
-      .groupBy("date")
-      .orderBy("date")
-      .getRawMany();
+    // const monthlyOrder = await Order.createQueryBuilder("entity")
+    //   .leftJoin("entity.product", "product")
+    //   .where({
+    //     status: "delivered",
+    //   })
+    //   .select("DATE_TRUNC('month', entity.created_at::timestamp)", "date")
+    //   .addSelect("COUNT(*)", "count")
+    //   .groupBy("date")
+    //   .orderBy("date")
+    //   .getRawMany();
     const followers = await User.createQueryBuilder("follow")
       .select("DATE_TRUNC('month', follow.created_at::timestamp)", "date")
       .addSelect("COUNT(*)", "count")
@@ -40,31 +40,28 @@ router.get("/", validateAdmin, async (req, res) => {
       .orderBy("date")
       .getRawMany();
 
-    console.log(seller);
+    const mostSoldProductRaw = await Order.createQueryBuilder("order")
+      .leftJoinAndSelect("order.product", "product")
+      .leftJoin("product.seller", "seller")
+      .where("EXTRACT(month FROM order.created_at) = :month", {
+        month: new Date().getMonth(),
+      })
+      .andWhere("order.status = 'delivered'")
+      .select("product.name")
+      .groupBy("product.id, order.id")
+      .orderBy("count(product.id)", "ASC")
+      .getRawMany();
 
-    // const mostSoldProduct = await Order.createQueryBuilder("order")
-    //   .where("EXTRACT(month FROM order.created_at) = :month", {
-    //     month: new Date().getMonth(),
-    //   })
-    //   .leftJoinAndSelect("order.product", "product")
-    //   .select("product.name, COUNT(product.name) as count")
-    //   //   .addSelect("COUNT(product.id)", "count")
-    //   .groupBy("product.id, order.id")
-    //   .orderBy("count(product.id)", "ASC")
-    //   //   .limit(3)
-    //   .getRawMany();
+    let mostBoughtProductCount: { [key: string]: number } = {};
 
-    // const mostSoldProduct = await Products.createQueryBuilder("product")
-    //   .leftJoinAndSelect("product.order", "order")
-    //   .where("EXTRACT(month FROM order.created_at) = :month", {
-    //     month: new Date().getMonth(),
-    //   })
-    //   .loadRelationCountAndMap("product.orderCount", "order")
-    //   .select(["product.name"])
-    //   .groupBy("product.name, order.id")
-    //   .getRawMany();
-
-    // console.log(mostSoldProduct);
+    mostSoldProductRaw.forEach((product) => {
+      if (mostBoughtProductCount[product.product_name]) {
+        mostBoughtProductCount[product.product_name] =
+          mostBoughtProductCount[product.product_name] + 1;
+      } else {
+        mostBoughtProductCount[product.product_name] = 1;
+      }
+    });
 
     res.json({
       status: "ok",
@@ -72,6 +69,7 @@ router.get("/", validateAdmin, async (req, res) => {
       orderWithMonth: result,
       followersWithMonth: followers,
       noOfOrdersByMonth: seller,
+      mostBoughtProductCount,
     });
   } catch (e) {
     console.log(e);

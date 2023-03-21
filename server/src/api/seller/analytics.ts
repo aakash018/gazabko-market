@@ -38,13 +38,19 @@ router.get("/", validateSeller, async (req, res) => {
       .orderBy("date")
       .getRawMany();
 
-    const followers = await Follow.createQueryBuilder("follow")
+    const followersByMonth = await Follow.createQueryBuilder("follow")
       .where({ sellerId: req.session.sellerID })
       .select("DATE_TRUNC('month', follow.created_at::timestamp)", "date")
       .addSelect("COUNT(*)", "count")
       .groupBy("date")
       .orderBy("date")
       .getRawMany();
+
+    const totalFollowers = await Follow.createQueryBuilder("follow")
+      .where({ sellerId: req.session.sellerID })
+      // .select("DATE_TRUNC('month', follow.created_at::timestamp)", "date")
+      .select("COUNT(*)", "count")
+      .getRawOne();
 
     const mostSoldProductRaw = await Order.createQueryBuilder("order")
       .leftJoinAndSelect("order.product", "product")
@@ -59,23 +65,6 @@ router.get("/", validateSeller, async (req, res) => {
       .orderBy("count(product.id)", "ASC")
       .getRawMany();
 
-    // const topCategories = await Order.createQueryBuilder("order")
-    //   .leftJoinAndSelect("order.product", "product")
-    //   .leftJoin("product.seller", "seller")
-    //   .leftJoin("product.category", "category")
-    //   .where("EXTRACT(month FROM order.created_at) = :month", {
-    //     month: new Date().getMonth(),
-    //   })
-    //   .andWhere("order.status = 'delivered'")
-    //   .andWhere("seller.id = :id", { id: req.session.sellerID })
-    //   .select("category.name")
-    //   .addSelect("SUM(order.price)", "count")
-    //   .groupBy("category.id, order.id")
-    //   .orderBy("count(category.id)", "ASC")
-    //   .getRawMany();
-
-    // console.log(topCategories);
-
     let mostBoughtProductCount: { [key: string]: number } = {};
 
     mostSoldProductRaw.forEach((product) => {
@@ -87,13 +76,24 @@ router.get("/", validateSeller, async (req, res) => {
       }
     });
 
+    const ordersCount = await Order.createQueryBuilder("order")
+      .leftJoin("order.product", "product")
+      .leftJoin("product.seller", "seller")
+      .where("seller.id = :id", { id: req.session.sellerID })
+      .select("Count(*)", "ordersCount")
+      .addSelect("SUM(order.price)", "totalPrice")
+      .getRawOne();
+
+    ordersCount["totalFollower"] = totalFollowers.count;
+
     res.json({
       status: "ok",
       message: "order with months found",
       orderWithMonth: result,
-      followersWithMonth: followers,
+      followersWithMonth: followersByMonth,
       noOfOrdersByMonth: monthlyOrder,
       mostBoughtProductCount,
+      totalStats: ordersCount,
     });
   } catch (e) {
     console.log(e);

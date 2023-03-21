@@ -80,6 +80,10 @@ const DashPage: React.FC = () => {
     returned: number;
   } | null>(null);
 
+  const [topProductsCount, setTopProductsCount] = useState<
+    [{ [key: string]: number }, string[]] | null
+  >(null);
+
   useEffect(() => {
     let ignore = false;
 
@@ -106,6 +110,9 @@ const DashPage: React.FC = () => {
               orderWithMonth?: orderWithMonth[];
               followersWithMonth?: orderWithMonth[];
               noOfOrdersByMonth?: orderWithMonth[];
+              mostBoughtProductCount?: {
+                [key: string]: number;
+              };
             }
           >(`${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/analytics`, {
             withCredentials: true,
@@ -114,7 +121,8 @@ const DashPage: React.FC = () => {
           if (
             res.data.status === "ok" &&
             res.data.orderWithMonth &&
-            res.data.followersWithMonth
+            res.data.followersWithMonth &&
+            res.data.mostBoughtProductCount
           ) {
             const monthlyDataLabels = res.data.orderWithMonth.map(
               (ele) => labels[new Date(ele.date).getMonth()]
@@ -142,6 +150,12 @@ const DashPage: React.FC = () => {
             );
 
             setLoading(false);
+
+            setTopProductsCount([
+              res.data.mostBoughtProductCount,
+              Object.keys(res.data.mostBoughtProductCount),
+            ]);
+
             setMonthlyOrder({
               data: monthlyOrderData,
               label: monthlyDataLabels,
@@ -224,7 +238,7 @@ const DashPage: React.FC = () => {
             <DashSearchBar pageLayoutData={adminPageSearchData} />
           </div>
           <div className={styles.doughnutCharts}>
-            <DashInfoHolder
+            {/* <DashInfoHolder
               totalEarning={37575}
               first={{
                 name: "Gazabko Bar",
@@ -239,23 +253,26 @@ const DashPage: React.FC = () => {
                 amount: 8000,
               }}
               onClick={handleClick}
-            />
-            <DashInfoHolder
-              totalEarning={314}
-              first={{
-                name: "NEKO glasses",
-                amount: 134,
-              }}
-              second={{
-                name: "5star Wears",
-                amount: 45,
-              }}
-              third={{
-                name: "Xiomi 42’ Smart TV",
-                amount: 21,
-              }}
-              onClick={handleClick}
-            />
+            /> */}
+            {topProductsCount && (
+              <DashInfoHolder
+                title="Most Sold Products This Month"
+                totalEarning={314}
+                first={{
+                  name: topProductsCount[1][0],
+                  amount: `${topProductsCount[0][topProductsCount[1][0]]}`,
+                }}
+                second={{
+                  name: topProductsCount[1][1],
+                  amount: `${topProductsCount[0][topProductsCount[1][1]]}`,
+                }}
+                third={{
+                  name: topProductsCount[1][2],
+                  amount: `${topProductsCount[0][topProductsCount[1][2]]}`,
+                }}
+                onClick={() => {}}
+              />
+            )}
           </div>
           <div className={styles.ordersDetains}>
             {countLoading && <h2>Loading...</h2>}

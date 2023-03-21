@@ -215,7 +215,7 @@ const EditProducts: React.FC = () => {
               >
                 <MdOutlineReportProblem />
               </InfoCard>
-              <InfoCard
+              {/* <InfoCard
                 amount={52}
                 bgColor={"#48bdbd"}
                 title="Products Returned"
@@ -224,7 +224,7 @@ const EditProducts: React.FC = () => {
                 }}
               >
                 <MdOutlineReportProblem />
-              </InfoCard>{" "}
+              </InfoCard>{" "} */}
             </>
           )}
         </div>

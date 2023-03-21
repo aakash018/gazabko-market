@@ -150,6 +150,12 @@ const SellerPage = () => {
     data: number[];
   }>();
 
+  const [dashTabsData, setDashTabsData] = useState<{
+    ordersCount: string;
+    totalPrice: string;
+    totalFollowers: string;
+  } | null>(null);
+
   const [topProductsCount, setTopProductsCount] = useState<
     [{ [key: string]: number }, string[]] | null
   >(null);
@@ -182,6 +188,11 @@ const SellerPage = () => {
               mostBoughtProductCount?: {
                 [key: string]: number;
               };
+              totalStats: {
+                ordersCount: string;
+                totalPrice: string;
+                totalFollowers: string;
+              };
             }
           >(`${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/analytics`, {
             withCredentials: true,
@@ -192,13 +203,17 @@ const SellerPage = () => {
             res.data.followersWithMonth &&
             res.data.mostBoughtProductCount
           ) {
+            // MOnth send is last date of previous month i.e
+            // Feb is represented by 2022-1-31
+            // Thus getmonth giving 1 for feb represents feb from labels list
+
             const monthlyDataLabels = res.data.orderWithMonth.map(
-              (ele) => labels[new Date(ele.date).getMonth()]
+              (ele, i) => labels[new Date(ele.date).getMonth()]
             );
 
-            const monthlyOrderData = res.data.orderWithMonth.map(
-              (ele) => ele.count
-            );
+            const monthlyOrderData = res.data.orderWithMonth.map((ele, i) => {
+              return ele.count;
+            });
 
             const monthlyFolllowerLabels = res.data.followersWithMonth.map(
               (ele) => labels[new Date(ele.date).getMonth()]
@@ -220,6 +235,9 @@ const SellerPage = () => {
               res.data.mostBoughtProductCount,
               Object.keys(res.data.mostBoughtProductCount),
             ]);
+
+            setDashTabsData(res.data.totalStats);
+            console.log(res.data.totalStats);
 
             setMonthlyOrder({
               data: monthlyOrderData,
@@ -279,23 +297,25 @@ const SellerPage = () => {
             </div>
           </div>
           <div className={styles.dash}>
-            <div className={styles.infoTabs}>
-              <SellerDashTabs
-                icon={<BiPackage color="#00AB77" />}
-                number={45}
-                text="Total units sold"
-              />
-              <SellerDashTabs
-                icon={<BiPackage color="#00AB77" />}
-                number={2_254}
-                text="Total Sales"
-              />
-              <SellerDashTabs
-                icon={<BiPackage color="#00AB77" />}
-                number={535}
-                text="Total Profit"
-              />
-            </div>
+            {dashTabsData && (
+              <div className={styles.infoTabs}>
+                <SellerDashTabs
+                  icon={<BiPackage color="#00AB77" />}
+                  number={dashTabsData.ordersCount || "0"}
+                  text="Total units sold"
+                />
+                <SellerDashTabs
+                  icon={<BiPackage color="#00AB77" />}
+                  number={dashTabsData.totalPrice || "0"}
+                  text="Total Sales"
+                />
+                <SellerDashTabs
+                  icon={<BiPackage color="#00AB77" />}
+                  number={dashTabsData.totalFollowers || "0"}
+                  text="Total Followers"
+                />
+              </div>
+            )}
             <div className={styles.doughnutCharts}>
               {/* <DashInfoHolder
                 totalEarning={37575}
@@ -377,7 +397,7 @@ const SellerPage = () => {
               </div>
             </div>
             <div className={styles.topProducts}>
-              <div className={styles.container}>
+              {/* <div className={styles.container}>
                 <span>Top Products</span>
                 <div
                   className={`ag-theme-alpine ${styles.main}`}
@@ -388,7 +408,7 @@ const SellerPage = () => {
                     columnDefs={columnDefs}
                   ></AgGridReact>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </>

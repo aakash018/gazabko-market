@@ -19,8 +19,6 @@ router.get("/getSellerInfo", async (req, res) => {
       .loadRelationCountAndMap("seller.productCount", "seller.products")
       .getOne();
 
-    console.log("Seller", seller);
-
     if (seller) {
       res.json({
         status: "ok",

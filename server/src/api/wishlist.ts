@@ -89,6 +89,8 @@ router.get("/getWishlist", validateUser, async (req, res) => {
       },
     });
 
+    console.log(wishlist);
+
     res.json({
       status: "ok",
       message: "wishlist found",

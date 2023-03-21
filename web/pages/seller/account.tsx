@@ -1,6 +1,7 @@
 import axios from "axios";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
+import { Seller } from "../../@types/global";
 import SellerNav from "../../components/Seller/SellerNav";
 import Button from "../../components/shared/Button";
 import ImageUploader from "../../components/shared/ImageUploader";
@@ -24,20 +25,49 @@ const Account: React.FC = () => {
   const [newPass, setNewPass] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
 
-  const { seller } = useAuth();
   const { setAlert } = useAlert();
+
+  const ignoreEffect = useRef(false);
+
   useEffect(() => {
-    console.log(seller);
-    if (seller) {
-      setUsername(seller.username);
-      setStoreAddress(seller.address);
-      setStoreName(seller.storeName);
-      setContactPerson(seller.contactPerson);
-      setPhoneNo(seller.phoneNo.toString());
-      setPanNo(seller.panNo || "");
-      setEmail(seller.email || "");
+    if (!ignoreEffect.current) {
+      (async () => {
+        try {
+          const res = await axios.get<RespondType & { seller: Seller }>(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/sellerAuth/me`,
+            {
+              withCredentials: true,
+            }
+          );
+          console.log(res.data);
+          if (res.data.status === "ok") {
+            setUsername(res.data.seller.username);
+            setStoreAddress(res.data.seller.address);
+            setStoreName(res.data.seller.storeName);
+            setContactPerson(res.data.seller.contactPerson);
+            setPhoneNo(res.data.seller.phoneNo);
+            setPanNo(res.data.seller.panNo || "");
+            setEmail(res.data.seller.email || "");
+          } else {
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        } catch (error) {
+          console.log(error);
+          setAlert({
+            type: "error",
+            message: "failed to connect to servers",
+          });
+        }
+      })();
     }
-  }, [seller]);
+
+    return () => {
+      ignoreEffect.current = true;
+    };
+  }, []);
 
   const handleInfoSubmit = async () => {
     if (

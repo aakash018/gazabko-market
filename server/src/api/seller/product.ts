@@ -135,8 +135,26 @@ router.get("/info", async (req, res) => {
       relations: {
         seller: true,
         offers: true,
+        category: {
+          subCatagories: {
+            subsubCategories: true,
+          },
+        },
+      },
+      select: {
+        category: {
+          name: true,
+          subCatagories: {
+            name: true,
+            subsubCategories: {
+              name: true,
+            },
+          },
+        },
       },
     });
+
+    console.log(product);
 
     if (product) {
       res.json({

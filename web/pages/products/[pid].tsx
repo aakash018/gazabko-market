@@ -234,10 +234,24 @@ const ProductDisplay: React.FC = () => {
       {!loading && product && (
         <div className={styles.productDisplay}>
           <div className={styles.productInfo}>
-            <Breadcrumb
-              category={{ name: "Women's Clothing", url: "womens-clothing" }}
-              subCategory={{ name: "Fashion", url: "fashion" }}
-            />
+            {product.category && (
+              <Breadcrumb
+                category={{
+                  name: product.category.name,
+                  url: product.category.name,
+                }}
+                subCategory={{
+                  name: product.category.subCatagories[0].name,
+                  url: product.category.subCatagories[0].name,
+                }}
+                grandCategory={{
+                  name: product.category.subCatagories[0].subsubCategories[0]
+                    .name,
+                  url: product.category.subCatagories[0].subsubCategories[0]
+                    .name,
+                }}
+              />
+            )}
 
             <ProductInfoDisplay
               id={product.id}
