@@ -1,4 +1,5 @@
 import express from "express";
+
 import { Products } from "../entities/Products";
 
 const router = express();

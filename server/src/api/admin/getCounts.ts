@@ -4,6 +4,7 @@ import { Order } from "../../entities/Orders";
 import { Seller } from "../../entities/seller/Seller";
 import { Products } from "../../entities/Products";
 import { Review } from "../../entities/Review";
+import { ToBeVerified } from "../../entities/seller/ToBeVerified";
 
 const router = express();
 
@@ -11,10 +12,7 @@ router.get("/getSellerCounts", validateAdmin, async (_, res) => {
   try {
     const sellers = await Seller.find({});
 
-    const pending = sellers.reduce((acc, el) => {
-      if (el.isVerified === false) return acc + 1;
-      else return acc;
-    }, 0);
+    const pending = await ToBeVerified.count();
 
     const verified = sellers.reduce((acc, el) => {
       if (el.isVerified === true) return acc + 1;

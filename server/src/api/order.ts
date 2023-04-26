@@ -72,6 +72,7 @@ router.get("/orderHistory", validateUser, async (req, res) => {
       relations: { product: true },
       select: {
         product: {
+          id: true,
           name: true,
           images: true,
           priceAfterDiscount: true,

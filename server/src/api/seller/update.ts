@@ -25,6 +25,7 @@ router.post("/info", validateSeller, async (req, res) => {
       email: userReq.email,
       phoneNo: userReq.phoneNo,
       panNo: userReq.panNo,
+      toUpdate: true,
       storeName: userReq.storeName,
       storeAddress: userReq.storeAddress,
       sellerID: req.session.sellerID,

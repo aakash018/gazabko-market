@@ -19,10 +19,24 @@ router.get("/", async (req, res) => {
     try {
       if (userReq.category === "All Categories") {
         const products = await AppDataSource.getRepository(Products)
-          .createQueryBuilder("products")
-          .where("Lower(products.name) LIKE LOWER(:name)", {
+          .createQueryBuilder("product")
+          .leftJoin("product.offers", "offers")
+          .where("Lower(product.name) LIKE LOWER(:name)", {
             name: `%${escapeLikeString(userReq.keyword)}%`,
           })
+          .select([
+            "product.id",
+            "product.name",
+            "product.brand",
+            "product.price",
+            "product.priceAfterDiscount",
+            "product.discount",
+            "product.timesBought",
+            "offers.common_discount",
+            "offers.discount",
+            "offers.ending_date",
+            "offers.starting_date",
+          ])
           .limit(16)
           .getMany();
 
@@ -200,6 +214,181 @@ router.get("/getPriceFilter", async (req, res) => {
     res.json({
       status: "fail",
       message: "failed to filter products",
+    });
+  }
+});
+
+interface searchFilters {
+  brands: string[];
+  price: {
+    low: number;
+    high: number;
+  };
+  sort: string;
+}
+router.get("/searchWithFilters", async (req, res) => {
+  const userReq = req.query as unknown as {
+    filters: searchFilters;
+    keyword: string;
+  };
+
+  try {
+    // let product = await Products.find({
+    //   where: {
+    //     brand: In(userReq.filters.brands),
+    //     price: Between(userReq.filters.price.low, userReq.filters.price.high),
+    //     name: Like(`${escapeLikeString(userReq.keyword)}`),
+    //   },
+    //   order: {
+    //     priceAfterDiscount:
+    //       userReq.filters.sort === "All Products"
+    //         ? undefined
+    //         : userReq.filters.sort === "Price High To Low"
+    //         ? "DESC"
+    //         : "ASC",
+    //     timesBought: "DESC",
+    //   },
+    // });
+    // console.log("USER", userReq.filters);
+    const products = await Products.createQueryBuilder("product")
+      .leftJoin("product.offers", "offers")
+      .where("product.brand IN (:...brands)", {
+        brands: userReq.filters.brands,
+      })
+      .andWhere("product.priceAfterDiscount BETWEEN :1 AND :2", {
+        1: userReq.filters.price.low,
+        2: userReq.filters.price.high,
+      })
+      .andWhere("Lower(product.name) LIKE LOWER(:name)", {
+        name: `%${escapeLikeString(userReq.keyword)}%`,
+      })
+      .select([
+        "product.id",
+        "product.name",
+        "product.brand",
+        "product.price",
+        "product.priceAfterDiscount",
+        "product.discount",
+        "product.timesBought",
+        "offers.common_discount",
+        "offers.discount",
+        "offers.ending_date",
+        "offers.starting_date",
+      ])
+      .orderBy(
+        "product.priceAfterDiscount",
+        userReq.filters.sort === "All Products"
+          ? undefined
+          : userReq.filters.sort === "Price High To Low"
+          ? "DESC"
+          : "ASC"
+      )
+      .limit(16)
+      .getMany();
+
+    res.json({
+      status: "ok",
+      message: "products found",
+      products,
+    });
+  } catch (e) {
+    console.log(e);
+
+    res.json({
+      status: "fail",
+      message: "failed to search products",
+    });
+  }
+});
+
+router.get("/searchCatsWithFilters", async (req, res) => {
+  const userReq = req.query as unknown as {
+    filters: searchFilters;
+    keyword: {
+      category: string;
+      subcategory: string;
+      subsubcategory: string;
+    };
+  };
+  console.log(userReq);
+  try {
+    // let product = await Products.find({
+    //   where: {
+    //     brand: In(userReq.filters.brands),
+    //     price: Between(userReq.filters.price.low, userReq.filters.price.high),
+    //     name: Like(`${escapeLikeString(userReq.keyword)}`),
+    //   },
+    //   order: {
+    //     priceAfterDiscount:
+    //       userReq.filters.sort === "All Products"
+    //         ? undefined
+    //         : userReq.filters.sort === "Price High To Low"
+    //         ? "DESC"
+    //         : "ASC",
+    //     timesBought: "DESC",
+    //   },
+    // });
+    // console.log("USER", userReq.filters);
+    const products = await Products.createQueryBuilder("product")
+      .leftJoin("product.offers", "offers")
+      .leftJoin("product.category", "category")
+      .leftJoin("category.subCatagories", "subcategory")
+      .leftJoin("subcategory.subsubCategories", "subsubcategory")
+      .where("product.brand IN (:...brands)", {
+        brands: userReq.filters.brands,
+      })
+      .andWhere("product.priceAfterDiscount BETWEEN :1 AND :2", {
+        1: userReq.filters.price.low,
+        2: userReq.filters.price.high,
+      })
+      .andWhere(
+        "category.name = :category AND subcategory.name = :subcategory AND subsubcategory.name = :subsubcategory",
+        {
+          category: userReq.keyword.category,
+          subcategory: userReq.keyword.subcategory,
+          subsubcategory: userReq.keyword.subsubcategory,
+        }
+      )
+      .select([
+        "product.id",
+        "product.name",
+        "product.brand",
+        "product.price",
+        "product.priceAfterDiscount",
+        "product.discount",
+        "product.timesBought",
+        "category.name",
+        "subcategory.name",
+        "subsubcategory.name",
+        "offers.common_discount",
+        "offers.discount",
+        "offers.ending_date",
+        "offers.starting_date",
+      ])
+      .orderBy(
+        "product.priceAfterDiscount",
+        userReq.filters.sort === "All Products"
+          ? undefined
+          : userReq.filters.sort === "Price High To Low"
+          ? "DESC"
+          : "ASC"
+      )
+      .limit(16)
+      .getMany();
+
+    console.log(products);
+
+    res.json({
+      status: "ok",
+      message: "products found",
+      products,
+    });
+  } catch (e) {
+    console.log(e);
+
+    res.json({
+      status: "fail",
+      message: "failed to search products",
     });
   }
 });

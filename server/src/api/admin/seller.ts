@@ -1,4 +1,5 @@
 import express from "express";
+import { ToBeVerified } from "../../entities/seller/ToBeVerified";
 import { ProductCommission } from "../../entities/admin/SellerProductCommission";
 import { Products } from "../../entities/Products";
 import { Seller } from "../../entities/seller/Seller";
@@ -28,16 +29,60 @@ router.post("/verifySeller", validateAdmin, async (req, res) => {
   }
 });
 
+router.post("/verifyUpdateSeller", validateAdmin, async (req, res) => {
+  const userReq = req.body as { sid: any; verificationReqId: any };
+  try {
+    const verificationReq = await ToBeVerified.findOne({
+      where: { id: userReq.verificationReqId },
+    });
+    if (verificationReq) {
+      Seller.update(
+        {
+          id: userReq.sid,
+        },
+        {
+          username: verificationReq.username,
+          address: verificationReq.storeAddress,
+          storeName: verificationReq.storeName,
+          contactPerson: verificationReq.contactPerson,
+          phoneNo: verificationReq.phoneNo,
+          email: verificationReq.email,
+          panNo: verificationReq.panNo,
+        }
+      );
+
+      await ToBeVerified.delete({
+        id: userReq.verificationReqId,
+      });
+
+      res.json({
+        status: "ok",
+        message: "seller updated",
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "no info found",
+      });
+    }
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to update seller",
+    });
+  }
+});
+
 router.get("/getPendingSellers", validateAdmin, async (_, res) => {
   try {
-    const pendingSellers = await Seller.find({
-      where: { isVerified: false },
-    });
+    const pendingSellers = await ToBeVerified.find({});
+
     res.json({
       message: "sellers found",
       status: "ok",
       pendingSellers,
     });
+    console.log(pendingSellers);
   } catch {
     res.json({
       message: "failed to find sellers",

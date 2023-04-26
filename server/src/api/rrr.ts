@@ -7,6 +7,7 @@ import { Products } from "../entities/Products";
 import { Review } from "../entities/Review";
 import { User } from "../entities/User";
 import validateUser from "../middleware/validateUser";
+import { Report } from "../entities/Report";
 
 const router = express();
 
@@ -98,7 +99,7 @@ router.get("/getAllReviews", validateUser, async (req, res) => {
   }
 });
 
-router.post("/returnProduct", async (req, res) => {
+router.post("/returnProduct", validateUser, async (req, res) => {
   const userReq = req.body as { oid: any; message: string };
 
   try {
@@ -140,6 +141,37 @@ router.post("/returnProduct", async (req, res) => {
     res.json({
       status: "fail",
       message: "failed to send return request",
+    });
+  }
+});
+
+router.post("/addReport", validateUser, async (req, res) => {
+  const userData = req.body as { title: string; report: string; pid: any };
+  console.log(userData);
+  try {
+    const user = await User.findOne({ where: { id: req.session.user } });
+    const product = await Products.findOne({
+      where: { id: userData.pid },
+    });
+
+    if (user && product) {
+      await Report.create({
+        user,
+        product,
+        productID: product.id,
+        report: userData.report,
+        title: userData.title,
+      }).save();
+      res.json({
+        status: "ok",
+        message: "report added",
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    res.json({
+      status: "fail",
+      message: "failed to add report",
     });
   }
 });

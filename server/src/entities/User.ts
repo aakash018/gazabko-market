@@ -16,6 +16,7 @@ import { Order } from "./Orders";
 import { Question } from "./QuestionAndAnswer";
 import { Review } from "./Review";
 import { Wishlist } from "./Wishlist";
+import { Report } from "./Report";
 
 @Entity()
 export class User extends BaseEntity {
@@ -68,6 +69,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Review, (review) => review.user)
   review: Review[];
+
+  @OneToMany(() => Report, (report) => report.user)
+  report: Report[];
 
   @OneToMany(() => Question, (question) => question.user)
   questions: Question[];

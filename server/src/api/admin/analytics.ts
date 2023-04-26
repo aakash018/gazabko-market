@@ -10,6 +10,7 @@ router.get("/", validateAdmin, async (_, res) => {
   try {
     const result = await Order.createQueryBuilder("entity")
       .leftJoin("entity.product", "product")
+      .where("entity.status = :status", { status: "delivered" })
       .select("DATE_TRUNC('month', entity.created_at::timestamp)", "date")
       .addSelect("SUM(entity.price)", "count")
       .groupBy("date")

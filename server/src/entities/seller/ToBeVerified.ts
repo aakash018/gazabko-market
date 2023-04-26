@@ -8,6 +8,9 @@ export class ToBeVerified extends BaseEntity {
   @Column()
   sellerID: number;
 
+  @Column({ default: false })
+  toUpdate: boolean;
+
   @Column()
   username: string;
 

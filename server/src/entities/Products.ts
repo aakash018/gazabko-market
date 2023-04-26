@@ -20,6 +20,7 @@ import { Question } from "./QuestionAndAnswer";
 import { Review } from "./Review";
 import { Seller } from "./seller/Seller";
 import { WishlistProducts } from "./WishListToProduct";
+import { Report } from "./Report";
 
 @Entity()
 export class Products extends BaseEntity {
@@ -114,6 +115,9 @@ export class Products extends BaseEntity {
 
   @OneToMany(() => Review, (review) => review.product)
   review: Review[];
+
+  @OneToMany(() => Report, (report) => report.product)
+  report: Report[];
 
   @CreateDateColumn()
   created_at: Date;

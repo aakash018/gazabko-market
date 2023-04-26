@@ -20,6 +20,7 @@ import { User } from "./entities/User";
 import { VerificationCode } from "./entities/VerificationCode";
 import { Wishlist } from "./entities/Wishlist";
 import { WishlistProducts } from "./entities/WishListToProduct";
+import { Report } from "./entities/Report";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -39,6 +40,7 @@ export const AppDataSource = new DataSource({
     Admin,
     Seller,
     Review,
+    Report,
     Question,
     Order,
     ProductCommission,

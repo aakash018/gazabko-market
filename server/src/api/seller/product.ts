@@ -9,6 +9,7 @@ import { Review } from "../../entities/Review";
 import { Question } from "../../entities/QuestionAndAnswer";
 import { ProductPayloadType } from "../../types/global";
 import { Category } from "../../entities/admin/Cateogries";
+import { Report } from "../../entities/Report";
 
 const router = express();
 
@@ -246,6 +247,9 @@ router.get("/getProductsCount", validateSeller, async (req, res) => {
     const reviews = await Review.countBy({
       product: { seller: { id: req.session.sellerID } },
     });
+    const report = await Report.countBy({
+      product: { seller: { id: req.session.sellerID } },
+    });
     const questions = await Question.countBy({
       product: { seller: { id: req.session.sellerID } },
       answered: false,
@@ -257,7 +261,7 @@ router.get("/getProductsCount", validateSeller, async (req, res) => {
     res.json({
       status: "ok",
       message: "counts loaded",
-      count: { outOfStock, total, reviews, questions, hiddenProducts },
+      count: { outOfStock, total, reviews, questions, hiddenProducts, report },
     });
   } catch {
     res.json({
@@ -292,6 +296,45 @@ router.get("/getReviews", validateSeller, async (req, res) => {
     res.json({
       status: "fail",
       message: "failed to load reviews",
+    });
+  }
+});
+
+router.get("/getReports", validateSeller, async (req, res) => {
+  try {
+    const reports = await Report.find({
+      where: { product: { seller: { id: req.session.sellerID } } },
+      relations: {
+        user: true,
+        product: true,
+      },
+      select: {
+        id: true,
+        report: true,
+        title: true,
+        user: {
+          firstName: true,
+          lastName: true,
+          avatar: true,
+        },
+        created_at: true,
+        product: {
+          images: true,
+          name: true,
+          id: true,
+        },
+      },
+    });
+
+    res.json({
+      status: "ok",
+      message: "reports found",
+      reports,
+    });
+  } catch (e) {
+    res.json({
+      status: "fail",
+      message: "failed to retrieve data",
     });
   }
 });
@@ -460,5 +503,91 @@ router.get("/getProductsWithCat", validateSeller, async (req, res) => {
     });
   }
 });
+
+router.get("/getProductToEdit", validateSeller, async (req, res) => {
+  const userReq = req.query as unknown as { pid: any };
+
+  try {
+    const product = await Products.findOne({
+      where: {
+        id: userReq.pid,
+        // seller: {
+        //   id: req.session.sellerID,
+        // },
+      },
+      relations: {
+        category: {
+          subCatagories: {
+            subsubCategories: true,
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        discount: true,
+        totalStock: true,
+        sizes: true,
+        color: true,
+        tags: true,
+        category: {
+          name: true,
+          subCatagories: {
+            name: true,
+            subsubCategories: {
+              name: true,
+            },
+          },
+        },
+        sku: true,
+        brand: true,
+        description: true,
+      },
+    });
+
+    res.json({
+      status: "ok",
+      message: "found",
+      product,
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "field to get product",
+    });
+  }
+});
+
+// router.put("/updateProduct", validateSeller, async (req, res) => {
+//   const productDetails: ProductPayloadType = req.body;
+
+//   const cleanDesc = sanitizeHtml(productDetails.description);
+
+//   try {
+//     await Products.update(
+//       {
+//         id: userReq.pid,
+//       },
+//       {brand: productDetails.brand,
+//         name: productDetails.productName,
+//         price: productDetails.price,
+//         description: cleanDesc,
+//         totalStock: productDetails.totalStock,
+//         store: seller.storeName,
+//         category: category,
+//         subCategory: category.subCatagories[0],
+//         subsubCategory: category.subCatagories[0].subsubCategories[0],
+//         sku: productDetails.sku,
+//         sizes: productDetails.sizes,
+//         images: productDetails.images,
+//         tags: productDetails.tags,
+//         discount: productDetails.discount,
+//         seller: seller,
+//         color: productDetails.color,
+//         priceAfterDiscount: productDetails.price - productDetails.discount,}
+//     );
+//   } catch {}
+// });
 
 export default router;

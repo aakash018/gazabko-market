@@ -136,7 +136,6 @@ app.get("/", (_, res) => {
 //? ROUTERS
 app.use("/auth", auth);
 app.use("/update", update);
-app.use("/seller/products", products);
 app.use("/question", question);
 app.use("/cart", cart);
 app.use("/order", order);
@@ -147,6 +146,7 @@ app.use("/offers", offers);
 app.use("/category", category);
 app.use("/brand", brand);
 
+app.use("/seller/products", products);
 app.use("/sellerAuth", sellerAuth);
 app.use("/sellerInfo", sellerInfo);
 app.use("/sellerOrder", sellerOrder);

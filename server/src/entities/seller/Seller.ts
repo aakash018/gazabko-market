@@ -40,7 +40,7 @@ export class Seller extends BaseEntity {
   @Column()
   contactPerson: string;
 
-  @Column({ type: "bigint" })
+  @Column()
   phoneNo: string;
 
   @Column({ default: "seller" })
