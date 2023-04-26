@@ -29,8 +29,9 @@ const Pending: React.FC = () => {
     { field: "Product" },
     { field: "Quantity", width: 150 },
     { field: "Size", width: 70 },
-    { field: "Color", width: 70 },
+    { field: "Color", width: 90 },
     { field: "Order No" },
+    { field: "Details" },
   ]);
 
   useEffect(() => {
@@ -52,12 +53,13 @@ const Pending: React.FC = () => {
           if (res.data.status === "ok" && res.data.orders) {
             const pendingOrders: TableDef[] = res.data.orders.map(
               (order, i) => ({
-                SN: i,
+                SN: i + 1,
                 Product: order.product!.name,
                 "Order No": order.id,
                 Quantity: order.quantity,
                 Size: order.size,
                 Color: order.color,
+                Details: "View",
               })
             );
             setRowData(pendingOrders);
@@ -92,8 +94,11 @@ const Pending: React.FC = () => {
           columData={columnDefs}
           rowData={rowData}
           height={800}
-          onRowClick={(e) => {
-            Router.push(`/seller/orders/id?oid=${e.data["Order No"]}`);
+          onCellClicked={(e) => {
+            console.log(e.colDef);
+            if (e.colDef.field === "Details") {
+              Router.push(`/seller/orders/id?oid=${e.data["Order No"]}`);
+            }
           }}
         />
       </div>

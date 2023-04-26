@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { ReviewType } from "../../../@types/rrr";
-import ProductReviewHolder from "../../../components/Admin/shared/ProductReviewHolder";
+import ProductReviewHolder from "../../../components/Admin/shared/ProductReportHolder";
 import ProductReviewsHolder from "../../../components/Admin/shared/ProductReviewsHolder";
 import SellerNav from "../../../components/Seller/SellerNav";
 

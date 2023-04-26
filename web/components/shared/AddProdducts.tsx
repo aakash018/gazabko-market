@@ -20,33 +20,40 @@ import { customStyles } from "../../modalStyle";
 import SelectedItemHolder from "../Admin/shared/SelectedItemHolder";
 import MultipleImageUploader from "./MultipleImageUploader";
 import axios from "axios";
-import { Category, ProtuctPayloadType } from "../../@types/global";
+import {
+  Category,
+  ProtuctPayloadType,
+  ProtuctType,
+  SubCategory,
+  SubSubCategory,
+} from "../../@types/global";
 import { useAlert } from "../../pages/_app";
 import { GiH2O } from "react-icons/gi";
 
-const AddProdducts: React.FC<{ type: "seller" | "admin" }> = ({ type }) => {
+interface Props {
+  type: "seller" | "admin";
+  work?: "edit" | "add";
+  pid?: any;
+}
+
+const AddProdducts: React.FC<Props> = ({ type, work, pid }) => {
   const { setAlert } = useAlert();
 
   const [tagsList, setTagsList] = useState<string[]>([]);
   const [sizeList, setSizeList] = useState<string[]>([]);
-  const [categoriesList, setCategoriesList] = useState<string[]>([]);
-  const [subCategoriesList, setSubCategoriesList] = useState<string[]>([]);
-  const [subSubCategoriesList, setSubSubCategoriesList] = useState<string[]>(
-    []
-  );
 
-  const productName = useRef<HTMLInputElement>(null);
-  const price = useRef<HTMLInputElement>(null);
-  const discount = useRef<HTMLInputElement>(null);
-  const totalStock = useRef<HTMLInputElement>(null);
+  const [productName, setProductName] = useState("");
+  const [price, setPrice] = useState("");
+  const [discount, setDiscount] = useState("");
+  const [totalStock, setTotalStock] = useState("");
   const sizes = useRef<HTMLInputElement>(null);
   const [openSubCatModal, setOpenSubCatModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [discountType, setDiscountType] = useState<"percentage" | "amount">(
     "percentage"
   );
-  const sku = useRef<HTMLInputElement>(null);
-  const brand = useRef<HTMLInputElement>(null);
+  const [sku, setSku] = useState("");
+  const [brand, setBrand] = useState("");
   const [value, setValue] = useState("");
   const [images, setImages] = useState<any[]>([]);
   const [colorList, setColorList] = useState<string[]>([]);
@@ -55,6 +62,8 @@ const AddProdducts: React.FC<{ type: "seller" | "admin" }> = ({ type }) => {
   const [loading, setLoading] = useState(false);
   const [selectedSubCat, setSelectedSubCat] = useState("");
   const [selectedSubSubCat, setSelectedSubSubCat] = useState("");
+
+  const [product, setProduct] = useState<ProtuctType | null>(null);
 
   useEffect(() => {
     let ignore = false;
@@ -88,6 +97,69 @@ const AddProdducts: React.FC<{ type: "seller" | "admin" }> = ({ type }) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!pid) return;
+    (async () => {
+      if (work === "edit") {
+        try {
+          setLoading(true);
+          const res = await axios.get<RespondType & { product?: ProtuctType }>(
+            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/getProductToEdit`,
+            {
+              params: {
+                pid,
+              },
+              withCredentials: true,
+            }
+          );
+
+          console.log(res.data);
+
+          if (res.data.status === "ok" && res.data.product) {
+            setProduct(res.data.product);
+
+            setProductName(res.data.product.name);
+            setPrice(res.data.product.price as unknown as string);
+            setDiscount(res.data.product.discount as unknown as string);
+            setTotalStock(res.data.product.totalStock as unknown as string);
+            setSizeList(JSON.parse(res.data.product.sizes as any) as string[]);
+            setColorList(JSON.parse(res.data.product.color as any) as string[]);
+            setTagsList(JSON.parse(res.data.product.tags as any) as string[]);
+            setSku(res.data.product.sku as unknown as string);
+            setBrand(res.data.product.brand);
+            if (res.data.product.category) {
+              setSelectedCategory(res.data.product.category.name);
+
+              setSelectedSubCat(
+                res.data.product.category.subCatagories[0].name
+              );
+              setSelectedSubSubCat(
+                res.data.product.category.subCatagories[0].subsubCategories[0]
+                  .name
+              );
+            }
+
+            setValue(res.data.product.description);
+            setLoading(false);
+          } else {
+            setLoading(false);
+            setAlert({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        } catch (e) {
+          console.log(e);
+          setLoading(true);
+          setAlert({
+            type: "error",
+            message: "failed to connect to servers",
+          });
+        }
+      }
+    })();
+  }, [pid]);
+
   const handelCatSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(e.target.value);
     setSelectedSubCat("");
@@ -106,12 +178,12 @@ const AddProdducts: React.FC<{ type: "seller" | "admin" }> = ({ type }) => {
   const handleSubmit = async () => {
     console.log(selectedCategory, selectedSubCat, selectedSubSubCat);
     if (
-      productName.current?.value.trim() === "" ||
-      brand.current?.value.trim() === "" ||
-      price.current?.value.trim() === "" ||
-      totalStock.current?.value.trim() === "" ||
+      productName.trim() === "" ||
+      brand.trim() === "" ||
+      price.trim() === "" ||
+      totalStock.trim() === "" ||
       tagsList.length === 0 ||
-      sku.current?.value.trim() === "" ||
+      sku.trim() === "" ||
       images.length === 0 ||
       value.trim() === "" ||
       selectedCategory.trim() === "" ||
@@ -124,22 +196,20 @@ const AddProdducts: React.FC<{ type: "seller" | "admin" }> = ({ type }) => {
       });
     }
 
-    let discountAmount = parseInt(discount.current!.value) | 0;
+    let discountAmount = parseInt(discount) | 0;
     if (discountType === "percentage") {
-      discountAmount =
-        parseInt(price.current!.value) *
-        (parseInt(discount.current!.value) / 100);
+      discountAmount = parseInt(price) * (parseInt(discount) / 100);
     }
     const payload: ProtuctPayloadType = {
-      productName: productName.current!.value,
-      brand: brand.current!.value,
-      price: parseInt(price.current!.value),
-      totalStock: parseInt(totalStock.current!.value),
+      productName: productName,
+      brand: brand,
+      price: parseInt(price),
+      totalStock: parseInt(totalStock),
       tags: JSON.stringify(tagsList),
       category: selectedCategory,
       subCategory: selectedSubCat,
       subsubCategory: selectedSubSubCat,
-      sku: parseInt(sku.current!.value),
+      sku: parseInt(sku),
       images: JSON.stringify(images),
       description: value,
       discount: discountAmount,
@@ -214,13 +284,22 @@ const AddProdducts: React.FC<{ type: "seller" | "admin" }> = ({ type }) => {
                         gap: "15px",
                       }}
                     >
-                      <IntputField label="Product's Name" input={productName} />
-                      <IntputField label="Price" input={price} />
+                      <IntputField
+                        label="Product's Name"
+                        setState={setProductName}
+                        value={productName}
+                      />
+                      <IntputField
+                        label="Price"
+                        setState={setPrice}
+                        value={price}
+                      />
                       <div className={styles.discount}>
                         <IntputField
                           label="Discount"
                           type={"number"}
-                          input={discount}
+                          setState={setDiscount}
+                          value={discount}
                         />
                         <select
                           onChange={(e) => {
@@ -237,7 +316,8 @@ const AddProdducts: React.FC<{ type: "seller" | "admin" }> = ({ type }) => {
                       <IntputField
                         label="Total Stock"
                         type={"number"}
-                        input={totalStock}
+                        value={totalStock}
+                        setState={setTotalStock}
                       />
                       {/* <div className={styles.dealsSection}>
                         <h2>Add to offer</h2>
@@ -269,8 +349,16 @@ const AddProdducts: React.FC<{ type: "seller" | "admin" }> = ({ type }) => {
                         <div className={styles.catSelector}>
                           <div className={styles.categoriesSelect}>
                             <div className={styles.label}>Add catogries</div>
-                            <select onChange={handelCatSelect}>
-                              <option value="" disabled selected hidden>
+                            <select
+                              onChange={handelCatSelect}
+                              value={selectedCategory}
+                            >
+                              <option
+                                value=""
+                                disabled
+                                selected={work === "add"}
+                                hidden
+                              >
                                 Select an option
                               </option>
                               {categories.map((cat, i) => (
@@ -326,6 +414,7 @@ const AddProdducts: React.FC<{ type: "seller" | "admin" }> = ({ type }) => {
                               <option value="" disabled selected hidden>
                                 Select an option
                               </option>
+
                               {categories.length !== 0 &&
                                 selectedCategory !== "" &&
                                 categories
@@ -357,8 +446,17 @@ const AddProdducts: React.FC<{ type: "seller" | "admin" }> = ({ type }) => {
                     </div>
                   </div>
                   <div className={styles.skuAndBrand}>
-                    <IntputField label="SKU" type={"number"} input={sku} />
-                    <IntputField label="Brand" input={brand} />
+                    <IntputField
+                      label="SKU"
+                      type={"number"}
+                      value={sku}
+                      setState={setSku}
+                    />
+                    <IntputField
+                      label="Brand"
+                      value={brand}
+                      setState={setBrand}
+                    />
                   </div>
                   <div className={styles.producttDetails}>
                     <h2>Product Details</h2>
@@ -371,9 +469,12 @@ const AddProdducts: React.FC<{ type: "seller" | "admin" }> = ({ type }) => {
                     ;
                   </div>
                   <div className={styles.actBtn}>
-                    <Button color="success" onClick={handleSubmit}>
-                      Save
-                    </Button>
+                    {work === "add" && (
+                      <Button color="success" onClick={handleSubmit}>
+                        Save
+                      </Button>
+                    )}
+                    {work === "edit" && <Button>Update</Button>}
                     <Button>View</Button>
                   </div>
                 </form>

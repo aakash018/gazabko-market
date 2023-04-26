@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Seller } from "../../../@types/global";
+import { Seller, ToBeVerifiedType } from "../../../@types/global";
 import AdminLayout from "../../../components/Admin/AdminNav";
 import PendingSellerVefHolder from "../../../components/Admin/shared/PendingSellerVefHolder";
 
@@ -10,16 +10,18 @@ import { useAlert } from "../../_app";
 const PendingVerification = () => {
   const [loading, setLoading] = useState(false);
 
-  const [pendingVerifications, setPendingVerifications] = useState<Seller[]>(
-    []
-  );
+  const [pendingVerifications, setPendingVerifications] = useState<
+    ToBeVerifiedType[]
+  >([]);
 
   const { setAlert } = useAlert();
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const res = await axios.get<RespondType & { pendingSellers?: Seller[] }>(
+      const res = await axios.get<
+        RespondType & { pendingSellers?: ToBeVerifiedType[] }
+      >(
         `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/seller/getPendingSellers`,
         {
           withCredentials: true,
@@ -28,6 +30,7 @@ const PendingVerification = () => {
       setLoading(false);
       if (res.data.status === "ok" && res.data.pendingSellers) {
         setPendingVerifications(res.data.pendingSellers);
+        console.log(res.data);
       } else {
         setAlert({
           type: "error",
@@ -53,12 +56,45 @@ const PendingVerification = () => {
     };
   }, []);
 
-  const handleVerifySeller = async (sid: number) => {
+  const handleVerifySeller = async (sid: string) => {
     try {
       const res = await axios.post<RespondType>(
         `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/seller/verifySeller`,
         {
           sid,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.status,
+        });
+        fetchData();
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed to verify seller",
+      });
+    }
+  };
+
+  const handleUpdateVerifySeller = async (sid: string, vid: string) => {
+    try {
+      const res = await axios.post<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/seller/verifyUpdateSeller`,
+        {
+          sid,
+          verificationReqId: vid,
         },
         {
           withCredentials: true,
@@ -95,16 +131,33 @@ const PendingVerification = () => {
         )}
         {!loading && pendingVerifications.length !== 0 && (
           <div className={styles.storeInfo}>
-            {pendingVerifications.map((seller, i) => (
+            {pendingVerifications.map((pendingVerification, i) => (
               <PendingSellerVefHolder
-                onVerifyRequest={() => handleVerifySeller(seller.id)}
+                onUpdateVerifyRequest={() =>
+                  handleUpdateVerifySeller(
+                    pendingVerification.sellerID,
+                    pendingVerification.id
+                  )
+                }
+                toUpdate={pendingVerification.toUpdate}
+                onVerifyRequest={() =>
+                  handleVerifySeller(pendingVerification.sellerID)
+                }
                 key={i}
-                address={seller.address}
-                storeName={seller.storeName}
-                email={seller.email === "" ? "N/A" : seller.email}
-                panNo={seller.panNo === "" ? "N/A" : seller.panNo}
-                personName={seller.contactPerson}
-                phoneNo={seller.phoneNo}
+                address={pendingVerification.storeAddress}
+                storeName={pendingVerification.storeName}
+                email={
+                  pendingVerification.email === ""
+                    ? "N/A"
+                    : pendingVerification.email
+                }
+                panNo={
+                  pendingVerification.panNo === ""
+                    ? "N/A"
+                    : pendingVerification.panNo
+                }
+                personName={pendingVerification.contactPerson}
+                phoneNo={pendingVerification.phoneNo}
               />
             ))}
           </div>

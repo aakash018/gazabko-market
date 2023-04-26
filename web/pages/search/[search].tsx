@@ -12,11 +12,19 @@ import IntputField from "../../components/shared/Input";
 import styles from "../../styles/components/Customer/pages/SearchResult.module.scss";
 import { useAlert } from "../_app";
 
+interface SearchFilters {
+  price: {
+    low: number | null;
+    high: number | null;
+  };
+  brands: string[] | null;
+  sort: string | null;
+}
+
 const SearchResult: React.FC = () => {
   const router = useRouter();
   const { search, parameter } = router.query;
 
-  const [priceRangeSlider, setPriceRangeSlider] = useState([0, 100]);
   const [products, setProducts] = useState<ProtuctType[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -26,6 +34,14 @@ const SearchResult: React.FC = () => {
   const [productHighPrice, setUserHighPrice] = useState<number>(0);
 
   const [filterBrands, setFilterBrands] = useState<string[]>([]);
+  const searchFilters = useRef<SearchFilters>({
+    brands: [],
+    price: {
+      low: null,
+      high: null,
+    },
+    sort: null,
+  });
 
   const sortSelectRef = useRef<HTMLSelectElement>(null);
 
@@ -46,7 +62,7 @@ const SearchResult: React.FC = () => {
         }
       );
       setLoading(false);
-      console.log(res.data);
+
       if (res.data.status === "ok" && res.data.products) {
         setProducts(res.data.products);
 
@@ -54,8 +70,28 @@ const SearchResult: React.FC = () => {
         const brands = res.data.products.map((product) => {
           return product.brand;
         });
+
+        const price = res.data.products
+          .map((prod) =>
+            prod.priceAfterDiscount ? prod.priceAfterDiscount : prod.price
+          )
+          .sort((a, b) => a - b);
+
+        // here set removes repeating names of brands
+
+        //for display
         setBrands([...new Set(brands)]);
 
+        //to check and uncheck brands
+        setFilterBrands([...new Set(brands)]);
+
+        //setting search filters to send to server
+        searchFilters.current.brands = [...new Set(brands)];
+
+        searchFilters.current.price!.low = price[0];
+        searchFilters.current.price!.high = price.pop() as number;
+
+        searchFilters.current.sort = "All Products";
         sortSelectRef.current!.value = "All Products";
       } else {
         setAlert({
@@ -70,14 +106,17 @@ const SearchResult: React.FC = () => {
   }, [parameter, search]);
 
   const handleSortByChange = async (e: ChangeEvent<HTMLSelectElement>) => {
-    console.log(e.target.value);
     setLoading(true);
+
+    searchFilters.current.sort = e.target.value;
+
     try {
+      console.log(searchFilters.current);
       const res = await axios.get<RespondType & { products?: ProtuctType[] }>(
-        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/search/getSortFilter`,
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/search/searchWithFilters`,
         {
           params: {
-            filter: e.target.value,
+            filters: searchFilters.current,
             keyword: parameter,
           },
         }
@@ -103,17 +142,16 @@ const SearchResult: React.FC = () => {
 
   const handelFilterProductsByBrand = async () => {
     setLoading(true);
+    console.log(searchFilters.current);
     const res = await axios.get<RespondType & { products?: ProtuctType[] }>(
-      `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/search/getFilteredProducts`,
+      `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/search/searchWithFilters`,
       {
+        headers: {
+          "Content-Type": "application/json",
+        },
         params: {
-          filters: {
-            brands: filterBrands,
-            price: {
-              low: productLowPrice,
-              high: productHighPrice,
-            },
-          },
+          filters: searchFilters.current,
+          keyword: parameter,
         },
       }
     );
@@ -121,7 +159,6 @@ const SearchResult: React.FC = () => {
 
     if (res.data.status === "ok" && res.data.products) {
       setProducts(res.data.products);
-      setFilterBrands([]);
     } else {
       setAlert({
         type: "error",
@@ -133,13 +170,11 @@ const SearchResult: React.FC = () => {
   const handleFilterProductByPrice = async () => {
     try {
       const res = await axios.get<RespondType & { products?: ProtuctType[] }>(
-        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/search/getPriceFilter`,
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/search/searchWithFilters`,
         {
           params: {
-            price: {
-              low: productLowPrice,
-              high: productHighPrice,
-            },
+            filters: searchFilters.current,
+            keyword: parameter,
           },
         }
       );
@@ -165,13 +200,21 @@ const SearchResult: React.FC = () => {
     brand: string
   ) => {
     if (e.target.checked) {
-      if (filterBrands.some((prevBrand) => brand === prevBrand)) return;
+      // if (filterBrands.some((prevBrand) => brand === prevBrand)) return;
       setFilterBrands((prev) => prev.concat(brand));
+
+      searchFilters.current.brands =
+        searchFilters.current.brands!.concat(brand);
     } else {
       setFilterBrands((prev) =>
         prev.filter((prevBrand) => prevBrand !== brand)
       );
+
+      searchFilters.current.brands = searchFilters.current.brands!.filter(
+        (prev) => prev !== brand
+      );
     }
+    console.log(searchFilters.current.brands);
   };
 
   return (
@@ -180,10 +223,10 @@ const SearchResult: React.FC = () => {
         <div className={styles.sideBar}>
           <div className={styles.searchSideBar} style={{ paddingTop: "30px" }}>
             <section className={styles.catToSearchIn}>
-              <SideBarNav
+              {/* <SideBarNav
                 title="Category to Search In "
                 options={["Electronics", "Men's Fashion", "Women's Fashion"]}
-              />
+              /> */}
             </section>
             <section className={styles.priceRange}>
               <section className={styles.title}>
@@ -195,6 +238,11 @@ const SearchResult: React.FC = () => {
                   <IntputField
                     type="number"
                     setState={setUserLowPrice}
+                    onChange={(e) => {
+                      searchFilters.current.price.low = parseInt(
+                        e.target.value
+                      );
+                    }}
                     style={{
                       padding: 5,
                     }}
@@ -209,6 +257,11 @@ const SearchResult: React.FC = () => {
                       padding: 5,
                     }}
                     setState={setUserHighPrice}
+                    onChange={(e) => {
+                      searchFilters.current.price.high = parseInt(
+                        e.target.value
+                      );
+                    }}
                   />
                 </section>
               </div>
@@ -236,6 +289,7 @@ const SearchResult: React.FC = () => {
                     <input
                       type="checkbox"
                       onChange={(e) => filterBrandSelect(e, brand)}
+                      checked={filterBrands.includes(brand)}
                     />
                     <span>{brand}</span>
                   </div>

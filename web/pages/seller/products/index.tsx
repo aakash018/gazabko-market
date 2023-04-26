@@ -39,6 +39,7 @@ interface CountRespondType {
   reviews: number;
   questions: number;
   hiddenProducts: number;
+  report: number;
 }
 
 const ProductsPage = () => {
@@ -162,7 +163,7 @@ const ProductsPage = () => {
             <MdReviews />
           </InfoCard>
           <InfoCard
-            amount={52}
+            amount={dataCount.report}
             bgColor={"#EC1E5C"}
             title="Products Reported"
             onViewClick={() => {

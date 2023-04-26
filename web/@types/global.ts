@@ -191,3 +191,16 @@ export interface WishlistType {
   user: User;
   items: WishlistProductsType[];
 }
+
+export interface ToBeVerifiedType {
+  id: string;
+  sellerID: any;
+  toUpdate: boolean;
+  username: string;
+  storeName: string;
+  storeAddress: string;
+  contactPerson: string;
+  phoneNo: string;
+  email: string;
+  panNo: string;
+}

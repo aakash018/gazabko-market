@@ -12,6 +12,8 @@ interface Props {
   panNo: string | "N/A";
   email: string | "N/A";
   onVerifyRequest: () => void;
+  onUpdateVerifyRequest: () => {};
+  toUpdate: boolean;
 }
 
 const PendingSellerVefHolder: React.FC<Props> = ({
@@ -22,6 +24,8 @@ const PendingSellerVefHolder: React.FC<Props> = ({
   phoneNo,
   storeName,
   onVerifyRequest,
+  onUpdateVerifyRequest,
+  toUpdate,
 }) => {
   return (
     <div className={styles.pendingSellerVefHolder}>
@@ -34,6 +38,16 @@ const PendingSellerVefHolder: React.FC<Props> = ({
         />
       </div>
       <div className={styles.info}>
+        {toUpdate && (
+          <div className={styles.infoHolder}>
+            <div
+              className={styles.title}
+              style={{ color: "var(--default-red)" }}
+            >
+              This is a seller info update request
+            </div>
+          </div>
+        )}
         <div className={styles.infoHolder}>
           <div className={styles.title}>Name</div>
           <div className={styles.mainInfo}>{storeName}</div>
@@ -61,7 +75,9 @@ const PendingSellerVefHolder: React.FC<Props> = ({
         </div>
 
         <div className={styles.actBtn}>
-          <Button onClick={onVerifyRequest}>Verify</Button>
+          <Button onClick={toUpdate ? onUpdateVerifyRequest : onVerifyRequest}>
+            {toUpdate ? "Verify Update" : "Verify"}
+          </Button>
           <Button color="error">Dismiss</Button>
         </div>
       </div>

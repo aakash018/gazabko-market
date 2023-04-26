@@ -20,9 +20,10 @@ const UserInput: React.FC<{
   const reviewRef = useRef<HTMLTextAreaElement>(null);
   const returnRef = useRef<HTMLTextAreaElement>(null);
   const reportRef = useRef<HTMLTextAreaElement>(null);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  const [reportSubject, setReportSubject] = useState("");
   const router = useRouter();
-  const { pid } = router.query;
+  const { oid } = router.query;
   const { setAlert } = useAlert();
 
   const handleSubmit = async () => {
@@ -66,10 +67,41 @@ const UserInput: React.FC<{
       const res = await axios.post<RespondType>(
         `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/rrr/returnProduct`,
         {
-          oid: pid,
+          oid,
           message: reportRef.current?.value,
         }
       );
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed to connect to server",
+      });
+    }
+  };
+
+  const handleReportRequest = async () => {
+    try {
+      const res = await axios.post<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/rrr/addReport`,
+        {
+          title: reportSubject,
+          report: reportRef.current?.value,
+          pid: (order as any).product.id,
+        },
+        { withCredentials: true }
+      );
+
       if (res.data.status === "ok") {
         setAlert({
           type: "message",
@@ -113,7 +145,11 @@ const UserInput: React.FC<{
         </div>
         {title === "Report" && (
           <div style={{ width: "350px" }}>
-            <InputField placeholder="Subject" />
+            <InputField
+              placeholder="Subject"
+              setState={setReportSubject}
+              value={reportSubject}
+            />
           </div>
         )}
 
@@ -133,8 +169,8 @@ const UserInput: React.FC<{
                 title === "Review"
                   ? reviewRef
                   : title === "Report"
-                  ? returnRef
-                  : reportRef
+                  ? reportRef
+                  : reviewRef
               }
             ></textarea>
             <Button
@@ -144,6 +180,7 @@ const UserInput: React.FC<{
                 } else if (title === "Return") {
                   handleReturnRequest();
                 } else {
+                  handleReportRequest();
                 }
               }}
             >
@@ -163,7 +200,7 @@ const Manage = () => {
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { pid } = router.query;
+  const { oid } = router.query;
   const { setAlert } = useAlert();
   useEffect(() => {
     let ignore = false;
@@ -173,7 +210,7 @@ const Manage = () => {
         setLoading(true);
         const res = await axios.get<RespondType & { order?: Order }>(
           `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/order/orderDetails`,
-          { withCredentials: true, params: { oid: pid } }
+          { withCredentials: true, params: { oid } }
         );
         setLoading(false);
         if (res.data.order && res.data.status === "ok") {

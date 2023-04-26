@@ -1,17 +1,17 @@
 import Image from "next/image";
 import React from "react";
-import { ReviewType } from "../../../@types/rrr";
+import { ReportType, ReviewType } from "../../../@types/rrr";
 import styles from "../../../styles/components/Admin/ProductReviewHolder.module.scss";
 import Button from "../../shared/Button";
 
 interface Props {
   showViewVendor?: boolean;
-  review: ReviewType;
+  report: ReportType;
 }
 
-const ProductReviewHolder: React.FC<Props> = ({
+const ProductReportHolder: React.FC<Props> = ({
   showViewVendor = true,
-  review,
+  report,
 }) => {
   return (
     <div className={styles.productReviewHolder}>
@@ -19,7 +19,7 @@ const ProductReviewHolder: React.FC<Props> = ({
         <Image src={"/images/shoes.jpg"} width={200} height={200} />
       </div>
       <div className={styles.info}>
-        <div className={styles.productName}>{review.product?.name}</div>
+        <div className={styles.productName}>{report.product?.name}</div>
         <div className={styles.priceAndView}>
           <div className={styles.price}>Rs. 2200</div>
           <Button>View Product</Button>
@@ -28,23 +28,22 @@ const ProductReviewHolder: React.FC<Props> = ({
           <div className={styles.header}>
             <div className={styles.profile}>
               <div className={styles.profilePic}>
-                <Image src={"/images/avatar.jpg"} width={50} height={50} />
+                <Image src={report.user!.avatar} width={50} height={50} />
               </div>
               <div className={styles.nameAndDate}>
-                <div className={styles.name}>Jon Leona</div>
-                <div className={styles.date}>27 July 2022</div>
+                <div className={styles.name}>{report.user!.firstName}</div>
+                <div className={styles.date}>
+                  {report.created_at.split("T")[0]}
+                </div>
               </div>
             </div>
-            <div className={styles.tag}>Scan or misguiding product</div>
+            <div className={styles.tag}>{report.title}</div>
           </div>
-          <div className={styles.content}>
-            This product is a scam. I bought it and it was a scam...This product
-            is a scam. I bought it and it was a scam...This product is a scam. I
-          </div>
+          <div className={styles.content}>{report.report}</div>
         </div>
         <div className={styles.actBtn}>
-          <Button color="success">Dismiss</Button>
-          {showViewVendor && <Button color="default">View Vender</Button>}
+          {/* <Button color="success">Dismiss</Button> */}
+          {/* {showViewVendor && <Button color="default">View Vender</Button>} */}
           <Button color="error">Hide Product</Button>
         </div>
       </div>
@@ -52,4 +51,4 @@ const ProductReviewHolder: React.FC<Props> = ({
   );
 };
 
-export default ProductReviewHolder;
+export default ProductReportHolder;
