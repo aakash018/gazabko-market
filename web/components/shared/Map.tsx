@@ -18,6 +18,7 @@ interface Props {
   setLatLng?: React.Dispatch<React.SetStateAction<string>>;
   lat?: number;
   lng?: number;
+  moveAblePointer?: boolean;
 }
 
 const center = {
@@ -25,7 +26,13 @@ const center = {
   lng: 85.342,
 };
 
-const GetCods: React.FC<Props> = ({ setAddress, setLatLng, lat, lng }) => {
+const GetCods: React.FC<Props> = ({
+  setAddress,
+  setLatLng,
+  lat,
+  lng,
+  moveAblePointer,
+}) => {
   const codsRef = useRef({
     lat: lat || 27.7172,
     lng: lng || 85.342,
@@ -82,6 +89,7 @@ const GetCods: React.FC<Props> = ({ setAddress, setLatLng, lat, lng }) => {
 
   useMapEvents({
     click(e) {
+      if (!moveAblePointer) return;
       setPosition({
         lat: e.latlng.lat,
         lng: e.latlng.lng,
@@ -138,7 +146,13 @@ const GetCods: React.FC<Props> = ({ setAddress, setLatLng, lat, lng }) => {
   );
 };
 
-const Map: React.FC<Props> = ({ setAddress, setLatLng, lat, lng }) => {
+const Map: React.FC<Props> = ({
+  setAddress,
+  setLatLng,
+  lat,
+  lng,
+  moveAblePointer = true,
+}) => {
   const codsRef = useRef({
     lat: lat || 27.7172,
     lng: lng || 85.342,
@@ -150,6 +164,7 @@ const Map: React.FC<Props> = ({ setAddress, setLatLng, lat, lng }) => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <GetCods
+        moveAblePointer={moveAblePointer}
         setAddress={setAddress}
         setLatLng={setLatLng}
         lat={lat}

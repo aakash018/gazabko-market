@@ -137,11 +137,11 @@ const CustomerDetails = () => {
                 <div className={styles.infoHolder}>
                   <div className={styles.infoTitle}>Joined Date: </div>
                   <div className={styles.infoContent}>
-                    {followerInfo.joinedDate}
+                    {followerInfo.joinedDate.split("T")[0]}
                   </div>
                 </div>
               </div>
-              <div className={styles.infoGroup}>
+              {/* <div className={styles.infoGroup}>
                 <div className={styles.infoHolder}>
                   <div className={styles.infoTitle}>
                     Total Reviews Written:{" "}
@@ -154,7 +154,7 @@ const CustomerDetails = () => {
                   </div>
                   <div className={styles.infoContent}>2</div>
                 </div>
-              </div>
+              </div> */}
               <div className={styles.actBtn}>
                 <Button color="error" onClick={hanldeUnfollowUser}>
                   Force Unfollow User

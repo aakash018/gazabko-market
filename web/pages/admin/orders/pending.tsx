@@ -34,7 +34,6 @@ const Pending: React.FC = () => {
       field: "Details",
       cellRenderer: () => (
         <div
-          onClick={() => Router.push("/admin/orders/54545465465")}
           style={{
             color: "var(--theme-color)",
             fontWeight: "bold",
@@ -106,6 +105,11 @@ const Pending: React.FC = () => {
           columData={columnDefs}
           rowData={rowData}
           height={800}
+          onCellClicked={(e) => {
+            if (e.colDef.field === "Details") {
+              Router.push(`/admin/orders/id?oid=${e.data.id}`);
+            }
+          }}
         />
       </div>
     </AdminLayout>

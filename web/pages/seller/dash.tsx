@@ -153,7 +153,7 @@ const SellerPage = () => {
   const [dashTabsData, setDashTabsData] = useState<{
     ordersCount: string;
     totalPrice: string;
-    totalFollowers: string;
+    totalFollower: string;
   } | null>(null);
 
   const [topProductsCount, setTopProductsCount] = useState<
@@ -191,7 +191,7 @@ const SellerPage = () => {
               totalStats: {
                 ordersCount: string;
                 totalPrice: string;
-                totalFollowers: string;
+                totalFollower: string;
               };
             }
           >(`${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/analytics`, {
@@ -237,7 +237,6 @@ const SellerPage = () => {
             ]);
 
             setDashTabsData(res.data.totalStats);
-            console.log(res.data.totalStats);
 
             setMonthlyOrder({
               data: monthlyOrderData,
@@ -311,7 +310,7 @@ const SellerPage = () => {
                 />
                 <SellerDashTabs
                   icon={<BiPackage color="#00AB77" />}
-                  number={dashTabsData.totalFollowers || "0"}
+                  number={dashTabsData.totalFollower || "0"}
                   text="Total Followers"
                 />
               </div>
@@ -335,7 +334,7 @@ const SellerPage = () => {
               /> */}
               {topProductsCount && (
                 <DashInfoHolder
-                  title="Most Sold Products This Most"
+                  title="Most Sold Products"
                   totalEarning={314}
                   first={{
                     name: topProductsCount[1][0],
@@ -376,7 +375,7 @@ const SellerPage = () => {
                 {!monthlyFollowers && <h2>Data not found</h2>}
                 {monthlyFollowers && (
                   <LineGraphInfo
-                    amount={231}
+                    amount={dashTabsData!.totalFollower || 0}
                     subTitle="Total Followers"
                     labels={monthlyFollowers!.label}
                     data={monthlyFollowers!.data}
@@ -388,7 +387,7 @@ const SellerPage = () => {
                 {!noOfMonthlyOrders && <h2>Data not found</h2>}
                 {noOfMonthlyOrders && (
                   <LineGraphInfo
-                    amount={4.3}
+                    amount={dashTabsData!.ordersCount || "0"}
                     subTitle="My Orders"
                     labels={noOfMonthlyOrders!.label}
                     data={noOfMonthlyOrders!.data}

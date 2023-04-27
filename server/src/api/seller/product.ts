@@ -322,6 +322,7 @@ router.get("/getReports", validateSeller, async (req, res) => {
           images: true,
           name: true,
           id: true,
+          isHidden: true,
         },
       },
     });
@@ -399,7 +400,7 @@ router.post("/addAnswer", validateSeller, async (req, res) => {
 });
 
 router.put("/hideProduct", validateSeller, async (req, res) => {
-  const userReq = req.body as { productID: number };
+  const userReq = req.body as { productID: any };
   try {
     await Products.update({ id: userReq.productID }, { isHidden: true });
     res.json({

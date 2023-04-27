@@ -6,6 +6,8 @@ import { Products } from "../../entities/Products";
 import validateAdmin from "../../middleware/validateAdmin";
 import { Review } from "../../entities/Review";
 
+import { Report } from "../../entities/Report";
+
 const router = express();
 
 router.get("/oneProductDetail", validateAdmin, async (req, res) => {
@@ -14,7 +16,7 @@ router.get("/oneProductDetail", validateAdmin, async (req, res) => {
   try {
     const product = await Products.createQueryBuilder("product")
       .where({ id: userReq.pid })
-      // .leftJoinAndSelect("seller.products", "products")
+      .leftJoinAndSelect("product.category", "category")
       .loadRelationCountAndMap("product.reviewsCount", "product.review")
       //   .loadRelationCountAndMap("product.", "seller.products")
       .getOne();
@@ -262,6 +264,70 @@ router.get("/getReviews", validateAdmin, async (_, res) => {
     res.json({
       status: "fail",
       message: "failed to find reviews",
+    });
+  }
+});
+
+router.get("/getReports", validateAdmin, async (_, res) => {
+  try {
+    const reports = await Report.find({
+      relations: {
+        user: true,
+        product: true,
+      },
+      select: {
+        id: true,
+        report: true,
+        title: true,
+        user: {
+          firstName: true,
+          lastName: true,
+          avatar: true,
+        },
+        created_at: true,
+        product: {
+          images: true,
+          name: true,
+          id: true,
+          isHidden: true,
+        },
+      },
+    });
+
+    res.json({
+      status: "ok",
+      message: "reports found",
+      reports,
+    });
+  } catch (e) {
+    res.json({
+      status: "fail",
+      message: "failed to retrieve data",
+    });
+  }
+});
+
+router.get("/getHiddenProducts", validateAdmin, async (_, res) => {
+  try {
+    const products = await Products.find({
+      where: { isHidden: true },
+      select: {
+        id: true,
+        name: true,
+        store: true,
+        timesBought: true,
+      },
+    });
+
+    res.json({
+      status: "ok",
+      message: "products found",
+      products,
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to find data",
     });
   }
 });

@@ -14,34 +14,36 @@ const ProductReports = () => {
   const [loading, setLoading] = useState(false);
   const { setAlert } = useAlert();
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get<RespondType & { reports: ReportType[] }>(
-          `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/getReports`,
-          {
-            withCredentials: true,
-          }
-        );
-        setLoading(false);
-
-        if (res.data.status === "ok") {
-          setReports(res.data.reports);
-        } else {
-          setAlert({
-            type: "error",
-            message: res.data.message,
-          });
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get<RespondType & { reports: ReportType[] }>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/getReports`,
+        {
+          withCredentials: true,
         }
-      } catch (e) {
-        setLoading(false);
+      );
+      setLoading(false);
+
+      if (res.data.status === "ok") {
+        setReports(res.data.reports);
+      } else {
         setAlert({
           type: "error",
-          message: "failed to connect to servers",
+          message: res.data.message,
         });
       }
-    })();
+    } catch (e) {
+      setLoading(false);
+      setAlert({
+        type: "error",
+        message: "failed to connect to servers",
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   return (
@@ -53,7 +55,11 @@ const ProductReports = () => {
         {!loading &&
           reports.length !== 0 &&
           reports.map((report, i) => (
-            <ProductReportHolder report={report} key={i} />
+            <ProductReportHolder
+              afterHideOrUnhide={fetchData}
+              report={report}
+              key={i}
+            />
           ))}
       </div>
     </SellerNav>

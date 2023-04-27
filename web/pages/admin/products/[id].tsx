@@ -22,40 +22,106 @@ const ProductDetails = () => {
     setImgUrl(url);
   };
 
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get<RespondType & { product?: ProtuctType }>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/products/oneProductDetail`,
+        {
+          withCredentials: true,
+          params: { pid },
+        }
+      );
+      setLoading(false);
+      console.log(res.data);
+
+      if (res.data.status === "ok" && res.data.product) {
+        setProduct(res.data.product);
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed to load product info",
+      });
+    }
+  };
+
   useEffect(() => {
     let ignore = false;
     if (!ignore && pid) {
-      (async () => {
-        try {
-          setLoading(true);
-          const res = await axios.get<RespondType & { product?: ProtuctType }>(
-            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/products/oneProductDetail`,
-            {
-              withCredentials: true,
-              params: { pid },
-            }
-          );
-          setLoading(false);
-          if (res.data.status === "ok" && res.data.product) {
-            setProduct(res.data.product);
-          } else {
-            setAlert({
-              type: "error",
-              message: res.data.message,
-            });
-          }
-        } catch {
-          setAlert({
-            type: "error",
-            message: "failed to load product info",
-          });
-        }
-      })();
+      fetchData();
     }
     return () => {
       ignore = true;
     };
   }, [pid]);
+
+  const handleHideProduct = async () => {
+    try {
+      const res = await axios.put<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/hideProduct`,
+        {
+          productID: product?.id,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+        fetchData();
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed to connect to server",
+      });
+    }
+  };
+
+  const handleUnhideProduct = async () => {
+    try {
+      const res = await axios.put<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/unhideProduct`,
+        {
+          productID: product?.id,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+        fetchData();
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed to connect to server",
+      });
+    }
+  };
 
   return (
     <AdminLayout>
@@ -143,7 +209,16 @@ const ProductDetails = () => {
             <div className={styles.infoGroup}>
               <div className={styles.actBtn}>
                 <Button>View Full Page</Button>
-                <Button color="error">Hide Product</Button>
+                {!product.isHidden && (
+                  <Button color="error" onClick={handleHideProduct}>
+                    Hide Product
+                  </Button>
+                )}
+                {product.isHidden && (
+                  <Button color="success" onClick={handleUnhideProduct}>
+                    Unhide Product
+                  </Button>
+                )}
                 <Button>View Vendor</Button>
               </div>
             </div>

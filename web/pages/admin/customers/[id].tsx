@@ -180,7 +180,9 @@ const CustomerInfoPage = () => {
                 </div>
                 <div className={styles.infoHolder}>
                   <div className={styles.infoTitle}>Total money spent: </div>
-                  <div className={styles.infoContent}>35,587</div>
+                  <div className={styles.infoContent}>
+                    {customer.totalMoneySpent}
+                  </div>
                 </div>
               </div>
               <div className={styles.infoGroup}>
@@ -235,6 +237,7 @@ const CustomerInfoPage = () => {
               </div>
               <div className={styles.map}>
                 <Map
+                  moveAblePointer={false}
                   setAddress={setAddress}
                   lat={JSON.parse(customer.address[0].latlng).lat}
                   lng={JSON.parse(customer.address[0].latlng).lng}

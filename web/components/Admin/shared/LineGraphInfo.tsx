@@ -4,7 +4,7 @@ import { Line } from "react-chartjs-2";
 
 interface Props {
   subTitle: string;
-  amount: number;
+  amount: number | string;
   labels: string[];
   data: number[];
 }

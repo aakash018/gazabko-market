@@ -9,6 +9,7 @@ import SellerNav from "../../../components/Seller/SellerNav";
 import styles from "../../../styles/components/Seller/pages/CustomerPage.module.scss";
 import { TableHolder } from "../../admin/orders";
 import { useAlert } from "../../_app";
+import { ECDH } from "crypto";
 
 type TableDef = {
   SN: number;
@@ -33,7 +34,13 @@ const CustomersPage = () => {
     { field: "Uid" },
     { field: "Name", width: 120 },
     { field: "Signed Up Date", width: 200 },
-    { field: "Total Items Boughts" },
+    { field: "Total Items Bought" },
+    {
+      field: "Details",
+      cellRenderer: () => (
+        <div style={{ color: "var(--theme-color)" }}>View</div>
+      ),
+    },
   ]);
 
   useEffect(() => {
@@ -128,9 +135,11 @@ const CustomersPage = () => {
           columData={columnDefs}
           inputRef={searchRef}
           title="All Followers"
-          width={790}
-          onRowClick={(event) => {
-            Router.push(`/seller/customers/id?uid=${event.data.Uid}`);
+          width={890}
+          onCellClicked={(event) => {
+            if (event.colDef.field === "Details") {
+              Router.push(`/seller/customers/id?uid=${event.data.Uid}`);
+            }
           }}
         />
       </div>

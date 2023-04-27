@@ -158,6 +158,7 @@ router.post("/verifyReceivedOrder", validateAdmin, async (req, res) => {
     });
   }
 });
+
 router.post("/verifyOutForDelivery", validateAdmin, async (req, res) => {
   try {
     const userReq = (await req.body) as { oid: number };
@@ -189,12 +190,15 @@ router.post("/verifyDelivered", validateAdmin, async (req, res) => {
       where: { id: userReq.oid },
       relations: {
         product: true,
+        user: true,
       },
     });
 
     if (order?.product) {
       order.product.timesBought = order.product.timesBought + 1;
       order.product.totalStock = order.product.totalStock - 1;
+      order.user.totalItemsBought = order.user.totalItemsBought + 1;
+      order.user.totalMoneySpent = order.user.totalMoneySpent + order.price;
       order.status = "delivered";
       order.product.save();
       order.save();

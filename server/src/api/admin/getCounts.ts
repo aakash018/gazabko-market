@@ -5,6 +5,7 @@ import { Seller } from "../../entities/seller/Seller";
 import { Products } from "../../entities/Products";
 import { Review } from "../../entities/Review";
 import { ToBeVerified } from "../../entities/seller/ToBeVerified";
+import { Report } from "../../entities/Report";
 
 const router = express();
 
@@ -103,9 +104,14 @@ router.get("/getProductCounts", validateAdmin, async (_, res) => {
       .getMany();
 
     const reviewsCount = await Review.count({});
+    const reportsCount = await Report.count({});
 
     const outOfStockCount = products.reduce((acc, el) => {
       if (el.totalStock <= 0) return acc + 1;
+      else return acc;
+    }, 0);
+    const hiddenCount = products.reduce((acc, el) => {
+      if (el.isHidden === true) return acc + 1;
       else return acc;
     }, 0);
 
@@ -115,7 +121,9 @@ router.get("/getProductCounts", validateAdmin, async (_, res) => {
       counts: {
         allProductsCount: products.length,
         reviewsCount,
+        reportsCount,
         outOfStockCount,
+        hiddenCount,
       },
     });
   } catch {}

@@ -4,6 +4,7 @@ declare interface User {
   firstName: string;
   lastName: string;
   totalItemsBought: number;
+  totalMoneySpent: number;
   email: string;
   isBanned: boolean;
   avatar: string;

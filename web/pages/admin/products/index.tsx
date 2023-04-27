@@ -23,6 +23,7 @@ import axios from "axios";
 import { setDefaultResultOrder } from "dns";
 import { useAlert } from "../../_app";
 import { ProtuctType } from "../../../@types/global";
+import { BsEyeSlashFill } from "react-icons/bs";
 
 type TableDef = {
   SN: number;
@@ -38,7 +39,9 @@ type TableDef = {
 interface CountResponse {
   allProductsCount: number;
   reviewsCount: number;
+  reportsCount: number;
   outOfStockCount: number;
+  hiddenCount: number;
 }
 
 const EditProducts: React.FC = () => {
@@ -206,7 +209,7 @@ const EditProducts: React.FC = () => {
                 <MdReviews />
               </InfoCard>
               <InfoCard
-                amount={52}
+                amount={counts.reportsCount}
                 bgColor={"#EC1E5C"}
                 title="Products Reported"
                 onViewClick={() => {
@@ -215,16 +218,16 @@ const EditProducts: React.FC = () => {
               >
                 <MdOutlineReportProblem />
               </InfoCard>
-              {/* <InfoCard
-                amount={52}
+              <InfoCard
+                amount={counts.hiddenCount}
                 bgColor={"#48bdbd"}
-                title="Products Returned"
+                title="Hidden Products"
                 onViewClick={() => {
-                  handleInfoCardRoute("productsReturned");
+                  handleInfoCardRoute("hiddenProducts");
                 }}
               >
-                <MdOutlineReportProblem />
-              </InfoCard>{" "} */}
+                <BsEyeSlashFill />
+              </InfoCard>{" "}
             </>
           )}
         </div>

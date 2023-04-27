@@ -259,7 +259,7 @@ const OrderDetails = () => {
                   </div>
                   <Button
                     onClick={() => {
-                      Router.push("/admin/customers/sdad");
+                      Router.push(`/admin/customers/id?cid=${order.user?.id}`);
                     }}
                   >
                     View Customer
@@ -311,6 +311,7 @@ const OrderDetails = () => {
                   className={styles.map}
                 >
                   <Map
+                    moveAblePointer={false}
                     setAddress={setAddress}
                     lat={JSON.parse(order.latlng).lat}
                     lng={JSON.parse(order.latlng).lng}
