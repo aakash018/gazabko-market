@@ -1,3 +1,17 @@
+.confirmHideModal {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    .content {
+        font-size: 1.5rem;
+    }
+
+    .actBtn {
+        display: flex;
+        gap: 20px;
+    }
+}
+
 .infoHolder {
     display: flex;
     font-size: 1.5rem;

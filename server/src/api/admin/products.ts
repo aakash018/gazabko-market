@@ -115,6 +115,38 @@ router.get("/productsOutOfStock", validateAdmin, async (_, res) => {
   }
 });
 
+router.put("/hideProduct", validateAdmin, async (req, res) => {
+  const userReq = req.body as { productID: any };
+  try {
+    await Products.update({ id: userReq.productID }, { isHidden: true });
+    res.json({
+      status: "ok",
+      message: "product now hidden",
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to hide product",
+    });
+  }
+});
+
+router.put("/unhideProduct", validateAdmin, async (req, res) => {
+  const userReq = req.body as { productID: number };
+  try {
+    await Products.update({ id: userReq.productID }, { isHidden: false });
+    res.json({
+      status: "ok",
+      message: "product now unhidden",
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to unhide product",
+    });
+  }
+});
+
 router.post("/addProduct", validateAdmin, async (req, res) => {
   const adminReq = req.body as ProductPayloadType;
 

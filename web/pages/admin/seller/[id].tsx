@@ -16,7 +16,7 @@ import IntputField from "../../../components/shared/Input";
 import axios from "axios";
 import { ProtuctType, Seller } from "../../../@types/global";
 import { useAlert } from "../../_app";
-import { sleep } from "../../../utils/sleep";
+import DialogBox from "../../../components/shared/DialogBox";
 
 interface TableDef {
   SN: number;
@@ -84,6 +84,8 @@ const SellerInfoPage: React.FC = () => {
   const [loadingProducts, setLoadingProducts] = useState(false);
   const { setAlert } = useAlert();
   const [banLoading, setBanLoading] = useState(false);
+  const [banConfirmModal, setBanConfirmModal] = useState(false);
+  const [banOrUnban, setBanOrUnban] = useState<"ban" | "unban">();
 
   const fetchData = async () => {
     try {
@@ -211,7 +213,8 @@ const SellerInfoPage: React.FC = () => {
         },
         { withCredentials: true }
       );
-      await sleep(2000);
+      setBanConfirmModal(false);
+
       setBanLoading(false);
       if (res.data.status === "ok") {
         setAlert({
@@ -242,7 +245,7 @@ const SellerInfoPage: React.FC = () => {
         },
         { withCredentials: true }
       );
-      await sleep(2000);
+      setBanConfirmModal(false);
       setBanLoading(false);
       if (res.data.status === "ok") {
         setAlert({
@@ -299,6 +302,31 @@ const SellerInfoPage: React.FC = () => {
 
   return (
     <AdminLayout>
+      <Modal
+        isOpen={banConfirmModal}
+        style={customStyles}
+        onRequestClose={() => setBanConfirmModal(false)}
+      >
+        <DialogBox title="Deactivate Confirm">
+          <div className={styles.confirmModal}>
+            <div className={styles.content}>
+              Do you want to {banOrUnban} this seller?
+            </div>
+            <div className={styles.actBtn}>
+              <Button
+                onClick={
+                  banOrUnban === "ban" ? handleBanSeller : handleUnbanSeller
+                }
+              >
+                Yes
+              </Button>
+              <Button color="error" onClick={() => setBanConfirmModal(false)}>
+                No
+              </Button>
+            </div>
+          </div>
+        </DialogBox>
+      </Modal>
       <Modal
         isOpen={comissionRateModal}
         style={customStyles}
@@ -444,7 +472,10 @@ const SellerInfoPage: React.FC = () => {
             {!seller.isBanned && (
               <Button
                 color="error"
-                onClick={handleBanSeller}
+                onClick={() => {
+                  setBanOrUnban("ban");
+                  setBanConfirmModal(true);
+                }}
                 disable={banLoading}
               >
                 Deactivate Seller
@@ -453,7 +484,10 @@ const SellerInfoPage: React.FC = () => {
             {seller.isBanned && (
               <Button
                 color="success"
-                onClick={handleUnbanSeller}
+                onClick={() => {
+                  setBanOrUnban("unban");
+                  setBanConfirmModal(true);
+                }}
                 disable={banLoading}
               >
                 Reactivate Seller

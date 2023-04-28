@@ -31,7 +31,7 @@ const ProductHolder: React.FC<Props> = ({
   }
 
   const handleProductClick = () => {
-    Router.push(`/products/${id}`);
+    Router.push(`/products/id?pid=${id}`);
   };
 
   return (

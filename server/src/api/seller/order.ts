@@ -77,7 +77,6 @@ router.get("/getOneOrderInfo", validateSeller, async (req, res) => {
       relations: {
         product: true,
         user: true,
-        offer: true,
       },
     });
     if (order) {

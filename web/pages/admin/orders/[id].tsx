@@ -138,256 +138,271 @@ const OrderDetails = () => {
   };
 
   return (
-    <AdminLayout>
-      <h1>Order Details</h1>
-      {loading && <h2>Loading...</h2>}
-      {!loading && order !== null && (
-        <div className={styles.orderDetails}>
-          <div className={styles.tracker}>
-            <OrderTracker orderState={order.state} orderStatus={order.status} />
-          </div>
-          <div className={styles.info}>
-            <div className={styles.product}>
-              <div className={styles.img}>
-                <Image src={"/images/shoes2.webp"} width={250} height={250} />
-              </div>
-              <div className={styles.content}>
-                <div className={styles.infoHolder}>
-                  <div className={styles.title}>Name</div>
-                  <div className={styles.data}>{order?.product?.name}</div>
-                </div>
-                <div className={styles.infoHolder}>
-                  <div className={styles.title}>Product Original Price</div>
-                  <div className={styles.data}>Rs. {order?.product?.price}</div>
-                </div>
-                <div className={styles.infoHolder}>
-                  <div className={styles.title}>Product Discount</div>
-                  <div className={styles.data}>
-                    Rs. {order?.product?.discount || 0}
-                  </div>
-                </div>
-                <div className={styles.infoHolder}>
-                  <div className={styles.title}>Shipping Charge</div>
-                  <div className={styles.data}>Rs. 60</div>
-                </div>
-                <div className={styles.infoHolder}>
-                  <div className={styles.title}>Product Price</div>
-                  <div className={styles.data}>
-                    Rs. {order?.product?.priceAfterDiscount}
-                  </div>
-                </div>
-                <div className={styles.infoHolder}>
-                  <div className={styles.title}>Quantity</div>
-                  <div className={styles.data}>{order?.quantity}</div>
-                </div>
-                <div className={styles.infoHolder}>
-                  <div className={styles.title}>
-                    Total Charge For All Items{" "}
-                  </div>
-                  <div className={styles.data}>
-                    Rs. {order!.product!.priceAfterDiscount * order!.quantity}
-                  </div>
-                </div>
-                {order.offer && (
-                  <>
-                    <div className={styles.infoHolder}>
-                      <div className={styles.title}>Offer</div>
-                      <div className={styles.data}>{order.offer.name}</div>
-                    </div>
-                    <div className={styles.infoHolder}>
-                      <div className={styles.title}>Offer has discount ?</div>
-                      <div className={styles.data}>
-                        {order.offer.common_discount ? "Yes" : "No"}
-                      </div>
-                    </div>
-                    <div className={styles.infoHolder}>
-                      <div className={styles.title}>Offer's Discount</div>
-                      <div className={styles.data}>
-                        {order.offer.discount} %
-                      </div>
-                    </div>
-                  </>
-                )}
-                <div className={styles.infoHolder}>
-                  <div className={styles.title}>Total Order Price</div>
-                  <div className={styles.data}>{order.price}</div>
-                </div>
-                <div className={styles.infoHolder}>
-                  <div className={styles.title}>Vendor</div>
-                  <div className={styles.data}>{order?.product?.store}</div>
-                </div>
-                <div className={styles.infoHolder}>
-                  <div className={styles.title}>Gift Coupen Used</div>
-                  <div className={styles.data}>N/A</div>
-                </div>
-                <div className={styles.actBtn}>
-                  <Button
-                    onClick={() => {
-                      Router.push(
-                        `/admin/products/id?pid=${order.product!.id}`
-                      );
-                    }}
-                  >
-                    View Product
-                  </Button>
-                </div>
-              </div>
+    <>
+      <AdminLayout>
+        <h1>Order Details</h1>
+        {loading && <h2>Loading...</h2>}
+        {!loading && order !== null && (
+          <div className={styles.orderDetails}>
+            <div className={styles.tracker}>
+              <OrderTracker
+                orderState={order.state}
+                orderStatus={order.status}
+              />
             </div>
-            <div className={styles.customer}>
-              <div
-                style={{
-                  display: "flex",
-                  alignContent: "flex-start",
-                  gap: "100px",
-                }}
-              >
-                <div className={styles.details}>
-                  <div className={styles.mainTitle}>Customer</div>
+            <div className={styles.info}>
+              <div className={styles.product}>
+                <div className={styles.img}>
+                  <Image src={"/images/shoes2.webp"} width={250} height={250} />
+                </div>
+                <div className={styles.content}>
                   <div className={styles.infoHolder}>
                     <div className={styles.title}>Name</div>
+                    <div className={styles.data}>{order?.product?.name}</div>
+                  </div>
+                  <div className={styles.infoHolder}>
+                    <div className={styles.title}>Product Original Price</div>
                     <div className={styles.data}>
-                      {order.user?.firstName} {order.user?.lastName}
+                      Rs. {order?.product?.price}
                     </div>
                   </div>
                   <div className={styles.infoHolder}>
-                    <div className={styles.title}>Phone No.</div>
-                    <div className={styles.data}>{order.user?.phoneNo}</div>
-                  </div>
-                  <div className={styles.infoHolder}>
-                    <div className={styles.title}>Email</div>
-                    <div className={styles.data}>{order.user?.email}</div>
-                  </div>
-                  <Button
-                    onClick={() => {
-                      Router.push(`/admin/customers/id?cid=${order.user?.id}`);
-                    }}
-                  >
-                    View Customer
-                  </Button>
-                </div>
-                <div
-                  className={styles.details}
-                  style={{
-                    maxWidth: "400px",
-                  }}
-                >
-                  <div className={styles.mainTitle}>Delivery Details</div>
-
-                  <div className={styles.infoHolder}>
-                    <div className={styles.title}>Address</div>
+                    <div className={styles.title}>Product Discount</div>
                     <div className={styles.data}>
-                      <div>{order.nearestLandmark}</div>
-                      <div>{order.deliveryAddress}</div>
+                      Rs. {order?.product?.discount || 0}
                     </div>
                   </div>
                   <div className={styles.infoHolder}>
-                    <div className={styles.title}>Order Placed At</div>
-                    <div className={styles.data}>{order.created_at}</div>
+                    <div className={styles.title}>Shipping Charge</div>
+                    <div className={styles.data}>Rs. 60</div>
                   </div>
                   <div className={styles.infoHolder}>
-                    <div className={styles.title}>Expected Delivary Date</div>
-                    <div className={styles.data}></div>
+                    <div className={styles.title}>Product Price</div>
+                    <div className={styles.data}>
+                      Rs. {order?.product?.priceAfterDiscount}
+                    </div>
                   </div>
-                  <span
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "1.3rem",
-                      color: "var(--theme-color)",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => setViewMap((prev) => !prev)}
-                  >
-                    {!viewMap ? "View in map" : "Close map"}
-                  </span>
-                </div>
-              </div>
-              {viewMap && (
-                <div
-                  style={{
-                    width: "100%",
-                    height: 200,
-                    marginTop: "30px",
-                  }}
-                  className={styles.map}
-                >
-                  <Map
-                    moveAblePointer={false}
-                    setAddress={setAddress}
-                    lat={JSON.parse(order.latlng).lat}
-                    lng={JSON.parse(order.latlng).lng}
-                  />
-                </div>
-              )}
-            </div>
-            <div className={styles.statusControl}>
-              <div className={styles.mainTitle}>Order Status Control</div>
-              {order.status === "pending" && (
-                <div
-                  className={styles.statusHolder}
-                  style={{ color: "var(--theme-red)" }}
-                >
-                  Order yet to be verified by the seller
-                </div>
-              )}
-              {order.status !== "pending" && (
-                <div className={styles.statusHolder}>
-                  <div className={styles.text}>Order Verified by Vendor</div>
-                  <GiCheckMark color="green" size={20} />
-                </div>
-              )}
-
-              <div className={styles.statusHolder}>
-                <div className={styles.text}>Order Recieved</div>
-                <div className={styles.button}>
-                  {order.status === "processing" && order.state === null && (
-                    <Button color="default" onClick={handleReceivedOrder}>
-                      VERIFY
-                    </Button>
-                  )}
-                  {order.state === "received" ||
-                    (order.state === "outForDelivery" && (
-                      <GiCheckMark color="green" size={20} />
-                    ))}
-                </div>
-              </div>
-
-              <div className={styles.statusHolder}>
-                <div className={styles.text}>Order Out for Delivery</div>
-                <div className={styles.button}>
-                  {order.state === "received" && (
-                    <Button color="default" onClick={handleOutForDeliveryOrder}>
-                      VERIFY
-                    </Button>
-                  )}
-                  {order.state === "outForDelivery" && (
-                    <GiCheckMark color="green" size={20} />
-                  )}
-                </div>
-              </div>
-
-              {
-                <div className={styles.statusHolder}>
-                  <div className={styles.text}>
-                    Order Delivered Successfully
+                  <div className={styles.infoHolder}>
+                    <div className={styles.title}>Quantity</div>
+                    <div className={styles.data}>{order?.quantity}</div>
                   </div>
-                  {order.status === "processing" &&
-                    order.state === "outForDelivery" && (
-                      <div className={styles.button}>
-                        <Button color="default" onClick={handleDeliveredOrder}>
-                          VERIFY
-                        </Button>
+                  <div className={styles.infoHolder}>
+                    <div className={styles.title}>
+                      Total Charge For All Items{" "}
+                    </div>
+                    <div className={styles.data}>
+                      Rs. {order!.product!.priceAfterDiscount * order!.quantity}
+                    </div>
+                  </div>
+                  {order.offerName && (
+                    <>
+                      <div className={styles.infoHolder}>
+                        <div className={styles.title}>Offer</div>
+                        <div className={styles.data}>{order.offerName}</div>
                       </div>
-                    )}
-                  {order.status === "delivered" && (
-                    <GiCheckMark color="green" size={20} />
+                      <div className={styles.infoHolder}>
+                        <div className={styles.title}>Offer has discount ?</div>
+                        <div className={styles.data}>
+                          {order.offerHasCommonDiscount ? "Yes" : "No"}
+                        </div>
+                      </div>
+                      <div className={styles.infoHolder}>
+                        <div className={styles.title}>Offer's Discount</div>
+                        <div className={styles.data}>
+                          {order.offerDiscount} %
+                        </div>
+                      </div>
+                    </>
                   )}
+                  <div className={styles.infoHolder}>
+                    <div className={styles.title}>Total Order Price</div>
+                    <div className={styles.data}>{order.price}</div>
+                  </div>
+                  <div className={styles.infoHolder}>
+                    <div className={styles.title}>Vendor</div>
+                    <div className={styles.data}>{order?.product?.store}</div>
+                  </div>
+                  <div className={styles.infoHolder}>
+                    <div className={styles.title}>Gift Coupen Used</div>
+                    <div className={styles.data}>N/A</div>
+                  </div>
+                  <div className={styles.actBtn}>
+                    <Button
+                      onClick={() => {
+                        Router.push(
+                          `/admin/products/id?pid=${order.product!.id}`
+                        );
+                      }}
+                    >
+                      View Product
+                    </Button>
+                  </div>
                 </div>
-              }
+              </div>
+              <div className={styles.customer}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignContent: "flex-start",
+                    gap: "100px",
+                  }}
+                >
+                  <div className={styles.details}>
+                    <div className={styles.mainTitle}>Customer</div>
+                    <div className={styles.infoHolder}>
+                      <div className={styles.title}>Name</div>
+                      <div className={styles.data}>
+                        {order.user?.firstName} {order.user?.lastName}
+                      </div>
+                    </div>
+                    <div className={styles.infoHolder}>
+                      <div className={styles.title}>Phone No.</div>
+                      <div className={styles.data}>{order.user?.phoneNo}</div>
+                    </div>
+                    <div className={styles.infoHolder}>
+                      <div className={styles.title}>Email</div>
+                      <div className={styles.data}>{order.user?.email}</div>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        Router.push(
+                          `/admin/customers/id?cid=${order.user?.id}`
+                        );
+                      }}
+                    >
+                      View Customer
+                    </Button>
+                  </div>
+                  <div
+                    className={styles.details}
+                    style={{
+                      maxWidth: "400px",
+                    }}
+                  >
+                    <div className={styles.mainTitle}>Delivery Details</div>
+
+                    <div className={styles.infoHolder}>
+                      <div className={styles.title}>Address</div>
+                      <div className={styles.data}>
+                        <div>{order.nearestLandmark}</div>
+                        <div>{order.deliveryAddress}</div>
+                      </div>
+                    </div>
+                    <div className={styles.infoHolder}>
+                      <div className={styles.title}>Order Placed At</div>
+                      <div className={styles.data}>{order.created_at}</div>
+                    </div>
+                    <div className={styles.infoHolder}>
+                      <div className={styles.title}>Expected Delivary Date</div>
+                      <div className={styles.data}></div>
+                    </div>
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "1.3rem",
+                        color: "var(--theme-color)",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => setViewMap((prev) => !prev)}
+                    >
+                      {!viewMap ? "View in map" : "Close map"}
+                    </span>
+                  </div>
+                </div>
+                {viewMap && (
+                  <div
+                    style={{
+                      width: "100%",
+                      height: 200,
+                      marginTop: "30px",
+                    }}
+                    className={styles.map}
+                  >
+                    <Map
+                      moveAblePointer={false}
+                      setAddress={setAddress}
+                      lat={JSON.parse(order.latlng).lat}
+                      lng={JSON.parse(order.latlng).lng}
+                    />
+                  </div>
+                )}
+              </div>
+              <div className={styles.statusControl}>
+                <div className={styles.mainTitle}>Order Status Control</div>
+                {order.status === "pending" && (
+                  <div
+                    className={styles.statusHolder}
+                    style={{ color: "var(--theme-red)" }}
+                  >
+                    Order yet to be verified by the seller
+                  </div>
+                )}
+                {order.status !== "pending" && (
+                  <div className={styles.statusHolder}>
+                    <div className={styles.text}>Order Verified by Vendor</div>
+                    <GiCheckMark color="green" size={20} />
+                  </div>
+                )}
+
+                <div className={styles.statusHolder}>
+                  <div className={styles.text}>Order Recieved</div>
+                  <div className={styles.button}>
+                    {order.status === "processing" && order.state === null && (
+                      <Button color="default" onClick={handleReceivedOrder}>
+                        VERIFY
+                      </Button>
+                    )}
+                    {order.state === "received" ||
+                      (order.state === "outForDelivery" && (
+                        <GiCheckMark color="green" size={20} />
+                      ))}
+                  </div>
+                </div>
+
+                <div className={styles.statusHolder}>
+                  <div className={styles.text}>Order Out for Delivery</div>
+                  <div className={styles.button}>
+                    {order.state === "received" && (
+                      <Button
+                        color="default"
+                        onClick={handleOutForDeliveryOrder}
+                      >
+                        VERIFY
+                      </Button>
+                    )}
+                    {order.state === "outForDelivery" && (
+                      <GiCheckMark color="green" size={20} />
+                    )}
+                  </div>
+                </div>
+
+                {
+                  <div className={styles.statusHolder}>
+                    <div className={styles.text}>
+                      Order Delivered Successfully
+                    </div>
+                    {order.status === "processing" &&
+                      order.state === "outForDelivery" && (
+                        <div className={styles.button}>
+                          <Button
+                            color="default"
+                            onClick={handleDeliveredOrder}
+                          >
+                            VERIFY
+                          </Button>
+                        </div>
+                      )}
+                    {order.status === "delivered" && (
+                      <GiCheckMark color="green" size={20} />
+                    )}
+                  </div>
+                }
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </AdminLayout>
+        )}
+      </AdminLayout>
+    </>
   );
 };
 

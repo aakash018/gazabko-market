@@ -11,7 +11,7 @@ import {
 } from "typeorm";
 import { User } from "./User";
 import { Products } from "./Products";
-import { Offers } from "./admin/Offers";
+
 import { Return } from "./Return";
 
 @Entity()
@@ -37,8 +37,14 @@ export class Order extends BaseEntity {
   @Column({ default: "pending" })
   status: "pending" | "processing" | "delivered";
 
-  @ManyToOne(() => Offers, (offer) => offer.orders)
-  offer: Offers;
+  @Column({ nullable: true })
+  offerName: string;
+
+  @Column({ nullable: true })
+  offerDiscount: number;
+
+  @Column({ nullable: true })
+  offerHasCommonDiscount: boolean;
 
   @ManyToOne(() => Products, (product) => product.order)
   product: Products;

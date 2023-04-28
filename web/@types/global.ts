@@ -105,7 +105,9 @@ export interface Order {
   nearestLandmark: string;
   latlng: string;
   user?: User;
-  offer?: OfferType;
+  offerName: string;
+  offerDiscount: number;
+  offerHasCommonDiscount: boolean;
   created_at: string;
   updated_at: string;
   product?: ProtuctType;

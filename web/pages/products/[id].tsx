@@ -83,7 +83,7 @@ const ProductDisplay: React.FC = () => {
   const { isLogedIn } = useAuth();
 
   const router = useRouter();
-  const { pid } = router.query;
+  const { id, pid } = router.query;
   const { setAlert } = useAlert();
 
   const questionRef = useRef<HTMLTextAreaElement>(null);

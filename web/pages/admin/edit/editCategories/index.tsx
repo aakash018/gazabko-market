@@ -10,8 +10,7 @@ import Modal from "react-modal";
 
 import styles from "../../../../styles/components/Admin/pages/EditCategories.module.scss";
 
-import { AiFillDelete, AiFillEdit } from "react-icons/ai";
-import { MdDetails } from "react-icons/md";
+import { AiFillDelete } from "react-icons/ai";
 import AddCategoriesModal from "../../../../components/Admin/AddCategoriesModal";
 import { customStyles } from "../../../../modalStyle";
 import Router from "next/router";

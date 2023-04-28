@@ -40,8 +40,15 @@ router.post("/addOrder", validateUser, async (req, res) => {
               cartProduct.product.price *
                 (cartProduct.product.offers.discount / 100)
             : cartProduct.product.priceAfterDiscount) * cartProduct.quantity,
-        offer: cartProduct.product.offers
-          ? cartProduct.product.offers
+
+        offerName: cartProduct.product.offers
+          ? cartProduct.product.offers.name
+          : undefined,
+        offerDiscount: cartProduct.product.offers
+          ? cartProduct.product.offers.discount
+          : undefined,
+        offerHasCommonDiscount: cartProduct.product.offers
+          ? cartProduct.product.offers.common_discount
           : undefined,
         isGift: cartProduct.isGift,
         deliveryAddress: userReq.address.deliveryAddress,

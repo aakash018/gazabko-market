@@ -117,7 +117,7 @@ const CategoryDetails = () => {
           </div>
         </div>
         <div className={styles.data}>
-          <div className={styles.doughnutCharts}>
+          {/* <div className={styles.doughnutCharts}>
             <DashInfoHolder
               totalEarning={28000}
               title="Total Sales"
@@ -146,6 +146,7 @@ const CategoryDetails = () => {
               width={610}
             />
           </div>
+        </div> */}
         </div>
       </div>
     </AdminLayout>

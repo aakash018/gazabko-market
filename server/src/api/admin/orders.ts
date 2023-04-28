@@ -119,7 +119,7 @@ router.get("/getOneOrderInfo", validateAdmin, async (req, res) => {
         product: {
           offers: true,
         },
-        offer: true,
+
         user: true,
       },
     });

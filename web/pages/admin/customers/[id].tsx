@@ -57,8 +57,9 @@ const CustomerInfoPage = () => {
 
   useEffect(() => {
     let ignore = false;
-
-    fetchData();
+    if (!ignore) {
+      fetchData();
+    }
     return () => {
       ignore = true;
     };

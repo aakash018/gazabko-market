@@ -16,6 +16,7 @@ import { OfferType } from "../../../@types/global";
 import { useAlert } from "../../_app";
 import { type } from "os";
 import TagsSelector from "../../../components/shared/TagsSelector";
+import DialogBox from "../../../components/shared/DialogBox";
 
 const EditDeals: React.FC = () => {
   const [offerName, setOfferName] = useState("");
@@ -32,6 +33,8 @@ const EditDeals: React.FC = () => {
   const [pageLoading, setPageLoading] = useState(false);
   const [offers, setOffers] = useState<OfferType[]>([]);
   const [selectedOffer, setSelectedOffer] = useState<OfferType | null>(null);
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const { setAlert } = useAlert();
 
@@ -115,6 +118,8 @@ const EditDeals: React.FC = () => {
           type: "message",
           message: res.data.message,
         });
+
+        setIsDeleteModalOpen(false);
         fetchOffers();
       } else {
         setAlert({
@@ -223,6 +228,25 @@ const EditDeals: React.FC = () => {
 
   return (
     <>
+      <Modal
+        isOpen={isDeleteModalOpen}
+        style={customStyles}
+        onRequestClose={() => setIsDeleteModalOpen(false)}
+      >
+        <DialogBox title="Confirm Delete">
+          <div className={"confirmModal"}>
+            <div className={"content"}>
+              Do you really want to delete the offer?
+            </div>
+            <div className={"actBtn"}>
+              <Button onClick={handleDeleteOffer}>Yes</Button>
+              <Button color="error" onClick={() => setIsDeleteModalOpen(false)}>
+                No
+              </Button>
+            </div>
+          </div>
+        </DialogBox>
+      </Modal>
       <Modal
         isOpen={openAddDeals}
         style={customStyles}
@@ -337,7 +361,10 @@ const EditDeals: React.FC = () => {
                     products within will be removed from the offer. This process
                     is irreversible.
                   </div>
-                  <Button color="error" onClick={handleDeleteOffer}>
+                  <Button
+                    color="error"
+                    onClick={() => setIsDeleteModalOpen(true)}
+                  >
                     Delete
                   </Button>
                 </div>
