@@ -14,6 +14,9 @@ router.get("/getSellerCounts", validateAdmin, async (_, res) => {
     const sellers = await Seller.find({});
 
     const pending = await ToBeVerified.count();
+    const pendingVerification = await Seller.find({
+      where: { isVerified: false },
+    });
 
     const verified = sellers.reduce((acc, el) => {
       if (el.isVerified === true) return acc + 1;
@@ -29,7 +32,7 @@ router.get("/getSellerCounts", validateAdmin, async (_, res) => {
       status: "ok",
       message: "count loaded",
       count: {
-        pending,
+        pending: pending + pendingVerification.length,
         verified,
         deactivated,
       },

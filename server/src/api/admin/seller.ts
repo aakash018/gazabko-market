@@ -9,6 +9,7 @@ const router = express();
 
 router.post("/verifySeller", validateAdmin, async (req, res) => {
   const userReq = req.body as { sid: number };
+  // console.log(userReq);
   try {
     await Seller.update(
       {
