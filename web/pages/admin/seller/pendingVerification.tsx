@@ -27,6 +27,7 @@ const PendingVerification = () => {
           withCredentials: true,
         }
       );
+      console.log(res.data);
       setLoading(false);
       if (res.data.status === "ok" && res.data.pendingSellers) {
         setPendingVerifications(res.data.pendingSellers);
@@ -71,7 +72,7 @@ const PendingVerification = () => {
       if (res.data.status === "ok") {
         setAlert({
           type: "message",
-          message: res.data.status,
+          message: res.data.message,
         });
         fetchData();
       } else {
@@ -141,10 +142,16 @@ const PendingVerification = () => {
                 }
                 toUpdate={pendingVerification.toUpdate}
                 onVerifyRequest={() =>
-                  handleVerifySeller(pendingVerification.sellerID)
+                  handleVerifySeller(
+                    (pendingVerification as any).id ||
+                      pendingVerification.sellerID
+                  )
                 }
                 key={i}
-                address={pendingVerification.storeAddress}
+                address={
+                  (pendingVerification as any).address ||
+                  pendingVerification.storeAddress
+                }
                 storeName={pendingVerification.storeName}
                 email={
                   pendingVerification.email === ""

@@ -75,7 +75,15 @@ router.post("/verifyUpdateSeller", validateAdmin, async (req, res) => {
 
 router.get("/getPendingSellers", validateAdmin, async (_, res) => {
   try {
-    const pendingSellers = await ToBeVerified.find({});
+    const pendingUpdateSellers = await ToBeVerified.find({});
+
+    const pendingVerifySellers = await Seller.find({
+      where: { isVerified: false },
+    });
+
+    const pendingSellers = pendingUpdateSellers.concat(
+      pendingVerifySellers as any
+    );
 
     res.json({
       message: "sellers found",
