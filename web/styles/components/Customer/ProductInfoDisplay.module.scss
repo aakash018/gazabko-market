@@ -78,6 +78,8 @@
     }
 
     &_rating {
+      display: flex;
+      gap: 10px;
       color: #f2c94c;
       font-size: 1.2rem;
       span {

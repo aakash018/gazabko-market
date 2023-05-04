@@ -12,6 +12,7 @@ import { useAuth } from "../context/User";
 import Router from "next/router";
 import { useAlert } from "./_app";
 import axios from "axios";
+import Link from "next/link";
 
 const Login: React.FC = () => {
   const username = useRef<HTMLInputElement>(null);
@@ -85,6 +86,8 @@ const Login: React.FC = () => {
         });
       }
     } catch {
+      setLoading(false);
+
       setAlert({
         type: "error",
         message: "failed to send email request",
@@ -201,13 +204,17 @@ const Login: React.FC = () => {
             </div>
             <div
               className={styles.login__forgotPassword}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", color: "var(--default-red)" }}
               onClick={() => setPage((prev) => prev + 1)}
             >
               Forgot Password
             </div>
             <div className={styles.login__signup}>
-              New Customer? <span> Create an account</span>
+              New Customer?{" "}
+              <span>
+                {" "}
+                <Link href={"/signup"}>Create an account</Link>
+              </span>
             </div>
             <div className={styles.login__or}>or</div>
             <div className={styles.login__loginOptions}>
@@ -226,6 +233,16 @@ const Login: React.FC = () => {
               <Button onClick={hanldeForgotPassEmailSubmit} disable={loading}>
                 {loading ? "Loading" : "Send Email"}
               </Button>
+              <div
+                onClick={() => setPage((page) => page - 1)}
+                style={{
+                  color: "var(--theme-color)",
+                  cursor: "pointer",
+                  fontSize: "1.2rem",
+                }}
+              >
+                <u>Back</u>
+              </div>
             </div>
           </div>
         )}

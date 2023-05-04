@@ -4,6 +4,7 @@ import Image from "next/image";
 import Layout from "../../Customer/Layout";
 import { FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import Link from "next/link";
 
 interface Props {
   children: React.ReactNode;
@@ -37,7 +38,12 @@ const SignUpLayout: React.FC<Props> = ({
       {showFooter && (
         <div className={styles.loginInsted}>
           <span className={styles.info}>
-            Already have an account? Sign in instead
+            Already have an account?{" "}
+            <Link href={"/login"}>
+              <span style={{ color: "var(--theme-color)", cursor: "pointer" }}>
+                Sign in instead
+              </span>
+            </Link>
           </span>
           <section className={styles.or}>or</section>
           <div className={styles.loginOptions}>

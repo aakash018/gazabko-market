@@ -23,6 +23,7 @@ interface CountType {
   pendingCount: number;
   processingCount: number;
   deliveredCount: number;
+  returnedCount: number;
 }
 
 const OrdersPage = () => {
@@ -32,7 +33,16 @@ const OrdersPage = () => {
 
   const { setAlert } = useAlert();
 
-  const [rowData, setRowData] = useState<TableDef[]>([]);
+  const [rowDataForRecentOrders, setRowDataForRecentOrders] = useState<
+    TableDef[]
+  >([]);
+
+  const [rowDataForCanceledOrders, setRowDataForCanceledOrders] = useState<
+    TableDef[]
+  >([]);
+  const [rowDataForReturnedOrders, setRowDataForReturnedOrders] = useState<
+    TableDef[]
+  >([]);
 
   const [dataCount, setDataCount] = useState<CountType | null>(null);
 
@@ -72,7 +82,7 @@ const OrdersPage = () => {
               withCredentials: true,
             }
           );
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.status === "ok" && res.data.count) {
             setDataCount(res.data.count);
           } else {
@@ -99,12 +109,15 @@ const OrdersPage = () => {
     let ignore = false;
     if (!ignore) {
       (async () => {
-        const res = await axios.get<RespondType & { orders?: Order[] }>(
+        const res = await axios.get<
+          RespondType & { recentOrders: Order[]; returnedOrders: Order[] }
+        >(
           `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/sellerOrder/recentOrders`,
           { withCredentials: true }
         );
-        if (res.data.status === "ok" && res.data.orders) {
-          const recentOrderRowData: TableDef[] = res.data.orders.map(
+        console.log(res.data);
+        if (res.data.status === "ok") {
+          const recentOrderRowData: TableDef[] = res.data.recentOrders.map(
             (order, i) => ({
               SN: i,
               Product: order.product!.name,
@@ -115,7 +128,20 @@ const OrdersPage = () => {
               Color: order.color,
             })
           );
-          setRowData(recentOrderRowData);
+
+          const returnedOrderRowData: TableDef[] = res.data.returnedOrders.map(
+            (order, i) => ({
+              SN: i,
+              Product: order.product!.name,
+              "Order No": order.id,
+              Status: order.status,
+              Quantity: order.quantity,
+              Size: order.size,
+              Color: order.color,
+            })
+          );
+          setRowDataForRecentOrders(recentOrderRowData);
+          setRowDataForReturnedOrders(returnedOrderRowData);
         }
       })();
     }
@@ -141,8 +167,9 @@ const OrdersPage = () => {
               pendingClick={() => {
                 Router.push("/seller/orders/pending");
               }}
-              cancledClick={() => {
-                Router.push("/seller/orders/cancledOrders");
+              returnedCount={dataCount!.returnedCount}
+              returnedClick={() => {
+                Router.push("/seller/orders/returnedOrders");
               }}
             />
           )}
@@ -152,16 +179,25 @@ const OrdersPage = () => {
             inputRef={recentOrdSearchRef}
             title="Recent Orders"
             columData={columnDefs}
-            rowData={rowData}
+            rowData={rowDataForRecentOrders}
             onRowClick={(e) => {
               Router.push(`/seller/orders/id?oid=${e.data["Order No"]}`);
             }}
           />
-          <TableHolder
+          {/* <TableHolder
             inputRef={allOrdSearchRef}
             title="All Orders"
             columData={columnDefs}
             rowData={rowData}
+            onRowClick={(e) => {
+              Router.push(`/seller/orders/id?oid=${e.data["Order No"]}`);
+            }}
+          /> */}
+          <TableHolder
+            inputRef={caancledOrdSearchRef}
+            title="Returned Orders"
+            columData={columnDefs}
+            rowData={rowDataForReturnedOrders}
             onRowClick={(e) => {
               Router.push(`/seller/orders/id?oid=${e.data["Order No"]}`);
             }}
@@ -170,18 +206,9 @@ const OrdersPage = () => {
             inputRef={caancledOrdSearchRef}
             title="Cancled Orders"
             columData={columnDefs}
-            rowData={rowData}
+            rowData={rowDataForRecentOrders}
             onRowClick={(e) => {
               Router.push(`/seller/orders/${e.data["Order No"]}`);
-            }}
-          />
-          <TableHolder
-            inputRef={caancledOrdSearchRef}
-            title="Returned Orders"
-            columData={columnDefs}
-            rowData={rowData}
-            onRowClick={(e) => {
-              Router.push(`/seller/orders/id?oid=${e.data["Order No"]}`);
             }}
           />
         </div>

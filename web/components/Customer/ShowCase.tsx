@@ -107,7 +107,7 @@ const ShowCase: React.FC<Props> = ({
                       ? product.discount
                       : 0
                   }
-                  rating={4.1}
+                  rating={product.rating.toFixed(1)}
                   productName={product.name}
                   id={product.id}
                 />

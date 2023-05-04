@@ -10,6 +10,7 @@ interface Props {
   look?: "outlined" | "filled" | "blank";
   icon?: ReactNode;
   disable?: boolean;
+  noDisableStyle?: boolean;
 }
 
 const Button: React.FC<Props> = ({
@@ -21,6 +22,7 @@ const Button: React.FC<Props> = ({
   look = "filled",
   icon,
   disable,
+  noDisableStyle = false,
 }) => {
   return (
     <div>
@@ -35,7 +37,7 @@ const Button: React.FC<Props> = ({
         disabled={disable}
       >
         {icon}
-        {disable ? "Loading..." : children}
+        {disable && !noDisableStyle ? "Loading..." : children}
       </button>
     </div>
   );

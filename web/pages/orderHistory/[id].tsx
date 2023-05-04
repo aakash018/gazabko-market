@@ -31,7 +31,7 @@ const PurchesTracker: React.FC = () => {
               withCredentials: true,
             }
           );
-          console.log(res.data);
+          console.log(res.data.order);
           setLoading(false);
           if (res.data.status === "ok" && res.data.order) {
             setOrder(res.data.order);
@@ -88,9 +88,7 @@ const PurchesTracker: React.FC = () => {
                 <div className={styles.content}>
                   <div className={styles.info}>
                     <div className={styles.name}>Subtotal</div>
-                    <div className={styles.data}>
-                      Rs. {order.product?.priceAfterDiscount}
-                    </div>
+                    <div className={styles.data}>Rs. {order.price}</div>
                   </div>
                   <div className={styles.info}>
                     <div className={styles.name}>Shipping Fee</div>
@@ -98,9 +96,7 @@ const PurchesTracker: React.FC = () => {
                   </div>
                   <div className={styles.info}>
                     <div className={styles.name}>Total</div>
-                    <div className={styles.data}>
-                      Rs. {order.product!.priceAfterDiscount + 60}
-                    </div>
+                    <div className={styles.data}>Rs. {order.price + 60}</div>
                   </div>
                 </div>
               </div>

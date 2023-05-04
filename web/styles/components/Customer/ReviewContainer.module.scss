@@ -11,6 +11,10 @@
 
     gap: 10px;
 
+    span {
+        color: var(--prm-grey);
+    }
+
     .rating {
         display: flex;
         align-items: center;

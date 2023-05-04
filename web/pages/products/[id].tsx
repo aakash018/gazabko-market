@@ -15,6 +15,7 @@ import axios from "axios";
 import { ProtuctType } from "../../@types/global";
 import { useAlert } from "../_app";
 import { QuestionType, ReviewType } from "../../@types/rrr";
+import { Rating } from "react-simple-star-rating";
 
 interface QuestionsHolderProps {
   question: string;
@@ -97,8 +98,9 @@ const ProductDisplay: React.FC = () => {
   const [questions, setQuestions] = useState<QuestionType[]>([]);
 
   const [products, setProducts] = useState<ProtuctType[]>([]);
+  const [reviewPage, setReviewPage] = useState(1);
 
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [reviewLoadButtonLoading, setReviewLoadButtonLoading] = useState(false);
 
   const handleQuastionSubmit = async () => {
     try {
@@ -128,6 +130,27 @@ const ProductDisplay: React.FC = () => {
         message: "error adding question",
       });
     }
+  };
+
+  const fetchData = async () => {
+    setReviewLoadButtonLoading(true);
+    const reviewRes = await axios.get<RespondType & { reviews: ReviewType[] }>(
+      `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/rrr/getReview`,
+      {
+        params: {
+          pid: pid,
+          page: reviewPage,
+        },
+        withCredentials: true,
+      }
+    );
+
+    if (reviewRes.data.status === "ok" && reviewRes.data.reviews) {
+      setReviews((rev) => rev.concat(reviewRes.data.reviews));
+      setReviewPage((p) => p + 1);
+    }
+    setReviewLoadButtonLoading(false);
+    setReviewLoading(false);
   };
 
   useEffect(() => {
@@ -162,20 +185,7 @@ const ProductDisplay: React.FC = () => {
           //? GETTING REVIEWS
           if (reviews.length === 0) {
             setReviewLoading(true);
-
-            const reviewRes = await axios.get<
-              RespondType & { reviews?: ReviewType[] }
-            >(`${process.env.NEXT_PUBLIC_SERVER_END_POINT}/rrr/getReview`, {
-              params: {
-                pid: pid,
-              },
-              withCredentials: true,
-            });
-
-            if (reviewRes.data.status === "ok" && reviewRes.data.reviews) {
-              setReviews(reviewRes.data.reviews);
-            }
-            setReviewLoading(false);
+            fetchData();
           }
 
           //? GETTING QUESTIONS
@@ -269,7 +279,7 @@ const ProductDisplay: React.FC = () => {
               }
               mp={product!.price}
               name={product!.name}
-              rating={4.7}
+              rating={product.rating}
               seller={product.seller}
               brand={product!.brand}
               product={product}
@@ -288,12 +298,8 @@ const ProductDisplay: React.FC = () => {
               <div className={styles.review}>
                 <section className={styles.title}>Rating and review</section>
                 <section className={styles.rating}>
-                  <BsStarFill />
-                  <BsStarFill />
-                  <BsStarFill />
-                  <BsStarFill />
-                  <BsStarHalf />
-                  <span>4.7</span>
+                  <Rating initialValue={product.rating} readonly />
+                  <span>{product.rating.toFixed(1)}</span>
                 </section>
                 <div className={styles.reviewHouse}>
                   {reviewLoading && <h2>Loading...</h2>}
@@ -306,12 +312,19 @@ const ProductDisplay: React.FC = () => {
                         name={`${review.user?.firstName} ${review.user?.lastName}`}
                         rating={review.rating}
                         review={review.review}
+                        created_at={review.created_at}
                       />
                     ))}
                 </div>
                 {!reviewLoading && reviews.length !== 0 && (
                   <section className={styles.actionBtn}>
-                    <Button onClick={() => {}} look="outlined">
+                    <Button
+                      onClick={() => {
+                        fetchData();
+                      }}
+                      look="outlined"
+                      disable={reviewLoadButtonLoading}
+                    >
                       Load More
                     </Button>
                   </section>

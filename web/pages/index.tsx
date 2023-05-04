@@ -43,13 +43,13 @@ const Home = () => {
     }, 3000);
   }, []);
 
-  useEffect(() => {
-    if (!isLogedIn) {
-      setTimeout(() => {
-        setIsLoginReminderOpen(true);
-      }, 10000);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!isLogedIn) {
+  //     setTimeout(() => {
+  //       setIsLoginReminderOpen(true);
+  //     }, 10000);
+  //   }
+  // }, []);
 
   useEffect(() => {
     let ignore = false;

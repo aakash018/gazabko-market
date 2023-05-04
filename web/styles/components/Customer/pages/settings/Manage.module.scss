@@ -17,6 +17,9 @@
                 gap: 20px;
 
                 .rating {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                     color: var(--prm-grey);
                     font-size: 2rem;
                     display: flex;

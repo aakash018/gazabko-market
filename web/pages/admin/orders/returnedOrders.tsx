@@ -27,8 +27,9 @@ interface ReturnedMmessageProps {
   user: User;
   orderAccepted: boolean;
   orderRejected: boolean;
+  showActBtn?: boolean;
 }
-const ReturnMessageHolder: React.FC<ReturnedMmessageProps> = ({
+export const ReturnMessageHolder: React.FC<ReturnedMmessageProps> = ({
   img,
   message,
   name,
@@ -38,9 +39,10 @@ const ReturnMessageHolder: React.FC<ReturnedMmessageProps> = ({
   user,
   orderAccepted,
   orderRejected,
+  showActBtn = true,
 }) => {
   return (
-    <div className={styles.returnMessageHolder}>
+    <div className={styles.returnMessageHolder} style={{ marginLeft: "20px" }}>
       <div className={styles.product}>
         <div className={styles.image}>
           <Image src={img} width={50} height={50} />
@@ -67,7 +69,7 @@ const ReturnMessageHolder: React.FC<ReturnedMmessageProps> = ({
         </div>
         <div className={styles.message}>{message}</div>
       </div>
-      {orderAccepted === false && orderRejected === false && (
+      {orderAccepted === false && orderRejected === false && showActBtn && (
         <div className={styles.actBtn}>
           <Button onClick={onAccept}>Accept</Button>
           <Button onClick={onCancel} color="error">
@@ -75,8 +77,8 @@ const ReturnMessageHolder: React.FC<ReturnedMmessageProps> = ({
           </Button>
         </div>
       )}
-      {orderAccepted && <h2>Request has been accepted</h2>}
-      {orderRejected && <h2>Request has been rejected</h2>}
+      {orderAccepted && <h3>Request has been accepted</h3>}
+      {orderRejected && <h3>Request has been rejected</h3>}
     </div>
   );
 };
@@ -162,34 +164,53 @@ const Pending: React.FC = () => {
       <h1>Returned Orders</h1>
       <div
         style={{
-          display: "flex",
+          // display: "flex",
+          // flexDirection: "d"
+          // flexWrap: "wrap",
           justifyContent: "center",
           marginTop: "40px",
+          gap: "20px",
         }}
       >
         {loading && <h2>Loading...</h2>}
         {!loading && returnedOrders.length === 0 && (
           <h2>No any returned orders</h2>
         )}
-        {!loading &&
-          returnedOrders.length !== 0 &&
-          returnedOrders.map((order, i) => {
-            if (order.return)
-              return (
-                <ReturnMessageHolder
-                  key={i}
-                  img={"/images/shoes2.webp"}
-                  name={order.product!.name}
-                  message={order.return!.message}
-                  onAccept={() => handleAcceptRequest(order.return!.id)}
-                  onCancel={() => {}}
-                  orderID={order.id}
-                  user={(order as any).user}
-                  orderAccepted={order.return.requestAccepted}
-                  orderRejected={order.return.requestRejected}
-                />
-              );
-          })}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "center",
+            gap: "20",
+            flexWrap: "wrap",
+          }}
+        >
+          {!loading &&
+            returnedOrders.length !== 0 &&
+            returnedOrders.map((order, i) => {
+              if (order.return)
+                return (
+                  <div
+                    style={{
+                      marginBottom: "20px",
+                    }}
+                  >
+                    <ReturnMessageHolder
+                      key={i}
+                      img={"/images/shoes2.webp"}
+                      name={order.product!.name}
+                      message={order.return!.message}
+                      onAccept={() => handleAcceptRequest(order.return!.id)}
+                      onCancel={() => {}}
+                      orderID={order.id}
+                      user={(order as any).user}
+                      orderAccepted={order.return.requestAccepted}
+                      orderRejected={order.return.requestRejected}
+                    />
+                  </div>
+                );
+            })}
+        </div>
       </div>
     </AdminLayout>
   );

@@ -1,6 +1,7 @@
 import axios from "axios";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import Modal from "react-modal";
 import Router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { GiCheckMark } from "react-icons/gi";
@@ -11,6 +12,8 @@ import OrderTracker from "../../../components/shared/Customer/OrderTracker";
 
 import styles from "../../../styles/components/Admin/pages/OrderDetails.module.scss";
 import { useAlert } from "../../_app";
+import { customStyles } from "../../../modalStyle";
+import DialogBox from "../../../components/shared/DialogBox";
 
 const Map = dynamic(
   () => import("../../../components/shared/Map"), // replace '@components/map' with your component's location
@@ -181,6 +184,14 @@ const OrderDetails = () => {
                     <div className={styles.data}>
                       Rs. {order?.product?.priceAfterDiscount}
                     </div>
+                  </div>
+                  <div className={styles.infoHolder}>
+                    <div className={styles.title}>Color: </div>
+                    <div className={styles.data}>{order.color || "N/A"}</div>
+                  </div>
+                  <div className={styles.infoHolder}>
+                    <div className={styles.title}>Size: </div>
+                    <div className={styles.data}>{order.size || "N/A"}</div>
                   </div>
                   <div className={styles.infoHolder}>
                     <div className={styles.title}>Quantity</div>

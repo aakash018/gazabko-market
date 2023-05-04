@@ -26,6 +26,8 @@ import Button from "../shared/Button";
 import PriceHolder from "../shared/Customer/PriceHolder";
 import Quantity from "../shared/Customer/Quantity";
 
+import { Rating } from "react-simple-star-rating";
+
 interface Props {
   id: number;
   name: string;
@@ -195,12 +197,8 @@ const ProductInfoDisplay: React.FC<Props> = ({
             <h1>{name}</h1>
           </section>
           <section className={styles.productDisplay__productInfo_rating}>
-            <BsStarFill />
-            <BsStarFill />
-            <BsStarFill />
-            <BsStarFill />
-            <BsStarHalf />
-            <span>{rating}</span>
+            <Rating initialValue={rating} readonly size={20} />
+            <span>{rating.toFixed(1)}</span>
           </section>
           <section style={{ marginTop: "5px", fontSize: "1.3rem" }}>
             Brand:{" "}

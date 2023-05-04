@@ -10,7 +10,9 @@ import Quantity from "./Quantity";
 import { Cart } from "../../../@types/global";
 import Button from "../Button";
 import Router from "next/router";
-
+import Modal from "react-modal";
+import { customStyles } from "../../../modalStyle";
+import DialogBox from "../DialogBox";
 interface Props {
   name: string;
   quantity: number;
@@ -49,6 +51,7 @@ const CartItemHolder: React.FC<Props> = ({
   const [quantityInput, setQuantity] = useState(quantity);
   const { setAlert } = useAlert();
   const { setCart } = useCart();
+  const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
 
   const handleDelete = async () => {
     if (type === "cart") {
@@ -135,50 +138,74 @@ const CartItemHolder: React.FC<Props> = ({
     }
   };
 
-  console.log(discount);
-
   return (
-    <div className={styles.cartItemHolder}>
-      <>
-        {" "}
-        <section className={styles.imageContainer}>
-          <Image src={"/images/shoes.jpg"} layout="fill" objectFit="cover" />
-        </section>
-        <section className={styles.info}>
-          <section className={styles.name}>{name}</section>
-          {showQuantity && totalStock && (
-            <section className={styles.quantityContainer}>
-              <Quantity
-                quantityInput={quantityInput}
-                setQuantity={setQuantity}
-                totalStock={totalStock}
-                onQuantityChange={handleQuantityChange}
-              />
+    <>
+      <Modal
+        isOpen={openDeleteConfirm}
+        style={customStyles}
+        onRequestClose={() => setOpenDeleteConfirm(false)}
+      >
+        <DialogBox title="Delete">
+          <div className="confirmModal">
+            <div className="content">Do you really want to delete it</div>
+            <div className="actBtn">
+              <Button onClick={handleDelete}>Yes</Button>
+              <Button color="error" onClick={() => setOpenDeleteConfirm(false)}>
+                No
+              </Button>
+            </div>
+          </div>
+        </DialogBox>
+      </Modal>
+      <div className={styles.cartItemHolder}>
+        <>
+          {" "}
+          <section className={styles.imageContainer}>
+            <Image src={"/images/shoes.jpg"} layout="fill" objectFit="cover" />
+          </section>
+          <section className={styles.info}>
+            <section className={styles.name}>{name}</section>
+            {showQuantity && totalStock && (
+              <section className={styles.quantityContainer}>
+                <Quantity
+                  quantityInput={quantityInput}
+                  setQuantity={setQuantity}
+                  totalStock={totalStock}
+                  onQuantityChange={handleQuantityChange}
+                />
+              </section>
+            )}
+            <section className={styles.price}>
+              <PriceHolder discount={discount} mp={mp} />
+            </section>
+            <section className={styles.actionBtns}>
+              {noDelete ? (
+                <></>
+              ) : (
+                <AiFillDelete
+                  onClick={() => setOpenDeleteConfirm(true)}
+                  style={{ cursor: "pointer" }}
+                />
+              )}
+              {type === "wishlist" && (
+                <Button
+                  onClick={() => {
+                    Router.push(`/products/${id}`);
+                  }}
+                >
+                  View Product
+                </Button>
+              )}
+            </section>
+          </section>
+          {showCheck && (
+            <section className={styles.checkBox}>
+              <input type="checkBox" onChange={onChecked} checked={check} />
             </section>
           )}
-          <section className={styles.price}>
-            <PriceHolder discount={discount} mp={mp} />
-          </section>
-          <section className={styles.actionBtns}>
-            {noDelete ? <></> : <AiFillDelete onClick={handleDelete} />}
-            {type === "wishlist" && (
-              <Button
-                onClick={() => {
-                  Router.push(`/products/${id}`);
-                }}
-              >
-                View Product
-              </Button>
-            )}
-          </section>
-        </section>
-        {showCheck && (
-          <section className={styles.checkBox}>
-            <input type="checkBox" onChange={onChecked} checked={check} />
-          </section>
-        )}
-      </>
-    </div>
+        </>
+      </div>
+    </>
   );
 };
 

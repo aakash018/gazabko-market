@@ -4,14 +4,15 @@ import SettingPageSettingHolder from "../../../components/shared/Customer/Settin
 
 import styles from "../../../styles/components/Customer/pages/settings/Manage.module.scss";
 import Image from "next/image";
-import Link from "next/link";
+// import Link from "next/link";
 import Button from "../../../components/shared/Button";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { BsStarFill } from "react-icons/bs";
 import InputField from "../../../components/shared/Input";
 import axios from "axios";
 import { useAlert } from "../../_app";
 import { Order } from "../../../@types/global";
+import { Rating } from "react-simple-star-rating";
 
 const UserInput: React.FC<{
   title: "Review" | "Return" | "Report";
@@ -26,12 +27,18 @@ const UserInput: React.FC<{
   const { oid } = router.query;
   const { setAlert } = useAlert();
 
-  const handleSubmit = async () => {
+  const [rating, setRating] = React.useState(0);
+
+  const onRatingChange = (score: number) => {
+    setRating(score);
+  };
+
+  const handleReviewSubmit = async () => {
     if (reviewRef.current && reviewRef.current.value.trim() !== "") {
       const payload = {
         pid: (order as any).product.id,
         review: reviewRef.current.value,
-        rating: 4.5,
+        rating: rating,
       };
       try {
         const res = await axios.post<RespondType>(
@@ -68,8 +75,9 @@ const UserInput: React.FC<{
         `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/rrr/returnProduct`,
         {
           oid,
-          message: reportRef.current?.value,
-        }
+          message: returnRef.current?.value,
+        },
+        { withCredentials: true }
       );
       if (res.data.status === "ok") {
         setAlert({
@@ -113,7 +121,8 @@ const UserInput: React.FC<{
           message: res.data.message,
         });
       }
-    } catch {
+    } catch (e) {
+      console.log(e);
       setAlert({
         type: "error",
         message: "failed to connect to server",
@@ -134,11 +143,7 @@ const UserInput: React.FC<{
             <div>Size: {order.size || "N/A"}</div>
             {title === "Review" && (
               <div className={styles.rating}>
-                <BsStarFill />
-                <BsStarFill />
-                <BsStarFill />
-                <BsStarFill />
-                <BsStarFill />
+                <Rating onClick={onRatingChange} transition />
               </div>
             )}
           </div>
@@ -170,13 +175,13 @@ const UserInput: React.FC<{
                   ? reviewRef
                   : title === "Report"
                   ? reportRef
-                  : reviewRef
+                  : returnRef
               }
             ></textarea>
             <Button
               onClick={() => {
                 if (title === "Review") {
-                  handleSubmit();
+                  handleReviewSubmit();
                 } else if (title === "Return") {
                   handleReturnRequest();
                 } else {
@@ -214,7 +219,6 @@ const Manage = () => {
         );
         setLoading(false);
         if (res.data.order && res.data.status === "ok") {
-          console.log(res.data.order);
           setOrder(res.data.order);
         } else {
           setAlert({

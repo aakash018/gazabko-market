@@ -260,6 +260,7 @@ const Cart: React.FC = () => {
                         Router.push("/checkout");
                       }}
                       disable={checkList.every((element) => element === false)}
+                      noDisableStyle={true}
                     >
                       PROCED TO CHECKOUT
                     </Button>
