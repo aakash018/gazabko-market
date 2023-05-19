@@ -49,11 +49,18 @@
         display: flex;
         justify-content: space-between;
         .bottomLeftCards {
-            width: 45%;
+            width: 100%;
             display: flex;
-            flex-direction: column;
-            gap: 30px;
+            flex: 1 0 auto;
+            // flex-grow: 1;
+            // flex-direction: column;
+            justify-content: space-between;
+            gap: 20px;
             height: 100%;
+
+            div {
+                min-width: 50%;
+            }
         }
 
         .bottomRightCards {

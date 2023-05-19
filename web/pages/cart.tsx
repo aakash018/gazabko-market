@@ -65,8 +65,10 @@ const Cart: React.FC = () => {
             if (checkList[i]) {
               if (
                 product.product.offers &&
-                product.product.offers!.starting_date <= new Date() &&
-                product.product.offers!.ending_date >= new Date() &&
+                new Date(product.product.offers!.starting_date).getTime() <=
+                  new Date().getTime() &&
+                new Date(product.product.offers!.ending_date).getTime() >=
+                  new Date().getTime() &&
                 product.product.offers?.common_discount &&
                 product.product.offers.discount
               ) {
@@ -201,8 +203,12 @@ const Cart: React.FC = () => {
                         totalStock={product.product.totalStock}
                         discount={
                           product.product.offers &&
-                          product.product.offers!.starting_date <= new Date() &&
-                          product.product.offers!.ending_date >= new Date() &&
+                          new Date(
+                            product.product.offers!.starting_date
+                          ).getTime() <= new Date().getTime() &&
+                          new Date(
+                            product.product.offers!.ending_date
+                          ).getTime() >= new Date().getTime() &&
                           product.product.offers?.common_discount &&
                           product.product.offers.discount
                             ? product.product.price *

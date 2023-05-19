@@ -112,6 +112,8 @@ export interface Order {
   updated_at: string;
   product?: ProtuctType;
   state: "received" | "outForDelivery" | null;
+
+  canceledBySeller: boolean;
 }
 
 export interface OnCartProductType {

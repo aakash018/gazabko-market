@@ -276,7 +276,7 @@ router.post("/forgotPassword", async (req, res) => {
     } catch {
       res.json({
         status: "fail",
-        message: "failed to send email!",
+        message: "failed to send email! Check your email address",
       });
     }
   } else {

@@ -5,6 +5,31 @@ import validateAdmin from "../../middleware/validateAdmin";
 
 const router = express();
 
+router.put("/verifyOrder", validateAdmin, async (req, res) => {
+  const adminReq = req.body as { oid: any };
+
+  try {
+    await Order.update(
+      {
+        id: adminReq.oid,
+      },
+      {
+        status: "processing",
+      }
+    );
+
+    res.json({
+      status: "ok",
+      message: "order status updated",
+    });
+  } catch {
+    res.json({
+      status: "failed",
+      message: "failed to update order status",
+    });
+  }
+});
+
 router.get("/getRecentOrders", validateAdmin, async (_, res) => {
   try {
     const recentOrders = await Order.find({
@@ -34,7 +59,7 @@ router.get("/getRecentOrders", validateAdmin, async (_, res) => {
 router.get("/getPendingOrders", validateAdmin, async (_, res) => {
   try {
     const pendingOrders = await Order.find({
-      where: { status: "pending" },
+      where: { status: "pending", canceledBySeller: false },
       order: {
         created_at: "DESC",
       },
@@ -274,6 +299,47 @@ router.put("/acceptReturn", validateAdmin, async (req, res) => {
     res.json({
       status: "fail",
       message: "failed to accept request",
+    });
+  }
+});
+
+router.get("/recentOrders", validateAdmin, async (_, res) => {
+  try {
+    const orders = await Order.find({
+      relations: {
+        product: true,
+      },
+      order: { created_at: "DESC" },
+    });
+
+    const returnedOrder = orders.filter((order) => {
+      return order.isToBeReturned;
+    });
+
+    const canceledOrders = orders.filter((order) => {
+      return order.canceledBySeller;
+    });
+
+    orders.splice(10);
+    returnedOrder.slice(10);
+    if (orders) {
+      res.json({
+        status: "ok",
+        message: "orders found",
+        recentOrders: orders,
+        returnedOrders: returnedOrder,
+        canceledOrders,
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "error finding orders",
+      });
+    }
+  } catch {
+    res.json({
+      status: "fail",
+      message: "fail to find orders",
     });
   }
 });

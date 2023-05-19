@@ -1,6 +1,7 @@
 import express from "express";
 import { Order } from "../../entities/Orders";
 import validateSeller from "../../middleware/validateSeller";
+import { Return } from "../../entities/Return";
 
 const router = express();
 
@@ -14,11 +15,23 @@ router.get("/recentOrders", validateSeller, async (req, res) => {
       order: { created_at: "DESC" },
     });
 
+    const returnedOrder = orders.filter((order) => {
+      return order.isToBeReturned;
+    });
+
+    const canceledOrders = orders.filter((order) => {
+      return order.canceledBySeller;
+    });
+
+    orders.splice(10);
+    returnedOrder.slice(10);
     if (orders) {
       res.json({
         status: "ok",
         message: "orders found",
-        orders,
+        recentOrders: orders,
+        returnedOrders: returnedOrder,
+        canceledOrders,
       });
     } else {
       res.json({
@@ -44,6 +57,7 @@ router.get("/getOrdersByStatus", validateSeller, async (req, res) => {
       where: {
         product: { seller: { id: req.session.sellerID } },
         status: userQuery.type,
+        canceledBySeller: false,
       },
       relations: {
         product: true,
@@ -139,13 +153,17 @@ router.delete("/cancelOrder", validateSeller, async (req, res) => {
   const userReq = req.query as unknown as { oid: number };
   if (userReq.oid) {
     try {
-      await Order.delete({
-        id: userReq.oid,
-      });
-
+      await Order.update(
+        {
+          id: userReq.oid,
+        },
+        {
+          canceledBySeller: true,
+        }
+      );
       res.json({
         status: "ok",
-        message: "order cancel",
+        message: "order was canceled",
       });
     } catch {
       res.json({
@@ -165,6 +183,7 @@ router.get("/orderCounts", validateSeller, async (req, res) => {
   try {
     const pendingCount = await Order.countBy({
       status: "pending",
+      canceledBySeller: false,
       product: { seller: { id: req.session.sellerID } },
     });
     const processingCount = await Order.count({
@@ -175,6 +194,11 @@ router.get("/orderCounts", validateSeller, async (req, res) => {
     });
     const deliveredCount = await Order.countBy({
       status: "delivered",
+      product: { seller: { id: req.session.sellerID } },
+    });
+
+    const returnedCount = await Order.countBy({
+      isToBeReturned: true,
       product: { seller: { id: req.session.sellerID } },
     });
 
@@ -194,12 +218,77 @@ router.get("/orderCounts", validateSeller, async (req, res) => {
         pendingCount,
         processingCount,
         deliveredCount,
+        returnedCount,
       },
     });
   } catch {
     res.json({
       status: "fail",
       message: "failed to find counts",
+    });
+  }
+});
+
+router.get("/returnedOrders", validateSeller, async (req, res) => {
+  try {
+    // console.log(req.session.)
+    const returns = await Order.find({
+      where: { product: { seller: { id: req.session.sellerID } } },
+      order: { created_at: "DESC" },
+      relations: {
+        return: true,
+        product: true,
+        user: true,
+      },
+      select: {
+        id: true,
+        created_at: true,
+        user: {
+          avatar: true,
+          firstName: true,
+          lastName: true,
+        },
+        product: {
+          name: true,
+          images: true,
+        },
+      },
+    });
+
+    res.json({
+      status: "ok",
+      message: "returns found",
+      returns,
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to find returns",
+    });
+  }
+});
+
+router.put("/acceptReturn", validateSeller, async (req, res) => {
+  const adminReq = req.body as { returnid: any };
+
+  try {
+    await Return.update(
+      {
+        id: adminReq.returnid,
+      },
+      {
+        requestAccepted: true,
+      }
+    );
+
+    res.json({
+      status: "ok",
+      message: "return request accepted",
+    });
+  } catch {
+    res.json({
+      status: "fail",
+      message: "failed to accept request",
     });
   }
 });

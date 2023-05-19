@@ -55,9 +55,9 @@ router.get("/", validateSeller, async (req, res) => {
     const mostSoldProductRaw = await Order.createQueryBuilder("order")
       .leftJoinAndSelect("order.product", "product")
       .leftJoin("product.seller", "seller")
-      .where("EXTRACT(month FROM order.created_at) = :month", {
-        month: new Date().getMonth(),
-      })
+      // .where("EXTRACT(month FROM order.created_at) = :month", {
+      //   month: new Date().getMonth(),
+      // })
       .andWhere("order.status = 'delivered'")
       .andWhere("seller.id = :id", { id: req.session.sellerID })
       .select("product.name")
@@ -66,6 +66,8 @@ router.get("/", validateSeller, async (req, res) => {
       .getRawMany();
 
     let mostBoughtProductCount: { [key: string]: number } = {};
+
+    console.log("DATA", mostSoldProductRaw);
 
     mostSoldProductRaw.forEach((product) => {
       if (mostBoughtProductCount[product.product_name]) {

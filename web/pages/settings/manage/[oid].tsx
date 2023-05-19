@@ -217,6 +217,7 @@ const Manage = () => {
           `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/order/orderDetails`,
           { withCredentials: true, params: { oid } }
         );
+
         setLoading(false);
         if (res.data.order && res.data.status === "ok") {
           setOrder(res.data.order);
@@ -244,43 +245,60 @@ const Manage = () => {
     <Layout>
       {loading && <h2>Loading....</h2>}
       {!loading && !order && <h2>Failed...</h2>}
-      {!loading && order && order.status !== "delivered" && (
+      {!loading &&
+        order &&
+        order.status !== "delivered" &&
+        !order.canceledBySeller && (
+          <h2
+            style={{
+              height: "400px",
+              display: "grid",
+              placeContent: "center  ",
+            }}
+          >
+            Product hasn't been delivered yet
+          </h2>
+        )}
+      {!loading && order && order.canceledBySeller && (
         <h2
           style={{ height: "400px", display: "grid", placeContent: "center  " }}
         >
-          Product hasn't been delivered yet
+          Order was canceled by the seller
         </h2>
       )}
-      {!loading && order && order.status === "delivered" && (
-        <div className={styles.manage}>
-          <div className={styles.options}>
-            <SettingPageSettingHolder
-              title="Review"
-              subtitle="write reviews"
-              onClick={() => {
-                setSelectedPage("Review");
-              }}
-            />
-            <SettingPageSettingHolder
-              title="Return"
-              subtitle="return product"
-              onClick={() => {
-                setSelectedPage("Return");
-              }}
-            />
-            <SettingPageSettingHolder
-              title="Report"
-              subtitle="report product"
-              onClick={() => {
-                setSelectedPage("Report");
-              }}
-            />
+      {!loading &&
+        order &&
+        order.status === "delivered" &&
+        !order.canceledBySeller && (
+          <div className={styles.manage}>
+            <div className={styles.options}>
+              <SettingPageSettingHolder
+                title="Review"
+                subtitle="write reviews"
+                onClick={() => {
+                  setSelectedPage("Review");
+                }}
+              />
+              <SettingPageSettingHolder
+                title="Return"
+                subtitle="return product"
+                onClick={() => {
+                  setSelectedPage("Return");
+                }}
+              />
+              <SettingPageSettingHolder
+                title="Report"
+                subtitle="report product"
+                onClick={() => {
+                  setSelectedPage("Report");
+                }}
+              />
+            </div>
+            <div className={styles.content}>
+              <UserInput title={selectedPage} order={order} />
+            </div>
           </div>
-          <div className={styles.content}>
-            <UserInput title={selectedPage} order={order} />
-          </div>
-        </div>
-      )}{" "}
+        )}{" "}
     </Layout>
   );
 };

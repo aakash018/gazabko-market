@@ -64,6 +64,25 @@ const PurchesTracker: React.FC = () => {
           <div className={styles.tracker}>
             <OrderTracker orderState={order.state} orderStatus={order.status} />
           </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "40px 0",
+            }}
+          >
+            {order.canceledBySeller && (
+              <div
+                style={{
+                  color: "var(--default-red)",
+                  fontSize: "1.5rem",
+                  fontWeight: "bold",
+                }}
+              >
+                This Order was canceled by the seller
+              </div>
+            )}
+          </div>
           <div className={styles.detailsCards}>
             <div className={styles.leftPart}>
               <div className={styles.product}>
@@ -78,8 +97,25 @@ const PurchesTracker: React.FC = () => {
                   </div>
                   <div className={styles.info}>
                     <div>{order.product?.name}</div>
-                    <div>Rs. {order.product?.priceAfterDiscount}</div>
+                    <div>Price. {order.product?.price}</div>
+                    <div>
+                      Original discount:{" "}
+                      {order.product?.discount ? order.product.discount : "N/A"}
+                    </div>
+                    <div>
+                      Original Price After Discount.{" "}
+                      {order.product?.priceAfterDiscount}
+                    </div>
+                    <div>
+                      Offer: {order.offerName ? order.offerName : "N/A"}
+                    </div>
+                    <div>
+                      Offer Common Discount:{" "}
+                      {order.offerDiscount ? order.offerDiscount : "N/A"}
+                    </div>
                     <div>Qty: {order.quantity}</div>
+                    <div>Color: {order.color ? order.color : "N/A"}</div>
+                    <div>Size: {order.size ? order.size : "N/A"}</div>
                   </div>
                 </div>
               </div>

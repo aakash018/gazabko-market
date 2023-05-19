@@ -217,14 +217,6 @@ const DashPage: React.FC = () => {
 
   return (
     <AdminLayout>
-      <Modal
-        isOpen={openModal}
-        style={customStyles}
-        onRequestClose={() => setOpenModal(false)}
-      >
-        <TopItemsPopup title="TEXT" items={topItems} />
-      </Modal>
-
       {loading && <h2>Loading...</h2>}
       {!loading && (
         <div className={styles.dash}>
@@ -256,7 +248,7 @@ const DashPage: React.FC = () => {
             /> */}
             {topProductsCount && (
               <DashInfoHolder
-                title="Most Sold Products This Month"
+                title="Most Sold Products"
                 totalEarning={314}
                 first={{
                   name: topProductsCount[1][0],
@@ -318,26 +310,30 @@ const DashPage: React.FC = () => {
           <div className={styles.bottomCards}>
             <div className={styles.bottomLeftCards}>
               {!monthlyFollowers && <h2>Data Not Found</h2>}
-              {monthlyFollowers && (
-                <LineGraphInfo
-                  amount={231}
-                  subTitle="Total Customers Added"
-                  labels={monthlyFollowers!.label}
-                  data={monthlyFollowers!.data}
-                />
-              )}
-              {noOfMonthlyOrders && (
-                <LineGraphInfo
-                  amount={311}
-                  subTitle="Total Sellers Added"
-                  labels={noOfMonthlyOrders!.label}
-                  data={noOfMonthlyOrders!.data}
-                />
-              )}
+              <div>
+                {monthlyFollowers && (
+                  <LineGraphInfo
+                    // amount={231}
+                    subTitle="Total Customers Added"
+                    labels={monthlyFollowers!.label}
+                    data={monthlyFollowers!.data}
+                  />
+                )}
+              </div>
+              <div>
+                {noOfMonthlyOrders && (
+                  <LineGraphInfo
+                    // amount={311}
+                    subTitle="Total Sellers Added"
+                    labels={noOfMonthlyOrders!.label}
+                    data={noOfMonthlyOrders!.data}
+                  />
+                )}
+              </div>
             </div>
-            <div className={styles.bottomRightCards}>
+            {/* <div className={styles.bottomRightCards}>
               <Goals />
-            </div>
+            </div> */}
           </div>
         </div>
       )}

@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
-import Slider from "rc-slider";
+
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import Layout from "../../components/Customer/Layout";
 import ShowCase from "../../components/Customer/ShowCase";
 import Button from "../../components/shared/Button";
-import SideBarNav from "../../components/shared/Customer/SideBarNav";
+
 import styles from "../../styles/components/Customer/pages/CatogriesPage.module.scss";
 
 import Image from "next/image";
-import IntputField from "../../components/shared/Input";
+
 import axios from "axios";
 import { ProtuctType } from "../../@types/global";
 import { useAlert } from "../_app";
@@ -310,8 +310,8 @@ const CategoriesPage = () => {
                 objectPosition={"top"}
               />
               <div className={styles.label}>
-                <div className={styles.title}>Gazabko Bar</div>
-                <div className={styles.topBrands}>
+                <div className={styles.title}>{(params as any)[0]}</div>
+                {/* <div className={styles.topBrands}>
                   <Image
                     src={"/images/brand.png"}
                     width={70}
@@ -342,7 +342,7 @@ const CategoriesPage = () => {
                     height={70}
                     objectFit="cover"
                   />
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

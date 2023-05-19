@@ -50,7 +50,7 @@ router.get("/getOrdersCount", validateAdmin, async (_, res) => {
     const orders = await Order.find({});
 
     const pending = orders.reduce((acc, el) => {
-      if (el.status === "pending") {
+      if (el.status === "pending" && el.canceledBySeller === false) {
         return acc + 1;
       } else {
         return acc;

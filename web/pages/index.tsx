@@ -163,7 +163,6 @@ const Home = () => {
                     includeTimer={true}
                     expireDate={new Date(offer.ending_date).getTime()}
                     title={offer.name}
-                    noOfProducts={5}
                     isOffer={offer.common_discount}
                     offerDiscount={offer.discount as number}
                     products={offer.products}

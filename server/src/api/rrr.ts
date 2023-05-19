@@ -12,28 +12,60 @@ import { Report } from "../entities/Report";
 const router = express();
 
 router.post("/review", validateUser, async (req, res) => {
-  const userReq: { pid: string; review: string; rating: string } = req.body;
+  const userReq: { pid: any; review: string; rating: number } = req.body;
   const user = await User.findOne({ where: { id: req.session.user } });
   const product = await Products.findOne({
     where: { id: parseInt(userReq.pid) },
   });
   try {
     if (user && product) {
+      const isAlreadyReviewed = await Review.findOne({
+        where: { productID: userReq.pid, user: { id: req.session.user } },
+      });
+
+      if (isAlreadyReviewed) {
+        return res.json({
+          status: "fail",
+          message: "you have already reviewed this product",
+        });
+      }
+
       await Review.create({
-        rating: parseInt(userReq.rating),
+        rating: userReq.rating,
         product: product,
         review: userReq.review,
-        productID: parseInt(userReq.pid),
+        productID: userReq.pid,
         user: user,
       }).save();
 
-      res.json({
+      const avgRating = await Review.createQueryBuilder("review")
+        .leftJoin("review.product", "product")
+        .where("product.id = :id ", { id: product.id })
+        .select("avg(review.rating)", "avgRating")
+        .getRawOne();
+      console.log("AVG", avgRating);
+
+      await Products.update(
+        {
+          id: parseInt(userReq.pid),
+        },
+        {
+          rating: avgRating.avgRating,
+        }
+      );
+
+      return res.json({
         status: "ok",
         message: "product reviewed successfully ",
       });
+    } else {
+      return res.json({
+        status: "failed",
+        message: "failed to find product to add review",
+      });
     }
   } catch {
-    res.json({
+    return res.json({
       status: "fail",
       message: "failed to review the product!!",
     });
@@ -41,15 +73,36 @@ router.post("/review", validateUser, async (req, res) => {
 });
 
 router.get("/getReview", async (req, res) => {
-  const userReq = req.query as unknown as { pid: string };
-  console.log(userReq);
+  const userReq = req.query as unknown as { pid: string; page: number };
+
+  const pageSize = 2;
+  const skip = (userReq.page - 1) * pageSize;
+
   try {
     const reviews = await Review.find({
       where: { productID: parseInt(userReq.pid) },
       relations: {
         user: true,
       },
+      select: {
+        id: true,
+        review: true,
+        rating: true,
+        created_at: true,
+        user: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+      order: {
+        rating: "DESC",
+      },
+      take: pageSize,
+      skip,
     });
+
+    console.log("REV", reviews);
+
     if (reviews && reviews.length !== 0) {
       res.json({
         status: "ok",
@@ -101,7 +154,7 @@ router.get("/getAllReviews", validateUser, async (req, res) => {
 
 router.post("/returnProduct", validateUser, async (req, res) => {
   const userReq = req.body as { oid: any; message: string };
-
+  console.log(userReq);
   try {
     const returnEntity = Return.create({
       message: userReq.message,

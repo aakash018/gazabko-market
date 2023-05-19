@@ -50,6 +50,7 @@ const OrderHistoryPage: React.FC = () => {
             order={order}
             product={order.product as ProtuctType}
             status={order.status}
+            canceled={order.canceledBySeller}
             key={i}
           />
         ))}

@@ -8,8 +8,14 @@ interface Props {
   product: ProtuctType;
   status: "pending" | "processing" | "delivered";
   order: Order;
+  canceled?: boolean;
 }
-const OrderHistoryProduct: React.FC<Props> = ({ product, status, order }) => {
+const OrderHistoryProduct: React.FC<Props> = ({
+  product,
+  status,
+  order,
+  canceled,
+}) => {
   return (
     <div
       className={styles.orderHistoryProduct}
@@ -32,9 +38,10 @@ const OrderHistoryProduct: React.FC<Props> = ({ product, status, order }) => {
             Placed on {order.created_at.split("T")[0]}
           </div>
         </section>
-        <div className={styles.name}>{product.name}</div>
+        {<div className={styles.name}>{product.name}</div>}
 
-        <div className={styles.status}>{status}</div>
+        {!canceled && <div className={styles.status}>{status}</div>}
+        {canceled && <div className={styles.status}>canceled</div>}
       </section>
     </div>
   );

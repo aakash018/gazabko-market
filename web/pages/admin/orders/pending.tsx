@@ -26,9 +26,9 @@ const Pending: React.FC = () => {
   const [columnDefs] = useState([
     { field: "SN", width: 60 },
     { field: "Product" },
-    { field: "Quantity", width: 150 },
-    { field: "Size" },
-    { field: "Color" },
+    { field: "Quantity", width: 100 },
+    { field: "Size", width: 70 },
+    { field: "Color", width: 100 },
     { field: "Order No" },
     {
       field: "Details",

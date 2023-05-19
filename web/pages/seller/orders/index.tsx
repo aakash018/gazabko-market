@@ -110,7 +110,11 @@ const OrdersPage = () => {
     if (!ignore) {
       (async () => {
         const res = await axios.get<
-          RespondType & { recentOrders: Order[]; returnedOrders: Order[] }
+          RespondType & {
+            recentOrders: Order[];
+            returnedOrders: Order[];
+            canceledOrders: Order[];
+          }
         >(
           `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/sellerOrder/recentOrders`,
           { withCredentials: true }
@@ -119,7 +123,7 @@ const OrdersPage = () => {
         if (res.data.status === "ok") {
           const recentOrderRowData: TableDef[] = res.data.recentOrders.map(
             (order, i) => ({
-              SN: i,
+              SN: i + 1,
               Product: order.product!.name,
               "Order No": order.id,
               Status: order.status,
@@ -131,7 +135,7 @@ const OrdersPage = () => {
 
           const returnedOrderRowData: TableDef[] = res.data.returnedOrders.map(
             (order, i) => ({
-              SN: i,
+              SN: i + 1,
               Product: order.product!.name,
               "Order No": order.id,
               Status: order.status,
@@ -140,6 +144,19 @@ const OrdersPage = () => {
               Color: order.color,
             })
           );
+
+          const canceledOrderRowData: TableDef[] = res.data.canceledOrders.map(
+            (order, i) => ({
+              SN: i + 1,
+              Product: order.product!.name,
+              "Order No": order.id,
+              Status: order.status,
+              Quantity: order.quantity,
+              Size: order.size,
+              Color: order.color,
+            })
+          );
+          setRowDataForCanceledOrders(canceledOrderRowData);
           setRowDataForRecentOrders(recentOrderRowData);
           setRowDataForReturnedOrders(returnedOrderRowData);
         }
@@ -206,7 +223,7 @@ const OrdersPage = () => {
             inputRef={caancledOrdSearchRef}
             title="Cancled Orders"
             columData={columnDefs}
-            rowData={rowDataForRecentOrders}
+            rowData={rowDataForCanceledOrders}
             onRowClick={(e) => {
               Router.push(`/seller/orders/${e.data["Order No"]}`);
             }}

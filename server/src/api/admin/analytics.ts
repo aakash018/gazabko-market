@@ -44,9 +44,9 @@ router.get("/", validateAdmin, async (_, res) => {
     const mostSoldProductRaw = await Order.createQueryBuilder("order")
       .leftJoinAndSelect("order.product", "product")
       .leftJoin("product.seller", "seller")
-      .where("EXTRACT(month FROM order.created_at) = :month", {
-        month: new Date().getMonth(),
-      })
+      // .where("EXTRACT(month FROM order.created_at) = :month", {
+      //   month: new Date().getMonth(),
+      // })
       .andWhere("order.status = 'delivered'")
       .select("product.name")
       .groupBy("product.id, order.id")

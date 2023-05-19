@@ -18,11 +18,11 @@ import Quantity from "../../../components/shared/Customer/Quantity";
 interface TableDef {
   SN: number;
   Product: string;
-  Buyer: string;
-  Quntity: number;
+  Quantity: number;
   "Order No": number;
-  Status: string;
-  id: number;
+  Status: "pending" | "processing" | "delivered";
+  Size: string | undefined;
+  Color: string;
 }
 
 interface TableHolderPros {
@@ -92,12 +92,23 @@ const Orders = () => {
   } | null>(null);
 
   const [rowData, setRowData] = useState<TableDef[]>([]);
+  const [rowDataForRecentOrders, setRowDataForRecentOrders] = useState<
+    TableDef[]
+  >([]);
+
+  const [rowDataForCanceledOrders, setRowDataForCanceledOrders] = useState<
+    TableDef[]
+  >([]);
+  const [rowDataForReturnedOrders, setRowDataForReturnedOrders] = useState<
+    TableDef[]
+  >([]);
 
   const [columnDefs] = useState([
     { field: "SN", width: 60 },
     { field: "Product" },
-    { field: "Buyer" },
-    { field: "Quntity", width: 150 },
+    { field: "Size", width: 70 },
+    { field: "Color", width: 150 },
+    { field: "Quantity", width: 150 },
     { field: "Order No" },
     {
       field: "Details",
@@ -153,47 +164,135 @@ const Orders = () => {
         }
       })();
 
-      (async () => {
-        try {
-          const res = await axios.get<RespondType & { recentOrders?: Order[] }>(
-            `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/orders/getRecentOrders`,
-            { withCredentials: true }
-          );
+      // (async () => {
+      //   try {
+      //     const res = await axios.get<
+      //       RespondType & {
+      //         recentOrders: Order[];
+      //         returnedOrders: Order[];
+      //         canceledOrders: Order[];
+      //       }
+      //     >(
+      //       `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/orders/getRecentOrders`,
+      //       { withCredentials: true }
+      //     );
 
-          if (res.data.status === "ok" && res.data.recentOrders) {
-            const recOrder: TableDef[] = res.data.recentOrders.map(
-              (order, i) => {
-                return {
-                  SN: i + 1,
-                  "Order No": order.id,
-                  Buyer: `${order.user?.firstName} ${order.user?.lastName}`,
-                  Quntity: order.quantity,
-                  Status: order.status,
-                  Product: order.product!.name,
-                  id: order.id,
-                };
-              }
-            );
+      //     if (res.data.status === "ok" && res.data.recentOrders) {
+      //       const recentOrderRowData: TableDef[] = res.data.recentOrders.map(
+      //         (order, i) => ({
+      //           SN: i + 1,
+      //           Product: order.product!.name,
+      //           "Order No": order.id,
+      //           Status: order.status,
+      //           Quantity: order.quantity,
+      //           Size: order.size,
+      //           Color: order.color,
+      //         })
+      //       );
 
-            setRowData(recOrder);
-          } else {
-            setAlert({
-              type: "error",
-              message: res.data.message,
-            });
-          }
-        } catch (e) {
-          console.log(e);
-          setAlert({
-            type: "error",
-            message: "failed to load orders",
-          });
-        }
-      })();
+      //       const returnedOrderRowData: TableDef[] =
+      //         res.data.returnedOrders.map((order, i) => ({
+      //           SN: i + 1,
+      //           Product: order.product!.name,
+      //           "Order No": order.id,
+      //           Status: order.status,
+      //           Quantity: order.quantity,
+      //           Size: order.size,
+      //           Color: order.color,
+      //         }));
+
+      //       const canceledOrderRowData: TableDef[] =
+      //         res.data.canceledOrders.map((order, i) => ({
+      //           SN: i + 1,
+      //           Product: order.product!.name,
+      //           "Order No": order.id,
+      //           Status: order.status,
+      //           Quantity: order.quantity,
+      //           Size: order.size,
+      //           Color: order.color,
+      //         }));
+      //       setRowDataForCanceledOrders(canceledOrderRowData);
+      //       setRowDataForRecentOrders(recentOrderRowData);
+      //       setRowDataForReturnedOrders(returnedOrderRowData);
+      //     } else {
+      //       setAlert({
+      //         type: "error",
+      //         message: res.data.message,
+      //       });
+      //     }
+      //   } catch (e) {
+      //     console.log(e);
+      //     setAlert({
+      //       type: "error",
+      //       message: "failed to load orders",
+      //     });
+      //   }
+      // })();
     }
     return () => {
       ignore = true;
     };
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+    if (!ignore) {
+      (async () => {
+        const res = await axios.get<
+          RespondType & {
+            recentOrders: Order[];
+            // returnedOrders: Order[];
+            canceledOrders: Order[];
+          }
+        >(
+          `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/orders/recentOrders`,
+          {
+            withCredentials: true,
+          }
+        );
+        console.log(res.data);
+        if (res.data.status === "ok") {
+          const recentOrderRowData: TableDef[] = res.data.recentOrders.map(
+            (order, i) => ({
+              SN: i + 1,
+              Product: order.product!.name,
+              "Order No": order.id,
+              Status: order.status,
+              Quantity: order.quantity,
+              Size: order.size,
+              Color: order.color,
+            })
+          );
+
+          // const returnedOrderRowData: TableDef[] = res.data.returnedOrders.map(
+          //   (order, i) => ({
+          //     SN: i + 1,
+          //     Product: order.product!.name,
+          //     "Order No": order.id,
+          //     Status: order.status,
+          //     Quantity: order.quantity,
+          //     Size: order.size,
+          //     Color: order.color,
+          //   })
+          // );
+
+          const canceledOrderRowData: TableDef[] = res.data.canceledOrders.map(
+            (order, i) => ({
+              SN: i + 1,
+              Product: order.product!.name,
+              "Order No": order.id,
+              Status: order.status,
+              Quantity: order.quantity,
+              Size: order.size,
+              Color: order.color,
+            })
+          );
+          setRowDataForCanceledOrders(canceledOrderRowData);
+          setRowDataForRecentOrders(recentOrderRowData);
+          // setRowDataForReturnedOrders(returnedOrderRowData);
+        }
+      })();
+    }
   }, []);
 
   return (
@@ -225,7 +324,7 @@ const Orders = () => {
           )}
         </div>
         <div className={styles.tables}>
-          <TableHolder
+          {/* <TableHolder
             inputRef={recentOrdSearchRef}
             title="Recent Orders"
             columData={columnDefs}
@@ -235,25 +334,25 @@ const Orders = () => {
                 Router.push(`/admin/orders/id?oid=${e.data.id}`);
               }
             }}
-          />
+          /> */}
           <TableHolder
             inputRef={allOrdSearchRef}
             title="All Orders"
             columData={columnDefs}
-            rowData={rowData}
+            rowData={rowDataForRecentOrders}
           />
           <TableHolder
             inputRef={caancledOrdSearchRef}
             title="Cancled Orders"
             columData={columnDefs}
-            rowData={rowData}
+            rowData={rowDataForCanceledOrders}
           />
-          <TableHolder
+          {/* <TableHolder
             inputRef={caancledOrdSearchRef}
             title="Returned Orders"
             columData={columnDefs}
             rowData={rowData}
-          />
+          /> */}
         </div>
       </div>
     </AdminLayout>

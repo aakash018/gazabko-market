@@ -31,6 +31,9 @@ export class Order extends BaseEntity {
   @Column({ nullable: true })
   color: string;
 
+  @Column({ default: false })
+  canceledBySeller: boolean;
+
   @Column({ nullable: true })
   state: "received" | "outForDelivery";
 

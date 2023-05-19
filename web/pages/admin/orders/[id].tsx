@@ -30,6 +30,7 @@ const OrderDetails = () => {
   const [loading, setLoading] = useState(false);
 
   const { setAlert } = useAlert();
+  const [verifyOrderModal, setVerifyOrderModal] = useState(false);
 
   const fetchDate = async () => {
     try {
@@ -140,8 +141,61 @@ const OrderDetails = () => {
     }
   };
 
+  const handleVerifyOrder = async () => {
+    try {
+      const res = await axios.put<RespondType>(
+        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/orders/verifyOrder`,
+        {
+          oid,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.data.status === "ok") {
+        setAlert({
+          type: "message",
+          message: res.data.message,
+        });
+        setVerifyOrderModal(false);
+        fetchDate();
+      } else {
+        setAlert({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    } catch {
+      setAlert({
+        type: "error",
+        message: "failed to connect to server",
+      });
+    }
+  };
+
   return (
     <>
+      <Modal
+        isOpen={verifyOrderModal}
+        style={customStyles}
+        onRequestClose={() => setVerifyOrderModal(false)}
+      >
+        <DialogBox title="Confirm Order">
+          <div className="confirmModal">
+            <div className="content">
+              Do you really want to verify this order?
+            </div>
+            <div className="actBtn">
+              <Button color="success" onClick={handleVerifyOrder}>
+                Yes
+              </Button>
+              <Button color="error" onClick={() => setVerifyOrderModal(false)}>
+                No
+              </Button>
+            </div>
+          </div>
+        </DialogBox>
+      </Modal>
       <AdminLayout>
         <h1>Order Details</h1>
         {loading && <h2>Loading...</h2>}
@@ -338,77 +392,111 @@ const OrderDetails = () => {
                   </div>
                 )}
               </div>
-              <div className={styles.statusControl}>
-                <div className={styles.mainTitle}>Order Status Control</div>
-                {order.status === "pending" && (
-                  <div
-                    className={styles.statusHolder}
-                    style={{ color: "var(--theme-red)" }}
-                  >
-                    Order yet to be verified by the seller
-                  </div>
-                )}
-                {order.status !== "pending" && (
-                  <div className={styles.statusHolder}>
-                    <div className={styles.text}>Order Verified by Vendor</div>
-                    <GiCheckMark color="green" size={20} />
-                  </div>
-                )}
 
-                <div className={styles.statusHolder}>
-                  <div className={styles.text}>Order Recieved</div>
-                  <div className={styles.button}>
-                    {order.status === "processing" && order.state === null && (
-                      <Button color="default" onClick={handleReceivedOrder}>
-                        VERIFY
-                      </Button>
-                    )}
-                    {order.state === "received" ||
-                      (order.state === "outForDelivery" && (
-                        <GiCheckMark color="green" size={20} />
-                      ))}
-                  </div>
+              {order.product?.store === "admin" && (
+                <div>
+                  <div></div>
                 </div>
+              )}
 
-                <div className={styles.statusHolder}>
-                  <div className={styles.text}>Order Out for Delivery</div>
-                  <div className={styles.button}>
-                    {order.state === "received" && (
+              {order.product?.store === "admin" &&
+                order.status === "pending" && (
+                  <div className={styles.verifyOrder}>
+                    <div className={styles.context}>Verify this order?</div>
+                    <div className={styles.actBtn}>
                       <Button
-                        color="default"
-                        onClick={handleOutForDeliveryOrder}
+                        color="success"
+                        onClick={() => setVerifyOrderModal(true)}
                       >
-                        VERIFY
+                        Yes
                       </Button>
-                    )}
-                    {order.state === "outForDelivery" && (
-                      <GiCheckMark color="green" size={20} />
-                    )}
-                  </div>
-                </div>
-
-                {
-                  <div className={styles.statusHolder}>
-                    <div className={styles.text}>
-                      Order Delivered Successfully
+                      <Button color="error">No</Button>
                     </div>
-                    {order.status === "processing" &&
-                      order.state === "outForDelivery" && (
-                        <div className={styles.button}>
-                          <Button
-                            color="default"
-                            onClick={handleDeliveredOrder}
-                          >
+                  </div>
+                )}
+
+              {order.status === "pending" && (
+                <h2
+                  className={styles.statusHolder}
+                  style={{ color: "var(--theme-red)" }}
+                >
+                  Order yet to be verified
+                </h2>
+              )}
+              {order.status !== "pending" && (
+                <div className={styles.statusControl}>
+                  <div className={styles.mainTitle}>Order Status Control</div>
+                  {order.status === "processing" && (
+                    <div className={styles.statusHolder}>
+                      <div className={styles.text}>
+                        Order Verified by Vendor
+                      </div>
+                      <GiCheckMark color="green" size={20} />
+                    </div>
+                  )}
+
+                  <div className={styles.statusHolder}>
+                    <div className={styles.text}>Order Recieved</div>
+                    <div className={styles.button}>
+                      {order.status === "processing" &&
+                        order.state === null && (
+                          <Button color="default" onClick={handleReceivedOrder}>
                             VERIFY
                           </Button>
-                        </div>
-                      )}
-                    {order.status === "delivered" && (
-                      <GiCheckMark color="green" size={20} />
-                    )}
+                        )}
+                      {order.state === "received" ||
+                        (order.state === "outForDelivery" && (
+                          <GiCheckMark color="green" size={20} />
+                        ))}
+                    </div>
                   </div>
-                }
-              </div>
+
+                  <div className={styles.statusHolder}>
+                    <div className={styles.text}>Order Out for Delivery</div>
+                    <div className={styles.button}>
+                      {order.state === "received" && (
+                        <Button
+                          color="default"
+                          onClick={handleOutForDeliveryOrder}
+                        >
+                          VERIFY
+                        </Button>
+                      )}
+                      {order.state === "outForDelivery" && (
+                        <GiCheckMark color="green" size={20} />
+                      )}
+                    </div>
+                  </div>
+                  {order.canceledBySeller && (
+                    <div>
+                      <div>Order was canceled by seller</div>
+                    </div>
+                  )}
+                  {/* {order} */}
+
+                  {
+                    <div className={styles.statusHolder}>
+                      <div className={styles.text}>
+                        Order Delivered Successfully
+                      </div>
+                      {order.status === "processing" &&
+                        order.state === "outForDelivery" && (
+                          <div className={styles.button}>
+                            <Button
+                              color="default"
+                              onClick={handleDeliveredOrder}
+                            >
+                              VERIFY
+                            </Button>
+                          </div>
+                        )}
+                      {order.status === "delivered" && (
+                        <GiCheckMark color="green" size={20} />
+                      )}
+                    </div>
+                  }
+                </div>
+              )}
             </div>
           </div>
         )}

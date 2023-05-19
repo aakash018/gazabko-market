@@ -262,14 +262,19 @@ const ProductDisplay: React.FC = () => {
                 }}
               />
             )}
-
+            {/* {console.log(
+              new Date(product.offers!.starting_date).getTime(),
+              new Date().getTime()
+            )} */}
             <ProductInfoDisplay
               id={product.id}
               totalStock={product!.totalStock}
               discount={
                 product.offers &&
-                product.offers!.starting_date <= new Date() &&
-                product.offers!.ending_date >= new Date() &&
+                new Date(product.offers!.starting_date).getTime() <=
+                  new Date().getTime() &&
+                new Date(product.offers!.ending_date).getTime() >=
+                  new Date().getTime() &&
                 product!.offers?.common_discount
                   ? Math.ceil(
                       (product.price / 100) *

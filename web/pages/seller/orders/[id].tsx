@@ -24,6 +24,7 @@ const OrdersDetails = () => {
 
   const [loading, setLoading] = useState(false);
   const [verifyConfirmModal, setVerifyConfirmModal] = useState(false);
+  const [cancelConfirmModal, setCancelConfirmModal] = useState(false);
 
   const { setAlert } = useAlert();
 
@@ -107,12 +108,14 @@ const OrdersDetails = () => {
           withCredentials: true,
         }
       );
+      console.log("YOOO", res.data);
       if (res.data.status === "ok") {
         setAlert({
           type: "message",
           message: res.data.message,
         });
-        Router.push("/seller/orders");
+        setCancelConfirmModal(false);
+        fetchOrder();
       } else {
         setAlert({
           type: "error",
@@ -144,6 +147,28 @@ const OrdersDetails = () => {
               <Button
                 color="error"
                 onClick={() => setVerifyConfirmModal(false)}
+              >
+                No
+              </Button>
+            </div>
+          </div>
+        </DialogBox>
+      </Modal>
+      <Modal
+        isOpen={cancelConfirmModal}
+        style={customStyles}
+        onRequestClose={() => setCancelConfirmModal(false)}
+      >
+        <DialogBox title="Hide Product">
+          <div className="confirmModal">
+            <div className="content">
+              Are you sure want to cancel this order?
+            </div>
+            <div className="actBtn">
+              <Button onClick={handleCancelOrder}>Yes</Button>
+              <Button
+                color="error"
+                onClick={() => setCancelConfirmModal(false)}
               >
                 No
               </Button>
@@ -184,7 +209,7 @@ const OrdersDetails = () => {
                     <div className={styles.infoHolder}>
                       <div className={styles.title}>Original Product Price</div>
                       <div className={styles.data}>
-                        Rs{orderDetails?.product?.price}
+                        Rs. {orderDetails?.product?.price}
                       </div>
                     </div>
                     <div className={styles.infoHolder}>
@@ -195,10 +220,7 @@ const OrdersDetails = () => {
                         Rs. {orderDetails?.product?.discount || 0}
                       </div>
                     </div>
-                    <div className={styles.infoHolder}>
-                      <div className={styles.title}>Shipping Charge</div>
-                      <div className={styles.data}>Rs. 60 </div>
-                    </div>
+
                     <div className={styles.infoHolder}>
                       <div className={styles.title}>
                         Total Charge For 1 Item
@@ -223,16 +245,6 @@ const OrdersDetails = () => {
                       <div className={styles.title}>Quantity</div>
                       <div className={styles.data}>
                         {orderDetails?.quantity}
-                      </div>
-                    </div>
-                    <div className={styles.infoHolder}>
-                      <div className={styles.title}>
-                        Total Charge For All Items{" "}
-                      </div>
-                      <div className={styles.data}>
-                        Rs.{" "}
-                        {orderDetails!.product!.priceAfterDiscount *
-                          orderDetails!.quantity}
                       </div>
                     </div>
                     {orderDetails.offerName && (
@@ -260,18 +272,54 @@ const OrdersDetails = () => {
                       </>
                     )}
                     <div className={styles.infoHolder}>
-                      <div className={styles.title}>Total Order Price</div>
-                      <div className={styles.data}>{orderDetails.price}</div>
-                    </div>
-                    <div className={styles.infoHolder}>
-                      <div className={styles.title}>Vendor</div>
-                      <div className={styles.data}>XYZ SuperMaart</div>
-                    </div>
-                    <div className={styles.infoHolder}>
                       <div className={styles.title}>Gift Coupen Used</div>
                       <div className={styles.data}>N/A</div>
                     </div>
-                    <div className={styles.actBtn}>
+                    <div className={styles.infoHolder}>
+                      <div className={styles.title}>
+                        Total Charge For All Items{" "}
+                      </div>
+                      <div className={styles.data}>
+                        Rs.{" "}
+                        {orderDetails!.product!.priceAfterDiscount *
+                          orderDetails!.quantity}
+                      </div>
+                    </div>
+                    <div className={styles.infoHolder}>
+                      <div className={styles.title}>Shipping Charge</div>
+                      <div className={styles.data}>Rs. 60 </div>
+                    </div>
+                    <div
+                      className={styles.infoHolder}
+                      style={{
+                        flexDirection: "column",
+                        gap: 0,
+                        marginTop: "20px",
+                      }}
+                    >
+                      <div
+                        className={styles.title}
+                        style={{ fontSize: "2rem" }}
+                      >
+                        Total Order Price
+                      </div>
+
+                      <div
+                        className={styles.data}
+                        style={{ fontSize: "2.3rem" }}
+                      >
+                        Rs. {orderDetails.price + 60}
+                      </div>
+                    </div>
+                    {/* <div className={styles.infoHolder}>
+                      <div className={styles.title}>Vendor</div>
+                      <div className={styles.data}>XYZ SuperMaart</div>
+                    </div> */}
+
+                    <div
+                      className={styles.actBtn}
+                      style={{ marginTop: "20px" }}
+                    >
                       <Button
                         onClick={() => {
                           Router.push(
@@ -314,33 +362,44 @@ const OrdersDetails = () => {
                       <div className={styles.infoHolder}>
                         <div className={styles.title}>Order Placed At</div>
                         <div className={styles.data}>
-                          {orderDetails.created_at}
+                          {new Date(orderDetails.created_at).toDateString()}
                         </div>
                       </div>
-                      <div className={styles.infoHolder}>
+                      {/* <div className={styles.infoHolder}>
                         <div className={styles.title}>
                           Expected Delivary Date
                         </div>
-                        <div className={styles.data}>28 Jul 2022</div>
-                      </div>
+                        <div className={styles.data}>
+                          {new Date(
+                            new Date(orderDetails.created_at).getDate() + 3
+                          ).toDateString()}
+                        </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
                 <div className={styles.statusControl}>
                   <div className={styles.mainTitle}>Order Status Control</div>
                   <div className={styles.actBtn}>
-                    {orderDetails.status === "pending" && (
-                      <>
-                        <Button onClick={() => setVerifyConfirmModal(true)}>
-                          Verify Order
-                        </Button>
-                        <Button color="error" onClick={handleCancelOrder}>
-                          Cancel Order
-                        </Button>
-                      </>
-                    )}
+                    {orderDetails.status === "pending" &&
+                      !orderDetails.canceledBySeller && (
+                        <>
+                          <Button onClick={() => setVerifyConfirmModal(true)}>
+                            Verify Order
+                          </Button>
+                          <Button
+                            color="error"
+                            onClick={() => setCancelConfirmModal(true)}
+                          >
+                            Cancel Order
+                          </Button>
+                        </>
+                      )}
                     {orderDetails.status !== "pending" && (
                       <h2>Order already verified</h2>
+                    )}
+                    {orderDetails.canceledBySeller && (
+                      <h2>You already canceled this order...</h2>
                     )}
                   </div>
                 </div>

@@ -4,12 +4,19 @@ import { Line } from "react-chartjs-2";
 
 interface Props {
   subTitle: string;
-  amount: number | string;
+  amount?: number | string;
   labels: string[];
   data: number[];
+  style?: React.CSSProperties;
 }
 
-const LineGraphInfo: React.FC<Props> = ({ subTitle, amount, data, labels }) => {
+const LineGraphInfo: React.FC<Props> = ({
+  subTitle,
+  amount,
+  data,
+  labels,
+  style,
+}) => {
   return (
     <div className={styles.lineGraphInfo}>
       <div className={styles.header}>
@@ -18,8 +25,12 @@ const LineGraphInfo: React.FC<Props> = ({ subTitle, amount, data, labels }) => {
       </div>
       <div className={styles.chart}>
         <Line
+          // width={400}
+          // height={300}
+          style={style}
           data={{
             labels: labels,
+
             datasets: [
               {
                 label: subTitle,

@@ -55,7 +55,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
   sizes,
   color,
 }) => {
-  const { user } = useAuth();
+  const { user, isLogedIn } = useAuth();
   const [quantity, setQuantity] = useState(1);
   const { setAlert } = useAlert();
   console.log(discount);
@@ -63,11 +63,36 @@ const ProductInfoDisplay: React.FC<Props> = ({
   const [selectedSize, setSelectedSize] = useState<string | undefined>(
     undefined
   );
-  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedColor, setSelectedColor] = useState<string | undefined>(
+    undefined
+  );
   const { setCart } = useCart();
 
   // TODO for subTotal also add offer
   const handleBuyNow = () => {
+    if (sizes && JSON.parse(sizes)?.length !== 0) {
+      if (selectedSize == undefined) {
+        return setAlert({
+          type: "error",
+          message: "select a size",
+        });
+      }
+    }
+    if (color && JSON.parse(color)?.length !== 0) {
+      console.log(selectedColor);
+      if (selectedColor == undefined) {
+        return setAlert({
+          type: "error",
+          message: "select a color",
+        });
+      }
+    }
+    if (!isLogedIn) {
+      return setAlert({
+        type: "error",
+        message: "user is not logged in!",
+      });
+    }
     if (setCart) {
       setCart({
         subTotal: (mp - discount) * quantity,
@@ -86,6 +111,23 @@ const ProductInfoDisplay: React.FC<Props> = ({
   };
 
   const handleAddToCart = async () => {
+    if (sizes && JSON.parse(sizes)?.length !== 0) {
+      if (selectedSize == undefined) {
+        return setAlert({
+          type: "error",
+          message: "select a size",
+        });
+      }
+    }
+    if (color && JSON.parse(color)?.length !== 0) {
+      console.log(selectedColor);
+      if (selectedColor == undefined) {
+        return setAlert({
+          type: "error",
+          message: "select a color",
+        });
+      }
+    }
     const res = await axios.post<RespondType>(
       `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/cart/addToCart`,
       {
@@ -113,6 +155,12 @@ const ProductInfoDisplay: React.FC<Props> = ({
   };
 
   const handleAddToWishlist = async () => {
+    if (!isLogedIn) {
+      return setAlert({
+        type: "error",
+        message: "user is not logged in!",
+      });
+    }
     try {
       const res = await axios.post<RespondType>(
         `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/wishlist/add`,
@@ -300,7 +348,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
             <span>Return Policy</span>
             <span>Warenty Policy</span>
           </section>
-          <section className={styles.promocode}>
+          {/* <section className={styles.promocode}>
             <div className={styles.promocodeTitle}>Promocodes</div>
             <div className={styles.promocodeDescContainer}>
               <div className={styles.promocodeDesc}>
@@ -322,9 +370,10 @@ const ProductInfoDisplay: React.FC<Props> = ({
                 </svg>
               </div>
             </div>
-          </section>
+          </section> */}
         </section>
       </div>
+      {!seller && <h3>Product by Admin</h3>}
       {seller && (
         <div className={styles.productDisplayRight}>
           <div className={styles.productDisplayRightContainer}>
@@ -355,7 +404,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
                   Standard Delivery
                   <br />
                   <span style={{ fontSize: "13px", color: "#757575" }}>
-                    2 days
+                    3 days
                   </span>
                 </span>
               </div>
@@ -384,12 +433,12 @@ const ProductInfoDisplay: React.FC<Props> = ({
               <div>
                 <span className={styles.grey}>Store name</span>
                 <br />
-                <Link href="/sellerInfo/dasds">
+                <Link href={`/sellerInfo/${seller.id}`}>
                   <a style={{ fontSize: "18px" }}>{seller.storeName}</a>
                 </Link>
               </div>
             </div>
-            <div className={styles.ratings}>
+            {/* <div className={styles.ratings}>
               <div className={styles.rating}>
                 <span>Seller rating</span>
                 <span className={styles.ratingPercentage}>99%</span>
@@ -398,7 +447,7 @@ const ProductInfoDisplay: React.FC<Props> = ({
                 <span>Ship on time</span>
                 <span className={styles.ratingPercentage}>99%</span>
               </div>
-            </div>
+            </div> */}
             <div className={styles.productDisplayRightButton}>
               <Button
                 color="error"

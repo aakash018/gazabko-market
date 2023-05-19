@@ -30,8 +30,8 @@ export class Products extends BaseEntity {
   @Column()
   name: string;
 
-  @Column({ default: 0 })
-  rating: number;
+  @Column({ default: 0.0, type: "float" })
+  rating: string;
 
   @Column()
   price: number;

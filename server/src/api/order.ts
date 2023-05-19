@@ -117,6 +117,27 @@ router.get("/orderDetails", validateUser, async (req, res) => {
         product: true,
         return: true,
       },
+      select: {
+        id: true,
+        created_at: true,
+        color: true,
+        size: true,
+        quantity: true,
+        state: true,
+        status: true,
+        canceledBySeller: true,
+        price: true,
+        deliveryAddress: true,
+        nearestLandmark: true,
+        product: {
+          id: true,
+          name: true,
+          images: true,
+          price: true,
+          discount: true,
+          priceAfterDiscount: true,
+        },
+      },
     });
 
     res.json({

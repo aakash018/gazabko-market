@@ -2,7 +2,7 @@ import axios from "axios";
 import Router from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { Order } from "../../../@types/global";
-import SellerLayout from "../../../components/Admin/AdminNav";
+// import SellerLayout from "../../../components/Admin/AdminNav";
 import SellerNav from "../../../components/Seller/SellerNav";
 import { TableHolder } from "../../admin/orders";
 import { useAlert } from "../../_app";
@@ -14,6 +14,7 @@ interface TableDef {
   "Order No": number;
   Size?: string;
   Color?: string;
+  isGift?: "Yes" | "No";
 }
 
 const Pending: React.FC = () => {
@@ -25,13 +26,26 @@ const Pending: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const [columnDefs] = useState([
-    { field: "SN", width: 60 },
+    { field: "Order No" },
     { field: "Product" },
     { field: "Quantity", width: 150 },
+    { field: "isGift", width: 100 },
     { field: "Size", width: 70 },
     { field: "Color", width: 90 },
-    { field: "Order No" },
-    { field: "Details" },
+    {
+      field: "Details",
+      cellRenderer: () => (
+        <div
+          style={{
+            fontWeight: "bold",
+            color: "var(--theme-color)",
+            cursor: "pointer",
+          }}
+        >
+          View
+        </div>
+      ),
+    },
   ]);
 
   useEffect(() => {
@@ -57,9 +71,9 @@ const Pending: React.FC = () => {
                 Product: order.product!.name,
                 "Order No": order.id,
                 Quantity: order.quantity,
-                Size: order.size,
-                Color: order.color,
-                Details: "View",
+                Size: order.size ? order.size : "N/A",
+                Color: order.color ? order.color : "N/A",
+                isGift: order.isGift ? "Yes" : "No",
               })
             );
             setRowData(pendingOrders);
