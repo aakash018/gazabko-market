@@ -67,9 +67,6 @@ const EditCategories = () => {
               color: "var(--theme-color)",
               fontWeight: "bold",
             }}
-            onClick={() => {
-              Router.push("/admin/edit/editCategories/sdasd");
-            }}
           >
             View
           </span>
@@ -209,6 +206,13 @@ const EditCategories = () => {
               rowData={rowData}
               columnDefs={columnDefs}
               onCellClicked={(e) => {
+                if (e.colDef.field === "Details") {
+                  Router.push(
+                    `/admin/edit/editCategories/${
+                      (e.data as any)["Category Name"]
+                    }`
+                  );
+                }
                 if (e.colDef.field === "Delete") {
                   if (e.data?.Products !== 0) {
                     setAlert({

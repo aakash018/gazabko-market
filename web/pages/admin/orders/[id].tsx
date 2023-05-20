@@ -251,14 +251,14 @@ const OrderDetails = () => {
                     <div className={styles.title}>Quantity</div>
                     <div className={styles.data}>{order?.quantity}</div>
                   </div>
-                  <div className={styles.infoHolder}>
+                  {/* <div className={styles.infoHolder}>
                     <div className={styles.title}>
                       Total Charge For All Items{" "}
                     </div>
                     <div className={styles.data}>
                       Rs. {order!.product!.priceAfterDiscount * order!.quantity}
                     </div>
-                  </div>
+                  </div> */}
                   {order.offerName && (
                     <>
                       <div className={styles.infoHolder}>
@@ -290,6 +290,51 @@ const OrderDetails = () => {
                   <div className={styles.infoHolder}>
                     <div className={styles.title}>Gift Coupen Used</div>
                     <div className={styles.data}>N/A</div>
+                  </div>
+
+                  <div className={styles.infoHolder}>
+                    <div className={styles.title}>Is a Gift</div>
+                    <div className={styles.data}>
+                      {order.isGift ? (
+                        <div style={{ color: "var(--default-green)" }}>Yes</div>
+                      ) : (
+                        <div style={{ color: "var(--default-red)" }}>No</div>
+                      )}{" "}
+                    </div>
+                  </div>
+
+                  <div className={styles.infoHolder}>
+                    <div className={styles.title}>
+                      Total Charge For All Items{" "}
+                    </div>
+                    <div className={styles.data}>Rs. {order.price}</div>
+                  </div>
+
+                  <div className={styles.infoHolder}>
+                    <div className={styles.title}>Shipping Charge</div>
+                    <div className={styles.data}>Rs. 60 </div>
+                  </div>
+                  {order.isGift && (
+                    <div className={styles.infoHolder}>
+                      <div className={styles.title}>Gift Wrap Charge</div>
+                      <div className={styles.data}>Rs. 25 </div>
+                    </div>
+                  )}
+                  <div
+                    className={styles.infoHolder}
+                    style={{
+                      flexDirection: "column",
+                      gap: 0,
+                      marginTop: "20px",
+                    }}
+                  >
+                    <div className={styles.title} style={{ fontSize: "2rem" }}>
+                      Total Order Price
+                    </div>
+
+                    <div className={styles.data} style={{ fontSize: "2.3rem" }}>
+                      Rs. {order.price + 60 + (order.isGift ? 25 : 0)}
+                    </div>
                   </div>
                   <div className={styles.actBtn}>
                     <Button
@@ -331,7 +376,7 @@ const OrderDetails = () => {
                     <Button
                       onClick={() => {
                         Router.push(
-                          `/admin/customers/id?cid=${order.user?.id}`
+                          `/admin/customers/id?uid=${order.user?.id}`
                         );
                       }}
                     >

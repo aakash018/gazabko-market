@@ -261,6 +261,7 @@ const Orders = () => {
               Quantity: order.quantity,
               Size: order.size,
               Color: order.color,
+              id: order.id,
             })
           );
 
@@ -285,6 +286,7 @@ const Orders = () => {
               Quantity: order.quantity,
               Size: order.size,
               Color: order.color,
+              id: order.id,
             })
           );
           setRowDataForCanceledOrders(canceledOrderRowData);
@@ -340,6 +342,11 @@ const Orders = () => {
             title="All Orders"
             columData={columnDefs}
             rowData={rowDataForRecentOrders}
+            onCellClicked={(e) => {
+              if (e.colDef.field === "Details") {
+                Router.push(`/admin/orders/id?oid=${e.data.id}`);
+              }
+            }}
           />
           <TableHolder
             inputRef={caancledOrdSearchRef}

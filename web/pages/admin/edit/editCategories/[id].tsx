@@ -1,11 +1,12 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import AdminLayout from "../../../../components/Admin/AdminNav";
-import DashInfoHolder from "../../../../components/Admin/DashInfoHolder";
-import LineGraphInfo from "../../../../components/Admin/shared/LineGraphInfo";
+// import DashInfoHolder from "../../../../components/Admin/DashInfoHolder";
+// import LineGraphInfo from "../../../../components/Admin/shared/LineGraphInfo";
 
 import styles from "../../../../styles/components/Admin/pages/CategoryDetails.module.scss";
-import { TableHolder } from "../../orders";
+import { useRouter } from "next/router";
+// import { TableHolder } from "../../orders";
 
 type TableDef = {
   SN: number;
@@ -75,6 +76,9 @@ const CategoryDetails = () => {
     },
   ]);
 
+  const router = useRouter();
+  const { id } = router.query;
+
   const [columnDefs] = useState([
     { field: "SN", width: 55 },
     { field: "Vendor's Name", resizable: true, width: 200 },
@@ -95,7 +99,7 @@ const CategoryDetails = () => {
             objectPosition={"top"}
           />
           <div className={styles.label}>
-            <div className={styles.name}>Gazaabko Bar</div>
+            <div className={styles.name}>{id}</div>
             <div className={styles.info}>
               <div className={styles.infoHolder}>
                 <div className={styles.tag}>Products</div>

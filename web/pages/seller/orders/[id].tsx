@@ -276,19 +276,35 @@ const OrdersDetails = () => {
                       <div className={styles.data}>N/A</div>
                     </div>
                     <div className={styles.infoHolder}>
+                      <div className={styles.title}>Is a Gift</div>
+                      <div className={styles.data}>
+                        {orderDetails.isGift ? (
+                          <div style={{ color: "var(--default-green)" }}>
+                            Yes
+                          </div>
+                        ) : (
+                          <div style={{ color: "var(--default-red)" }}>No</div>
+                        )}{" "}
+                      </div>
+                    </div>
+                    <div className={styles.infoHolder}>
                       <div className={styles.title}>
                         Total Charge For All Items{" "}
                       </div>
                       <div className={styles.data}>
-                        Rs.{" "}
-                        {orderDetails!.product!.priceAfterDiscount *
-                          orderDetails!.quantity}
+                        Rs. {orderDetails.price}
                       </div>
                     </div>
                     <div className={styles.infoHolder}>
                       <div className={styles.title}>Shipping Charge</div>
                       <div className={styles.data}>Rs. 60 </div>
                     </div>
+                    {orderDetails.isGift && (
+                      <div className={styles.infoHolder}>
+                        <div className={styles.title}>Gift Wrap Charge</div>
+                        <div className={styles.data}>Rs. 25 </div>
+                      </div>
+                    )}
                     <div
                       className={styles.infoHolder}
                       style={{
@@ -308,7 +324,10 @@ const OrdersDetails = () => {
                         className={styles.data}
                         style={{ fontSize: "2.3rem" }}
                       >
-                        Rs. {orderDetails.price + 60}
+                        Rs.{" "}
+                        {orderDetails.price +
+                          60 +
+                          (orderDetails.isGift ? 25 : 0)}
                       </div>
                     </div>
                     {/* <div className={styles.infoHolder}>

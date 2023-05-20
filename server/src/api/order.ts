@@ -33,8 +33,10 @@ router.post("/addOrder", validateUser, async (req, res) => {
         // all this crap is to find real price in case if the product belongs to offer or not
         price:
           (cartProduct.product.offers &&
-          cartProduct.product.offers!.starting_date <= new Date() &&
-          cartProduct.product.offers!.ending_date >= new Date() &&
+          new Date(cartProduct.product.offers!.starting_date).getTime() <=
+            new Date().getTime() &&
+          new Date(cartProduct.product.offers!.ending_date).getTime() >=
+            new Date().getTime() &&
           cartProduct.product.offers.common_discount
             ? cartProduct.product.price -
               cartProduct.product.price *
