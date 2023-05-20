@@ -20,7 +20,7 @@ type TableDef = {
   Product: string;
   Vendor: string;
   "Item Sold": number;
-  "Item Status": string;
+  // "Item Status": string;
   id: any;
 };
 
@@ -36,7 +36,8 @@ const AllProducts = () => {
     { field: "Product", width: 190 },
     { field: "Vendor", width: 190 },
     { field: "Item Sold", width: 135 },
-    { field: "Item Status", width: 135 },
+    { field: "Remaining Stock", width: 160 },
+    // { field: "Item Status", width: 135 },
     // {
     //   field: "Edit",
     //   width: 105,
@@ -90,8 +91,9 @@ const AllProducts = () => {
                 "Item Sold": product.timesBought,
                 Vendor: product.seller ? product.seller.storeName : "Admin",
                 id: product.id,
-                "Item Status":
-                  product.totalStock > 0 ? "In Stock" : "Out Of Stock",
+                "Remaining Stock": product.totalStock,
+                // "Item Status":
+                //   product.totalStock > 0 ? "In Stock" : "Out Of Stock",
               })
             );
 

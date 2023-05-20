@@ -18,14 +18,19 @@ const ProductReportHolder: React.FC<Props> = ({
   showViewVendor = true,
   type = "seller",
   report,
+
   afterHideOrUnhide,
 }) => {
   const { setAlert } = useAlert();
 
   const handleHideProduct = async () => {
+    const url =
+      type === "seller"
+        ? `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/hideProduct`
+        : `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/products/hideProduct`;
     try {
       const res = await axios.put<RespondType>(
-        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/hideProduct`,
+        url,
         {
           productID: report.product?.id,
         },
@@ -54,9 +59,13 @@ const ProductReportHolder: React.FC<Props> = ({
   };
 
   const handleUnhideProduct = async () => {
+    const url =
+      type === "seller"
+        ? `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/unhideProduct`
+        : `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/admin/products/unhideProduct`;
     try {
       const res = await axios.put<RespondType>(
-        `${process.env.NEXT_PUBLIC_SERVER_END_POINT}/seller/products/unhideProduct`,
+        url,
         {
           productID: report.product?.id,
         },

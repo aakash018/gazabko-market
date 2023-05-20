@@ -120,7 +120,12 @@ const OrdersPage = () => {
           { withCredentials: true }
         );
         console.log(res.data);
-        if (res.data.status === "ok") {
+        if (
+          res.data.status === "ok" &&
+          res.data.recentOrders &&
+          res.data.returnedOrders &&
+          res.data.canceledOrders
+        ) {
           const recentOrderRowData: TableDef[] = res.data.recentOrders.map(
             (order, i) => ({
               SN: i + 1,

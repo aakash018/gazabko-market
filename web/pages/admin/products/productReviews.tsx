@@ -62,6 +62,7 @@ const ProductReviews = () => {
           {loading && <h2>Loading...</h2>}
           {!loading && reviews.length === 0 && <h2>No reviews</h2>}
           {!loading &&
+            reviews &&
             reviews.length !== 0 &&
             reviews.map((review, i) => (
               <ProductReviewsHolder review={review} key={i} />
