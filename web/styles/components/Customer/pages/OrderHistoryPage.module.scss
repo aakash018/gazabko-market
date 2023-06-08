@@ -6,14 +6,28 @@
 
     width: 100%;
 
+    @media (max-width: 700px) {
+        flex-direction: column;
+    }
+
+    .optionsHolder {
+        @media (max-width: 700px) {
+            display: flex;
+            justify-content: space-around;
+        }
+    }
     .orderHistoryNav {
         margin-top: 50px;
         line-height: 25px;
+
         .title {
             font-size: 1.5rem;
             font-weight: bold;
         }
         ul {
+            @media (max-width: 700px) {
+                display: none;
+            }
             li {
                 font-size: 1.2rem;
                 list-style: none;
@@ -39,8 +53,15 @@
 
         display: flex;
         flex-direction: column;
-
+        min-height: 550px;
         gap: 20px;
+
+        @media (max-width: 700px) {
+            margin-right: 0px;
+            margin: auto;
+            padding-top: 30px;
+            width: 95%;
+        }
     }
 
     .products {

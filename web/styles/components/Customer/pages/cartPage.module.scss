@@ -18,29 +18,44 @@
     background-color: var(--box-bg);
 
     margin-bottom: 10px;
+
+    @media (max-width: 700px) {
+        width: 100%;
+    }
 }
 
 .cartBody {
     display: flex;
     gap: 20px;
 
+    @media (max-width: 700px) {
+        flex-direction: column;
+    }
+
     .cartItems {
-      min-width: 70%;
-      display: flex;
+        min-width: 70%;
+        display: flex;
         flex-direction: column;
 
         gap: 20px;
     }
 
     .orderSummary {
-      align-self: flex-start;
-      width: 300px;
-      padding: 20px;
-      position: sticky;
-      top: 135px;
-      right: 10px;
+        align-self: flex-start;
+        width: 300px;
+        padding: 20px;
+        position: sticky;
+        top: 135px;
+        right: 10px;
 
         background-color: var(--box-bg);
+
+        @media (max-width: 700px) {
+            position: relative;
+            top: 0px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
 
         .title {
             font-size: 1.5rem;

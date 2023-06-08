@@ -9,7 +9,7 @@ const OrderHistoryLayout: React.FC<{ children: React.ReactNode }> = ({
   return (
     <Layout>
       <div className={styles.orderHistory}>
-        <div>
+        <div className={styles.optionsHolder}>
           <div className={styles.orderHistoryNav}>
             <div className={styles.title}>
               <Link href={"/orderHistory"}>
