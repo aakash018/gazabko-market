@@ -7,10 +7,7 @@ import {
   BsBagPlusFill,
   BsCashStack,
   BsFillCartPlusFill,
-  BsHeart,
   BsHeartFill,
-  BsStarFill,
-  BsStarHalf,
 } from "react-icons/bs";
 import { FaShippingFast } from "react-icons/fa";
 

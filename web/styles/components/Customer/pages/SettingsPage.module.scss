@@ -6,6 +6,8 @@
 
     margin-left: 120px;
     margin-top: 40px;
+    position: relative;
+
     .title {
         font-size: 1.8rem;
         color: var(--theme-color);
@@ -51,6 +53,7 @@
 
         display: flex;
         align-content: center;
+
         .avatarContainer {
             position: absolute;
             top: -100px;
@@ -209,5 +212,71 @@
                 margin-bottom: 50px;
             }
         }
+    }
+}
+
+.settingContainer {
+    .settingHolder {
+        background-color: white;
+        padding: 10px;
+        position: relative;
+        transition: all 0.5s ease-in;
+
+        z-index: 40;
+        height: 700px;
+        @media (max-width: 700px) {
+            transform: translateX(-100%);
+        }
+        .hamburger {
+            position: absolute;
+            top: -50px;
+            right: -80px;
+            font-size: 2.5rem;
+
+            cursor: pointer;
+
+            // color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 50%;
+            opacity: 0;
+
+            @media (max-width: 700px) {
+                opacity: 1;
+            }
+        }
+
+        .activeHamburger {
+            opacity: 0;
+        }
+
+        .settingOptions {
+            @media (max-width: 700px) {
+                // visibility: hidden;
+                // opacity: 0;
+            }
+        }
+        .settingOptionActive {
+            visibility: visible;
+        }
+    }
+
+    .settingHolderActive {
+        padding-left: 15px;
+        transform: translateX(0%);
+    }
+}
+
+.menuCancel {
+    opacity: 0;
+    color: var(--default-red);
+    font-size: 2rem;
+    margin-left: 125px;
+    cursor: pointer;
+    @media (max-width: 700px) {
+        opacity: 1;
     }
 }

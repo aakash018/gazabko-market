@@ -5,6 +5,7 @@ import { TbGift } from "react-icons/tb";
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
+import styles from "../../../styles/components/Customer/pages/settings/Profile.module.scss";
 
 import Image from "next/image";
 
@@ -100,15 +101,19 @@ const SettingHomePage = () => {
   }
 
   return (
-    <div>
-      <h1>Settings</h1>
-      <div style={{ display: "flex", gap: "10px" }}>
+    <div className={styles.profileWrapper}>
+      <h1 className={styles.title}>Settings</h1>
+      <div
+        style={{ display: "flex", gap: "10px" }}
+        className={styles.profileInfoHolder}
+      >
         <div
           style={{
             border: "1px solid #ddd",
             marginTop: "20px",
             padding: "10px 50px 10px 20px",
           }}
+          className={styles.profileInfoHolder}
         >
           <span style={{ fontSize: "16px" }}>My Profile</span>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -157,6 +162,7 @@ const SettingHomePage = () => {
             marginTop: "20px",
             padding: "10px 60px 15px 15px",
           }}
+          className={styles.addressHolder}
         >
           <span style={{ fontSize: "16px" }}>Address Book</span>
           <div style={{ display: "flex", marginTop: "5px" }}>
@@ -164,7 +170,7 @@ const SettingHomePage = () => {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                paddingRight: "50px",
+                // paddingRight: "10px",
               }}
             >
               <span style={{ fontSize: "14px", color: "#757575" }}>
@@ -192,11 +198,11 @@ const SettingHomePage = () => {
         </div>
       </div>
       <div style={{ marginTop: "40px" }}>
-        <h1>Your Orders</h1>
+        <h1 className={styles.orderTitle}>Your Orders</h1>
         <div style={{ marginTop: "20px" }}>
           <div
-            className="ag-theme-alpine"
-            style={{ width: 870, height: "400px" }}
+            className={`ag-theme-alpine ${styles.orderTable}`}
+            // style={{ width: 870, height: "400px" }}
           >
             <AgGridReact
               rowData={rowData}

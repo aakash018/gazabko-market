@@ -8,12 +8,20 @@
   gap: 50px;
   padding: 20px;
 
+  @media (max-width: 700px) {
+    flex-direction: column;
+  }
+
   &__imagesDisplay {
     height: 90%;
-    width: 30%;
+    min-width: 30%;
     display: flex;
     flex-direction: column;
     gap: 20px;
+
+    @media (max-width: 700px) {
+      min-width: 400px;
+    }
 
     &_img {
       width: 100%;
@@ -39,6 +47,8 @@
     display: flex;
     flex-direction: column;
     gap: 25px;
+
+    margin-left: 20px;
 
     &_name {
       font-size: 1.3rem;
@@ -127,6 +137,7 @@
 
     &_actionBtns {
       display: flex;
+      min-width: 400px;
       gap: 20px;
     }
 
@@ -239,5 +250,11 @@
       justify-content: center;
       margin-top: 10px;
     }
+  }
+}
+
+.productDisplayRight {
+  @media (max-width: 700px) {
+    display: none;
   }
 }

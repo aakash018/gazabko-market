@@ -1,0 +1,45 @@
+$mobile-left-margin: -250px;
+
+.profileInfoHolder {
+    @media (max-width: 700px) {
+        flex-direction: column;
+    }
+
+    .addressHolder {
+        @media (max-width: 700px) {
+            width: 400px;
+            margin-left: $mobile-left-margin;
+        }
+    }
+
+    .profileInfoHolder {
+        @media (max-width: 700px) {
+            width: 400px;
+            margin-top: 40px;
+
+            margin-left: $mobile-left-margin;
+        }
+    }
+}
+
+.orderTable {
+    width: 870px;
+    height: 400px;
+    @media (max-width: 700px) {
+        width: 400px;
+
+        margin-left: $mobile-left-margin;
+    }
+}
+
+.title {
+    @media (max-width: 700px) {
+        margin-left: $mobile-left-margin;
+    }
+}
+
+.orderTitle {
+    @media (max-width: 700px) {
+        margin-left: $mobile-left-margin;
+    }
+}

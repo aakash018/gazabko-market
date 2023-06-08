@@ -406,7 +406,9 @@ const ProductDisplay: React.FC = () => {
                 marginTop: "-50px",
               }}
             >
-              <div className={styles.otherProducts}>
+              <div
+                className={`${styles.otherProducts} ${styles.otherFromSeller}`}
+              >
                 <ShowCase
                   title="Other from the seller"
                   includeTimer={false}

@@ -56,7 +56,9 @@
 .shippingAddress {
     display: flex;
     flex-direction: column;
-
+    @media (max-width: 700px) {
+        margin-left: -325px;
+    }
     .actBtn {
         margin: 20px 0;
         align-self: flex-end;

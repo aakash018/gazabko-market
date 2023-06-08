@@ -9,10 +9,10 @@ import { customStyles } from "../../../modalStyle";
 import IntputField from "../../shared/Input";
 import dynamic from "next/dynamic";
 import axios from "axios";
-import { setDefaultResultOrder } from "dns";
+// import { setDefaultResultOrder } from "dns";
 import { useAlert } from "../../../pages/_app";
 import { useAuth } from "../../../context/User";
-import { setDatasets } from "react-chartjs-2/dist/utils";
+// import { setDatasets } from "react-chartjs-2/dist/utils";
 
 const Map = dynamic(
   () => import("../../shared/Map"),
@@ -153,7 +153,7 @@ const ShippingAddress = () => {
           withCredentials: true,
         }
       );
-      console.log(res.data);
+
       if (res.data.status === "ok" && res.data.address) {
         setPhoneNo(res.data.address.phoneNo);
         setDeliveryAddress(res.data.address.deliveryAddress);

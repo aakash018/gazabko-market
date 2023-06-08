@@ -24,6 +24,8 @@
         }
     }
 
+    $left-margin-for-mobile: 30px;
+
     .review {
         width: 100%;
 
@@ -32,6 +34,9 @@
 
         display: flex;
         flex-direction: column;
+        @media (max-width: 700px) {
+            margin-left: $left-margin-for-mobile;
+        }
 
         .title {
             font-size: 2rem;
@@ -78,6 +83,9 @@
         display: flex;
         flex-direction: column;
         gap: 20px;
+        @media (max-width: 700px) {
+            margin-left: $left-margin-for-mobile;
+        }
     }
 
     .questionsInput {
@@ -87,6 +95,9 @@
         flex-direction: column;
         align-items: center;
         margin-top: 40px;
+        @media (max-width: 700px) {
+            margin-left: $left-margin-for-mobile;
+        }
 
         .content {
             min-width: 95%;
@@ -129,6 +140,15 @@
 
     .otherProducts {
         width: 100%;
+        @media (max-width: 700px) {
+            margin-left: $left-margin-for-mobile;
+        }
+    }
+
+    .otherFromSeller {
+        @media (max-width: 700px) {
+            display: none;
+        }
     }
 }
 

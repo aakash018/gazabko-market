@@ -16,11 +16,15 @@ import Button from "../../components/shared/Button";
 import { useAuth } from "../../context/User";
 import { useAlert } from "../_app";
 import PrivatePage from "../../components/shared/PrivatePage";
+// import { FaHamburger } from "react-icons/fa";
+import { GiCancel, GiHamburgerMenu } from "react-icons/gi";
 
 const SettingsPage = () => {
   const [page, setPage] = useState<number>(1);
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const { setAlert } = useAlert();
+
+  const [isMobileMenuActive, setIsMobileMenuActive] = useState(false);
 
   return (
     <PrivatePage>
@@ -32,96 +36,121 @@ const SettingsPage = () => {
             gap: "20px",
             marginTop: "40px",
           }}
+          className={styles.settingContainer}
         >
-          <div>
-            <div style={{ marginBottom: "20px" }}>
-              <div style={{ display: "flex", fontSize: "14px" }}>
-                <span>
-                  Hello,{" "}
-                  <span
-                    style={{
-                      color: "var(--theme-color)",
-                      fontWeight: "bold",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => setPage(1)}
-                  >
-                    Joshep Miles
-                  </span>
-                </span>{" "}
-                &nbsp;
-                <span title="Verified User" style={{ color: "green" }}>
-                  <MdVerifiedUser />
-                </span>
-              </div>
+          <div
+            className={`${styles.settingHolder} ${
+              isMobileMenuActive ? styles.settingHolderActive : ""
+            }`}
+          >
+            <div
+              className={`${styles.hamburger} ${
+                isMobileMenuActive ? styles.activeHamburger : ""
+              }`}
+              onClick={() => {
+                setIsMobileMenuActive((prev) => !prev);
+              }}
+            >
+              <GiHamburgerMenu />
             </div>
-            <div>
-              <SettingPageSettingHolder
-                title="Favourite Seller"
-                subtitle="7 seller favourited"
-                onClick={() => {
-                  setPage(2);
-                }}
-              />
-              <SettingPageSettingHolder
-                title="Edit Profile"
-                subtitle="username, password etc."
-                onClick={() => {
-                  setPage(3);
-                }}
-              />
-              <SettingPageSettingHolder
-                title="Shipping addresses"
-                subtitle="3 ddresses"
-                onClick={() => {
-                  setPage(4);
-                }}
-              />
-              <SettingPageSettingHolder
-                title="Payment Options"
-                subtitle="debit card, credit card, online wallet etc."
-                onClick={() => {}}
-              />
-              <SettingPageSettingHolder
-                title="Order History & Reviews"
-                subtitle="order history | wishlist | reviews"
-                onClick={() => {
-                  Router.push("/orderHistory");
-                }}
-              />
-              <SettingPageSettingHolder
-                title="Promocodes"
-                subtitle="You have special promocodes"
-                onClick={() => {}}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: "20px",
-                }}
-              >
-                <Button
-                  color="error"
-                  onClick={async () => {
-                    const res = await logout();
-                    console.log(res);
-                    if (res?.status === "ok") {
-                      setAlert({
-                        type: "message",
-                        message: res.message,
-                      });
-                      Router.push("/");
-                    } else {
-                      setAlert({
-                        type: "error",
-                        message: "error logging out",
-                      });
-                    }
+            <div
+              className={`${styles.settingOptions} ${
+                isMobileMenuActive ? styles.settingOptionActive : ""
+              }`}
+            >
+              <div style={{ marginBottom: "20px" }}>
+                <div style={{ display: "flex", fontSize: "14px" }}>
+                  <span>
+                    <span>Hello, </span>
+                    <span
+                      style={{
+                        color: "var(--theme-color)",
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => setPage(1)}
+                    >
+                      {user?.firstName}
+                    </span>
+                    <span
+                      className={styles.menuCancel}
+                      onClick={() => {
+                        setIsMobileMenuActive(false);
+                      }}
+                    >
+                      <GiCancel />
+                    </span>
+                  </span>{" "}
+                </div>
+              </div>
+              <div>
+                <SettingPageSettingHolder
+                  title="Favourite Seller"
+                  subtitle="7 seller favourited"
+                  onClick={() => {
+                    setPage(2);
+                  }}
+                />
+                <SettingPageSettingHolder
+                  title="Edit Profile"
+                  subtitle="username, password etc."
+                  onClick={() => {
+                    setPage(3);
+                  }}
+                />
+                <SettingPageSettingHolder
+                  title="Shipping addresses"
+                  subtitle="3 ddresses"
+                  onClick={() => {
+                    setPage(4);
+                  }}
+                />
+                <SettingPageSettingHolder
+                  title="Payment Options"
+                  subtitle="debit card, credit card, online wallet etc."
+                  onClick={() => {}}
+                />
+                <SettingPageSettingHolder
+                  title="Order History & Reviews"
+                  subtitle="order history | wishlist | reviews"
+                  onClick={() => {
+                    Router.push("/orderHistory");
+                  }}
+                />
+                <SettingPageSettingHolder
+                  title="Promocodes"
+                  subtitle="You have special promocodes"
+                  onClick={() => {}}
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px",
                   }}
                 >
-                  Logout
-                </Button>
+                  <Button
+                    color="error"
+                    onClick={async () => {
+                      const res = await logout();
+                      console.log(res);
+                      if (res?.status === "ok") {
+                        setAlert({
+                          type: "message",
+                          message: res.message,
+                        });
+                        Router.push("/");
+                      } else {
+                        setAlert({
+                          type: "error",
+                          message: "error logging out",
+                        });
+                      }
+                    }}
+                  >
+                    Logout
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
