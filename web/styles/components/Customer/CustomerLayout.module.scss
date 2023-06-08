@@ -2,7 +2,7 @@
     margin-top: 100px;
 
     display: flex;
-
+    // position: relative;
     .contentWrapper {
         display: flex;
         justify-content: center;
@@ -19,4 +19,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.mobileNavHolder {
+    pointer-events: none;
+    visibility: hidden;
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    z-index: 50;
+
+    @media (max-width: 700px) {
+        visibility: visible;
+        pointer-events: all;
+    }
 }

@@ -1,6 +1,10 @@
 .price {
     display: flex;
     gap: 10px;
+    font-size: 1.6rem;
+    @media (max-width: 700px) {
+        font-size: 1.1rem;
+    }
 
     .original {
         color: var(--default-red);

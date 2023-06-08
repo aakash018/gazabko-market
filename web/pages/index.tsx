@@ -170,7 +170,7 @@ const Home = () => {
                 );
             })}
             <div className={styles.catogriesGrid}>
-              <div className={styles.title}>Catogries</div>
+              {/* <div className={styles.title}>Catogries</div> */}
               <CatogriesGridBox />
             </div>
             <ShowCase

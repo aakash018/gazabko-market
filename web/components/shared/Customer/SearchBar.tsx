@@ -51,11 +51,11 @@ const SearchBarCustomer: React.FC<Props> = ({ categries }) => {
           categories={categries}
           setCategory={setSelectedCat}
         />
-        <div style={{ height: "40px" }}>
+        <div style={{ height: "40px", display: "flex" }}>
           <input
             style={{
               height: "40px",
-              width: "450px",
+
               outline: "none",
               border: "none",
               textIndent: "10px",

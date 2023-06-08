@@ -1,0 +1,17 @@
+.mobileNav {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: white;
+    padding: 12px;
+    box-shadow: 0 2px 10px 5px rgba(146, 146, 146, 0.726);
+
+    .icon {
+        font-size: 3rem;
+        color: rgb(192, 192, 192);
+    }
+    .active {
+        color: var(--theme-color);
+    }
+}

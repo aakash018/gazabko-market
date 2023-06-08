@@ -3,6 +3,7 @@ import CustomerNav from "./CustomerNav";
 
 import styles from "../../styles/components/Customer/CustomerLayout.module.scss";
 import Footer from "../shared/Customer/Footer";
+import MobileBottomNavBar from "../shared/Customer/MobileBottomNavBar";
 
 interface Props {
   children: React.ReactNode;
@@ -39,6 +40,9 @@ const Layout: React.FC<Props> = ({
           </div>
         </>
       )}
+      <div className={styles.mobileNavHolder}>
+        <MobileBottomNavBar />
+      </div>
     </>
   );
 };

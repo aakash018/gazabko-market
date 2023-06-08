@@ -101,7 +101,7 @@ const CustomerNav: React.FC<Props> = ({ sliderCategories }) => {
       </div>
       <nav className={` ${show && styles.miniNavHidden}`}>
         <div className={styles.customerNav}>
-          <section className="logo">
+          <section className={styles.logo}>
             <Image
               src="/images/logo.png"
               width={180}

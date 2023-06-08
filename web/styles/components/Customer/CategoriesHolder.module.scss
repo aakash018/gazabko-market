@@ -7,6 +7,10 @@
   line-height: 2.6em;
   color: #757575;
   box-shadow: 1px 1px 0px 1px #bbb, -1px -1px 0px 1px #bbb;
+
+  @media (max-width: 700px) {
+    display: none;
+  }
 }
 
 .bannerSliderSubCategoriesDivContainer,

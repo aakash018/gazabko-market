@@ -60,7 +60,7 @@ const ShowCase: React.FC<Props> = ({
         </>
       )}
       <section
-        style={{ display: "flex", justifyContent: "center" }}
+        style={{ display: "flex" }}
         className={styles.productShowCase__products}
       >
         {!products ||

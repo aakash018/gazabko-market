@@ -27,6 +27,9 @@ html {
   --box-bg-hover: #e4e4e4;
   --default-dark: #3d3d3d;
   --default-yellow: #f2c94c;
+
+  --mobile-size: 600px;
+  --tablet-size: 780px;
 }
 
 html {

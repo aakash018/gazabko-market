@@ -1,4 +1,5 @@
 import { Category } from "../../../@types/global";
+import styles from "../../../styles/components/shared/Customer/CatSelector.module.scss";
 
 const categoriesList = [
   "Women's Fashion",
@@ -34,9 +35,10 @@ const SearchBarCategoriesSelector = ({
           borderBottomLeftRadius: "10px",
           borderTopLeftRadius: "10px",
           border: "none",
-          width: "180px",
+          // width: "180px",
           textOverflow: "ellipsis",
         }}
+        className={styles.searchBarCat}
         onChange={(e) => {
           setCategory(e.target.value);
         }}

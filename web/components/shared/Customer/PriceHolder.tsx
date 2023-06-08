@@ -7,11 +7,7 @@ interface Props {
   fontSize?: number | string;
 }
 
-const PriceHolder: React.FC<Props> = ({
-  discount,
-  mp,
-  fontSize = "1.6rem",
-}) => {
+const PriceHolder: React.FC<Props> = ({ discount, mp }) => {
   let price: number = 0;
 
   if (discount && discount !== 0) {
@@ -19,7 +15,7 @@ const PriceHolder: React.FC<Props> = ({
   }
 
   return (
-    <section className={styles.price} style={{ fontSize: fontSize }}>
+    <section className={styles.price}>
       <div
         className={`${styles.original} ${
           discount && discount !== 0 ? styles.discounted : ""
