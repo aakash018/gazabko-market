@@ -1,9 +1,52 @@
 .manage {
     display: flex;
     gap: 30px;
+    position: relative;
 
     .content {
         width: 100%;
+        @media (max-width: 700px) {
+            margin-top: 30px;
+            margin-left: -250px;
+        }
+    }
+
+    .options {
+        background-color: white;
+        position: relative;
+        z-index: 40;
+        padding: 20px 10px;
+        transition: all 0.5s ease-in;
+        @media (max-width: 700px) {
+            margin-top: -8px;
+            transform: translateX(-100%);
+        }
+
+        .menuCancel {
+            position: absolute;
+            right: 0;
+            top: -10px;
+            font-size: 1.8rem;
+            color: var(--default-red);
+
+            cursor: pointer;
+        }
+    }
+
+    .optionsActive {
+        transform: translateX(0);
+    }
+
+    .menuIcon {
+        position: absolute;
+        font-size: 2rem;
+        cursor: pointer;
+
+        @media (max-width: 700px) {
+            position: absolute;
+            top: -10px;
+            left: 20px;
+        }
     }
 
     .review {
@@ -34,6 +77,9 @@
                 outline: none;
                 resize: none;
                 padding: 10px;
+                @media (max-width: 700px) {
+                    width: 90%;
+                }
             }
         }
     }

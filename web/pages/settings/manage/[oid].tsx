@@ -13,6 +13,8 @@ import axios from "axios";
 import { useAlert } from "../../_app";
 import { Order } from "../../../@types/global";
 import { Rating } from "react-simple-star-rating";
+import { GiCancel, GiHamburgerMenu } from "react-icons/gi";
+import { FcCancel } from "react-icons/fc";
 
 const UserInput: React.FC<{
   title: "Review" | "Return" | "Report";
@@ -205,6 +207,7 @@ const Manage = () => {
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [showMobileNav, setShowMobileNav] = useState(false);
   const { oid } = router.query;
   const { setAlert } = useAlert();
   useEffect(() => {
@@ -271,12 +274,29 @@ const Manage = () => {
         order.status === "delivered" &&
         !order.canceledBySeller && (
           <div className={styles.manage}>
-            <div className={styles.options}>
+            <div
+              className={styles.menuIcon}
+              onClick={() => setShowMobileNav((prev) => !prev)}
+            >
+              <GiHamburgerMenu />
+            </div>
+            <div
+              className={`${styles.options} ${
+                showMobileNav ? styles.optionsActive : ""
+              }`}
+            >
+              <div
+                className={styles.menuCancel}
+                onClick={() => setShowMobileNav(false)}
+              >
+                <GiCancel />
+              </div>
               <SettingPageSettingHolder
                 title="Review"
                 subtitle="write reviews"
                 onClick={() => {
                   setSelectedPage("Review");
+                  setShowMobileNav(false);
                 }}
               />
               <SettingPageSettingHolder
@@ -284,6 +304,7 @@ const Manage = () => {
                 subtitle="return product"
                 onClick={() => {
                   setSelectedPage("Return");
+                  setShowMobileNav(false);
                 }}
               />
               <SettingPageSettingHolder
@@ -291,6 +312,7 @@ const Manage = () => {
                 subtitle="report product"
                 onClick={() => {
                   setSelectedPage("Report");
+                  setShowMobileNav(false);
                 }}
               />
             </div>
