@@ -13,6 +13,11 @@
     margin-top: 20px;
 
     border-radius: 10px;
+
+    @media (max-width: 700px) {
+        flex-direction: column;
+        min-width: 300px;
+    }
 }
 .account {
     display: flex;
@@ -20,11 +25,21 @@
 
     margin-top: 60px;
 
+    @media (max-width: 700px) {
+        flex-direction: column;
+        margin-left: 50px;
+        width: 70%;
+    }
+
     .inputs {
         display: flex;
         // flex-direction: column;
 
         gap: 50px;
+
+        @media (max-width: 700px) {
+            flex-direction: column;
+        }
 
         .title {
             font-size: 1.5rem;

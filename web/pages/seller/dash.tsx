@@ -16,7 +16,7 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 import LineGraphInfo from "../../components/Admin/shared/LineGraphInfo";
 import Router from "next/router";
 import { useEffect, useState } from "react";
-import { AgGridReact } from "ag-grid-react";
+
 import DashSearchBar from "../../components/Admin/DashSearchBar";
 import { selllerPageLayoutData } from "../../sellerPageLayoutData";
 import axios from "axios";
@@ -277,7 +277,9 @@ const SellerPage = () => {
 
   return (
     <SellerNav>
-      <h1>DashBoard</h1>
+      <h1 className={styles.pageTitle}>
+        <span>DashBoard</span>
+      </h1>
       {loading && <h2>Loading...</h2>}
       {!loading && (
         <>
@@ -287,11 +289,7 @@ const SellerPage = () => {
               justifyContent: "center",
             }}
           >
-            <div
-              style={{
-                width: "50%",
-              }}
-            >
+            <div className={styles.searchContainer}>
               <DashSearchBar pageLayoutData={selllerPageLayoutData} />
             </div>
           </div>

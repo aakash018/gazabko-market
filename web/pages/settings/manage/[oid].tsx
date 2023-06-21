@@ -7,14 +7,14 @@ import Image from "next/image";
 // import Link from "next/link";
 import Button from "../../../components/shared/Button";
 import { useRouter } from "next/router";
-import { BsStarFill } from "react-icons/bs";
+// import { BsStarFill } from "react-icons/bs";
 import InputField from "../../../components/shared/Input";
 import axios from "axios";
 import { useAlert } from "../../_app";
 import { Order } from "../../../@types/global";
 import { Rating } from "react-simple-star-rating";
 import { GiCancel, GiHamburgerMenu } from "react-icons/gi";
-import { FcCancel } from "react-icons/fc";
+// import { FcCancel } from "react-icons/fc";
 
 const UserInput: React.FC<{
   title: "Review" | "Return" | "Report";

@@ -8,6 +8,10 @@
 
     margin-top: 30px;
 
+    @media (max-width: 700px) {
+        width: 350px;
+    }
+
     .title {
         color: var(--theme-color);
     }

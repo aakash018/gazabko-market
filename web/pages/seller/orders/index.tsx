@@ -28,7 +28,7 @@ interface CountType {
 
 const OrdersPage = () => {
   const recentOrdSearchRef = useRef<HTMLInputElement>(null);
-  const allOrdSearchRef = useRef<HTMLInputElement>(null);
+  // const allOrdSearchRef = useRef<HTMLInputElement>(null);
   const caancledOrdSearchRef = useRef<HTMLInputElement>(null);
 
   const { setAlert } = useAlert();
@@ -171,7 +171,9 @@ const OrdersPage = () => {
 
   return (
     <SellerNav>
-      <h1>Orders</h1>
+      <div className={styles.pageTitle}>
+        <h1>Orders</h1>
+      </div>
       <div className={styles.orders}>
         <div className={styles.infoTabs}>
           {dataCount === null && <h2>Lodging...</h2>}

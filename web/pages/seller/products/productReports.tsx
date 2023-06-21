@@ -6,7 +6,7 @@ import styles from "../../../styles/components/Seller/pages/ProductReports.modul
 import axios from "axios";
 import { ReportType } from "../../../@types/rrr";
 import { useAlert } from "../../_app";
-import { GiH2O } from "react-icons/gi";
+
 import ProductReportHolder from "../../../components/Admin/shared/ProductReportHolder";
 
 const ProductReports = () => {

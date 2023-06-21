@@ -85,7 +85,9 @@ const HiddenProducts = () => {
 
   return (
     <SellerNav>
-      <h1>Hidden Products</h1>
+      <div className={styles.pageTitle}>
+        <h1>Hidden Products</h1>
+      </div>
       {loading && <h2>Loading...</h2>}
       {!loading && (
         <div className={styles.hiddenProducts}>
@@ -95,10 +97,7 @@ const HiddenProducts = () => {
             </div>
             <div className={styles.table}>
               <div className={styles.table}>
-                <div
-                  className="ag-theme-alpine"
-                  style={{ height: 280, width: 810 }}
-                >
+                <div className={`ag-theme-alpine ${styles.main}`}>
                   <AgGridReact
                     rowData={rowData}
                     columnDefs={columnDefs}

@@ -124,64 +124,71 @@ const ProductsPage = () => {
       {!dataCount && <h2>Loading...</h2>}
       {dataCount && (
         <div className={styles.options}>
-          <EditOptionsButton
-            icon={<MdOutlineAdd />}
-            text={"Add Products"}
-            bgColor={"#5494F5"}
-            onClick={() => {
-              handleInfoCardRoute("add");
-            }}
-          />
-          <InfoCard
-            amount={dataCount.total}
-            bgColor={"#00AB77"}
-            title="Total Product"
-            onViewClick={() => {
-              handleInfoCardRoute("allProducts");
-            }}
-          >
-            <FiPackage />
-          </InfoCard>
-          <InfoCard
-            amount={dataCount.outOfStock}
-            bgColor={"#F36868"}
-            title="Products out of stock"
-            onViewClick={() => {
-              handleInfoCardRoute("outOfStock");
-            }}
-          >
-            <FaBoxOpen />
-          </InfoCard>
-          <InfoCard
-            amount={dataCount.reviews}
-            bgColor={"#9E1EEC"}
-            title="Products Reviews"
-            onViewClick={() => {
-              handleInfoCardRoute("productReviews");
-            }}
-          >
-            <MdReviews />
-          </InfoCard>
-          <InfoCard
-            amount={dataCount.report}
-            bgColor={"#EC1E5C"}
-            title="Products Reported"
-            onViewClick={() => {
-              handleInfoCardRoute("productReports");
-            }}
-          >
-            <MdOutlineReportProblem />
-          </InfoCard>
-          <InfoCard
-            amount={dataCount.questions}
-            bgColor={"#9b9e36"}
-            title="Questions Asked"
-            onViewClick={() => {
-              handleInfoCardRoute("questionsAsked");
-            }}
-          >
-            <BsFillPatchQuestionFill />
-          </InfoCard>
+          <div className={styles.cardGroup}>
+            <EditOptionsButton
+              icon={<MdOutlineAdd />}
+              text={"Add Products"}
+              bgColor={"#5494F5"}
+              onClick={() => {
+                handleInfoCardRoute("add");
+              }}
+            />
+            <InfoCard
+              amount={dataCount.total}
+              bgColor={"#00AB77"}
+              title="Total Product"
+              onViewClick={() => {
+                handleInfoCardRoute("allProducts");
+              }}
+            >
+              <FiPackage />
+            </InfoCard>
+          </div>
+
+          <div className={styles.cardGroup}>
+            <InfoCard
+              amount={dataCount.outOfStock}
+              bgColor={"#F36868"}
+              title="Products out of stock"
+              onViewClick={() => {
+                handleInfoCardRoute("outOfStock");
+              }}
+            >
+              <FaBoxOpen />
+            </InfoCard>
+            <InfoCard
+              amount={dataCount.reviews}
+              bgColor={"#9E1EEC"}
+              title="Products Reviews"
+              onViewClick={() => {
+                handleInfoCardRoute("productReviews");
+              }}
+            >
+              <MdReviews />
+            </InfoCard>
+          </div>
+          <div className={styles.cardGroup}>
+            <InfoCard
+              amount={dataCount.report}
+              bgColor={"#EC1E5C"}
+              title="Products Reported"
+              onViewClick={() => {
+                handleInfoCardRoute("productReports");
+              }}
+            >
+              <MdOutlineReportProblem />
+            </InfoCard>
+            <InfoCard
+              amount={dataCount.questions}
+              bgColor={"#9b9e36"}
+              title="Questions Asked"
+              onViewClick={() => {
+                handleInfoCardRoute("questionsAsked");
+              }}
+            >
+              <BsFillPatchQuestionFill />
+            </InfoCard>
+          </div>
           <InfoCard
             amount={dataCount.hiddenProducts}
             bgColor={"#a11e3f"}
@@ -199,10 +206,7 @@ const ProductsPage = () => {
         <div className={styles.title}>
           <h2>Top Selling Products</h2>
         </div>
-        <div
-          className={`ag-theme-alpine ${styles.main}`}
-          style={{ height: 400, width: 850 }}
-        >
+        <div className={`ag-theme-alpine ${styles.main}`}>
           <AgGridReact
             rowData={rowData}
             columnDefs={columnDefs}

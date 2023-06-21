@@ -9,9 +9,10 @@ import styles from "../../styles/components/Seller/SellerNav.module.scss";
 import { TbTruckDelivery } from "react-icons/tb";
 import { FaPercentage } from "react-icons/fa";
 import NotificationHolder from "../shared/NotificationHolder";
-import axios from "axios";
+
 import { useAuth } from "../../context/User";
 import { useAlert } from "../../pages/_app";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 interface Props {
   children: React.ReactNode;
@@ -24,6 +25,8 @@ const SellerNav: React.FC<Props> = ({ children }) => {
   const { setAlert } = useAlert();
   const { logout } = useAuth();
   const [warningOpen, setWarningOpen] = useState(false);
+
+  const [activeMobileNav, setActiveMobileNav] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -59,11 +62,28 @@ const SellerNav: React.FC<Props> = ({ children }) => {
         setWarningOpen={setWarningOpen}
       />
       <div className={styles.admin}>
-        <div className={styles.adminNav}>
-          <div className={styles.logo}>
-            <Image src="/images/logo.png" width={180} height={60} alt="logo" />
+        <div
+          className={`${styles.adminNav} ${
+            activeMobileNav ? styles.activeMobileNav : ""
+          }`}
+        >
+          <div className={styles.header}>
+            <div className={styles.logo}>
+              <Image
+                src="/images/logo.png"
+                width={180}
+                height={60}
+                alt="logo"
+              />
+            </div>
+            <div
+              className={styles.menuIcon}
+              onClick={() => setActiveMobileNav((prev) => !prev)}
+            >
+              <GiHamburgerMenu />
+            </div>
           </div>
-          <div className={styles.navigation}>
+          <div className={`${styles.navigation} `}>
             <Button
               look="blank"
               onClick={() => {

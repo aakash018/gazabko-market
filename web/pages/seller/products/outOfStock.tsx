@@ -65,10 +65,7 @@ const OutOfStock = () => {
             <div className={styles.search}>
               <SearchBar inputRef={searchRef} />
             </div>
-            <div
-              className="ag-theme-alpine"
-              style={{ height: "550px", width: 620 }}
-            >
+            <div className={`ag-theme-alpine ${styles.main}`}>
               <AgGridReact
                 rowData={rowData}
                 columnDefs={columnDefs}

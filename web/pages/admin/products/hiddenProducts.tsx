@@ -8,7 +8,7 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 
 import Router from "next/router";
 import AdminLayout from "../../../components/Admin/AdminNav";
-import Button from "../../../components/shared/Button";
+// import Button from "../../../components/shared/Button";
 import axios from "axios";
 import { ProtuctType } from "../../../@types/global";
 import { useAlert } from "../../_app";
@@ -112,10 +112,7 @@ const OutOfStock = () => {
             placeContent: "center",
           }}
         >
-          <div
-            className="ag-theme-alpine"
-            style={{ height: "500px", width: "870px" }}
-          >
+          <div className={`ag-theme-alpine ${styles.main}`}>
             <AgGridReact
               rowData={rowData}
               columnDefs={columnDefs}

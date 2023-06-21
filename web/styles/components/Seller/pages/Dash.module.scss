@@ -1,3 +1,19 @@
+.pageTitle {
+    @media (max-width: 700px) {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+}
+
+.searchContainer {
+    width: 50%;
+
+    @media (max-width: 700px) {
+        width: 100%;
+    }
+}
+
 .dash {
     margin-top: 30px;
 
@@ -9,6 +25,12 @@
         display: flex;
         // display: none;
         justify-content: space-evenly;
+
+        @media (max-width: 700px) {
+            flex-direction: column;
+            align-items: center;
+            // display: none;
+        }
     }
 
     .doughnutCharts {
@@ -34,6 +56,12 @@
     .bottomCardsHolder {
         display: flex;
         justify-content: space-between;
+
+        @media (max-width: 700px) {
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
 
         .customerCard {
             width: 48%;

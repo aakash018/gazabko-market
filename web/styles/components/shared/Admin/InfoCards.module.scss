@@ -8,6 +8,12 @@
     display: flex;
     flex-direction: column;
     font-weight: bold;
+
+    @media (max-width: 700px) {
+        width: 200px;
+        height: 150px;
+    }
+
     .topPart {
         display: flex;
 
@@ -20,11 +26,19 @@
         }
         .amount {
             font-size: 3.5rem;
+
+            @media (max-width: 700px) {
+                font-size: 3rem;
+            }
         }
     }
     .title {
         font-size: 1.5rem;
         margin-top: -10px;
+
+        @media (max-width: 700px) {
+            font-size: 1.4rem;
+        }
     }
 
     .actBtn {

@@ -17,7 +17,7 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import axios from "axios";
 import { useAlert } from "../../_app";
-import { SelectionChangedEvent } from "ag-grid-community";
+// import { SelectionChangedEvent } from "ag-grid-community";
 
 type TableDef = {
   SN: number;
@@ -187,16 +187,13 @@ const AllProducts = () => {
             <div className={styles.search}>
               <SearchBar inputRef={searchRef} />
             </div>
-            <div className={styles.main}>
-              <div
-                className={`ag-theme-alpine ${styles.main}`}
-                style={{ height: 350, width: 890 }}
-              >
+            <div>
+              <div className={`ag-theme-alpine ${styles.main}`}>
                 <AgGridReact
                   rowData={rowData}
                   columnDefs={columnDefs}
                 ></AgGridReact>
-              </div>
+              </div>{" "}
             </div>
           </div>
         </div>

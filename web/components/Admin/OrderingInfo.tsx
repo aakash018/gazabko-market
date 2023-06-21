@@ -29,38 +29,42 @@ const OrderingInfo: React.FC<Props> = ({
   returnedCount,
 }) => (
   <div className={styles.orderingInfo}>
-    <InfoCard
-      amount={pendingCount}
-      title="Orders Pending"
-      bgColor="#5494f5"
-      onViewClick={pendingClick}
-    >
-      <MdOutlinePendingActions />
-    </InfoCard>
-    <InfoCard
-      amount={processingCount}
-      title="Orders Processing"
-      bgColor="#f36868"
-      onViewClick={processingClick}
-    >
-      <FaTruckMoving />
-    </InfoCard>
-    <InfoCard
-      amount={deliveredCount}
-      title="Orders Delivered"
-      bgColor="#00ab77"
-      onViewClick={deliveredClick}
-    >
-      <AiFillCheckCircle />
-    </InfoCard>
-    <InfoCard
-      amount={returnedCount}
-      title="Returned Orders"
-      bgColor="#cc54de"
-      onViewClick={returnedClick}
-    >
-      <MdCancel />
-    </InfoCard>
+    <div className={styles.group}>
+      <InfoCard
+        amount={pendingCount}
+        title="Orders Pending"
+        bgColor="#5494f5"
+        onViewClick={pendingClick}
+      >
+        <MdOutlinePendingActions />
+      </InfoCard>
+      <InfoCard
+        amount={processingCount}
+        title="Orders Processing"
+        bgColor="#f36868"
+        onViewClick={processingClick}
+      >
+        <FaTruckMoving />
+      </InfoCard>
+    </div>
+    <div className={styles.group}>
+      <InfoCard
+        amount={deliveredCount}
+        title="Orders Delivered"
+        bgColor="#00ab77"
+        onViewClick={deliveredClick}
+      >
+        <AiFillCheckCircle />
+      </InfoCard>
+      <InfoCard
+        amount={returnedCount}
+        title="Returned Orders"
+        bgColor="#cc54de"
+        onViewClick={returnedClick}
+      >
+        <MdCancel />
+      </InfoCard>
+    </div>
   </div>
 );
 

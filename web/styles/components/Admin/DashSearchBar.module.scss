@@ -1,6 +1,9 @@
 .dashSearchBar {
     position: relative;
     width: 100%;
+    @media (max-width: 700px) {
+        min-width: 300px;
+    }
     .input {
         display: flex;
         align-items: center;
