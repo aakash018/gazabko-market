@@ -5,6 +5,20 @@
     min-width: 90%;
 }
 
+.searchHolder {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    align-self: flex-start;
+    margin-left: 50px;
+
+    @media (max-width: 700px) {
+        width: 60%;
+        align-self: center;
+        margin-left: 0px;
+    }
+}
+
 .dashPageWraper {
     display: flex;
     justify-content: center;
@@ -48,6 +62,10 @@
 
         display: flex;
         justify-content: space-between;
+
+        @media (max-width: 700px) {
+            width: 350px;
+        }
         .bottomLeftCards {
             width: 100%;
             display: flex;
@@ -61,6 +79,10 @@
             div {
                 min-width: 50%;
             }
+
+            @media (max-width: 700px) {
+                flex-direction: column;
+            }
         }
 
         .bottomRightCards {
@@ -73,5 +95,11 @@
 
             padding: 20px;
         }
+    }
+}
+
+.earningGraph {
+    @media (max-width: 700px) {
+        width: 400px;
     }
 }

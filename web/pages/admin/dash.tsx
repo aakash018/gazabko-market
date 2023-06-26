@@ -220,13 +220,7 @@ const DashPage: React.FC = () => {
       {loading && <h2>Loading...</h2>}
       {!loading && (
         <div className={styles.dash}>
-          <div
-            style={{
-              width: "50%",
-              alignSelf: "flex-start",
-              marginLeft: "50px",
-            }}
-          >
+          <div style={{}} className={styles.searchHolder}>
             <DashSearchBar pageLayoutData={adminPageSearchData} />
           </div>
           <div className={styles.doughnutCharts}>

@@ -13,6 +13,7 @@ import NotificationHolder from "../shared/NotificationHolder";
 import { FaTruck } from "react-icons/fa";
 import { useAlert } from "../../pages/_app";
 import { useAuth } from "../../context/User";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 interface Props {
   children: React.ReactNode;
@@ -24,6 +25,8 @@ const AdminLayout: React.FC<Props> = ({ children }) => {
   const [warningOpen, setWarningOpen] = useState(false);
   const { setAlert } = useAlert();
   const { logout } = useAuth();
+
+  const [navMobileOpen, setNavMobileOpen] = useState(false);
 
   const handleToggleNoti = () => {
     setNotiOpen((prev) => !prev);
@@ -63,7 +66,11 @@ const AdminLayout: React.FC<Props> = ({ children }) => {
         setWarningOpen={setWarningOpen}
       />
       <div className={styles.admin}>
-        <div className={styles.adminNav}>
+        <div
+          className={`${styles.adminNav} ${
+            navMobileOpen ? styles.activeHam : ""
+          }`}
+        >
           <div className={styles.logo}>
             <Image
               src="/images/adminLogo.png"
@@ -71,6 +78,12 @@ const AdminLayout: React.FC<Props> = ({ children }) => {
               height={60}
               alt="logo"
             />
+          </div>
+          <div
+            className={`${styles.hamburgerHolder} `}
+            onClick={() => setNavMobileOpen((prev) => !prev)}
+          >
+            <GiHamburgerMenu />
           </div>
           <div className={styles.navigation}>
             <Button
