@@ -173,10 +173,7 @@ const CustomerPage = () => {
               <SearchBar inputRef={searchRef} />
             </div>
             <div className={styles.tables}>
-              <div
-                className="ag-theme-alpine"
-                style={{ height: 400, width: 800 }}
-              >
+              <div className={`ag-theme-alpine ${styles.mainTable}`}>
                 <AgGridReact
                   rowData={rowData}
                   columnDefs={columnDefs}

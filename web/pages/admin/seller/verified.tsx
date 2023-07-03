@@ -101,10 +101,7 @@ const Verified = () => {
             <SearchBar inputRef={searchInput} />
           </div>
           <div className={styles.table}>
-            <div
-              className="ag-theme-alpine"
-              style={{ height: 950, width: 850 }}
-            >
+            <div className={`ag-theme-alpine ${styles.mainTable}`} style={{}}>
               <AgGridReact
                 rowData={rowData}
                 columnDefs={columnDefs}

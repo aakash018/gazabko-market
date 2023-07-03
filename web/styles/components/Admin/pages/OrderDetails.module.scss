@@ -17,6 +17,7 @@
         gap: 40px;
 
         align-items: center;
+
         .infoHolder {
             display: flex;
             gap: 20px;
@@ -36,6 +37,10 @@
             align-items: center;
 
             gap: 100px;
+
+            @media (max-width: 700px) {
+                flex-direction: column;
+            }
             .content {
                 display: flex;
                 flex-direction: column;
@@ -54,6 +59,17 @@
 
             width: fit-content;
             padding: 20px;
+            .content {
+                display: flex;
+                align-content: flex-start;
+                gap: 100px;
+
+                @media (max-width: 700px) {
+                    flex-direction: column;
+
+                    width: 350px;
+                }
+            }
 
             .details {
                 display: flex;

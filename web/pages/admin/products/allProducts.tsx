@@ -179,10 +179,7 @@ const AllProducts = () => {
           <div className={styles.search}>
             <SearchBar inputRef={searchRef} />
           </div>
-          <div
-            className={`ag-theme-alpine ${styles.main}`}
-            style={{ height: 450, width: 850 }}
-          >
+          <div className={`ag-theme-alpine ${styles.main}`}>
             <AgGridReact
               rowData={rowData}
               columnDefs={columnDefs}

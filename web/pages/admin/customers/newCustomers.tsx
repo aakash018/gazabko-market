@@ -106,10 +106,7 @@ const newCustomers = () => {
             </div>
           </div>
           <div className={styles.tables}>
-            <div
-              className="ag-theme-alpine"
-              style={{ height: 400, width: 920 }}
-            >
+            <div className={`ag-theme-alpine ${styles.mainTable}`}>
               <AgGridReact
                 rowData={rowData}
                 columnDefs={columnDefs}

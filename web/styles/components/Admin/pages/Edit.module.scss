@@ -20,6 +20,9 @@
             gap: 45px;
 
             margin-top: 45px;
+            @media (max-width: 700px) {
+                flex-direction: column;
+            }
         }
     }
 }

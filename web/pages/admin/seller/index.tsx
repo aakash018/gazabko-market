@@ -165,7 +165,7 @@ const VendorPage = () => {
         </div>
         <div className={styles.topVendors}>
           <div className={styles.title}>Top Sellers</div>
-          <div className="ag-theme-alpine" style={{ height: 450, width: 580 }}>
+          <div className={`ag-theme-alpine ${styles.main}`}>
             <AgGridReact
               rowData={rowData}
               columnDefs={columnDefs}

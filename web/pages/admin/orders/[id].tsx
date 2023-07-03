@@ -350,13 +350,7 @@ const OrderDetails = () => {
                 </div>
               </div>
               <div className={styles.customer}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignContent: "flex-start",
-                    gap: "100px",
-                  }}
-                >
+                <div className={styles.content}>
                   <div className={styles.details}>
                     <div className={styles.mainTitle}>Customer</div>
                     <div className={styles.infoHolder}>

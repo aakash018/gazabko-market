@@ -10,6 +10,7 @@ import Button from "../../../components/shared/Button";
 import styles from "../../../styles/components/Admin/pages/CustomerInfoPage.module.scss";
 import { sleep } from "../../../utils/sleep";
 import { useAlert } from "../../_app";
+import BackButton from "../../../components/shared/BackButton";
 
 const Map = dynamic(
   () => import("../../../components/shared/Map"), // replace '@components/map' with your component's location
@@ -130,6 +131,7 @@ const CustomerInfoPage = () => {
 
   return (
     <AdminLayout>
+      <BackButton />
       <div className={styles.customerInfoWrapper}>
         {loading && <h2>Loading...</h2>}
         {!loading && customer && (

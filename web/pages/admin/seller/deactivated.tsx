@@ -115,10 +115,7 @@ const DeactivatedVendors = () => {
             <SearchBar inputRef={searchRef} />
           </div>
           <div className={styles.table}>
-            <div
-              className="ag-theme-alpine"
-              style={{ height: 280, width: 870 }}
-            >
+            <div className={`ag-theme-alpine ${styles.mainTable}`}>
               <AgGridReact
                 rowData={rowData}
                 columnDefs={columnDefs}

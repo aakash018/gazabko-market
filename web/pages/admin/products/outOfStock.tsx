@@ -113,10 +113,7 @@ const OutOfStock = () => {
             placeContent: "center",
           }}
         >
-          <div
-            className="ag-theme-alpine"
-            style={{ height: "500px", width: "870px" }}
-          >
+          <div className={`ag-theme-alpine ${styles.main}`}>
             <AgGridReact
               rowData={rowData}
               columnDefs={columnDefs}
